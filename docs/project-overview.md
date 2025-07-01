@@ -49,3 +49,4 @@ appointment for a more qualified doctor.
 
 ### Entity Relationship Diagram
 
+![Entity Relationship Diagram](./images/erd.svg)
