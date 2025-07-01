@@ -1,4 +1,4 @@
-Clicic Management System
+Clinic Management System
 ========================
 
 A clinic system used to support an on-campus clinic for providing medical care, for basic
