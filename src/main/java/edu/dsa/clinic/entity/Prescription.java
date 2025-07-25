@@ -1,4 +1,4 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;

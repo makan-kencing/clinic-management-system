@@ -1,4 +1,4 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
 
 /**
  * The types of {@link Consultation} that can be categorized as.

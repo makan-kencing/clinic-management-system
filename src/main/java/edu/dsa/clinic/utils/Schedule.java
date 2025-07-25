@@ -1,6 +1,6 @@
-package edu.dsa.ass.clinicmanagementsystem.utils;
+package edu.dsa.clinic.utils;
 
-import edu.dsa.ass.clinicmanagementsystem.entity.Shift;
+import edu.dsa.clinic.entity.Shift;
 
 import java.util.ArrayList;
 import java.util.List;
