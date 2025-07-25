@@ -1,12 +1,16 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
+
+import org.jetbrains.annotations.Range;
 
 import java.util.Objects;
 
 public abstract class IdentifiableEntity {
+    @Range(from = 0, to = Integer.MAX_VALUE)
     private static int lastId = 0;
+    @Range(from = 0, to = Integer.MAX_VALUE)
     private int id;
 
-    public IdentifiableEntity(int id) {
+    public IdentifiableEntity(@Range(from = 0, to = Integer.MAX_VALUE) int id) {
         this.id = id;
     }
 
@@ -14,11 +18,11 @@ public abstract class IdentifiableEntity {
         this(++lastId);
     }
 
-    public int getId() {
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@Range(from = 1, to = Integer.MAX_VALUE) int id) {
         this.id = id;
     }
 

@@ -1,9 +1,6 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
-
-import org.jetbrains.annotations.Nullable;
+package edu.dsa.clinic.entity;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * An appointment created by the patient or a staff for a {@link Consultation} in the future.

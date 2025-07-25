@@ -1,9 +1,8 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
 
-import edu.dsa.ass.clinicmanagementsystem.utils.Range;
+import edu.dsa.clinic.utils.Range;
 
 import java.time.LocalTime;
-import java.util.List;
 
 /**
  * The working hours defined for a {@link Doctor}.

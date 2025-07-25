@@ -1,4 +1,4 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
 
 public enum Gender {
     MALE,

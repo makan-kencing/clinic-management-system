@@ -1,36 +1,37 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
- * The prescribed treatment to treat or cure symptom(s) after a {@link Consultation}
+ * A detailed record for documenting a {@link Patient} symptoms and diagnosis after a {@link Consultation}.
  *
  * @author TODO
+ * @see Patient
  * @see Consultation
  */
-public class Treatment extends IdentifiableEntity{
-    private Diagnosis diagnosis;
+public class Diagnosis extends IdentifiableEntity {
+    private Consultation consultation;
     private List<Prescription> prescriptions;
-    private String symptom;
+    private String description;
 
     @Override
     public String toString() {
-        return "Treatment{" +
-                "diagnosis=" + diagnosis +
+        return "Diagnosis{" +
+                "consultation=" + consultation +
                 ", prescriptions=" + prescriptions +
-                ", symptom='" + symptom + '\'' +
+                ", description='" + description + '\'' +
                 ", notes='" + notes + '\'' +
                 '}';
     }
 
-    public Diagnosis getDiagnosis() {
-        return diagnosis;
+    public Consultation getConsultation() {
+        return consultation;
     }
 
-    public void setDiagnosis(Diagnosis diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
     }
 
     public List<Prescription> getPrescriptions() {
@@ -41,12 +42,12 @@ public class Treatment extends IdentifiableEntity{
         this.prescriptions = prescriptions;
     }
 
-    public String getSymptom() {
-        return symptom;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSymptom(String symptom) {
-        this.symptom = symptom;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public @Nullable String getNotes() {

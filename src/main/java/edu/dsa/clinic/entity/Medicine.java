@@ -1,4 +1,4 @@
-package edu.dsa.ass.clinicmanagementsystem.entity;
+package edu.dsa.clinic.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
