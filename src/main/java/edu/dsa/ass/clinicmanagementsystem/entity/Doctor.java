@@ -1,5 +1,7 @@
 package edu.dsa.ass.clinicmanagementsystem.entity;
 
+import edu.dsa.ass.clinicmanagementsystem.utils.Schedule;
+
 import java.util.List;
 
 /**
