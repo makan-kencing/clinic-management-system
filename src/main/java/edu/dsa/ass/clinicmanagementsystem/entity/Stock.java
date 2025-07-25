@@ -1,17 +1,17 @@
 package edu.dsa.ass.clinicmanagementsystem.entity;
 
+import org.jetbrains.annotations.Range;
+
 import java.time.LocalDateTime;
 
 public class Stock extends IdentifiableEntity {
     private Medicine medicine;
+    @Range(from = 1, to = Integer.MAX_VALUE)
     private int stockInQuantity;
     private LocalDateTime stockInDate;
     private String location;
+    @Range(from = 0, to = Integer.MAX_VALUE)
     private int quantityLeft;
-
-    public Medicine getMedicine() {
-        return medicine;
-    }
 
     @Override
     public String toString() {
@@ -24,17 +24,22 @@ public class Stock extends IdentifiableEntity {
                 '}';
     }
 
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
     public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
     }
 
-    public int getStockInQuantity() {
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getStockInQuantity() {
         return stockInQuantity;
     }
 
-    public void setStockInQuantity(int stockInQuantity) {
+    public void setStockInQuantity(@Range(from = 1, to = Integer.MAX_VALUE) int stockInQuantity) {
         this.stockInQuantity = stockInQuantity;
     }
+
 
     public LocalDateTime getStockInDate() {
         return stockInDate;
@@ -52,11 +57,11 @@ public class Stock extends IdentifiableEntity {
         this.location = location;
     }
 
-    public int getQuantityLeft() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getQuantityLeft() {
         return quantityLeft;
     }
 
-    public void setQuantityLeft(int quantityLeft) {
+    public void setQuantityLeft(@Range(from = 0, to = Integer.MAX_VALUE) int quantityLeft) {
         this.quantityLeft = quantityLeft;
     }
 }

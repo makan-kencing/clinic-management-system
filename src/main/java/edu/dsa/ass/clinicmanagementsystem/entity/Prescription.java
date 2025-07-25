@@ -1,6 +1,7 @@
 package edu.dsa.ass.clinicmanagementsystem.entity;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 /**
  * The amount of {@link Medicine} to be prescribed for a {@link Treatment}.
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class Prescription extends IdentifiableEntity {
     private Treatment treatment;
     private Medicine medicine;
+    @Range(from = 1, to = Integer.MAX_VALUE)
     private int quantity;
     private @Nullable String notes;
 
@@ -41,11 +43,11 @@ public class Prescription extends IdentifiableEntity {
         this.medicine = medicine;
     }
 
-    public int getQuantity() {
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(@Range(from = 1, to = Integer.MAX_VALUE) int quantity) {
         this.quantity = quantity;
     }
 
