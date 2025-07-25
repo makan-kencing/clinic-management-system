@@ -3,7 +3,6 @@ package edu.dsa.ass.clinicmanagementsystem.entity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The meeting session between a patient and a doctor.
@@ -15,14 +14,14 @@ import java.util.Objects;
 public class Consultation extends IdentifiableEntity {
     private Patient patient;
     private Doctor doctor;
-    private Diagnosis diagnosis;
+    private List<Diagnosis> diagnoses;
 
     @Override
     public String toString() {
         return "Consultation{" +
                 "patient=" + patient +
                 ", doctor=" + doctor +
-                ", diagnosis=" + diagnosis +
+                ", diagnoses=" + diagnoses +
                 ", treatments=" + treatments +
                 ", notes='" + notes + '\'' +
                 '}';
@@ -44,12 +43,12 @@ public class Consultation extends IdentifiableEntity {
         this.doctor = doctor;
     }
 
-    public Diagnosis getDiagnosis() {
-        return diagnosis;
+    public List<Diagnosis> getDiagnoses() {
+        return diagnoses;
     }
 
-    public void setDiagnosis(Diagnosis diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setDiagnoses(List<Diagnosis> diagnoses) {
+        this.diagnoses = diagnoses;
     }
 
     public List<Treatment> getTreatments() {
