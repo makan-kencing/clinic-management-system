@@ -1,5 +1,7 @@
 package edu.dsa.ass.clinicmanagementsystem.entity;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * The amount of {@link Medicine} to be prescribed for a {@link Treatment}.
  *
@@ -7,8 +9,9 @@ package edu.dsa.ass.clinicmanagementsystem.entity;
  * @see Medicine
  * @see Treatment
  */
-public class Prescription {
+public class Prescription extends IdentifiableEntity {
+    private Treatment treatment;
     private Medicine medicine;
-    private int quantity;  // TODO: deal with multiple kinds of uom, like strips, boxes, litres, and etc
-    private String notes;
+    private int quantity;
+    private @Nullable String notes;
 }

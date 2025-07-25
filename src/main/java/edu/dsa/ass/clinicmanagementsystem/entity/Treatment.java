@@ -1,5 +1,7 @@
 package edu.dsa.ass.clinicmanagementsystem.entity;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,9 @@ import java.util.List;
  * @author TODO
  * @see Consultation
  */
-public class Treatment {
+public class Treatment extends IdentifiableEntity{
+    private Diagnosis diagnosis;
     private List<Prescription> prescriptions;
-    private String notes;
+    private String symptom;
+    private @Nullable String notes;
 }

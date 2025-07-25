@@ -11,8 +11,8 @@ import java.util.List;
  * @author TODO
  * @see Doctor
  */
-public class Shift {
+public class Shift extends IdentifiableEntity {
     private Doctor doctor;
-    private Range<LocalTime> shift;
-    private List<Range<LocalTime>> breaks;
+    private ShiftType type;
+    private Range<LocalTime> timeRange;
 }

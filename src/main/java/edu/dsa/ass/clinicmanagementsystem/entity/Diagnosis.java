@@ -1,6 +1,6 @@
 package edu.dsa.ass.clinicmanagementsystem.entity;
 
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A detailed record for documenting a {@link Patient} symptoms and diagnosis after a {@link Consultation}.
@@ -9,8 +9,8 @@ import java.util.List;
  * @see Patient
  * @see Consultation
  */
-public class Diagnosis {
-    private List<String> symptoms;
-    private String diagnosis;
-    private String notes;
+public class Diagnosis extends IdentifiableEntity {
+    private Consultation consultation;
+    private String description;
+    private @Nullable String notes;
 }

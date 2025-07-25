@@ -5,5 +5,9 @@ package edu.dsa.ass.clinicmanagementsystem.entity;
  *
  * @author TODO
  */
-public class Patient {
+public class Patient extends IdentifiableEntity {
+    private String name;
+    private Gender gender;
+    private String identification;
+    private String contactNumber;
 }

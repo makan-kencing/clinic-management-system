@@ -8,6 +8,10 @@ import java.util.List;
  *
  * @author TODO
  */
-public class Doctor {
+public class Doctor extends IdentifiableEntity {
+    private String name;
+    private Gender gender;
+    private String contactNumber;
     private List<String> specializations;
+    private Schedule schedule;
 }
