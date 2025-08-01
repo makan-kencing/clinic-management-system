@@ -11,23 +11,23 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 public class DoubleLinkedList<T> implements ListInterface<T> {
-    private Node first;
-    private Node last;
+    private Node<T> first;
+    private Node<T> last;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int length = 0;
 
-    protected class Node {
-        @Nullable Node before;
-        @Nullable Node next;
-        T data;
+    protected static class Node<K> {
+        @Nullable Node<K> before;
+        @Nullable Node<K> next;
+        K data;
 
         /**
          * Add a new entry to the chain.
          *
          * @param e The new data to be added to the chain.
          */
-        private void chain(T e) {
-            var node = new Node();
+        private void chain(K e) {
+            var node = new Node<K>();
             node.data = e;
 
             this.chainRight(node);
@@ -49,7 +49,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
          *
          * @param right The node to chain on the right.
          */
-        private void chainRight(@Nullable Node right) {
+        private void chainRight(@Nullable Node<K> right) {
             this.next = right;
 
             if (right != null)
@@ -61,7 +61,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
          *
          * @param left The node to chain on the left.
          */
-        private void chainLeft(@Nullable Node left) {
+        private void chainLeft(@Nullable Node<K> left) {
             this.before = left;
 
             if (left != null)
