@@ -252,7 +252,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         }
 
         // TODO:
-        throw new RuntimeException("Not implemented.");
+        throw new UnsupportedOperationException("Not implemented.");
     }
 
     @Override
@@ -265,7 +265,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     @Override
     public void sort(Comparator<T> sorter) {
         // TODO:
-        throw new RuntimeException("Not implemented");
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
