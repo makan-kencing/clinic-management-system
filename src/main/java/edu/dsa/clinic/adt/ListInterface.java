@@ -84,7 +84,7 @@ public interface ListInterface<T> extends QueueLikeInterface<T>, Cloneable, Iter
     void extend(ListInterface<T> other);
 
     /**
-     * Filter the list based on the given logic condition.
+     * Filter elements in the list that matches the filter condition.
      *
      * @param filter The logic to filter against.
      */
