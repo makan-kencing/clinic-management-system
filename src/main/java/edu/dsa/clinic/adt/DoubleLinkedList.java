@@ -9,8 +9,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class DoubleLinkedList<T> implements ListInterface<T> {
-    private Node<T> first;
-    private Node<T> last;
+    @Nullable
+    private Node<T> first = null;
+    @Nullable
+    private Node<T> last = null;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int length = 0;
 
@@ -18,18 +20,6 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         @Nullable Node<K> before;
         @Nullable Node<K> next;
         K data;
-
-        /**
-         * Add a new entry to the chain.
-         *
-         * @param e The new data to be added to the chain.
-         */
-        private void chain(K e) {
-            var node = new Node<K>();
-            node.data = e;
-
-            Node.chain(this, node);
-        }
 
         /**
          * Unlinks the current node from the chain by chaining the before and next node together.
@@ -63,7 +53,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         @Nullable
         private Node<K> next;
 
-        public NodeIterator(@NotNull Node<K> startingNode) {
+        public NodeIterator(@Nullable Node<K> startingNode) {
             this.next = startingNode;
         }
 
@@ -120,6 +110,29 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
             throw new IndexOutOfBoundsException();
     }
 
+    /**
+     * Reset this.last to the actual last node and this.length to the new length.
+     */
+    private void resetLastNode() {
+        if (this.first == null) {  // if there's no first, there's no last
+            this.length = 0;
+            return;
+        }
+
+        // if there is no this.last node, start at this.first node, else start at this.last node
+        Node<T> startingNode;
+        if (this.last != null) startingNode = this.last;
+        else {
+            startingNode = this.first;
+            this.length = 1;
+        }
+
+        // traverse and find the node without .next and designates it as this.last node
+        for (var node : new NodeIterator<>(startingNode))
+            if (node.next == null) this.last = node;
+            else this.length++;
+    }
+
     private Node<T> getNode(int index) throws IndexOutOfBoundsException {
         this.throwIfOutOfBounds(index);
 
@@ -131,6 +144,29 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
                 i++;
 
         throw new IndexOutOfBoundsException();
+    }
+
+    private void addNode(Node<T> node) {
+        if (this.first != null)  // this.first being set usually means this.last is also set
+            this.addNode(this.last, node);
+        else {
+            this.first = node;
+            this.last = node;
+            this.length = 1;
+        }
+    }
+
+    private void addNode(Node<T> at, Node<T> node) {
+        Node.chain(at, node);
+        this.resetLastNode();
+    }
+
+    private void removeNode(Node<T> node) {
+        node.destroy();
+
+        if (this.last == node) this.last = this.last.before;
+
+        this.length--;
     }
 
     private @Nullable Node<T> findNode(Filter<T> filter) {
@@ -158,15 +194,20 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public void add(T e) {
-        this.last.chain(e);
+        var node = new Node<T>();
+        node.data = e;
+
+        this.addNode(node);
     }
 
     @Override
     public void insert(int index, T e) {
-        var node = this.getNode(index);
-        node.chain(e);
+        var insertAt = this.getNode(index);
 
-        length++;
+        var node = new Node<T>();
+        node.data = e;
+
+        this.addNode(insertAt, node);
     }
 
     @Override
@@ -174,7 +215,9 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         this.throwIfOutOfBounds(index);
 
         var node = this.getNode(index);
-        node.destroy();
+        this.removeNode(node);
+
+        this.length--;
     }
 
     @Override
@@ -201,8 +244,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         if (this.last == null) throw new IndexOutOfBoundsException();
 
         var popped = this.last;
-        this.last.destroy();
-        this.last = popped.before;
+        this.removeNode(popped);
 
         return popped.data;
     }
@@ -212,8 +254,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         if (this.first == null) throw new IndexOutOfBoundsException();
 
         var popped = this.first;
-        this.first.destroy();
-        this.first = popped.next;
+        this.removeNode(popped);
 
         return popped.data;
     }
@@ -222,6 +263,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     public void clear() {
         this.first = null;
         this.last = null;
+        this.length = 0;
     }
 
     @Override
@@ -245,21 +287,22 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     @Override
     public void extend(ListInterface<T> other) {
         if (other instanceof DoubleLinkedList<T> linkedList) {
-            if (this.last != null)
+            if (this.first == null) this.first = linkedList.first;
+            else  // assume this.first and this.last is not null
                 Node.chain(this.last, linkedList.first);
-            else
-                this.last = linkedList.first;
+
+            this.length += linkedList.length;
+            this.last = linkedList.last;
         }
 
-        // TODO:
+        // TODO: Implement extending non linked lists.
         throw new UnsupportedOperationException("Not implemented.");
     }
 
     @Override
     public void filter(Filter<T> filter) {
         for (var node : this.getNodeIterator())
-            if (filter.filter(node.data))
-                node.destroy();
+            if (!filter.filter(node.data)) this.removeNode(node);
     }
 
     @Override
