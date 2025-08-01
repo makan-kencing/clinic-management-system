@@ -7,8 +7,6 @@ import org.jetbrains.annotations.Range;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public class DoubleLinkedList<T> implements ListInterface<T> {
     private Node<T> first;
@@ -30,7 +28,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
             var node = new Node<K>();
             node.data = e;
 
-            this.chainRight(node);
+            Node.chain(this, node);
         }
 
         /**
@@ -47,25 +45,73 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         /**
          * Chain two nodes together.
          *
-         * @param right The node to chain on the right.
+         * @param left  The left node.
+         * @param right The right node.
+         * @param <K>   The generic type of both nodes.
          */
-        private void chainRight(@Nullable Node<K> right) {
-            this.next = right;
+        private static <K> void chain(@Nullable Node<K> left, @Nullable Node<K> right) {
+            if (left != null) {
+                left.next = right;
+            }
+            if (right != null) {
+                right.before = left;
+            }
+        }
+    }
 
-            if (right != null)
-                right.before = this;
+    static class NodeIterator<K> implements Iterator<Node<K>>, Iterable<Node<K>> {
+        @Nullable
+        private Node<K> next;
+
+        public NodeIterator(@NotNull Node<K> startingNode) {
+            this.next = startingNode;
         }
 
-        /**
-         * Chain two nodes together.
-         *
-         * @param left The node to chain on the left.
-         */
-        private void chainLeft(@Nullable Node<K> left) {
-            this.before = left;
+        @Override
+        public boolean hasNext() {
+            return this.next != null;
+        }
 
-            if (left != null)
-                left.next = this;
+        @Override
+        public Node<K> next() {
+            var current = this.next;
+            assert (current != null);
+
+            this.next = current.next;
+
+            return current;
+        }
+
+        @Override
+        public @NotNull Iterator<Node<K>> iterator() {
+            return this;
+        }
+    }
+
+    static class LinkedListIterator<K> implements Iterator<K>, Iterable<K> {
+        private final NodeIterator<K> iterator;
+
+        public LinkedListIterator(NodeIterator<K> nodeIterator) {
+            this.iterator = nodeIterator;
+        }
+
+        public LinkedListIterator(Node<K> node) {
+            this(new NodeIterator<>(node));
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public K next() {
+            return iterator.next().data;
+        }
+
+        @Override
+        public @NotNull Iterator<K> iterator() {
+            return this;
         }
     }
 
@@ -74,34 +120,40 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
             throw new IndexOutOfBoundsException();
     }
 
-    private Node getNode(int index) {
+    private Node<T> getNode(int index) throws IndexOutOfBoundsException {
         this.throwIfOutOfBounds(index);
 
-        var current = this.first;
-        for (int i = 0; i < index; i++) {
-            assert(current.next != null);
-            current = current.next;
-        }
+        var i = 0;
+        for (var node : this.getNodeIterator())
+            if (i == index)
+                return node;
+            else
+                i++;
 
-        return current;
+        throw new IndexOutOfBoundsException();
     }
 
-    private @Nullable Node findNode(Filter<T> filter) {
-        for (var current = this.first; current != null; current = current.next)
-            if (filter.filter(current.data))
-                return current;
+    private @Nullable Node<T> findNode(Filter<T> filter) {
+        for (var node : this.getNodeIterator())
+            if (filter.filter(node.data))
+                return node;
 
         return null;
     }
 
     private int indexNode(Filter<T> filter) throws NoSuchElementException {
-        var current = this.first;
-
-        for (int i = 0; i < this.length && current != null; i++, current = current.next)
-            if (filter.filter(current.data))
+        var i = 0;
+        for (var node : this.getNodeIterator())
+            if (filter.filter(node.data))
                 return i;
+            else
+                i++;
 
-        throw new IndexOutOfBoundsException();
+        throw new NoSuchElementException();
+    }
+
+    private NodeIterator<T> getNodeIterator() {
+        return new NodeIterator<>(this.first);
     }
 
     @Override
@@ -194,7 +246,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     public void extend(ListInterface<T> other) {
         if (other instanceof DoubleLinkedList<T> linkedList) {
             if (this.last != null)
-                this.last.chainRight(linkedList.first);
+                Node.chain(this.last, linkedList.first);
             else
                 this.last = linkedList.first;
         }
@@ -205,8 +257,9 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public void filter(Filter<T> filter) {
-        // TODO:
-        throw new RuntimeException("Not implemented");
+        for (var node : this.getNodeIterator())
+            if (filter.filter(node.data))
+                node.destroy();
     }
 
     @Override
@@ -217,19 +270,6 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public @NotNull Iterator<T> iterator() {
-        // TODO:
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void forEach(Consumer<? super T> action) {
-        // TODO
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public Spliterator<T> spliterator() {
-        // TODO
-        throw new RuntimeException("Not implemented");
+        return new LinkedListIterator<>(this.first);
     }
 }
