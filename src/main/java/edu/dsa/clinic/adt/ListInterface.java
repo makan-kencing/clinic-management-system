@@ -6,7 +6,14 @@ import org.jetbrains.annotations.Range;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-public interface ListInterface<T> extends QueueLikeInterface<T>, Cloneable, Iterable<T> {
+public interface ListInterface<T> extends Cloneable, Iterable<T> {
+    /**
+     * Add the element to the last of the list.
+     *
+     * @param e The element to add to the list.
+     */
+    void add(T e);
+
     /**
      * Insert elements after the element located at index.
      *
@@ -33,11 +40,26 @@ public interface ListInterface<T> extends QueueLikeInterface<T>, Cloneable, Iter
     T get(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException;
 
     /**
+     * Get the first element in the list.
+     *
+     * @return The first element. If the element doesn't exist, return null.
+     */
+    @Nullable T getFirst();
+
+    /**
      * Get the last element in the list.
      *
      * @return The element in the last. If the element doesn't exist, return null.
      */
     @Nullable T getLast();
+
+    /**
+     * Remove and get the first element in the list.
+     *
+     * @return The first element.
+     * @throws IndexOutOfBoundsException If the element doesn't exist.
+     */
+    T popFirst() throws IndexOutOfBoundsException;
 
     /**
      * Remove and get the last element in the list.
