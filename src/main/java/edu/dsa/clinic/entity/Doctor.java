@@ -8,7 +8,7 @@ import java.util.List;
  * The doctor responsible for consulting with {@link Patient} about their problems for diagnosis and prescriptions.
  * Runs on a shift schedule.
  *
- * @author TODO
+ * @author Daren is very handsome
  */
 public class Doctor extends IdentifiableEntity {
     private String name;
