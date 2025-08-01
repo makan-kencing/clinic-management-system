@@ -15,6 +15,7 @@ public class Diagnosis extends IdentifiableEntity {
     private Consultation consultation;
     private List<Prescription> prescriptions;
     private String description;
+    private @Nullable String notes;
 
     @Override
     public String toString() {
@@ -57,6 +58,4 @@ public class Diagnosis extends IdentifiableEntity {
     public void setNotes(@Nullable String notes) {
         this.notes = notes;
     }
-
-    private @Nullable String notes;
 }

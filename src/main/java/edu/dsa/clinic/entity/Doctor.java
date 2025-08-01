@@ -14,6 +14,8 @@ public class Doctor extends IdentifiableEntity {
     private String name;
     private Gender gender;
     private String contactNumber;
+    private List<String> specializations;
+    private Schedule schedule;
 
     @Override
     public String toString() {
@@ -65,7 +67,4 @@ public class Doctor extends IdentifiableEntity {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
-
-    private List<String> specializations;
-    private Schedule schedule;
 }

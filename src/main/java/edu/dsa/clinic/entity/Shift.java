@@ -12,6 +12,8 @@ import java.time.LocalTime;
  */
 public class Shift extends IdentifiableEntity {
     private Doctor doctor;
+    private ShiftType type;
+    private Range<LocalTime> timeRange;
 
     @Override
     public String toString() {
@@ -45,7 +47,4 @@ public class Shift extends IdentifiableEntity {
     public void setTimeRange(Range<LocalTime> timeRange) {
         this.timeRange = timeRange;
     }
-
-    private ShiftType type;
-    private Range<LocalTime> timeRange;
 }

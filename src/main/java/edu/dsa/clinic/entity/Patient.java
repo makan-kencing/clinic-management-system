@@ -8,6 +8,8 @@ package edu.dsa.clinic.entity;
 public class Patient extends IdentifiableEntity {
     private String name;
     private Gender gender;
+    private String identification;
+    private String contactNumber;
 
     public String getName() {
         return name;
@@ -50,7 +52,4 @@ public class Patient extends IdentifiableEntity {
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
-
-    private String identification;
-    private String contactNumber;
 }
