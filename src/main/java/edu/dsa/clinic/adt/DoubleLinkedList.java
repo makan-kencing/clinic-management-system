@@ -106,7 +106,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     }
 
     private void throwIfOutOfBounds(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException {
-        if (index >= this.length - 1)
+        if (index >= this.length)
             throw new IndexOutOfBoundsException();
     }
 
