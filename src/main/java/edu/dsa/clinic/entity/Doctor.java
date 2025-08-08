@@ -1,8 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.utils.Schedule;
-
-import java.util.List;
 
 /**
  * The doctor responsible for consulting with {@link Patient} about their problems for diagnosis and prescriptions.
@@ -14,7 +13,7 @@ public class Doctor extends IdentifiableEntity {
     private String name;
     private Gender gender;
     private String contactNumber;
-    private List<String> specializations;
+    private ListInterface<String> specializations;
     private Schedule schedule;
 
     @Override
@@ -52,11 +51,11 @@ public class Doctor extends IdentifiableEntity {
         this.contactNumber = contactNumber;
     }
 
-    public List<String> getSpecializations() {
+    public ListInterface<String> getSpecializations() {
         return specializations;
     }
 
-    public void setSpecializations(List<String> specializations) {
+    public void setSpecializations(ListInterface<String> specializations) {
         this.specializations = specializations;
     }
 

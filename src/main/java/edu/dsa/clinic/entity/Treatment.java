@@ -1,8 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * The prescribed treatment to treat or cure symptom(s) after a {@link Consultation}
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class Treatment extends IdentifiableEntity{
     private Diagnosis diagnosis;
-    private List<Prescription> prescriptions;
+    private ListInterface<Prescription> prescriptions;
     private String symptom;
 
     @Override
@@ -33,11 +32,11 @@ public class Treatment extends IdentifiableEntity{
         this.diagnosis = diagnosis;
     }
 
-    public List<Prescription> getPrescriptions() {
+    public ListInterface<Prescription> getPrescriptions() {
         return prescriptions;
     }
 
-    public void setPrescriptions(List<Prescription> prescriptions) {
+    public void setPrescriptions(ListInterface<Prescription> prescriptions) {
         this.prescriptions = prescriptions;
     }
 

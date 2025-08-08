@@ -1,8 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * A detailed record for documenting a {@link Patient} symptoms and diagnosis after a {@link Consultation}.
@@ -13,7 +12,7 @@ import java.util.List;
  */
 public class Diagnosis extends IdentifiableEntity {
     private Consultation consultation;
-    private List<Prescription> prescriptions;
+    private ListInterface<Prescription> prescriptions;
     private String description;
     private @Nullable String notes;
 
@@ -35,11 +34,11 @@ public class Diagnosis extends IdentifiableEntity {
         this.consultation = consultation;
     }
 
-    public List<Prescription> getPrescriptions() {
+    public ListInterface<Prescription> getPrescriptions() {
         return prescriptions;
     }
 
-    public void setPrescriptions(List<Prescription> prescriptions) {
+    public void setPrescriptions(ListInterface<Prescription> prescriptions) {
         this.prescriptions = prescriptions;
     }
 

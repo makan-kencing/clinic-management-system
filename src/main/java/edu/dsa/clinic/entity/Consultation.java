@@ -1,8 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * The meeting session between a patient and a doctor.
@@ -14,8 +13,8 @@ import java.util.List;
 public class Consultation extends IdentifiableEntity {
     private Patient patient;
     private Doctor doctor;
-    private List<Diagnosis> diagnoses;
-    private List<Treatment> treatments;
+    private ListInterface<Diagnosis> diagnoses;
+    private ListInterface<Treatment> treatments;
     private @Nullable String notes;
 
     @Override
@@ -45,19 +44,19 @@ public class Consultation extends IdentifiableEntity {
         this.doctor = doctor;
     }
 
-    public List<Diagnosis> getDiagnoses() {
+    public ListInterface<Diagnosis> getDiagnoses() {
         return diagnoses;
     }
 
-    public void setDiagnoses(List<Diagnosis> diagnoses) {
+    public void setDiagnoses(ListInterface<Diagnosis> diagnoses) {
         this.diagnoses = diagnoses;
     }
 
-    public List<Treatment> getTreatments() {
+    public ListInterface<Treatment> getTreatments() {
         return treatments;
     }
 
-    public void setTreatments(List<Treatment> treatments) {
+    public void setTreatments(ListInterface<Treatment> treatments) {
         this.treatments = treatments;
     }
 

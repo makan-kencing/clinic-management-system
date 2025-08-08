@@ -1,7 +1,8 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.ListInterface;
+
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * The medicine to be prescribed to {@link Patient} for treatments.
@@ -14,8 +15,8 @@ public class Medicine extends IdentifiableEntity {
     private String brand;
     private BigDecimal cost;
     private BigDecimal price;
-    private List<Medicine> substitutes;
-    private List<Medicine> substitutesFor;
+    private ListInterface<Medicine> substitutes;
+    private ListInterface<Medicine> substitutesFor;
 
     @Override
     public String toString() {
@@ -70,30 +71,29 @@ public class Medicine extends IdentifiableEntity {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+    private ListInterface<Stock> stocks;
 
-    public List<Medicine> getSubstitutes() {
+    public ListInterface<Medicine> getSubstitutes() {
         return substitutes;
     }
 
-    public void setSubstitutes(List<Medicine> substitutes) {
+    public void setSubstitutes(ListInterface<Medicine> substitutes) {
         this.substitutes = substitutes;
     }
 
-    public List<Medicine> getSubstitutesFor() {
+    public ListInterface<Medicine> getSubstitutesFor() {
         return substitutesFor;
     }
 
-    public void setSubstitutesFor(List<Medicine> substitutesFor) {
+    public void setSubstitutesFor(ListInterface<Medicine> substitutesFor) {
         this.substitutesFor = substitutesFor;
     }
 
-    public List<Stock> getStocks() {
+    public ListInterface<Stock> getStocks() {
         return stocks;
     }
 
-    public void setStocks(List<Stock> stocks) {
+    public void setStocks(ListInterface<Stock> stocks) {
         this.stocks = stocks;
     }
-
-    private List<Stock> stocks;
 }
