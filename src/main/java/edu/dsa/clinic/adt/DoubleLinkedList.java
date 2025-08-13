@@ -49,7 +49,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         }
     }
 
-    static class NodeIterator<K> implements Iterator<Node<K>>, Iterable<Node<K>> {
+    protected static class NodeIterator<K> implements Iterator<Node<K>>, Iterable<Node<K>> {
         @Nullable
         private Node<K> next;
 
@@ -78,7 +78,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         }
     }
 
-    static class LinkedListIterator<K> implements Iterator<K>, Iterable<K> {
+    protected static class LinkedListIterator<K> implements Iterator<K>, Iterable<K> {
         private final NodeIterator<K> iterator;
 
         public LinkedListIterator(NodeIterator<K> nodeIterator) {
@@ -105,7 +105,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         }
     }
 
-    private void throwIfOutOfBounds(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException {
+    protected void throwIfOutOfBounds(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException {
         if (index >= this.length)
             throw new IndexOutOfBoundsException();
     }
@@ -113,7 +113,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     /**
      * Reset this.last to the actual last node and this.length to the new length.
      */
-    private void resetLastNode() {
+    protected void resetLastNode() {
         if (this.first == null) {  // if there's no first, there's no last
             this.length = 0;
             return;
@@ -133,7 +133,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
             else this.length++;
     }
 
-    private Node<T> getNode(int index) throws IndexOutOfBoundsException {
+    protected Node<T> getNode(int index) throws IndexOutOfBoundsException {
         this.throwIfOutOfBounds(index);
 
         var i = 0;
@@ -146,7 +146,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         throw new IndexOutOfBoundsException();
     }
 
-    private void addNode(Node<T> node) {
+    protected void addNode(Node<T> node) {
         if (this.first != null)  // this.first being set usually means this.last is also set
             this.addNode(this.last, node);
         else {
@@ -156,12 +156,12 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         }
     }
 
-    private void addNode(Node<T> at, Node<T> node) {
+    protected void addNode(Node<T> at, Node<T> node) {
         Node.chain(at, node);
         this.resetLastNode();
     }
 
-    private void removeNode(Node<T> node) {
+    protected void removeNode(Node<T> node) {
         node.destroy();
 
         if (this.last == node) this.last = this.last.before;
@@ -169,7 +169,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         this.length--;
     }
 
-    private @Nullable Node<T> findNode(Filter<T> filter) {
+    protected @Nullable Node<T> findNode(Filter<T> filter) {
         for (var node : this.getNodeIterator())
             if (filter.filter(node.data))
                 return node;
@@ -177,7 +177,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         return null;
     }
 
-    private int indexNode(Filter<T> filter) throws NoSuchElementException {
+    protected int indexNode(Filter<T> filter) throws NoSuchElementException {
         var i = 0;
         for (var node : this.getNodeIterator())
             if (filter.filter(node.data))
@@ -188,7 +188,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         throw new NoSuchElementException();
     }
 
-    private NodeIterator<T> getNodeIterator() {
+    protected NodeIterator<T> getNodeIterator() {
         return new NodeIterator<>(this.first);
     }
 
