@@ -12,6 +12,7 @@ public abstract class IdentifiableEntity {
 
     public IdentifiableEntity(@Range(from = 0, to = Integer.MAX_VALUE) int id) {
         this.id = id;
+        lastId = Math.max(lastId, id);
     }
 
     public IdentifiableEntity() {
