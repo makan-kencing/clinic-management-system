@@ -119,6 +119,22 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
      */
     void sort(Comparator<T> sorter);
 
+    /**
+     * Filter elements in the list that doesn't match the filter condition into a new list.
+     *
+     * @param filter The logic to filter against.
+     * @return The new list with the filtered contents.
+     */
+    ListInterface<T> filtered(Filter<T> filter);
+
+    /**
+     * Sort the list based on the given comparison logic into a new list.
+     *
+     * @param sorter The comparison logic to sort against.
+     * @return THe new list with the sorted contents.
+     */
+    ListInterface<T> sorted(Comparator<T> sorter);
+
     @FunctionalInterface
     interface Filter<T> {
         boolean filter(T o);

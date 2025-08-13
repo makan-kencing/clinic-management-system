@@ -312,6 +312,16 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     }
 
     @Override
+    public ListInterface<T> filtered(Filter<T> filter) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public ListInterface<T> sorted(Comparator<T> sorter) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
     public @NotNull Iterator<T> iterator() {
         return new LinkedListIterator<>(this.first);
     }
