@@ -307,17 +307,24 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public void sort(Comparator<T> sorter) {
-        // TODO:
+        // TODO: Implement sorting
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public ListInterface<T> filtered(Filter<T> filter) {
-        throw new UnsupportedOperationException("Not implemented");
+        var copy = new DoubleLinkedList<T>();
+
+        for (var node : this.getNodeIterator())
+            if (!filter.filter(node.data))
+                copy.addNode(node);
+
+        return copy;
     }
 
     @Override
     public ListInterface<T> sorted(Comparator<T> sorter) {
+        // TODO: Implement sorting
         throw new UnsupportedOperationException("Not implemented");
     }
 
