@@ -1,5 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import org.jetbrains.annotations.Range;
 
 public class Inventory {
@@ -9,6 +11,7 @@ public class Inventory {
     private int maxQuantity;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int autoOrderThreshold;
+    private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>();
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMinQuantity() {
         return minQuantity;
@@ -32,6 +35,14 @@ public class Inventory {
 
     public void setAutoOrderThreshold(@Range(from = 0, to = Integer.MAX_VALUE) int autoOrderThreshold) {
         this.autoOrderThreshold = autoOrderThreshold;
+    }
+
+    public ListInterface<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(ListInterface<Stock> stocks) {
+        this.stocks = stocks;
     }
 
     @Override
