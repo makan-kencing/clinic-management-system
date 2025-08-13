@@ -59,8 +59,22 @@ abstract class ListTest<T extends ListInterface<String>> {
     }
 
     @DisplayName("Test inserting into list")
+    @ParameterizedTest
+    @CsvSource({"0,hello", "2,hi", "4,hey"})
     void insert(int position, String arg) {
+        impl.add("0");
+        impl.add("1");
+        impl.add("2");
+        impl.add("3");
+        impl.add("4");
+        impl.insert(position, arg);
 
+        assertEquals(6, impl.size());
+        assertEquals(arg, impl.get(position + 1));
+        assertEquals(arg, impl.findFirst(arg::equals));
+        assertEquals(position + 1, impl.index(arg::equals));
+        assertThrows(IndexOutOfBoundsException.class, () -> impl.get(6));
+        assertThrows(IndexOutOfBoundsException.class, () -> impl.insert(6, arg));
     }
 
     void pop() {
