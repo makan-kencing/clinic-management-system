@@ -164,7 +164,8 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     protected void removeNode(Node<T> node) {
         node.destroy();
 
-        if (this.last == node) this.last = this.last.before;
+        if (this.first == node) this.first = this.first.next;
+        else if (this.last == node) this.last = this.last.before;
 
         this.length--;
     }
