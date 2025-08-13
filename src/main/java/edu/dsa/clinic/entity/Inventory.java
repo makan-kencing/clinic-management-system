@@ -11,7 +11,9 @@ public class Inventory {
     private int maxQuantity;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int autoOrderThreshold;
-    private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>();
+    private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
+            s1.getStockInDate().compareTo(s2.getStockInDate())
+    );
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMinQuantity() {
         return minQuantity;

@@ -26,6 +26,9 @@ public record Schedule(
     }
 
     private static ListInterface<Shift> newList() {
-        return new SortedDoubleLinkedList<>();
+        return new SortedDoubleLinkedList<>((s1, s2) ->
+                s1.getTimeRange().from()
+                        .compareTo(s2.getTimeRange().from())
+        );
     }
 }
