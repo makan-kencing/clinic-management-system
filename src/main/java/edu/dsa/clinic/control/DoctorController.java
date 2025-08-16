@@ -11,17 +11,63 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
+import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Shift;
+import edu.dsa.clinic.entity.ShiftType;
 
 public class DoctorController {
     
     private ListInterface<Doctor> DoctorList;
-    private SortedDoubleLinkedList<DoctorShift> shifts;
+    private SortedDoubleLinkedList<Shift> ShiftList;
     
-    public void createDoctorRecord(){
+    public DoctorController() {
+        this.DoctorList = new DoubleLinkedList<>();
+        this.ShiftList = new SortedDoubleLinkedList<>(
+            (s1, s2) -> s1.getShiftTime().compareTo(s2.getShiftTime())
+        );
+    }
+    
+    public void addDoctorRecord(){
         
     }
     
-    public void modifyDoctorInfo(){
+    public void editDoctorInfo(){
         
+    }
+    
+    public void removeDoctorInfo(){
+        
+    }
+    
+    public void viewDoctorInfo(){
+        
+    }
+    
+    public ListInterface<Doctor> doctorsList(){
+        return DoctorList;
+    }
+    
+    public void addShift(){
+        
+    }
+    
+    public void editShift(){
+        
+    }
+    
+    public void removeShift(){
+        
+    }
+    
+    public void viewShift(){
+        
+    }
+    
+    public ListInterface<Shift> listShiftsForDoctor(){
+        return ShiftList;
+    }
+    
+    public ListInterface<Shift> allShifts(){
+        return ShiftList;
     }
 }
