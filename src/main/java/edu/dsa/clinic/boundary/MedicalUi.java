@@ -1,16 +1,16 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.control.MedicalController;
-import edu.dsa.clinic.entity.Gender;
-import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.entity.*;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MedicalUi {
 
 
 
-    public void viewMedical(){
+    public void viewMedical() throws IOException {
         Scanner sc = new Scanner(System.in);
         String [] menu ={
                 "Create Consultation Record",
@@ -51,17 +51,28 @@ public class MedicalUi {
         }
     }
 
+    public void mainInsert() throws IOException {
+        MedicalController medicalController = new MedicalController();
+        Patient patient = insertPatientInform();
+        Doctor doctor= insertAttendingDoctor();
+        insertDiagnosisForm(patient);
+        medicalController.createConsultationRecord(patient,doctor);
+    }
 
-    public Patient insertPatientInform(){
+    public Patient insertPatientInform() throws IOException {
         Scanner sc = new Scanner(System.in);
         Patient patients = new Patient();
         Gender genders = null;
+
+        Doctor doctors = new Doctor();
 
         System.out.println("Enter Patient Name: ");
         String name = sc.nextLine();
         patients.setName(name);
         System.out.println("Select Patient Gender: ");
+        System.out.println("-".repeat(30));
         System.out.printf("%s,%s,%s","| [1] Male |"," [2] Female |"," [3] Unknown |");
+        System.out.println("-".repeat(30));
         String choice = sc.nextLine();
         switch (choice) {
             case "1"-> genders =Gender.MALE;
@@ -74,7 +85,43 @@ public class MedicalUi {
         patients.setIdentification(identification);
         System.out.println("Enter Contact Number: ");
         String contactNumber= sc.nextLine();
+        System.out.println("-".repeat(30));
         patients.setContactNumber(contactNumber);
-        return patients;
+       return patients;
+
     }
+    public Doctor insertAttendingDoctor() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        Doctor doctor = new Doctor();
+        Gender genders = null;
+        System.out.println("Enter Doctor Name: ");
+        String name = sc.nextLine();
+        System.out.println("Select Doctor Gender: ");
+        System.out.println("-".repeat(30));
+        System.out.printf("%s,%s,%s","| [1] Male |"," [2] Female |"," [3] Unknown |");
+        System.out.println("-".repeat(30));
+        String choice = sc.nextLine();
+        switch (choice) {
+            case "1"-> genders =Gender.MALE;
+            case "2"-> genders =Gender.FEMALE;
+            case "3"-> genders=Gender.IDK;
+        }
+        doctor.setGender(genders);
+        System.out.println("-".repeat(30));
+        System.out.println("Enter Contact Number: ");
+        String contactNumber= sc.nextLine();
+        System.out.println("-".repeat(30));
+        doctor.setContactNumber(contactNumber);
+        return doctor;
+    }
+    public void insertDiagnosisForm(Patient patient) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        Diagnosis diagnosis = new Diagnosis();
+        MedicalController medicalController = new MedicalController();
+        Consultation c=medicalController.listConsultations(patient);
+
+
+    }
+
+
 }
