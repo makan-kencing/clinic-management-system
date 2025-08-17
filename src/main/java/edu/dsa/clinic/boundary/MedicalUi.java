@@ -8,13 +8,10 @@ import java.util.Scanner;
 
 public class MedicalUi {
 
-    Scanner sc = new Scanner(System.in);
-    MedicalController medicals = new MedicalController();
-    Patient patients = new Patient();
-    Gender genders;
+
 
     public void viewMedical(){
-
+        Scanner sc = new Scanner(System.in);
         String [] menu ={
                 "Create Consultation Record",
                 "List Out Consultation Record",
@@ -56,6 +53,10 @@ public class MedicalUi {
 
 
     public Patient insertPatientInform(){
+        Scanner sc = new Scanner(System.in);
+        Patient patients = new Patient();
+        Gender genders = null;
+
         System.out.println("Enter Patient Name: ");
         String name = sc.nextLine();
         patients.setName(name);
