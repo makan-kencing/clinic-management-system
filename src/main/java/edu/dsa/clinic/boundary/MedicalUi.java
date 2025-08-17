@@ -1,7 +1,11 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.control.MedicalController;
-import edu.dsa.clinic.entity.*;
+import edu.dsa.clinic.entity.Consultation;
+import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Gender;
+import edu.dsa.clinic.entity.Patient;
 
 import java.io.IOException;
 import java.util.Scanner;
