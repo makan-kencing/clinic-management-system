@@ -35,13 +35,21 @@ public class SortedDoubleLinkedList<T> extends DoubleLinkedList<T> {
 
     @Override
     public ListInterface<T> filtered(Filter<T> filter) {
-        // TODO: redo implementation for more efficient adding
-        throw new UnsupportedOperationException("Not implemented");
+        SortedDoubleLinkedList<T> filteredList = new SortedDoubleLinkedList<>(this.sorter);
+        for (T item : this) {
+            if (filter.filter(item)) {
+                filteredList.add(item);
+            }
+        }
+        return filteredList;
     }
 
     @Override
     public ListInterface<T> sorted(Comparator<T> sorter) {
-        // TODO: redo implementation for more efficient adding
-        throw new UnsupportedOperationException("Not implemented");
+        SortedDoubleLinkedList<T> sortedList = new SortedDoubleLinkedList<>(sorter);
+        for (T item : this) {
+            sortedList.add(item);
+        }
+        return sortedList;
     }
 }
