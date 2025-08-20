@@ -14,17 +14,17 @@ import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Shift;
 import edu.dsa.clinic.entity.ShiftType;
+import edu.dsa.clinic.Database;
 
 public class DoctorController {
-    
-    private ListInterface<Doctor> DoctorList;
-    private SortedDoubleLinkedList<Shift> ShiftList;
-    
+    public ListInterface<Doctor> doctorsList;
+    public ListInterface<Shift> doctorShift;
+
+
+
+
     public DoctorController() {
-        this.DoctorList = new DoubleLinkedList<>();
-        this.ShiftList = new SortedDoubleLinkedList<>(
-            (s1, s2) -> s1.getShiftTime().compareTo(s2.getShiftTime())
-        );
+
     }
     
     public void addDoctorRecord(){
@@ -43,9 +43,7 @@ public class DoctorController {
         
     }
     
-    public ListInterface<Doctor> doctorsList(){
-        return DoctorList;
-    }
+
     
     public void addShift(){
         
@@ -63,11 +61,5 @@ public class DoctorController {
         
     }
     
-    public ListInterface<Shift> listShiftsForDoctor(){
-        return ShiftList;
-    }
-    
-    public ListInterface<Shift> allShifts(){
-        return ShiftList;
-    }
+
 }
