@@ -74,7 +74,7 @@ public class MedicalUi {
         patients.setName(name);
         System.out.println("Select Patient Gender: ");
         System.out.println("-".repeat(30));
-        System.out.printf("%s,%s,%s","| [1] Male |"," [2] Female |"," [3] Unknown |");
+        System.out.printf("%s,%s,%s","|  Male |","  Female |"," [3] Unknown |");
         System.out.println("-".repeat(30));
         String choice = sc.nextLine();
         switch (choice) {
