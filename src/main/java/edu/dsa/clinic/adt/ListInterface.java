@@ -66,9 +66,9 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
      * Remove the first element that matches the condition
      *
      * @param filter The boolean logic to match against.
-     * @return Whether an element was removed.
+     * @return The removed element.
      */
-    boolean removeFirst(Filter<T> filter);
+    @Nullable T removeFirst(Filter<T> filter);
 
     /**
      * Remove and get the first element in the list.

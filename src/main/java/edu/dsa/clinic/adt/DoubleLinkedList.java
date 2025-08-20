@@ -273,18 +273,18 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     }
 
     @Override
-    public boolean removeFirst(Filter<T> filter) {
-        if (this.reference == null) return false;
+    public T removeFirst(Filter<T> filter) {
+        if (this.reference == null) return null;
 
         for (var node : this.reference.head)
             if (filter.filter(node.data)) {
                 this.removeNode(node);
                 this.length--;
 
-                return true;
+                return node.data;
             }
 
-        return false;
+        return null;
     }
 
     @Override
