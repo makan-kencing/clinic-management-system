@@ -1,6 +1,7 @@
 package edu.dsa.clinic.adt;
 
 import edu.dsa.clinic.utils.Filter;
+import edu.dsa.clinic.utils.Mapper;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
@@ -121,6 +122,15 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
      * @param other The other list to be extended with.
      */
     void extend(ListInterface<T> other);
+
+    /**
+     * Map all the element in the list to another value.
+     *
+     * @param mapper The mapping function to convert the list.
+     * @return The new list with the values mapped.
+     * @param <M> The datatype to map to.
+     */
+    <M> ListInterface<M> map(Mapper<T, M> mapper);
 
     /**
      * Filter elements in the list that doesn't match the filter condition.

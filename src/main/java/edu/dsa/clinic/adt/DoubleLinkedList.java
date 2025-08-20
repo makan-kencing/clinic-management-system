@@ -1,6 +1,7 @@
 package edu.dsa.clinic.adt;
 
 import edu.dsa.clinic.utils.Filter;
+import edu.dsa.clinic.utils.Mapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -351,6 +352,21 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
             this.addNodeTail(node);
             this.length++;
         }
+    }
+
+    @Override
+    public <M> ListInterface<M> map(Mapper<T, M> mapper) {
+        var mapped = new DoubleLinkedList<M>();
+
+        for (var data : this) {
+            var mappedData = mapper.map(data);
+
+            var node = new Node<>(mappedData);
+            mapped.addNodeTail(node);
+            mapped.length++;
+        }
+
+        return mapped;
     }
 
     @Override
