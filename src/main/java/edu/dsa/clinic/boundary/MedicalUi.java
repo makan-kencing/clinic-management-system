@@ -1,17 +1,24 @@
 package edu.dsa.clinic.boundary;
 
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
+import edu.dsa.clinic.entity.Medicine;
+import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.entity.Prescription;
+import edu.dsa.clinic.entity.Specialization;
+import edu.dsa.clinic.entity.Treatment;
 
+import javax.print.Doc;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class MedicalUi {
 
+public class MedicalUi {
 
 
     public void viewMedical() throws IOException {
@@ -55,15 +62,7 @@ public class MedicalUi {
         }
     }
 
-    public void mainInsert() throws IOException {
-        MedicalController medicalController = new MedicalController();
-        Patient patient = insertPatientInform();
-        Doctor doctor= insertAttendingDoctor();
-        insertDiagnosisForm(patient);
-        medicalController.createConsultationRecord(patient,doctor);
-    }
-
-    public Patient insertPatientInform() throws IOException {
+    public void insertPatientInform() throws IOException {
         Scanner sc = new Scanner(System.in);
         Patient patients = new Patient();
         Gender genders = null;
@@ -91,13 +90,14 @@ public class MedicalUi {
         String contactNumber= sc.nextLine();
         System.out.println("-".repeat(30));
         patients.setContactNumber(contactNumber);
-       return patients;
+        insertAttendingDoctor(patients);
 
     }
-    public Doctor insertAttendingDoctor() throws IOException {
+    public void insertAttendingDoctor(Patient patient) throws IOException {
         Scanner sc = new Scanner(System.in);
         Doctor doctor = new Doctor();
         Gender genders = null;
+        Specialization specialization=null;
         System.out.println("Enter Doctor Name: ");
         String name = sc.nextLine();
         System.out.println("Select Doctor Gender: ");
@@ -115,15 +115,116 @@ public class MedicalUi {
         System.out.println("Enter Contact Number: ");
         String contactNumber= sc.nextLine();
         System.out.println("-".repeat(30));
+        System.out.println("Enter Doctor Specialization: ");
+        System.out.printf("%s,%s,%s,%s,%s"
+                ,"| [1] Neurosurgery |"
+                ," [2] Pediatrics |"
+                ," [3] Ophthalmology |",
+                " [4] Otorhinolaryngology |"
+                ," [5] Orthopedics |");
+        String choice2 = sc.nextLine();
+        switch (choice2) {
+           case "1" -> specialization= Specialization.Neurosurgery;
+           case "2" -> specialization=Specialization.Pediatrics;
+           case "3" -> specialization=Specialization.Ophthalmology;
+           case "4" -> specialization=Specialization.Otorhinolaryngology;
+           case "5" -> specialization=Specialization.Orthopedics;
+        }
+        doctor.setSpecializations(specialization);
         doctor.setContactNumber(contactNumber);
-        return doctor;
+        insertDiagnosisForm(patient,doctor);
     }
-    public void insertDiagnosisForm(Patient patient) throws IOException {
+    public void insertDiagnosisForm(Patient patient, Doctor doctor) throws IOException {
         Scanner sc = new Scanner(System.in);
         Diagnosis diagnosis = new Diagnosis();
-        MedicalController medicalController = new MedicalController();
-        Consultation c=medicalController.listConsultations(patient);
+        Consultation consultation =new Consultation();
 
+        consultation.setDoctor(doctor);
+        consultation.setPatient(patient);
+        diagnosis.setConsultation(consultation);
+
+        System.out.println(doctor.toString());
+        System.out.println("-".repeat(30));
+        System.out.println(patient.toString());
+        System.out.println("-".repeat(30));
+        System.out.println("| Diagnosis |");
+        System.out.println("-".repeat(30));
+        while (true) {
+            System.out.print("Enter diagnosis description: ");
+            String dc = sc.nextLine().trim();
+
+            if (dc.isEmpty()) {
+                System.out.println("Description cannot be empty. Please enter again.");
+
+            } else {
+                diagnosis.setDescription(dc);
+                break;
+            }
+        }
+        System.out.println("Diagnosis notes (optional): ");
+        String dn = sc.nextLine();
+        diagnosis.setNotes(dn.isBlank() ? null : dn);
+
+        while (true) {
+            insertTreatmentForm(diagnosis);
+            System.out.print("Add another treatment? (y/n): ");
+            String more = sc.nextLine().trim();
+            if (!more.equalsIgnoreCase("y")) break;
+        }
+
+
+
+
+    }
+
+    public void insertTreatmentForm(Diagnosis diagnosis) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        Prescription p = new Prescription();
+        Treatment treatment = new Treatment();
+        treatment.setDiagnosis(diagnosis);
+        Medicine medicine = new Medicine();
+
+        System.out.println("-".repeat(50));
+        System.out.println("| Treatment |");
+        System.out.println("-".repeat(50));
+        System.out.println("Symptom for this treatment (e.g., Fever/Cough/Nasal Congestion): ");
+        String symptom = sc.nextLine();
+        treatment.setSymptom(symptom);
+        while(true){
+            p.setTreatment(treatment);
+
+            System.out.println("-".repeat(30));
+            System.out.println("| Prescription |");
+            System.out.println("-".repeat(30));
+            System.out.println("Medicine name: ");
+            medicine.setName(sc.nextLine());
+    //      System.out.println("Medicine Type: ");
+    //      medicine.setName(sc.nextLine());
+            p.setMedicine(medicine);
+
+            int qty;
+            while (true) {
+                System.out.print("Quantity (>=1): ");
+                String line = sc.nextLine().trim();
+                try {
+                    qty = Integer.parseInt(line);
+                    if (qty < 1) {
+                        System.out.println("Quantity must be >= 1.");
+                        continue;
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number. The input must be integer.");
+                }
+            }
+            p.setQuantity(qty);
+
+            System.out.println("Prescription notes (optional): ");
+            String pn = sc.nextLine();
+            p.setNotes(pn.isBlank() ? null : pn);
+
+
+        }
 
     }
 
