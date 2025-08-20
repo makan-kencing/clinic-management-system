@@ -15,6 +15,7 @@ public class Consultation extends IdentifiableEntity {
     private Doctor doctor;
     private ListInterface<Diagnosis> diagnoses;
     private ListInterface<Treatment> treatments;
+    private ConsultationType consultationType;
     private @Nullable String notes;
 
     @Override
@@ -66,5 +67,13 @@ public class Consultation extends IdentifiableEntity {
 
     public void setNotes(@Nullable String notes) {
         this.notes = notes;
+    }
+
+    public ConsultationType getConsultationType() {
+        return consultationType;
+    }
+
+    public void setConsultationType(ConsultationType consultationType) {
+        this.consultationType = consultationType;
     }
 }
