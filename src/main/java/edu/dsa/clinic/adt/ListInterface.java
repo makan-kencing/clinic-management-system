@@ -62,6 +62,14 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
     void remove(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException;
 
     /**
+     * Remove the first element that matches the condition
+     *
+     * @param filter The boolean logic to match against.
+     * @return Whether an element was removed.
+     */
+    boolean removeFirst(Filter<T> filter);
+
+    /**
      * Remove and get the first element in the list.
      *
      * @return The first element.
@@ -142,6 +150,21 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
      * @return THe new list with the sorted contents.
      */
     ListInterface<T> sorted(Comparator<T> sorter);
+
+    /**
+     * Convert the list to an array.
+     * @implNote Added to be used for converting to vargs friendly type.
+     *
+     * @return The array.
+     */
+    T[] toArray();
+
+    /**
+     * Create a shallow copy of the existing list.
+     *
+     * @return The shallow copy of the list.
+     */
+    ListInterface<T> clone();
 
     @FunctionalInterface
     interface Filter<T> {
