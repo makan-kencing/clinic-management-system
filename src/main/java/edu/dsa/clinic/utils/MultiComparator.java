@@ -1,5 +1,7 @@
 package edu.dsa.clinic.utils;
 
+import edu.dsa.clinic.adt.ListInterface;
+
 import java.util.Comparator;
 
 // https://stackoverflow.com/questions/4258700/collections-sort-with-multiple-fields
@@ -9,6 +11,10 @@ public class MultiComparator<T> implements Comparator<T> {
     @SafeVarargs
     public MultiComparator(Comparator<? super T>... comparators) {
         this.comparators = comparators;
+    }
+
+    public MultiComparator(ListInterface<Comparator<? super T>> comparators) {
+        this.comparators = comparators.toArray();
     }
 
     public int compare(T o1, T o2) {
