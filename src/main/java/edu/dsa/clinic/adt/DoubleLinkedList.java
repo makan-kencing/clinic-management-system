@@ -272,6 +272,21 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     }
 
     @Override
+    public boolean removeFirst(Filter<T> filter) {
+        if (this.reference == null) return false;
+
+        for (var node : this.reference.head)
+            if (filter.filter(node.data)) {
+                this.removeNode(node);
+                this.length--;
+
+                return true;
+            }
+
+        return false;
+    }
+
+    @Override
     public T pop() throws IndexOutOfBoundsException {
         if (this.reference == null) throw new IndexOutOfBoundsException();
 
@@ -373,6 +388,17 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
         return clone;
 
+    }
+
+    @Override
+    public T[] toArray() {
+        T[] array = (T[]) new Object[this.length];
+
+        var i = 0;
+        for (var data : this)
+            array[i++] = data;
+
+        return array;
     }
 
     @Override
