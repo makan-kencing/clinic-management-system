@@ -18,7 +18,7 @@ public class Medicine extends IdentifiableEntity {
     private BigDecimal price;
     private ListInterface<Medicine> substitutes = new DoubleLinkedList<>();
     private ListInterface<Medicine> substitutesFor = new DoubleLinkedList<>();
-    private Inventory inventory;
+    private Inventory inventory = new Inventory();
 
     @Override
     public String toString() {
