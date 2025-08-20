@@ -1,5 +1,6 @@
 package edu.dsa.clinic.adt;
 
+import edu.dsa.clinic.utils.Filter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
@@ -165,9 +166,4 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
      * @return The shallow copy of the list.
      */
     ListInterface<T> clone();
-
-    @FunctionalInterface
-    interface Filter<T> {
-        boolean filter(T o);
-    }
 }

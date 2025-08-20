@@ -1,5 +1,6 @@
 package edu.dsa.clinic.adt;
 
+import edu.dsa.clinic.utils.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;

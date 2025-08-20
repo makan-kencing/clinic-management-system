@@ -3,6 +3,7 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Stock;
+import edu.dsa.clinic.utils.Filter;
 
 import java.util.Comparator;
 
@@ -14,7 +15,7 @@ public class InventoryController {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public ListInterface<Stock> getAllStocks(ListInterface.Filter<Stock> filter, Comparator<Stock> sorter) {
+    public ListInterface<Stock> getAllStocks(Filter<Stock> filter, Comparator<Stock> sorter) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
