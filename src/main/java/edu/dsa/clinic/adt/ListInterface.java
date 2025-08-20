@@ -15,20 +15,20 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
     void add(T e);
 
     /**
+     * Add the element to the start of the list.
+     *
+     * @param e The element to add to the list.
+     */
+    void addLeft(T e);
+
+    /**
      * Insert elements after the element located at index.
      *
      * @param index The index to insert the element after.
      * @param e The new element to be added.
+     * @throws IndexOutOfBoundsException If the index does not point to an element.
      */
-    void insert(@Range(from = 0, to = Integer.MAX_VALUE) int index, T e);
-
-    /**
-     * Remove the element at the specified index.
-     *
-     * @param index The index of the element to remove.
-     * @throws IndexOutOfBoundsException If the index exceed the list current size.
-     */
-    void remove(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException;
+    void insert(@Range(from = 0, to = Integer.MAX_VALUE) int index, T e) throws IndexOutOfBoundsException;
 
     /**
      * Get the element at the specified index.
@@ -52,6 +52,14 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
      * @return The element in the last. If the element doesn't exist, return null.
      */
     @Nullable T getLast();
+
+    /**
+     * Remove the element at the specified index.
+     *
+     * @param index The index of the element to remove.
+     * @throws IndexOutOfBoundsException If the index exceed the list current size.
+     */
+    void remove(@Range(from = 0, to = Integer.MAX_VALUE) int index) throws IndexOutOfBoundsException;
 
     /**
      * Remove and get the first element in the list.
