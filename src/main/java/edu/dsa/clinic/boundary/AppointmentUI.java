@@ -38,7 +38,7 @@ public class AppointmentUI extends UI{
 
             switch(choice) {
                 case 1  -> createAppointment();
-//                case 2  -> viewAllAppointments();
+                case 2  -> viewAppointment();
 //                case 3  -> editAppointment();
 //                case 4  -> cancelAppointment();
 //                case 0  -> quit();
@@ -202,6 +202,33 @@ public class AppointmentUI extends UI{
         }
     }
 
+    //TODO: seach, sort
+    public void viewAppointment() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        var table = new Tabulate<>(new Tabulate.Header[]{
+                new Tabulate.Header("Id", 5, Tabulate.Alignment.RIGHT),
+                new Tabulate.Header("Patient Name", 25, Tabulate.Alignment.CENTER),
+                new Tabulate.Header("Doctor", 25, Tabulate.Alignment.CENTER),
+                new Tabulate.Header("Start At", 25, Tabulate.Alignment.CENTER),
+                new Tabulate.Header("End At", 25, Tabulate.Alignment.CENTER),
+                new Tabulate.Header("Created At", 25, Tabulate.Alignment.CENTER)
+        }, Database.appointmentList.clone()) {
+            @Override
+            protected Cell[] getRow(Appointment element) {
+                return new Cell[] {
+                        new Cell(String.valueOf(element.getId()), Alignment.CENTER),
+                        new Cell(element.getPatient().getName()),
+                        new Cell(element.getDoctor().getName()),
+                        new Cell(element.getExpectedStartAt().format(formatter)),
+                        new Cell(element.getExpectedEndAt().format(formatter)),
+                        new Cell(element.getCreatedAt().format(formatter))
+                };
+            }
+        };
+
+        table.display();
+    }
 
 
 
