@@ -14,6 +14,7 @@ public class Diagnosis extends IdentifiableEntity {
     private Consultation consultation;
     private ListInterface<Prescription> prescriptions;
     private String description;
+    private ListInterface<Treatment> treatment;
     private @Nullable String notes;
 
     @Override
@@ -21,6 +22,7 @@ public class Diagnosis extends IdentifiableEntity {
         return "Diagnosis{" +
                 "consultation=" + consultation +
                 ", prescriptions=" + prescriptions +
+                ", treatment='" + treatment + '\'' +
                 ", description='" + description + '\'' +
                 ", notes='" + notes + '\'' +
                 '}';
@@ -57,4 +59,12 @@ public class Diagnosis extends IdentifiableEntity {
     public void setNotes(@Nullable String notes) {
         this.notes = notes;
     }
+
+   public ListInterface<Treatment> getTreatment() {
+        return treatment;
+   }
+
+   public void setTreatment(ListInterface<Treatment> treatment) {
+        this.treatment = treatment;
+   }
 }
