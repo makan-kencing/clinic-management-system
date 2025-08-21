@@ -5,6 +5,8 @@ import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Specialization;
 
 public class Initializer {
     private Initializer() {
@@ -53,5 +55,45 @@ public class Initializer {
         var consultationQueues = new DoubleLinkedList<ConsultationQueue>();
 
         consultationQueues.add(queue);
+
+        var doctor = new Doctor();
+        doctor.setName("daren1");
+        doctor.setGender(Gender.MALE);
+        doctor.setContactNumber("+123456789");
+        doctor.setSpecialization(Specialization.Neurosurgery);
+        doctor.setSchedule(null);
+        Database.doctorList.add(doctor);
+
+        doctor = new Doctor();
+        doctor.setName("daren2");
+        doctor.setGender(Gender.IDK);
+        doctor.setContactNumber("+123456789");
+        doctor.setSpecialization(Specialization.Ophthalmology);
+        doctor.setSchedule(null);
+        Database.doctorList.add(doctor);
+
+        doctor = new Doctor();
+        doctor.setName("daren3");
+        doctor.setGender(Gender.FEMALE);
+        doctor.setContactNumber("+123456789");
+        doctor.setSpecialization(Specialization.Orthopedics);
+        doctor.setSchedule(null);
+        Database.doctorList.add(doctor);
+
+        doctor = new Doctor();
+        doctor.setName("daren4");
+        doctor.setGender(Gender.FEMALE);
+        doctor.setContactNumber("+123456789");
+        doctor.setSpecialization(Specialization.Pediatrics);
+        doctor.setSchedule(null);
+        Database.doctorList.add(doctor);
+
+        doctor = new Doctor();
+        doctor.setName("daren5");
+        doctor.setGender(Gender.MALE);
+        doctor.setContactNumber("+123456789");
+        doctor.setSpecialization(Specialization.Otorhinolaryngology);
+        doctor.setSchedule(null);
+        Database.doctorList.add(doctor);
     }
 }
