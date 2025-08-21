@@ -13,7 +13,8 @@ public class Doctor extends IdentifiableEntity {
     private String name;
     private Gender gender;
     private String contactNumber;
-    private ListInterface<String> specializations;
+    private Specialization specializations;
+    //private ListInterface<String> specializations;
     private Schedule schedule;
 
     @Override
@@ -51,13 +52,16 @@ public class Doctor extends IdentifiableEntity {
         this.contactNumber = contactNumber;
     }
 
-    public ListInterface<String> getSpecializations() {
-        return specializations;
-    }
+   public void setSpecializations(Specialization specializations) {this.specializations = specializations;}
+//    public ListInterface<String> getSpecializations() {
+//        return specializations;
+//    }
+//
+//    public void setSpecializations(ListInterface<String> specializations) {
+//        this.specializations = specializations;
+//    }
 
-    public void setSpecializations(ListInterface<String> specializations) {
-        this.specializations = specializations;
-    }
+    public Specialization getSpecializations() {return specializations;}
 
     public Schedule getSchedule() {
         return schedule;
