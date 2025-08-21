@@ -20,8 +20,9 @@ public class MedicalController {
         Database.diagnosisList.add(diagnosis);
     }
 
-    public void createTreatmentRecord(Treatment treatment, Prescription prescription) throws IOException {
+    public Prescription createPrescriptionRecord(Prescription prescription) throws IOException {
         Database.prescriptionsList.add(prescription);
+        return prescription;
     }
 
     public Consultation listConsultations(Patient patient) throws IOException {

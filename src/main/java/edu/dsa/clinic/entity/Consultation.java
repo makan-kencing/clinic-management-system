@@ -14,7 +14,6 @@ public class Consultation extends IdentifiableEntity {
     private Patient patient;
     private Doctor doctor;
     private ListInterface<Diagnosis> diagnoses;
-    private ListInterface<Treatment> treatments;
     private ConsultationType consultationType;
     private @Nullable String notes;
 
@@ -24,7 +23,6 @@ public class Consultation extends IdentifiableEntity {
                 "patient=" + patient +
                 ", doctor=" + doctor +
                 ", diagnoses=" + diagnoses +
-                ", treatments=" + treatments +
                 ", notes='" + notes + '\'' +
                 '}';
     }
@@ -53,13 +51,6 @@ public class Consultation extends IdentifiableEntity {
         this.diagnoses = diagnoses;
     }
 
-    public ListInterface<Treatment> getTreatments() {
-        return treatments;
-    }
-
-    public void setTreatments(ListInterface<Treatment> treatments) {
-        this.treatments = treatments;
-    }
 
     public @Nullable String getNotes() {
         return notes;

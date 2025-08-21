@@ -1,9 +1,11 @@
 package edu.dsa.clinic.boundary;
 
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Dispensing;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Medicine;
@@ -132,6 +134,7 @@ public class MedicalUi {
         }
         doctor.setSpecializations(specialization);
         doctor.setContactNumber(contactNumber);
+
         insertDiagnosisForm(patient,doctor);
     }
     public void insertDiagnosisForm(Patient patient, Doctor doctor) throws IOException {
@@ -173,6 +176,10 @@ public class MedicalUi {
         }
 
 
+        MedicalController mc = new MedicalController();
+        mc.createConsultationRecord(consultation);
+
+        System.out.println(">> Created Consultation + Diagnosis + Treatments + Prescriptions.");
 
 
     }
@@ -183,12 +190,17 @@ public class MedicalUi {
         Treatment treatment = new Treatment();
         treatment.setDiagnosis(diagnosis);
         Medicine medicine = new Medicine();
+        Consultation consultation =new Consultation();
 
         System.out.println("-".repeat(50));
         System.out.println("| Treatment |");
         System.out.println("-".repeat(50));
         System.out.println("Symptom for this treatment (e.g., Fever/Cough/Nasal Congestion): ");
         String symptom = sc.nextLine();
+        while (symptom.isEmpty()) {
+            System.out.println("Symptom cannot be empty. Please enter again:");
+            symptom = sc.nextLine().trim();
+        }
         treatment.setSymptom(symptom);
         while(true){
             p.setTreatment(treatment);
@@ -198,8 +210,6 @@ public class MedicalUi {
             System.out.println("-".repeat(30));
             System.out.println("Medicine name: ");
             medicine.setName(sc.nextLine());
-    //      System.out.println("Medicine Type: ");
-    //      medicine.setName(sc.nextLine());
             p.setMedicine(medicine);
 
             int qty;
@@ -218,11 +228,14 @@ public class MedicalUi {
                 }
             }
             p.setQuantity(qty);
-
             System.out.println("Prescription notes (optional): ");
             String pn = sc.nextLine();
             p.setNotes(pn.isBlank() ? null : pn);
+            treatment.getPrescriptions().add(p);
 
+            System.out.print("Add another prescription for this treatment? (y/n): ");
+            String moreP = sc.nextLine().trim();
+            if (!moreP.equalsIgnoreCase("y")) break;
 
         }
 
