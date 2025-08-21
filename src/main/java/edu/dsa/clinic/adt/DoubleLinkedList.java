@@ -408,17 +408,6 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     }
 
     @Override
-    public T[] toArray() {
-        T[] array = (T[]) new Object[this.length];
-
-        var i = 0;
-        for (var data : this)
-            array[i++] = data;
-
-        return array;
-    }
-
-    @Override
     public @NotNull Iterator<T> iterator() {
         return new LinkedListIterator<>(this);
     }
