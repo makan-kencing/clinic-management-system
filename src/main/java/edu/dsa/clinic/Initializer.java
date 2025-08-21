@@ -1,5 +1,8 @@
 package edu.dsa.clinic;
 
+import edu.dsa.clinic.adt.DoubleLinkedList;
+import edu.dsa.clinic.entity.ConsultationQueue;
+import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
 
@@ -42,5 +45,13 @@ public class Initializer {
         patient.setIdentification("09865");
         patient.setContactNumber("+123456789");
         Database.patientsList.add(patient);
+
+        var queue = new ConsultationQueue()
+                .setPatient(patient)
+                .setConsultationType(ConsultationType.GENERAL);
+
+        var consultationQueues = new DoubleLinkedList<ConsultationQueue>();
+
+        consultationQueues.add(queue);
     }
 }

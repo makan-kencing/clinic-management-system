@@ -163,14 +163,6 @@ public interface ListInterface<T> extends Cloneable, Iterable<T> {
     ListInterface<T> sorted(Comparator<T> sorter);
 
     /**
-     * Convert the list to an array.
-     * @implNote Added to be used for converting to vargs friendly type.
-     *
-     * @return The array.
-     */
-    T[] toArray();
-
-    /**
      * Create a shallow copy of the existing list.
      *
      * @return The shallow copy of the list.
