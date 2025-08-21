@@ -460,6 +460,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         Node<T> fast = head;
 
         while (fast.next != null && fast.next.next != null) {
+            assert slow != null;
             slow = slow.next;
             fast = fast.next.next;
         }
