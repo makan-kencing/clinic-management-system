@@ -6,6 +6,8 @@ package edu.dsa.clinic.entity;
  * @author daren
  */
 public enum ShiftType {
-    WORK,
-    BREAK
+    BREAK,
+    MORNING,
+    AFTERNOON,
+    NIGHT,
 }
