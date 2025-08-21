@@ -382,9 +382,68 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public void sort(Comparator<T> sorter) {
-        // TODO: Implement sorting
-        throw new UnsupportedOperationException("Not implemented");
+        if (reference == null || length < 2) {
+            return;
+        }
+
+        reference.head = mergeSort(reference.head, sorter);
+
+        Node<T> tail = reference.head;
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+        reference.tail = tail;
     }
+
+    private Node<T> mergeSort(Node<T> head, Comparator<T> sorter) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        Node<T> middle = getMiddle(head);
+        Node<T> nextOfMiddle = middle.next;
+
+        middle.next = null;
+        if (nextOfMiddle != null) nextOfMiddle.before = null;
+
+        Node<T> left = mergeSort(head, sorter);
+        Node<T> right = mergeSort(nextOfMiddle, sorter);
+
+        return merge(left, right, sorter);
+    }
+
+    private Node<T> merge(Node<T> left, Node<T> right, Comparator<T> sorter) {
+        if (left == null) return right;
+        if (right == null) return left;
+
+        Node<T> result;
+
+        if (sorter.compare(left.data, right.data) <= 0) {
+            result = left;
+            result.next = merge(left.next, right, sorter);
+            if (result.next != null) result.next.before = result;
+        } else {
+            result = right;
+            result.next = merge(left, right.next, sorter);
+            if (result.next != null) result.next.before = result;
+        }
+
+        return result;
+    }
+
+    private Node<T> getMiddle(Node<T> head) {
+        if (head == null) return head;
+
+        Node<T> slow = head;
+        Node<T> fast = head;
+
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
 
     @Override
     public ListInterface<T> filtered(Filter<T> filter) {
