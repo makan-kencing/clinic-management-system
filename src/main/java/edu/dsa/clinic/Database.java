@@ -14,8 +14,9 @@ public class Database {
     public final static ListInterface<Diagnosis> diagnosisList = new DoubleLinkedList<>();
     public final static ListInterface<Consultation> consultationsList = new DoubleLinkedList<>();
     public final static ListInterface<Medicine> medicineList = new DoubleLinkedList<>();
-    public final static ListInterface<Prescription> prescriptionsList =new DoubleLinkedList<>();
-    public final static ListInterface<Treatment> treatmentsList=new DoubleLinkedList<>();
+    public final static ListInterface<Prescription> prescriptionsList = new DoubleLinkedList<>();
+    public final static ListInterface<Treatment> treatmentsList = new DoubleLinkedList<>();
+
     private Database() {
     }
 }
