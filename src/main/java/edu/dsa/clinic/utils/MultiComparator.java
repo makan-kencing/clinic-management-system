@@ -6,15 +6,10 @@ import java.util.Comparator;
 
 // https://stackoverflow.com/questions/4258700/collections-sort-with-multiple-fields
 public class MultiComparator<T> implements Comparator<T> {
-    private final Comparator<? super T>[] comparators;
+    private final ListInterface<Comparator<T>> comparators;
 
-    @SafeVarargs
-    public MultiComparator(Comparator<? super T>... comparators) {
+    public MultiComparator(ListInterface<Comparator<T>> comparators) {
         this.comparators = comparators;
-    }
-
-    public MultiComparator(ListInterface<Comparator<? super T>> comparators) {
-        this.comparators = comparators.toArray();
     }
 
     public int compare(T o1, T o2) {

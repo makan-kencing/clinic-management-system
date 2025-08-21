@@ -40,10 +40,10 @@ public class MedicineController {
         var medicines = Database.medicineList.clone();
 
         if (filters != null && filters.size() != 0)
-            medicines.filter(new MultiFilter<>(filters.toArray()));
+            medicines.filter(new MultiFilter<>(filters));
 
         if (sorters != null && sorters.size() != 0)
-            medicines.sort(new MultiComparator<>(sorters.toArray()));
+            medicines.sort(new MultiComparator<>(sorters));
 
         return medicines;
     }
