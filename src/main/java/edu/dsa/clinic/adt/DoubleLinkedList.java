@@ -193,6 +193,28 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     }
 
     /**
+     * Add a {@link Node} before a specific node.
+     *
+     * @param after The node that the new node will be inserted before.
+     * @param node The {@link Node} to be inserted.
+     */
+    protected void addNodeBefore(Node<T> after, Node<T> node) {
+        assert (this.reference != null);
+
+        node.next = after;
+        node.before = after.before;
+
+        if (after.before != null) {
+            after.before.next = node;
+        } else {
+            // inserting before the head
+            this.reference.head = node;
+        }
+
+        after.before = node;
+    }
+
+    /**
      * Remove the {@link Node} from the list.
      * Also invalidates head and tail reference if affected.
      *
