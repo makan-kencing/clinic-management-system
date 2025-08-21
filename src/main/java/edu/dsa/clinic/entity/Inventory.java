@@ -4,6 +4,11 @@ import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import org.jetbrains.annotations.Range;
 
+/**
+ * The inventory definition of a {@link Medicine}.
+ *
+ * @author makan-kencing
+ */
 public class Inventory {
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int minQuantity;
@@ -11,7 +16,7 @@ public class Inventory {
     private int maxQuantity;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int autoOrderThreshold;
-    private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
+    private final ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
             s1.getStockInDate().compareTo(s2.getStockInDate())
     );
 
@@ -19,32 +24,31 @@ public class Inventory {
         return minQuantity;
     }
 
-    public void setMinQuantity(@Range(from = 0, to = Integer.MAX_VALUE) int minQuantity) {
+    public Inventory setMinQuantity(@Range(from = 0, to = Integer.MAX_VALUE) int minQuantity) {
         this.minQuantity = minQuantity;
+        return this;
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMaxQuantity() {
         return maxQuantity;
     }
 
-    public void setMaxQuantity(@Range(from = 0, to = Integer.MAX_VALUE) int maxQuantity) {
+    public Inventory setMaxQuantity(@Range(from = 0, to = Integer.MAX_VALUE) int maxQuantity) {
         this.maxQuantity = maxQuantity;
+        return this;
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getAutoOrderThreshold() {
         return autoOrderThreshold;
     }
 
-    public void setAutoOrderThreshold(@Range(from = 0, to = Integer.MAX_VALUE) int autoOrderThreshold) {
+    public Inventory setAutoOrderThreshold(@Range(from = 0, to = Integer.MAX_VALUE) int autoOrderThreshold) {
         this.autoOrderThreshold = autoOrderThreshold;
+        return this;
     }
 
     public ListInterface<Stock> getStocks() {
         return stocks;
-    }
-
-    public void setStocks(ListInterface<Stock> stocks) {
-        this.stocks = stocks;
     }
 
     @Override
@@ -53,6 +57,7 @@ public class Inventory {
                 "minQuantity=" + minQuantity +
                 ", maxQuantity=" + maxQuantity +
                 ", autoOrderThreshold=" + autoOrderThreshold +
+                ", stocks=" + stocks +
                 '}';
     }
 }

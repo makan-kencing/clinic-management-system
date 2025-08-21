@@ -3,9 +3,10 @@ package edu.dsa.clinic.entity;
 import java.time.LocalDateTime;
 
 /**
- * An appointment created by the patient or a staff for a {@link Consultation} in the future.
+ * An appointment between a {@link Patient} and {@link Doctor} for a {@link Consultation} in the future.
+ * The appointment is scheduled by a staff.
  *
- * @author TODO
+ * @author wen han
  * @see Consultation
  */
 public class Appointment extends IdentifiableEntity {
@@ -15,54 +16,60 @@ public class Appointment extends IdentifiableEntity {
     private LocalDateTime expectedStartAt;
     private LocalDateTime expectedEndAt;
 
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "patient=" + patient +
-                ", doctor=" + doctor +
-                ", createdAt=" + createdAt +
-                ", expectedStartAt=" + expectedStartAt +
-                ", expectedEndAt=" + expectedEndAt +
-                '}';
-    }
-
     public Patient getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public Appointment setPatient(Patient patient) {
         this.patient = patient;
+        return this;
     }
 
     public Doctor getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public Appointment setDoctor(Doctor doctor) {
         this.doctor = doctor;
+        return this;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public Appointment setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public LocalDateTime getExpectedStartAt() {
         return expectedStartAt;
     }
 
-    public void setExpectedStartAt(LocalDateTime expectedStartAt) {
+    public Appointment setExpectedStartAt(LocalDateTime expectedStartAt) {
         this.expectedStartAt = expectedStartAt;
+        return this;
     }
 
     public LocalDateTime getExpectedEndAt() {
         return expectedEndAt;
     }
 
-    public void setExpectedEndAt(LocalDateTime expectedEndAt) {
+    public Appointment setExpectedEndAt(LocalDateTime expectedEndAt) {
         this.expectedEndAt = expectedEndAt;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                ", createdAt=" + createdAt +
+                ", expectedStartAt=" + expectedStartAt +
+                ", expectedEndAt=" + expectedEndAt +
+                '}';
     }
 }

@@ -114,9 +114,17 @@ public abstract class Tabulate<T> {
 
         for (var header : this.headers)
             sum += this.padding + header.padLength + this.padding;
-        sum -= this.padding + this.padding;
 
+        sum += 2;
         return sum;
+    }
+
+    protected StringJoiner getRowBuilder(char padding, char border) {
+        return new StringJoiner(
+                Character.toString(padding).repeat(this.padding) + border + Character.toString(padding).repeat(this.padding),
+                border + Character.toString(padding).repeat(this.padding),
+                Character.toString(padding).repeat(this.padding) + border
+        );
     }
 
     public void addFilter(String name, Filter<T> filter) {
@@ -138,11 +146,16 @@ public abstract class Tabulate<T> {
     protected abstract Cell[] getRow(T element);
 
     protected void displayBorder() {
-        System.out.println("=".repeat(this.getWidth()));
+        var joiner = this.getRowBuilder('-', '+');
+
+        for (var header : headers)
+            joiner.add("-".repeat(header.padLength));
+
+        System.out.println(joiner);
     }
 
     protected void displayHeader() {
-        var joiner = new StringJoiner(Alignment.CENTER.pad("|", ' ', 1 + 2 * padding));
+        var joiner = this.getRowBuilder(' ', '|');
 
         for (var header : this.headers)
             joiner.add(header.pad(' ', header.padLength));
@@ -169,7 +182,7 @@ public abstract class Tabulate<T> {
 
             var cells = this.getRow(row);
 
-            var joiner = new StringJoiner(Alignment.CENTER.pad("|", ' ', 1 + 2 * padding));
+            var joiner = this.getRowBuilder(' ', '|');
             for (int i = 0; i < this.headers.length; i++) {
                 var header = this.headers[i];
                 var cell = cells[i];
@@ -182,10 +195,8 @@ public abstract class Tabulate<T> {
     }
 
     protected void displayFooter() {
-        int width = this.getWidth();
-
         var page = String.format("%d / %d", this.page, this.getMaxPage());
-        System.out.println(Alignment.CENTER.pad(page, ' ', width));
+        System.out.println("|" + Alignment.CENTER.pad(page, ' ', this.getWidth() - 2) + "|");
 
         if (this.filters.size() > 0) {
             var joiner = new StringJoiner(", ");

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Range;
 /**
  * The amount of {@link Medicine} to be prescribed for a {@link Treatment}.
  *
- * @author TODO
+ * @author tan
  * @see Medicine
  * @see Treatment
  */
@@ -18,55 +18,57 @@ public class Prescription extends IdentifiableEntity {
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int quantity;
     private @Nullable String notes;
-    private ListInterface<Dispensing> dispensedMedications = new DoubleLinkedList<>();
+    private final ListInterface<Dispensing> dispensedMedications = new DoubleLinkedList<>();
 
     public Treatment getTreatment() {
         return treatment;
     }
 
-    @Override
-    public String toString() {
-        return "Prescription{" +
-                "treatment=" + treatment +
-                ", medicine=" + medicine +
-                ", quantity=" + quantity +
-                ", notes='" + notes + '\'' +
-                '}';
-    }
-
-    public void setTreatment(Treatment treatment) {
+    public Prescription setTreatment(Treatment treatment) {
         this.treatment = treatment;
+        return this;
     }
 
     public Medicine getMedicine() {
         return medicine;
     }
 
-    public void setMedicine(Medicine medicine) {
+    public Prescription setMedicine(Medicine medicine) {
         this.medicine = medicine;
+        return this;
     }
 
     public @Range(from = 1, to = Integer.MAX_VALUE) int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(@Range(from = 1, to = Integer.MAX_VALUE) int quantity) {
+    public Prescription setQuantity(@Range(from = 1, to = Integer.MAX_VALUE) int quantity) {
         this.quantity = quantity;
+        return this;
     }
 
     public @Nullable String getNotes() {
         return notes;
     }
 
-    public void setNotes(@Nullable String notes) {
+    public Prescription setNotes(@Nullable String notes) {
         this.notes = notes;
+        return this;
     }
 
     public ListInterface<Dispensing> getDispensedMedications() {
         return dispensedMedications;
     }
 
-    public void setDispensedMedications(ListInterface<Dispensing> dispensedMedications) {
-        this.dispensedMedications = dispensedMedications;
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                ", id=" + id +
+                ", treatment=" + treatment +
+                ", medicine=" + medicine +
+                ", quantity=" + quantity +
+                ", notes='" + notes + '\'' +
+                ", dispensedMedications=" + dispensedMedications +
+                '}';
     }
 }

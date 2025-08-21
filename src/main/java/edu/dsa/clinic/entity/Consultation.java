@@ -1,79 +1,83 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
+
 /**
- * The meeting session between a patient and a doctor.
+ * The meeting session between a {@link Patient} and a {@link Doctor}.
  *
- * @author TODO
- * @see Doctor
- * @see Patient
+ * @author tan
  */
 public class Consultation extends IdentifiableEntity {
     private Patient patient;
     private Doctor doctor;
-    private ListInterface<Diagnosis> diagnoses;
-    private ListInterface<Treatment> treatments;
-    private ConsultationType consultationType;
+    private ConsultationType type;
+    private Instant consultedAt;
     private @Nullable String notes;
-
-    @Override
-    public String toString() {
-        return "Consultation{" +
-                "patient=" + patient +
-                ", doctor=" + doctor +
-                ", diagnoses=" + diagnoses +
-                ", treatments=" + treatments +
-                ", notes='" + notes + '\'' +
-                '}';
-    }
+    private final ListInterface<Diagnosis> diagnoses = new DoubleLinkedList<>();
 
     public Patient getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public Consultation setPatient(Patient patient) {
         this.patient = patient;
+        return this;
     }
 
     public Doctor getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public Consultation setDoctor(Doctor doctor) {
         this.doctor = doctor;
+        return this;
     }
 
-    public ListInterface<Diagnosis> getDiagnoses() {
-        return diagnoses;
+    public ConsultationType getType() {
+        return type;
     }
 
-    public void setDiagnoses(ListInterface<Diagnosis> diagnoses) {
-        this.diagnoses = diagnoses;
+    public Consultation setType(ConsultationType type) {
+        this.type = type;
+        return this;
     }
 
-    public ListInterface<Treatment> getTreatments() {
-        return treatments;
+    public Instant getConsultedAt() {
+        return consultedAt;
     }
 
-    public void setTreatments(ListInterface<Treatment> treatments) {
-        this.treatments = treatments;
+    public Consultation setConsultedAt(Instant consultedAt) {
+        this.consultedAt = consultedAt;
+        return this;
     }
 
     public @Nullable String getNotes() {
         return notes;
     }
 
-    public void setNotes(@Nullable String notes) {
+    public Consultation setNotes(@Nullable String notes) {
         this.notes = notes;
+        return this;
     }
 
-    public ConsultationType getConsultationType() {
-        return consultationType;
+    public ListInterface<Diagnosis> getDiagnoses() {
+        return diagnoses;
     }
 
-    public void setConsultationType(ConsultationType consultationType) {
-        this.consultationType = consultationType;
+    @Override
+    public String toString() {
+        return "Consultation{" +
+                "id=" + id +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                ", type=" + type +
+                ", consultedAt=" + consultedAt +
+                ", notes='" + notes + '\'' +
+                ", diagnoses=" + diagnoses +
+                '}';
     }
 }
