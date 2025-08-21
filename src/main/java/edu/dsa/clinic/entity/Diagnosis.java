@@ -1,70 +1,60 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A detailed record for documenting a {@link Patient} symptoms and diagnosis after a {@link Consultation}.
+ * A detailed record for documenting a {@link Patient} disease diagnosis after a {@link Consultation}.
  *
- * @author TODO
+ * @author tan
  * @see Patient
  * @see Consultation
  */
 public class Diagnosis extends IdentifiableEntity {
     private Consultation consultation;
-    private ListInterface<Prescription> prescriptions;
+    private String diagnosis;
     private String description;
-    private ListInterface<Treatment> treatment;
     private @Nullable String notes;
-
-    @Override
-    public String toString() {
-        return "Diagnosis{" +
-                "consultation=" + consultation +
-                ", prescriptions=" + prescriptions +
-                ", treatment='" + treatment + '\'' +
-                ", description='" + description + '\'' +
-                ", notes='" + notes + '\'' +
-                '}';
-    }
+    private final ListInterface<Treatment> treatments = new DoubleLinkedList<>();
 
     public Consultation getConsultation() {
         return consultation;
     }
 
-    public void setConsultation(Consultation consultation) {
+    public Diagnosis setConsultation(Consultation consultation) {
         this.consultation = consultation;
+        return this;
     }
 
-    public ListInterface<Prescription> getPrescriptions() {
-        return prescriptions;
+    public String getDiagnosis() {
+        return diagnosis;
     }
 
-    public void setPrescriptions(ListInterface<Prescription> prescriptions) {
-        this.prescriptions = prescriptions;
+    public Diagnosis setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Diagnosis setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public @Nullable String getNotes() {
         return notes;
     }
 
-    public void setNotes(@Nullable String notes) {
+    public Diagnosis setNotes(@Nullable String notes) {
         this.notes = notes;
+        return this;
     }
 
-   public ListInterface<Treatment> getTreatment() {
-        return treatment;
-   }
-
-   public void setTreatment(ListInterface<Treatment> treatment) {
-        this.treatment = treatment;
-   }
+    public ListInterface<Treatment> getTreatments() {
+        return treatments;
+    }
 }

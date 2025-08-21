@@ -7,13 +7,40 @@ import java.time.LocalTime;
 /**
  * The working hours defined for a {@link Doctor}.
  *
- * @author TODO
+ * @author daren
  * @see Doctor
  */
-public class Shift extends IdentifiableEntity {
+public class Shift {
     private Doctor doctor;
     private ShiftType type;
     private Range<LocalTime> timeRange;
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public Shift setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        return this;
+    }
+
+    public ShiftType getType() {
+        return type;
+    }
+
+    public Shift setType(ShiftType type) {
+        this.type = type;
+        return this;
+    }
+
+    public Range<LocalTime> getTimeRange() {
+        return timeRange;
+    }
+
+    public Shift setTimeRange(Range<LocalTime> timeRange) {
+        this.timeRange = timeRange;
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -22,29 +49,5 @@ public class Shift extends IdentifiableEntity {
                 ", type=" + type +
                 ", timeRange=" + timeRange +
                 '}';
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public ShiftType getType() {
-        return type;
-    }
-
-    public void setType(ShiftType type) {
-        this.type = type;
-    }
-
-    public Range<LocalTime> getTimeRange() {
-        return timeRange;
-    }
-
-    public void setTimeRange(Range<LocalTime> timeRange) {
-        this.timeRange = timeRange;
     }
 }

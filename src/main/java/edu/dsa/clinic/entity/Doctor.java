@@ -1,10 +1,9 @@
 package edu.dsa.clinic.entity;
 
-import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.utils.Schedule;
 
 /**
- * The doctor responsible for consulting with {@link Patient} about their problems for diagnosis and prescriptions.
+ * The doctor responsible for consulting with {@link Patient} about their problems for {@link Diagnosis} and {@link Prescription}.
  * Runs on a shift schedule.
  *
  * @author Daren is very handsome
@@ -13,61 +12,63 @@ public class Doctor extends IdentifiableEntity {
     private String name;
     private Gender gender;
     private String contactNumber;
-    private Specialization specializations;
-    //private ListInterface<String> specializations;
+    private Specialization specialization;
     private Schedule schedule;
-
-    @Override
-    public String toString() {
-        return "Doctor{" +
-                "name='" + name + '\'' +
-                ", gender=" + gender +
-                ", contactNumber='" + contactNumber + '\'' +
-                ", specializations=" + specializations +
-                ", schedule=" + schedule +
-                '}';
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Doctor setName(String name) {
         this.name = name;
+        return this;
     }
 
     public Gender getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public Doctor setGender(Gender gender) {
         this.gender = gender;
+        return this;
     }
 
     public String getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(String contactNumber) {
+    public Doctor setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+        return this;
     }
 
-   public void setSpecializations(Specialization specializations) {this.specializations = specializations;}
-//    public ListInterface<String> getSpecializations() {
-//        return specializations;
-//    }
-//
-//    public void setSpecializations(ListInterface<String> specializations) {
-//        this.specializations = specializations;
-//    }
+    public Specialization getSpecialization() {
+        return specialization;
+    }
 
-    public Specialization getSpecializations() {return specializations;}
+    public Doctor setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
+        return this;
+    }
 
     public Schedule getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Schedule schedule) {
+    public Doctor setSchedule(Schedule schedule) {
         this.schedule = schedule;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", specialization=" + specialization +
+                ", schedule=" + schedule +
+                '}';
     }
 }

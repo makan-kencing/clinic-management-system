@@ -6,9 +6,9 @@ import edu.dsa.clinic.adt.ListInterface;
 import java.math.BigDecimal;
 
 /**
- * The medicine to be prescribed to {@link Patient} for treatments.
+ * The information of a {@link Medicine} product.
  *
- * @author TODO
+ * @author makan-kencing
  */
 public class Medicine extends IdentifiableEntity {
     private String name;
@@ -16,84 +16,79 @@ public class Medicine extends IdentifiableEntity {
     private String brand;
     private BigDecimal cost;
     private BigDecimal price;
-    private ListInterface<Medicine> substitutes = new DoubleLinkedList<>();
-    private ListInterface<Medicine> substitutesFor = new DoubleLinkedList<>();
-    private Inventory inventory = new Inventory();
-
-    @Override
-    public String toString() {
-        return "Medicine{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", brand='" + brand + '\'' +
-                ", cost=" + cost +
-                ", price=" + price +
-                ", substitutes=" + substitutes +
-                ", substitutesFor=" + substitutesFor +
-                '}';
-    }
+    private final Inventory inventory = new Inventory();
+    private final ListInterface<Medicine> substitutes = new DoubleLinkedList<>();
+    private final ListInterface<Medicine> substitutesFor = new DoubleLinkedList<>();
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Medicine setName(String name) {
         this.name = name;
+        return this;
     }
 
     public MedicineType getType() {
         return type;
     }
 
-    public void setType(MedicineType type) {
+    public Medicine setType(MedicineType type) {
         this.type = type;
+        return this;
     }
 
     public String getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public Medicine setBrand(String brand) {
         this.brand = brand;
+        return this;
     }
 
     public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public Medicine setCost(BigDecimal cost) {
         this.cost = cost;
+        return this;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public Medicine setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public ListInterface<Medicine> getSubstitutes() {
-        return substitutes;
-    }
-
-    public void setSubstitutes(ListInterface<Medicine> substitutes) {
-        this.substitutes = substitutes;
-    }
-
-    public ListInterface<Medicine> getSubstitutesFor() {
-        return substitutesFor;
-    }
-
-    public void setSubstitutesFor(ListInterface<Medicine> substitutesFor) {
-        this.substitutesFor = substitutesFor;
+        return this;
     }
 
     public Inventory getInventory() {
         return inventory;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public ListInterface<Medicine> getSubstitutes() {
+        return substitutes;
+    }
+
+    public ListInterface<Medicine> getSubstitutesFor() {
+        return substitutesFor;
+    }
+
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", brand='" + brand + '\'' +
+                ", cost=" + cost +
+                ", price=" + price +
+                ", inventory=" + inventory +
+                ", substitutes=" + substitutes +
+                ", substitutesFor=" + substitutesFor +
+                '}';
     }
 }

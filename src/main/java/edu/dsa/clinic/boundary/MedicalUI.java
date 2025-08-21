@@ -120,7 +120,7 @@ public class MedicalUI extends UI {
             if (!moreP.equalsIgnoreCase("y")) break;
         }
 
-        diagnosis.getTreatment().add(treatment);
+        diagnosis.getTreatments().add(treatment);
     }
 
     public void startConsultationSession() {

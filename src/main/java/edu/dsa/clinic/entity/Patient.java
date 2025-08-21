@@ -3,7 +3,7 @@ package edu.dsa.clinic.entity;
 /**
  * A person seeking advice or treatment from {@link Doctor}.
  *
- * @author TODO
+ * @author daren
  */
 public class Patient extends IdentifiableEntity {
     private String name;
@@ -15,41 +15,46 @@ public class Patient extends IdentifiableEntity {
         return name;
     }
 
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "name='" + name + '\'' +
-                ", gender=" + gender +
-                ", identification='" + identification + '\'' +
-                ", contactNumber='" + contactNumber + '\'' +
-                '}';
-    }
-
-    public void setName(String name) {
+    public Patient setName(String name) {
         this.name = name;
+        return this;
     }
 
     public Gender getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public Patient setGender(Gender gender) {
         this.gender = gender;
+        return this;
     }
 
     public String getIdentification() {
         return identification;
     }
 
-    public void setIdentification(String identification) {
+    public Patient setIdentification(String identification) {
         this.identification = identification;
+        return this;
     }
 
     public String getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(String contactNumber) {
+    public Patient setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", identification='" + identification + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                '}';
     }
 }

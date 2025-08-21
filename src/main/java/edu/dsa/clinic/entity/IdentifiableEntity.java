@@ -4,6 +4,9 @@ import org.jetbrains.annotations.Range;
 
 import java.util.Objects;
 
+/**
+ * An entity that can be uniquely identified with an id.
+ */
 public abstract class IdentifiableEntity {
     @Range(from = 0, to = Integer.MAX_VALUE)
     private static int lastId = 0;
