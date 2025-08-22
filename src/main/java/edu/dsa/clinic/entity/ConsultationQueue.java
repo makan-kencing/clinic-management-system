@@ -1,9 +1,17 @@
 package edu.dsa.clinic.entity;
 
+import org.jetbrains.annotations.Range;
+
+/**
+ * The queue information of a walk-in {@link Patient}.
+ *
+ * @author bincent
+ */
 public class ConsultationQueue {
     private static int lastQueueNo = 0;
 
-    private int queueNo;
+    @Range(from = 1, to = Integer.MAX_VALUE)
+    private final int queueNo;
     private Patient patient;
     private ConsultationType type;
 
@@ -11,7 +19,7 @@ public class ConsultationQueue {
         this.queueNo = ++lastQueueNo;
     }
 
-    public int getQueueNo() {
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getQueueNo() {
         return queueNo;
     }
 
@@ -19,13 +27,13 @@ public class ConsultationQueue {
         return patient;
     }
 
-    public ConsultationType getConsultationType() {
-        return type;
-    }
-
     public ConsultationQueue setPatient(Patient patient) {
         this.patient = patient;
         return this;
+    }
+
+    public ConsultationType getType() {
+        return type;
     }
 
     public ConsultationQueue setConsultationType(ConsultationType type) {
@@ -35,9 +43,10 @@ public class ConsultationQueue {
 
     @Override
     public String toString() {
-        return "Consultation Queue:" +
-                " QueueNo: " + queueNo +
-                ", Patient: " + (patient != null ? patient.getName() : "N/A") +
-                ", Type: " + (type != null ? type : "N/A");
+        return "ConsultationQueue{" +
+                "queueNo=" + queueNo +
+                ", patient=" + patient +
+                ", type=" + type +
+                '}';
     }
 }
