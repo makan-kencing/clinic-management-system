@@ -46,21 +46,45 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         }
 
         /**
+         * Link a {@link Node} after the this {@link Node}
+         *
+         * @param after The {@link Node} to link with.
+         */
+        public void linkAfter(Node<K> after) {
+            assert(this != after);
+
+            if (this.next != null)
+                Node.link(after, this.next);
+
+            Node.link(this, after);
+        }
+
+        /**
+         * Link a {@link Node} before the this {@link Node}
+         *
+         * @param before The {@link Node} to link with.
+         */
+        public void linkBefore(Node<K> before) {
+            assert(this != before);
+
+            if (this.before != null)
+                Node.link(this.before, before);
+
+            Node.link(before, this);
+        }
+
+        /**
          * Link two nodes together.
          *
          * @param left  The left node.
          * @param right The right node.
          * @param <K>   The generic type of both nodes.
          */
-        public static <K> void link(@Nullable Node<K> left, @Nullable Node<K> right) {
+        public static <K> void link(Node<K> left, Node<K> right) {
             assert(left != right);
 
-            if (left != null) {
-                left.next = right;
-            }
-            if (right != null) {
-                right.before = left;
-            }
+            left.next = right;
+            right.before = left;
         }
 
         @Override
@@ -95,6 +119,63 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
             public @NotNull Iterator<Node<K>> iterator() {
                 return this;
             }
+        }
+    }
+
+    public static final class MergeSorter<T> {
+        private final Comparator<T> sorter;
+
+        private MergeSorter(Comparator<T> sorter) {
+            this.sorter = sorter;
+        }
+
+        private Node<T> sort(Node<T> head) {
+            if (head == null || head.next == null)
+                return head;
+
+            Node<T> middle = this.getMiddle(head);
+            Node<T> nextOfMiddle = middle.next;
+
+            middle.next = null;
+            if (nextOfMiddle != null) nextOfMiddle.before = null;
+
+            Node<T> left = this.sort(head);
+            Node<T> right = this.sort(nextOfMiddle);
+
+            return merge(left, right);
+        }
+
+        private Node<T> merge(Node<T> left, Node<T> right) {
+            if (left == null) return right;
+            if (right == null) return left;
+
+            Node<T> result;
+
+            if (sorter.compare(left.data, right.data) <= 0) {
+                result = left;
+                result.next = this.merge(left.next, right);
+            } else {
+                result = right;
+                result.next = this.merge(left, right.next);
+            }
+            if (result.next != null)
+                result.next.before = result;
+
+            return result;
+        }
+
+        private Node<T> getMiddle(Node<T> head) {
+            if (head == null) return head;
+
+            Node<T> slow = head;
+            Node<T> fast = head;
+
+            while (fast.next != null && fast.next.next != null) {
+                assert slow != null;
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+            return slow;
         }
     }
 
@@ -158,7 +239,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         if (this.reference == null)
             this.reference = new Reference(node);
         else {
-            Node.link(this.reference.head, node);
+            this.reference.head.linkBefore(node);
             this.reference.head = node;
         }
     }
@@ -172,24 +253,9 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         if (this.reference == null)
             this.reference = new Reference(node);
         else {
-            Node.link(this.reference.tail, node);
+            this.reference.tail.linkAfter(node);
             this.reference.tail = node;
         }
-    }
-
-    /**
-     * Add a {@link Node} after a specific node.
-     *
-     * @param before A {@link Node} to insert after.
-     * @param node The {@link Node} to be inserted.
-     */
-    protected void addNodeAfter(Node<T> before, Node<T> node) {
-        assert(this.reference != null);
-
-        Node.link(before, node);
-
-        if (this.reference.tail == before)
-            this.reference.tail = node;
     }
 
     /**
@@ -201,17 +267,25 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
     protected void addNodeBefore(Node<T> after, Node<T> node) {
         assert (this.reference != null);
 
-        node.next = after;
-        node.before = after.before;
+        after.linkBefore(node);
 
-        if (after.before != null) {
-            after.before.next = node;
-        } else {
-            // inserting before the head
+        if (this.reference.head == after)
             this.reference.head = node;
-        }
+    }
 
-        after.before = node;
+    /**
+     * Add a {@link Node} after a specific node.
+     *
+     * @param before A {@link Node} to insert after.
+     * @param node The {@link Node} to be inserted.
+     */
+    protected void addNodeAfter(Node<T> before, Node<T> node) {
+        assert(this.reference != null);
+
+        before.linkAfter(node);
+
+        if (this.reference.tail == before)
+            this.reference.tail = node;
     }
 
     /**
@@ -404,69 +478,18 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public void sort(Comparator<T> sorter) {
-        if (reference == null || length < 2) {
+        if (this.reference == null || length < 2)
             return;
-        }
 
-        reference.head = mergeSort(reference.head, sorter);
+        this.reference.head = new MergeSorter<>(sorter).sort(this.reference.head);
 
-        Node<T> tail = reference.head;
+        // reset tail reference
+        var tail = this.reference.head;
         while (tail.next != null) {
             tail = tail.next;
         }
-        reference.tail = tail;
+        this.reference.tail = tail;
     }
-
-    private Node<T> mergeSort(Node<T> head, Comparator<T> sorter) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-
-        Node<T> middle = getMiddle(head);
-        Node<T> nextOfMiddle = middle.next;
-
-        middle.next = null;
-        if (nextOfMiddle != null) nextOfMiddle.before = null;
-
-        Node<T> left = mergeSort(head, sorter);
-        Node<T> right = mergeSort(nextOfMiddle, sorter);
-
-        return merge(left, right, sorter);
-    }
-
-    private Node<T> merge(Node<T> left, Node<T> right, Comparator<T> sorter) {
-        if (left == null) return right;
-        if (right == null) return left;
-
-        Node<T> result;
-
-        if (sorter.compare(left.data, right.data) <= 0) {
-            result = left;
-            result.next = merge(left.next, right, sorter);
-            if (result.next != null) result.next.before = result;
-        } else {
-            result = right;
-            result.next = merge(left, right.next, sorter);
-            if (result.next != null) result.next.before = result;
-        }
-
-        return result;
-    }
-
-    private Node<T> getMiddle(Node<T> head) {
-        if (head == null) return head;
-
-        Node<T> slow = head;
-        Node<T> fast = head;
-
-        while (fast.next != null && fast.next.next != null) {
-            assert slow != null;
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        return slow;
-    }
-
 
     @Override
     public ListInterface<T> filtered(Filter<T> filter) {

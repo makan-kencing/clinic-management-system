@@ -17,19 +17,17 @@ public class SortedDoubleLinkedList<T> extends DoubleLinkedList<T> {
     }
 
     protected void addNodeSorted(Node<T> node) {
-        if (this.reference == null) {
+        if (this.reference == null)
             this.reference = new Reference(node);
-            return;
+        else {
+            for (var current : this.reference.head)
+                // add before of current node if the current node is bigger
+                if (sorter.compare(current.data, node.data) > 0) {
+                    super.addNodeBefore(current, node);
+                    return;
+                }
+            super.addNodeTail(node);
         }
-        Node<T> current = this.reference.head;
-        while (current != null) {
-            if (sorter.compare(node.data, current.data) < 0) {
-                super.addNodeBefore(current, node);
-                return;
-            }
-            current = current.next;
-        }
-        super.addNodeAfter(this.reference.tail, node);
     }
 
     @Override
