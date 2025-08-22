@@ -6,7 +6,7 @@ import edu.dsa.clinic.utils.Schedule;
  * The doctor responsible for consulting with {@link Patient} about their problems for {@link Diagnosis} and {@link Prescription}.
  * Runs on a shift schedule.
  *
- * @author Daren is very handsome
+ * @author Daren
  */
 public class Doctor extends IdentifiableEntity {
     private String name;

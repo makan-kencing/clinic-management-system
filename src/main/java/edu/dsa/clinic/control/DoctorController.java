@@ -5,6 +5,8 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.entity.Doctor;
 
 public class DoctorController {
     public DoctorController() {
@@ -23,11 +25,11 @@ public class DoctorController {
     }
 
     public static int getDoctorCount(){
-        return Database.doctorsList.size();
+        return Database.doctorList.size();
     }
 
-    public void getDoctorInfo(){
-
+    public ListInterface<Doctor> getDoctors(){
+        return Database.doctorList;
     }
 
     public void addShift(){
