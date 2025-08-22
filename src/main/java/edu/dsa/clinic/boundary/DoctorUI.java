@@ -1,6 +1,7 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.entity.*;
 import edu.dsa.clinic.ClinicManagementSystem;
 
@@ -72,5 +73,19 @@ public class DoctorUI {
 
         System.out.println("Doctor created successfully: " + doctor);
     }
+
+//    private void viewDoctorsUI() {
+//        int count = DoctorController.getDoctorCount();
+//        if (count == 0) {
+//            System.out.println("No doctors found.");
+//            return;
+//        }
+//        int i = 0;
+//        for (Doctor d : doctorController.getDoctorInfo()) {
+//            System.out.println((i++) + ". " + d);
+//        }
+//    }
+
+
 
 }

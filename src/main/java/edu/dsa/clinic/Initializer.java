@@ -78,7 +78,7 @@ public class Initializer {
         doctor.setContactNumber("+123456789");
         doctor.setSpecialization(Specialization.Orthopedics);
         doctor.setSchedule(null);
-        Database.doctorList.add(doctor);
+        Database.doctorsList.add(doctor);
 
         appointment = new Appointment();
         appointment.setPatient(patient);

@@ -31,15 +31,19 @@ public class DoctorController {
         
     }
     
-    public void editDoctorInfo(){
+    public void updateDoctorInfo(){
         
     }
     
-    public void removeDoctorInfo(){
+    public void deleteDoctorInfo(){
         
     }
-    
-    public void viewDoctorInfo(){
+
+    public static int getDoctorCount(){
+        return Database.doctorsList.size();
+    }
+
+    public void getDoctorInfo(){
         
     }
     
