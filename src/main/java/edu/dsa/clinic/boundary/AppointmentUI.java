@@ -4,15 +4,18 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.utils.table.Alignment;
+import edu.dsa.clinic.utils.table.Cell;
+import edu.dsa.clinic.utils.table.Column;
+import edu.dsa.clinic.utils.table.InteractiveTable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.time.format.DateTimeParseException;
-
-import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.utils.Tabulate;
+import java.util.Scanner;
 
 
 public class AppointmentUI extends UI {
@@ -68,21 +71,21 @@ public class AppointmentUI extends UI {
         boolean valid = false;
 
         do {
-            var table = new Tabulate<>(new Tabulate.Header[]{
-                    new Tabulate.Header("Id", 5, Tabulate.Alignment.RIGHT),
-                    new Tabulate.Header("Name", 20, Tabulate.Alignment.CENTER),
-                    new Tabulate.Header("Gender", 10, Tabulate.Alignment.CENTER),
-                    new Tabulate.Header("Contact No", 15, Tabulate.Alignment.CENTER),
-                    new Tabulate.Header("Specialization", 20, Tabulate.Alignment.CENTER)
+            var table = new InteractiveTable<>(new Column[]{
+                    new Column("Id", Alignment.RIGHT, 5),
+                    new Column("Name", Alignment.CENTER, 20),
+                    new Column("Gender", Alignment.CENTER, 10),
+                    new Column("Contact No", Alignment.CENTER, 15),
+                    new Column("Specialization", Alignment.CENTER, 20)
             }, Database.doctorList.clone()) {
                 @Override
-                protected Cell[] getRow(Doctor element) {
-                    return new Cell[]{
-                            new Cell(String.valueOf(element.getId()), Alignment.CENTER),
-                            new Cell(element.getName()),
-                            new Cell(element.getGender().toString(), Alignment.CENTER),
-                            new Cell(element.getContactNumber()),
-                            new Cell(element.getSpecialization().toString(), Alignment.CENTER)
+                protected Cell[] getRow(Doctor o) {
+                    return new Cell[] {
+                            new Cell(o.getId(), Alignment.CENTER),
+                            new Cell(o.getName()),
+                            new Cell(o.getGender(), Alignment.CENTER),
+                            new Cell(o.getContactNumber()),
+                            new Cell(o.getSpecialization(), Alignment.CENTER)
                     };
                 }
             };
@@ -114,21 +117,21 @@ public class AppointmentUI extends UI {
         boolean valid = false;
 
         do {
-            var table = new Tabulate<>(new Tabulate.Header[]{
-                    new Tabulate.Header("Id", 5, Tabulate.Alignment.RIGHT),
-                    new Tabulate.Header("Name", 20, Tabulate.Alignment.CENTER),
-                    new Tabulate.Header("Gender", 10, Tabulate.Alignment.CENTER),
-                    new Tabulate.Header("Identification", 20, Tabulate.Alignment.CENTER),
-                    new Tabulate.Header("Contact No", 20, Tabulate.Alignment.CENTER)
+            var table = new InteractiveTable<>(new Column[]{
+                    new Column("Id", Alignment.RIGHT, 5),
+                    new Column("Name", Alignment.CENTER, 20),
+                    new Column("Gender", Alignment.CENTER, 10),
+                    new Column("Identification", Alignment.CENTER, 20),
+                    new Column("Contact No", Alignment.CENTER, 20)
             }, Database.patientsList.clone()) {
                 @Override
-                protected Cell[] getRow(Patient element) {
-                    return new Cell[]{
-                            new Cell(String.valueOf(element.getId()), Alignment.CENTER),
-                            new Cell(element.getName()),
-                            new Cell(element.getGender().toString(), Alignment.CENTER),
-                            new Cell(element.getIdentification()),
-                            new Cell(element.getContactNumber())
+                protected Cell[] getRow(Patient o) {
+                    return new Cell[] {
+                            new Cell(o.getId(), Alignment.CENTER),
+                            new Cell(o.getName()),
+                            new Cell(o.getGender(), Alignment.CENTER),
+                            new Cell(o.getIdentification()),
+                            new Cell(o.getContactNumber())
                     };
                 }
             };
@@ -233,30 +236,29 @@ public class AppointmentUI extends UI {
         }
     }
 
-
     public void viewAppointment() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         var appointments = this.appointmentController.getAppointments();
         String option, searchOption;
 
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 5, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Patient Name", 25, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Doctor", 25, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Start At", 25, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("End At", 25, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Created At", 25, Tabulate.Alignment.CENTER)
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 5),
+                new Column("Patient Name", Alignment.CENTER, 25),
+                new Column("Doctor", Alignment.CENTER, 25),
+                new Column("Start At", Alignment.CENTER, 25),
+                new Column("End At", Alignment.CENTER, 25),
+                new Column("Created At", Alignment.CENTER, 25)
         }, appointments) {
             @Override
-            protected Cell[] getRow(Appointment element) {
-                return new Cell[]{
-                        new Cell(String.valueOf(element.getId()), Alignment.LEFT),
-                        new Cell(element.getPatient().getName()),
-                        new Cell(element.getDoctor().getName()),
-                        new Cell(element.getExpectedStartAt().format(formatter)),
-                        new Cell(element.getExpectedEndAt().format(formatter)),
-                        new Cell(element.getCreatedAt().format(formatter))
+            protected Cell[] getRow(Appointment o) {
+                return new Cell[] {
+                        new Cell(o.getId(), Alignment.LEFT),
+                        new Cell(o.getPatient().getName()),
+                        new Cell(o.getDoctor().getName()),
+                        new Cell(o.getExpectedStartAt().format(formatter)),
+                        new Cell(o.getExpectedEndAt().format(formatter)),
+                        new Cell(o.getCreatedAt().format(formatter))
                 };
             }
         };
@@ -484,7 +486,4 @@ public class AppointmentUI extends UI {
 
         return option;
     }
-
-
-
 }

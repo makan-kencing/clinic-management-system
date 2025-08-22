@@ -1,13 +1,16 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
-import edu.dsa.clinic.utils.Tabulate;
+import edu.dsa.clinic.utils.table.Alignment;
+import edu.dsa.clinic.utils.table.Cell;
+import edu.dsa.clinic.utils.table.Column;
+import edu.dsa.clinic.utils.table.InteractiveTable;
+import edu.dsa.clinic.utils.table.Table;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Scanner;
@@ -26,23 +29,25 @@ public class MedicalUI extends UI {
     }
 
     public void viewConsultationRecord() {
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 4, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Patient Name", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Doctor Name", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Consulted At", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Notes", 40, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Diagnoses", 20, Tabulate.Alignment.CENTER)
-        }, Database.consultationsList.clone()) {
+        var consultations = this.medicalController.getConsultationList();
+
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Patient Name", Alignment.CENTER, 20),
+                new Column("Doctor Name", Alignment.CENTER, 20),
+                new Column("Consulted At", Alignment.CENTER, 20),
+                new Column("Notes", Alignment.CENTER, 40),
+                new Column("Diagnoses", Alignment.CENTER, 20)
+        }, consultations) {
             @Override
-            protected Cell[] getRow(Consultation element) {
+            protected Cell[] getRow(Consultation o) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId())),
-                        new Cell(element.getPatient().getName()),
-                        new Cell(element.getDoctor().getName()),
-                        new Cell(element.getConsultedAt().toString()),
-                        new Cell(element.getNotes()),
-                        new Cell(String.valueOf(element.getDiagnoses().size())),
+                        new Cell(o.getId()),
+                        new Cell(o.getPatient().getName()),
+                        new Cell(o.getDoctor().getName()),
+                        new Cell(o.getConsultedAt()),
+                        new Cell(o.getNotes()),
+                        new Cell(o.getDiagnoses().size()),
                 };
             }
         };
@@ -255,22 +260,21 @@ public class MedicalUI extends UI {
 
     // edit diagnosis
     public void viewDiagnosis(Consultation consultation) {
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 4, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Diagnosis", 40, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Diagnoses", 40, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Notes", 40, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Treatment",10,Tabulate.Alignment.CENTER)
+        var table = new Table<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Diagnosis", Alignment.CENTER, 40),
+                new Column("Diagnoses", Alignment.CENTER, 40),
+                new Column("Notes", Alignment.CENTER, 40),
+                new Column("Treatment", Alignment.CENTER, 10)
         }, consultation.getDiagnoses().clone()) {
             @Override
-            protected Cell[] getRow(Diagnosis element) {
+            protected Cell[] getRow(Diagnosis o) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId())),
-                        new Cell(element.getDiagnosis()),
-                        new Cell(element.getDescription()),
-                        new Cell(element.getNotes() != null ? element.getNotes() : ""),
-                        new Cell(String.valueOf(element.getTreatments().size()))
-
+                        new Cell(o.getId()),
+                        new Cell(o.getDiagnosis()),
+                        new Cell(o.getDescription()),
+                        new Cell(o.getNotes() != null ? o.getNotes() : ""),
+                        new Cell(o.getTreatments().size())
                 };
             }
         };
@@ -333,19 +337,19 @@ public class MedicalUI extends UI {
     }
     //edit treatment
     public void viewTreatment(Diagnosis diagnosis) {
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 4, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Symptom", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Prescriptions", 40, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Notes", 40, Tabulate.Alignment.CENTER)
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Symptom", Alignment.CENTER, 20),
+                new Column("Prescriptions", Alignment.CENTER, 40),
+                new Column("Notes", Alignment.CENTER, 40)
         }, diagnosis.getTreatments().clone()) {
             @Override
-            protected Cell[] getRow(Treatment element) {
+            protected Cell[] getRow(Treatment o) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId())),
-                        new Cell(element.getSymptom()),
-                        new Cell(element.getPrescriptions().toString()),
-                        new Cell(element.getNotes())
+                        new Cell(o.getId()),
+                        new Cell(o.getSymptom()),
+                        new Cell(o.getPrescriptions()),
+                        new Cell(o.getNotes())
                 };
             }
         };
