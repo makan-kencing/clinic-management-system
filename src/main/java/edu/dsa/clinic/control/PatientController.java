@@ -17,15 +17,21 @@ import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.utils.Tabulate;
+import edu.dsa.clinic.boundary.PatientUI;
 
 import java.util.Comparator;
 import java.util.Scanner;
 
 public class PatientController {
-
     private ListInterface<Patient> patientList = new DoubleLinkedList<>();
     private ListInterface<ConsultationQueue> queueList = new SortedDoubleLinkedList<>(Comparator.comparingInt(ConsultationQueue::getQueueNo));
+    private final PatientUI patientUI;
+    private final Scanner scanner;
 
+    public PatientController(PatientUI patientUI, Scanner scanner) {
+        this.patientUI = patientUI;
+        this.scanner = scanner;
+    }
     public boolean createPatientRecord(Patient patient) {
         return true;
     }
@@ -62,153 +68,79 @@ public class PatientController {
 
     }
 
-    public static DoubleLinkedList<Patient> sortPatients(DoubleLinkedList<Patient> patients, String column, boolean ascending) {
-        switch (column.toLowerCase()) {
-            case "id":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? Integer.compare(a.getId(), b.getId())
-                        : Integer.compare(b.getId(), a.getId()));
-            case "name":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getName().compareToIgnoreCase(b.getName())
-                        : b.getName().compareToIgnoreCase(a.getName()));
-            case "identification":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getIdentification().compareToIgnoreCase(b.getIdentification())
-                        : b.getIdentification().compareToIgnoreCase(a.getIdentification()));
-            case "contact":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getContactNumber().compareTo(b.getContactNumber())
-                        : b.getContactNumber().compareTo(a.getContactNumber()));
-            case "gender":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getGender().compareTo(b.getGender())
-                        : b.getGender().compareTo(a.getGender()));
-            default:
-                throw new IllegalArgumentException("Invalid column: " + column);
+    public Patient handlePatientMenuOption(Tabulate<Patient> table, int opt, Scanner scanner) {
+        Patient selectedPatient = null;
+
+        switch (opt) {
+            case 1:
+                patientUI.displayTable(table);
+                selectedPatient = promptSelect(scanner);
+                break;
+            case 2:
+                filterPatients(table, scanner);
+                break;
+            case 3:
+                table.resetFilters();
+                patientUI.displayTable(table);
+                break;
         }
+        return selectedPatient;
     }
 
     public void filterPatients(Tabulate<Patient> table, Scanner scanner) {
-        System.out.print("==============================");
-        System.out.println("\nFilters:");
-        System.out.println("(1) name");
-        System.out.println("(2) identification");
-        System.out.println("(3) contact number");
-        System.out.println("(4) gender");
-        System.out.print("==============================");
-        System.out.println();
-        System.out.print("Filter by: ");
-        var opt = scanner.nextInt();
-        scanner.nextLine();
+        patientUI.showFilterMenu();
+        int opt = patientUI.getFilterOption(scanner);
 
         switch (opt) {
             case 1: {
-                System.out.print("Search name by: ");
-                var value = scanner.nextLine();
-
-                System.out.println();
-
+                String value = patientUI.getSearchValue("name", scanner);
                 table.addFilter("Search \"" + value + "\"",
                         p -> p.getName().toLowerCase().contains(value.toLowerCase()));
-                table.display();
                 break;
             }
             case 2: {
-                System.out.print("Search identification by: ");
-                var value = scanner.nextLine();
-
-                System.out.println();
-
+                String value = patientUI.getSearchValue("identification", scanner);
                 table.addFilter("Search \"" + value + "\"",
-                        p -> p.getIdentification().contains(value.toLowerCase()));
-                table.display();
+                        p -> p.getIdentification().toLowerCase().contains(value.toLowerCase()));
                 break;
             }
             case 3: {
-                System.out.print("Search contact number by: ");
-                var value = scanner.nextLine();
-
-                System.out.println();
-
+                String value = patientUI.getSearchValue("contact number", scanner);
                 table.addFilter("Search \"" + value + "\"",
-                        p -> p.getContactNumber().contains(value.toLowerCase()));
-                table.display();
+                        p -> p.getContactNumber().contains(value));
                 break;
             }
             case 4: {
-                System.out.println();
-                System.out.print("==============================");
-                System.out.println("\nFilter gender by: ");
-                System.out.println("(1) male");
-                System.out.println("(2) female");
-                System.out.print("==============================");
-                System.out.println();
-                System.out.print("Selection : ");
-                var value = scanner.nextInt();
-                scanner.nextLine();
-
-                System.out.println();
-
-                if (value == 1) {
+                patientUI.showGenderFilterMenu();
+                int genderOpt = patientUI.getGenderOption(scanner);
+                if (genderOpt == 1) {
                     table.addFilter("Male only", p -> p.getGender() == Gender.MALE);
-                    table.display();
-                } else if (value == 2) {
+                } else if (genderOpt == 2) {
                     table.addFilter("Female only", p -> p.getGender() == Gender.FEMALE);
-                    table.display();
                 }
                 break;
             }
-            default:
-                break;
         }
-    }
-
-    public Patient selectPatientWithFilter(Tabulate<Patient> table, int opt, Scanner scanner) {
-        Patient selectedPatient = null;
-        switch (opt) {
-            case 1: {
-                table.display();
-                selectedPatient = promptSelect(scanner);
-                break;
-            }
-            case 2: {
-                filterPatients(table, scanner);
-                break;
-            }
-            case 3: {
-                table.resetFilters();
-                table.display();
-                break;
-            }
-        }
-        return selectedPatient;
+        patientUI.displayTable(table);
     }
 
     public Patient promptSelect(Scanner scanner) {
         Patient selectedPatient;
         do {
-            System.out.print("\nEnter Patient ID (0 to exit): ");
-            int selectedId = scanner.nextInt();
-            scanner.nextLine();
-
-            System.out.println();
+            int selectedId = patientUI.promptInt("Select Patient ID (0 to exit): ", scanner);
 
             if (selectedId == 0) {
-                System.out.println();
-                System.out.print("==============================");
-                System.out.println();
                 return null;
             }
 
             selectedPatient = Database.patientsList.findFirst(p -> p.getId() == selectedId);
 
             if (selectedPatient == null) {
-                System.out.println("Patient with ID (" + selectedId + ") not found. Please re-enter Patient ID...");
+                patientUI.showPatientNotFound(selectedId);
             }
         } while (selectedPatient == null);
 
-        System.out.println("Patient (" + selectedPatient.getName() + ") with ID (" + selectedPatient.getId() + ") selected!");
+        patientUI.showPatientSelected(selectedPatient);
         return selectedPatient;
     }
 }
