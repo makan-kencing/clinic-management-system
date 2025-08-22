@@ -20,9 +20,10 @@ public final class StringUtils {
 
     public static String pad(String s, char padding, @Range(from = 0, to = Integer.MAX_VALUE) int n) {
         int repeats = Math.max(0, (n - s.length()) / 2);
+        int offset = Math.max(0, (n - s.length()) % 2);
 
         return Character.toString(padding).repeat(repeats)
                 + s
-                + Character.toString(padding).repeat(repeats + (n - s.length()) % 2);
+                + Character.toString(padding).repeat(repeats + offset);
     }
 }
