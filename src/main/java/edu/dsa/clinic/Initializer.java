@@ -136,14 +136,36 @@ public class Initializer {
         appointment.setExpectedEndAt(LocalDateTime.of(2025, 10, 1, 12, 00));
         Database.appointmentList.add(appointment);
 
-        var queue = new ConsultationQueue()
-                .setPatient(patient)
-                .setConsultationType(ConsultationType.GENERAL);
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(0))
+                .setConsultationType(ConsultationType.GENERAL));
 
-        var consultationQueues = new DoubleLinkedList<ConsultationQueue>();
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(1))
+                .setConsultationType(ConsultationType.SPECIALIST));
 
-        consultationQueues.add(queue);
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(2))
+                .setConsultationType(ConsultationType.EMERGENCY));
 
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(3))
+                .setConsultationType(ConsultationType.FOLLOW_UP));
 
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(4))
+                .setConsultationType(ConsultationType.GENERAL));
+
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(1))
+                .setConsultationType(ConsultationType.GENERAL));
+
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(3))
+                .setConsultationType(ConsultationType.SPECIALIST));
+
+        Database.queueList.add(new ConsultationQueue()
+                .setPatient(Database.patientsList.get(2))
+                .setConsultationType(ConsultationType.FOLLOW_UP));
     }
 }
