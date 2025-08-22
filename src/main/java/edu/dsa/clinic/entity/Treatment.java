@@ -47,6 +47,13 @@ public class Treatment extends IdentifiableEntity{
         return prescriptions;
     }
 
+    public Treatment addPrescription(Prescription prescription) {
+        prescription.setTreatment(this);
+
+        this.prescriptions.add(prescription);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Treatment{" +

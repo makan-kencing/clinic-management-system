@@ -16,11 +16,13 @@ import java.util.Scanner;
 public class MedicalUI extends UI {
     private final MedicalController medicalController;
     private final MedicineUI medicineUI;
+    private final PatientUI patientUI;
 
     public MedicalUI(Scanner scanner) {
         super(scanner);
         this.medicalController = new MedicalController();
         this.medicineUI = new MedicineUI(scanner);
+        this.patientUI = new PatientUI(scanner);
     }
 
     public void viewConsultationRecord() {
