@@ -2,7 +2,6 @@ package edu.dsa.clinic;
 
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Consultation;
-import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Doctor;
@@ -11,6 +10,7 @@ import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.entity.Treatment;
+import edu.dsa.clinic.utils.ConsultationQueue;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -172,36 +172,13 @@ public class Initializer {
         appointment.setExpectedEndAt(LocalDateTime.of(2025, 10, 1, 12, 00));
         Database.appointmentList.add(appointment);
 
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(0))
-                .setConsultationType(ConsultationType.GENERAL));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(1))
-                .setConsultationType(ConsultationType.SPECIALIST));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(2))
-                .setConsultationType(ConsultationType.EMERGENCY));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(3))
-                .setConsultationType(ConsultationType.FOLLOW_UP));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(4))
-                .setConsultationType(ConsultationType.GENERAL));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(1))
-                .setConsultationType(ConsultationType.GENERAL));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(3))
-                .setConsultationType(ConsultationType.SPECIALIST));
-
-        Database.queueList.add(new ConsultationQueue()
-                .setPatient(Database.patientsList.get(2))
-                .setConsultationType(ConsultationType.FOLLOW_UP));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.SPECIALIST));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.EMERGENCY));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(3), ConsultationType.FOLLOW_UP));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.SPECIALIST));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.FOLLOW_UP));
     }
 }
