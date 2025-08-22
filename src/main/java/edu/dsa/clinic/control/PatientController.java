@@ -8,19 +8,19 @@ package edu.dsa.clinic.control;
  *
  * @author Bincent
  */
-import edu.dsa.clinic.Database;
-import edu.dsa.clinic.adt.ListInterface;
+
 import edu.dsa.clinic.adt.DoubleLinkedList;
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.entity.ConsultationType;
+
 import java.util.Comparator;
 
 public class PatientController {
 
     private ListInterface<Patient> patientList = new DoubleLinkedList<>();
-    private ListInterface<ConsultationQueue> queueList = new SortedDoubleLinkedList<>(Comparator.comparingInt(ConsultationQueue::getId));
+    private ListInterface<ConsultationQueue> queueList = new SortedDoubleLinkedList<>(Comparator.comparingInt(ConsultationQueue::getQueueNo));
 
     public boolean createPatientRecord(Patient patient){
         return true;
