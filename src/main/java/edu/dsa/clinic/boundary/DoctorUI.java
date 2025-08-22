@@ -111,7 +111,7 @@ public class DoctorUI extends UI {
                 System.out.println("Invalid option. Try again.");
             }
 
-        }while(option<1 || option>5 || !Character.isDigit(option));
+        }while(option <1 || option > 5 || !Character.isDigit(option));
 
 
 
@@ -151,6 +151,12 @@ public class DoctorUI extends UI {
     }
 
     public void modifyDoctor() {
+        int choice;
+        viewDoctorsUI();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the Doctor Id that you want to modify: ");
+        //Doctor.getId() = scanner.nextInt();
+
 
 
     }
