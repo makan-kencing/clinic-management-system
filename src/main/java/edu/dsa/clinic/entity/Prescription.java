@@ -60,6 +60,13 @@ public class Prescription extends IdentifiableEntity {
         return dispensedMedications;
     }
 
+    public Prescription addDispensedMedication(Dispensing dispensing) {
+        dispensing.setPrescription(this);
+
+        this.dispensedMedications.add(dispensing);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Prescription{" +

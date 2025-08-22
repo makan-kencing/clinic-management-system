@@ -86,6 +86,13 @@ public class Medicine extends IdentifiableEntity {
         return stocks;
     }
 
+    public Medicine addStock(Stock stock) {
+        stock.setMedicine(this);
+
+        this.stocks.add(stock);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Medicine{" +

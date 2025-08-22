@@ -20,34 +20,147 @@ public class Initializer {
     }
 
     public static void initialize() {
-        //first
-        var patient = new Patient();
-        patient.setName("hi");
-        patient.setGender(Gender.MALE);
-        patient.setIdentification("01234");
-        patient.setContactNumber("+123456789");
-        Database.patientsList.add(patient);
+        // Patients data
+        Database.patientsList.add(
+                ((Patient) new Patient()
+                        .setId(1))
+                        .setName("hi")
+                        .setGender(Gender.MALE)
+                        .setIdentification("01234")
+                        .setContactNumber("+123456789")
+        );
+        Database.patientsList.add(
+                ((Patient) new Patient()
+                        .setId(2))
+                        .setName("hello")
+                        .setGender(Gender.IDK)
+                        .setIdentification("31324")
+                        .setContactNumber("+123456789")
+        );
+        Database.patientsList.add(
+                ((Patient) new Patient()
+                        .setId(3))
+                        .setName("john doe")
+                        .setGender(Gender.IDK)
+                        .setIdentification("54821")
+                        .setContactNumber("+123456789")
+        );
+        Database.patientsList.add(
+                ((Patient) new Patient()
+                        .setId(4))
+                        .setName("Patient Zero")
+                        .setGender(Gender.FEMALE)
+                        .setIdentification("94756")
+                        .setContactNumber("+123456789")
+        );
+        Database.patientsList.add(
+                ((Patient) new Patient()
+                        .setId(5))
+                        .setName("PAX-19")
+                        .setGender(Gender.MALE)
+                        .setIdentification("09865")
+                        .setContactNumber("+123456789")
+        );
 
-        var doctor = new Doctor();
-        doctor.setName("daren1");
-        doctor.setGender(Gender.MALE);
-        doctor.setContactNumber("+123456789");
-        doctor.setSpecialization(Specialization.Neurosurgery);
-        doctor.setSchedule(null);
-        Database.doctorList.add(doctor);
+        // Doctors data
+        Database.doctorList.add(
+                ((Doctor) new Doctor()
+                        .setId(1))
+                        .setName("daren1")
+                        .setGender(Gender.MALE)
+                        .setContactNumber("+123456789")
+                        .setSpecialization(Specialization.Neurosurgery)
+                        .setSchedule(null)
+        );
+        Database.doctorList.add(
+                ((Doctor) new Doctor()
+                        .setId(2))
+                        .setName("daren2")
+                        .setGender(Gender.IDK)
+                        .setContactNumber("+123456789")
+                        .setSpecialization(Specialization.Ophthalmology)
+                        .setSchedule(null)
+        );
+        Database.doctorList.add(
+                ((Doctor) new Doctor()
+                        .setId(3))
+                        .setName("daren3")
+                        .setGender(Gender.FEMALE)
+                        .setContactNumber("+123456789")
+                        .setSpecialization(Specialization.Orthopedics)
+                        .setSchedule(null)
+        );
+        Database.doctorList.add(
+                ((Doctor) new Doctor()
+                        .setId(4))
+                        .setName("daren4")
+                        .setGender(Gender.FEMALE)
+                        .setContactNumber("+123456789")
+                        .setSpecialization(Specialization.Pediatrics)
+                        .setSchedule(null)
+        );
+        Database.doctorList.add(
+                ((Doctor) new Doctor()
+                        .setId(5))
+                        .setName("daren5")
+                        .setGender(Gender.MALE)
+                        .setContactNumber("+123456789")
+                        .setSpecialization(Specialization.Otorhinolaryngology)
+                        .setSchedule(null)
+        );
 
-        var appointment = new Appointment();
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setCreatedAt(LocalDateTime.of(2025, 8, 21, 11, 30));
-        appointment.setExpectedStartAt(LocalDateTime.of(2025, 8, 22, 8, 30));
-        appointment.setExpectedEndAt(LocalDateTime.of(2025, 8, 22, 9, 30));
-        Database.appointmentList.add(appointment);
+        // Appointments data
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(1))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 1))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 1))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 11, 30))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 22, 8, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 22, 9, 30))
+        );
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(2))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 2))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 2))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 24, 9, 00))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 24, 10, 00))
+        );
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(3))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 3))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 3))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 25, 9, 00))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 25, 10, 00))
+        );
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(4))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 4))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 4))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 26, 14, 00))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 26, 15, 00))
+        );
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(5))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 5))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 5))
+                        .setCreatedAt(LocalDateTime.of(2025, 9, 21, 16, 45))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 9, 26, 11, 00))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 10, 1, 12, 00))
+        );
 
+        // Consultations data
         Database.consultationsList.add(
                 new Consultation()
-                        .setPatient(patient)
-                        .setDoctor(doctor)
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 1))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 1))
                         .setType(ConsultationType.GENERAL)
                         .setNotes("This is a consultation")
                         .setConsultedAt(Instant.parse("2025-06-05T10:15:30Z"))
@@ -75,103 +188,7 @@ public class Initializer {
                                                 .setNotes("llllll"))))
         );
 
-
-        //second
-        patient = new Patient();
-        patient.setName("hello");
-        patient.setGender(Gender.IDK);
-        patient.setIdentification("31324");
-        patient.setContactNumber("+123456789");
-        Database.patientsList.add(patient);
-
-        doctor = new Doctor();
-        doctor.setName("daren2");
-        doctor.setGender(Gender.IDK);
-        doctor.setContactNumber("+123456789");
-        doctor.setSpecialization(Specialization.Ophthalmology);
-        doctor.setSchedule(null);
-        Database.doctorList.add(doctor);
-
-        appointment = new Appointment();
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45));
-        appointment.setExpectedStartAt(LocalDateTime.of(2025, 8, 24, 9, 00));
-        appointment.setExpectedEndAt(LocalDateTime.of(2025, 8, 24, 10, 00));
-        Database.appointmentList.add(appointment);
-
-        //third
-        patient = new Patient();
-        patient.setName("john doe");
-        patient.setGender(Gender.IDK);
-        patient.setIdentification("54821");
-        patient.setContactNumber("+123456789");
-        Database.patientsList.add(patient);
-
-        doctor = new Doctor();
-        doctor.setName("daren3");
-        doctor.setGender(Gender.FEMALE);
-        doctor.setContactNumber("+123456789");
-        doctor.setSpecialization(Specialization.Orthopedics);
-        doctor.setSchedule(null);
-        Database.doctorList.add(doctor);
-
-        appointment = new Appointment();
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45));
-        appointment.setExpectedStartAt(LocalDateTime.of(2025, 8, 25, 9, 00));
-        appointment.setExpectedEndAt(LocalDateTime.of(2025, 8, 25, 10, 00));
-        Database.appointmentList.add(appointment);
-
-        //Fourth
-        patient = new Patient();
-        patient.setName("Patient Zero");
-        patient.setGender(Gender.FEMALE);
-        patient.setIdentification("94756");
-        patient.setContactNumber("+123456789");
-        Database.patientsList.add(patient);
-
-        doctor = new Doctor();
-        doctor.setName("daren4");
-        doctor.setGender(Gender.FEMALE);
-        doctor.setContactNumber("+123456789");
-        doctor.setSpecialization(Specialization.Pediatrics);
-        doctor.setSchedule(null);
-        Database.doctorList.add(doctor);
-
-        appointment = new Appointment();
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45));
-        appointment.setExpectedStartAt(LocalDateTime.of(2025, 8, 26, 14, 00));
-        appointment.setExpectedEndAt(LocalDateTime.of(2025, 8, 26, 15, 00));
-        Database.appointmentList.add(appointment);
-
-        //fifth
-        patient = new Patient();
-        patient.setName("PAX-19");
-        patient.setGender(Gender.MALE);
-        patient.setIdentification("09865");
-        patient.setContactNumber("+123456789");
-        Database.patientsList.add(patient);
-
-        doctor = new Doctor();
-        doctor.setName("daren5");
-        doctor.setGender(Gender.MALE);
-        doctor.setContactNumber("+123456789");
-        doctor.setSpecialization(Specialization.Otorhinolaryngology);
-        doctor.setSchedule(null);
-        Database.doctorList.add(doctor);
-
-        appointment = new Appointment();
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setCreatedAt(LocalDateTime.of(2025, 9, 21, 16, 45));
-        appointment.setExpectedStartAt(LocalDateTime.of(2025, 9, 26, 11, 00));
-        appointment.setExpectedEndAt(LocalDateTime.of(2025, 10, 1, 12, 00));
-        Database.appointmentList.add(appointment);
-
+        // Consultation queues data
         Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
         Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.SPECIALIST));
         Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.EMERGENCY));
