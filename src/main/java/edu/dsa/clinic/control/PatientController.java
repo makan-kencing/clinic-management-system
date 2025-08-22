@@ -89,45 +89,6 @@ public class PatientController {
         }
     }
 
-    public void filterPatients(Tabulate<Patient> table, String column, String value) {
-        filterPatients(table, column, value, null);
-    }
-
-    public void filterPatients(Tabulate<Patient> table, String column, String value, String gender) {
-        switch (column) {
-            case "name": {
-                table.addFilter("Search " + column + " \"" + value + "\"",
-                        p -> p.getName().toLowerCase().contains(value.toLowerCase()));
-                table.display();
-                break;
-            }
-            case "identification": {
-                table.addFilter("Search " + column + " \"" + value + "\"",
-                        p -> p.getIdentification().contains(value.toLowerCase()));
-                table.display();
-                break;
-            }
-            case "contact": {
-                table.addFilter("Search " + column + " \"" + value + "\"",
-                        p -> p.getContactNumber().contains(value.toLowerCase()));
-                table.display();
-                break;
-            }
-            case "gender": {
-                if (gender.equals("male")) {
-                    table.addFilter("Male only", p -> p.getGender() == Gender.MALE);
-                    table.display();
-                } else if (gender.equals("female")) {
-                    table.addFilter("Female only", p -> p.getGender() == Gender.FEMALE);
-                    table.display();
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-
     public Patient performSelect(int selectedId) {
         return Database.patientsList.findFirst(p -> p.getId() == selectedId);
     }

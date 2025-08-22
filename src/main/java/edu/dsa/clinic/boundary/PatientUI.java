@@ -114,21 +114,21 @@ public class PatientUI extends UI {
                 System.out.print("Search name by: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                patientController.filterPatients(table, "name", value);
+                filter(table, "name", value);
                 break;
             }
             case 2: {
                 System.out.print("Search identification by: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                patientController.filterPatients(table, "identification", value);
+                filter(table, "identification", value);
                 break;
             }
             case 3: {
                 System.out.print("Search contact number by: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                patientController.filterPatients(table, "contact", value);
+                filter(table, "contact", value);
             }
             case 4: {
                 System.out.println();
@@ -143,15 +143,54 @@ public class PatientUI extends UI {
                 System.out.println();
 
                 if (value == 1) {
-                    patientController.filterPatients(table, "gender", null, "male");
+                    filter(table, "gender", null, "male");
                 } else if (value == 2) {
-                    patientController.filterPatients(table, "gender", null, "female");
+                    filter(table, "gender", null, "female");
                 }
                 break;
             }
             default:
                 System.out.println();
                 table.display();
+                break;
+        }
+    }
+
+    public void filter(Tabulate<Patient> table, String column, String value) {
+        filter(table, column, value, null);
+    }
+
+    public void filter(Tabulate<Patient> table, String column, String value, String gender) {
+        switch (column) {
+            case "name": {
+                table.addFilter("Search " + column + " \"" + value + "\"",
+                        p -> p.getName().toLowerCase().contains(value.toLowerCase()));
+                table.display();
+                break;
+            }
+            case "identification": {
+                table.addFilter("Search " + column + " \"" + value + "\"",
+                        p -> p.getIdentification().contains(value.toLowerCase()));
+                table.display();
+                break;
+            }
+            case "contact": {
+                table.addFilter("Search " + column + " \"" + value + "\"",
+                        p -> p.getContactNumber().contains(value.toLowerCase()));
+                table.display();
+                break;
+            }
+            case "gender": {
+                if (gender.equals("male")) {
+                    table.addFilter("Male only", p -> p.getGender() == Gender.MALE);
+                    table.display();
+                } else if (gender.equals("female")) {
+                    table.addFilter("Female only", p -> p.getGender() == Gender.FEMALE);
+                    table.display();
+                }
+                break;
+            }
+            default:
                 break;
         }
     }
