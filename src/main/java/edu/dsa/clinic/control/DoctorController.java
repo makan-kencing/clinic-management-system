@@ -23,7 +23,7 @@ public class DoctorController {
     }
 
     public static int getDoctorCount(){
-        return Database.doctorsList.size();
+        return Database.doctorList.size();
     }
 
     public void getDoctorInfo(){
