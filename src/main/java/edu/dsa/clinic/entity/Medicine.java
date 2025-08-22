@@ -2,6 +2,8 @@ package edu.dsa.clinic.entity;
 
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.adt.SortedDoubleLinkedList;
+import edu.dsa.clinic.utils.Inventory;
 
 import java.math.BigDecimal;
 
@@ -19,6 +21,9 @@ public class Medicine extends IdentifiableEntity {
     private final Inventory inventory = new Inventory();
     private final ListInterface<Medicine> substitutes = new DoubleLinkedList<>();
     private final ListInterface<Medicine> substitutesFor = new DoubleLinkedList<>();
+    private final ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
+            s1.getStockInDate().compareTo(s2.getStockInDate())
+    );
 
     public String getName() {
         return name;
@@ -75,6 +80,10 @@ public class Medicine extends IdentifiableEntity {
 
     public ListInterface<Medicine> getSubstitutesFor() {
         return substitutesFor;
+    }
+
+    public ListInterface<Stock> getStocks() {
+        return stocks;
     }
 
     @Override
