@@ -263,10 +263,10 @@ public class MedicalUI extends UI {
             @Override
             protected Cell[] getRow(Diagnosis element) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId()),
-                                new Cell(element.getDiagnosis()),
-                                new Cell(element.getDescription()),
-                                new Cell(element.getNotes() != null ? element.getNotes() : "")
+                        new Cell(String.valueOf(element.getId())),
+                        new Cell(element.getDiagnosis()),
+                        new Cell(element.getDescription()),
+                        new Cell(element.getNotes() != null ? element.getNotes() : "")
                 };
             }
         };
