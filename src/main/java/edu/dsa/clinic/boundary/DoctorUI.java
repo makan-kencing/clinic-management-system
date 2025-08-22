@@ -10,11 +10,13 @@ import java.util.Scanner;
 
 public class DoctorUI extends UI {
     private final DoctorController doctorController;
+    Doctor doctor = new Doctor();
 
     public DoctorUI(Scanner scanner) {
         super(scanner);
         doctorController = new DoctorController();
     }
+
 
     public int getDoctorMenu() {
         Scanner sc = new Scanner(System.in);
@@ -120,7 +122,7 @@ public class DoctorUI extends UI {
         System.out.println("Doctor created successfully: " + doctor);
     }
 
-    public void viewDoctorsUI() {
+    public void viewDoctorsList() {
         int count = DoctorController.getDoctorCount();
         if (count == 0) {
             System.out.println("No doctors found.");
@@ -150,15 +152,65 @@ public class DoctorUI extends UI {
         table.display();
     }
 
-    public void modifyDoctor() {
-        int choice;
-        viewDoctorsUI();
-        Scanner scanner = new Scanner(System.in);
+    public void modifyDoctor(Doctor doctor) {
+        int id;
+        viewDoctorsList();
+        Scanner sc = new Scanner(System.in);
         System.out.println("Enter the Doctor Id that you want to modify: ");
-        //Doctor.getId() = scanner.nextInt();
+        id = sc.nextInt();
+        var selectDoctor = Database.doctorList.findFirst(d ->d.getId() == id);
+        if(selectDoctor == null){
+            System.out.println("Doctor Id not found.");
+        }
 
 
 
+
+    }
+
+    public void modifyName(Doctor doctor, Scanner sc) {
+        int id;
+        viewDoctorsList();
+        System.out.println("Enter the Doctor Id that you want to modify: ");
+        id = sc.nextInt();
+        var selectDoctor = Database.doctorList.findFirst(d ->d.getId() == id);
+        if(selectDoctor == null){
+            System.out.println("Doctor Id not found.");
+        }
+
+
+        System.out.println("Current name: " + doctor.getName());
+        System.out.print("Enter new name: ");
+        String newName = scanner.nextLine();
+        if (!newName.trim().isEmpty()) {
+            doctor.setName(newName);
+            System.out.println("Name updated successfully!");
+        } else {
+            System.out.println("Name cannot be empty. No changes made.");
+        }
+    }
+
+    public void findDoctor(Doctor doctor){
+
+        Scanner sc = new Scanner(System.in);
+        int id;
+        viewDoctorsList();
+        System.out.println("Enter the Doctor Id that you want to modify: ");
+        id = sc.nextInt();
+        var selectDoctor = Database.doctorList.findFirst(d ->d.getId() == id);
+        if(selectDoctor == null){
+            System.out.println("Doctor Id not found.");
+            return;
+        }
+
+        System.out.println("\n--- Modifying Doctor: " + selectDoctor.getName() + " ---");
+        System.out.println("(Leave field empty to keep current value)");
+        System.out.print("Current Name: " + doctor.getName());
+        System.out.print("Enter new Name: ");
+        String newName = sc.nextLine();
+        if (!newName.trim().isEmpty()) {
+            doctor.setName(newName);
+        }
     }
 
 
