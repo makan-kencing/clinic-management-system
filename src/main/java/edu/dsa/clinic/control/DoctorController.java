@@ -4,11 +4,6 @@
  */
 package edu.dsa.clinic.control;
 
-/**
- *
- * @author daren
- */
-
 import edu.dsa.clinic.Database;
 
 public class DoctorController {
@@ -28,7 +23,7 @@ public class DoctorController {
     }
 
     public static int getDoctorCount(){
-        return Database.doctorList.size();
+        return Database.doctorsList.size();
     }
 
     public void getDoctorInfo(){
