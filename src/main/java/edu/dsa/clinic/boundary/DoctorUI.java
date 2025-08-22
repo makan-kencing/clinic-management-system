@@ -1,9 +1,8 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Database;
-import edu.dsa.clinic.control.DoctorController;
-import edu.dsa.clinic.entity.*;
-import edu.dsa.clinic.ClinicManagementSystem;
+import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Gender;
 
 import java.util.Scanner;
 
@@ -69,7 +68,7 @@ public class DoctorUI {
         System.out.print("Enter Contact Number: ");
         doctor.setContactNumber(sc.nextLine());
 
-        Database.doctorsList.add(doctor);
+        Database.doctorList.add(doctor);
 
         System.out.println("Doctor created successfully: " + doctor);
     }

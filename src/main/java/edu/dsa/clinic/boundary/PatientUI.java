@@ -4,7 +4,10 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.control.PatientController;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.utils.Tabulate;
+import edu.dsa.clinic.utils.table.Alignment;
+import edu.dsa.clinic.utils.table.Cell;
+import edu.dsa.clinic.utils.table.Column;
+import edu.dsa.clinic.utils.table.InteractiveTable;
 
 import java.util.Scanner;
 
@@ -18,21 +21,21 @@ public class PatientUI extends UI {
     public Patient selectPatient() {
         Patient selectedPatient = null;
 
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 4, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Name", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Gender", 10, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Identification", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Contact No", 20, Tabulate.Alignment.CENTER)
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Name", Alignment.CENTER, 20),
+                new Column("Gender", Alignment.CENTER, 10),
+                new Column("Identification", Alignment.CENTER, 20),
+                new Column("Contact No", Alignment.CENTER, 20)
         }, Database.patientsList.clone()) {
             @Override
-            protected Cell[] getRow(Patient element) {
+            protected Cell[] getRow(Patient o) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId())),
-                        new Cell(element.getName()),
-                        new Cell(element.getGender().toString(), Alignment.CENTER),
-                        new Cell(element.getIdentification()),
-                        new Cell(element.getContactNumber())
+                        new Cell(o.getId()),
+                        new Cell(o.getName()),
+                        new Cell(o.getGender(), Alignment.CENTER),
+                        new Cell(o.getIdentification()),
+                        new Cell(o.getContactNumber())
                 };
             }
         };
@@ -96,7 +99,7 @@ public class PatientUI extends UI {
         return selectedPatient;
     }
 
-    public void filterPatient(Tabulate<Patient> table) {
+    public void filterPatient(InteractiveTable<Patient> table) {
         System.out.println("-".repeat(30));
         System.out.println("Filters:");
         System.out.println("(1) name");
@@ -156,11 +159,11 @@ public class PatientUI extends UI {
         }
     }
 
-    public void filter(Tabulate<Patient> table, String column, String value) {
+    public void filter(InteractiveTable<Patient> table, String column, String value) {
         filter(table, column, value, null);
     }
 
-    public void filter(Tabulate<Patient> table, String column, String value, String gender) {
+    public void filter(InteractiveTable<Patient> table, String column, String value, String gender) {
         switch (column) {
             case "name": {
                 table.addFilter("Search " + column + " \"" + value + "\"",

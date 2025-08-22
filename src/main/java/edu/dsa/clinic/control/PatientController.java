@@ -16,7 +16,6 @@ import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.utils.Tabulate;
 
 import java.util.Comparator;
 import java.util.Scanner;
