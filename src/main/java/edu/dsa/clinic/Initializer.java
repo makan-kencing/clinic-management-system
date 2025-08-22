@@ -1,14 +1,18 @@
 package edu.dsa.clinic;
 
-import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.entity.Appointment;
+import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.ConsultationType;
+import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Specialization;
+import edu.dsa.clinic.entity.Treatment;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class Initializer {
@@ -39,6 +43,38 @@ public class Initializer {
         appointment.setExpectedStartAt(LocalDateTime.of(2025, 8, 22, 8, 30));
         appointment.setExpectedEndAt(LocalDateTime.of(2025, 8, 22, 9, 30));
         Database.appointmentList.add(appointment);
+
+        Database.consultationsList.add(
+                new Consultation()
+                        .setPatient(patient)
+                        .setDoctor(doctor)
+                        .setType(ConsultationType.GENERAL)
+                        .setNotes("This is a consultation")
+                        .setConsultedAt(Instant.parse("2025-06-05T10:15:30Z"))
+                        .addDiagnosis(new Diagnosis()
+                                .setDiagnosis("Fever")
+                                .setDescription("Let patient become ok ")
+                                .setNotes("good")
+                                .addTreatment(new Treatment()
+                                        .setSymptom("hhhhhhhhhhhhhhhh")
+                                        .setNotes("uuuuuuuuuuuuuuuuuuuu")
+                                        .addPrescription(new Prescription()
+                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setQuantity(1)
+                                                .setNotes("llllll"))))
+                        .addDiagnosis(new Diagnosis()
+                                .setDiagnosis("Fever")
+                                .setDescription("Let patient become ok ")
+                                .setNotes("good")
+                                .addTreatment(new Treatment()
+                                        .setSymptom("hhhhhhhhhhhhhhhh")
+                                        .setNotes("uuuuuuuuuuuuuuuuuuuu")
+                                        .addPrescription(new Prescription()
+                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setQuantity(1)
+                                                .setNotes("llllll"))))
+        );
+
 
         //second
         patient = new Patient();
@@ -78,7 +114,7 @@ public class Initializer {
         doctor.setContactNumber("+123456789");
         doctor.setSpecialization(Specialization.Orthopedics);
         doctor.setSchedule(null);
-        Database.doctorsList.add(doctor);
+        Database.doctorList.add(doctor);
 
         appointment = new Appointment();
         appointment.setPatient(patient);
