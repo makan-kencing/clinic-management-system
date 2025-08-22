@@ -2,17 +2,17 @@ package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.control.PatientController;
+import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.utils.Tabulate;
 
 import java.util.Scanner;
 
 public class PatientUI extends UI {
-    private final PatientController patientController;
+    private final PatientController patientController = new PatientController();
 
     public PatientUI(Scanner scanner) {
         super(scanner);
-        this.patientController = new PatientController(this, scanner);
     }
 
     public Patient selectPatient() {
@@ -36,87 +36,123 @@ public class PatientUI extends UI {
                 };
             }
         };
-
-        displayTable(table);
+        table.display();
 
         int opt;
         do {
-            showPatientMenu();
-            opt = promptInt("Selection: ", scanner);
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Patient ID " +
+                    "\n(2) Filter Patient Record " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextInt();
+            this.scanner.nextLine();
+
+            System.out.println();
 
             if (opt != 4) {
-                selectedPatient = patientController.handlePatientMenuOption(table, opt, scanner);
+                switch (opt) {
+                    case 1: {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Patient ID (0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (selectedId == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                break;
+                            }
+                            selectedPatient = patientController.performSelect(selectedId);
+                            if (selectedPatient == null) {
+                                System.out.println("Patient with ID (" + selectedId + ") not found. Please re-enter Patient ID...");
+                            } else {
+                                System.out.println("Patient (" + selectedPatient.getName() + ") with ID (" + selectedPatient.getId() + ") selected!");
+                            }
+                        } while (selectedPatient == null);
+                        break;
+                    }
+                    case 2: {
+                        filterPatient(table);
+                        break;
+                    }
+                    case 3: {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                table.display();
+                break;
             }
-        } while (opt != 4 && selectedPatient == null);
+        } while (opt > 1 && opt < 4);
 
         return selectedPatient;
     }
 
-    public void showPatientMenu() {
-        System.out.println("==============================");
-        System.out.println("(1) Select Patient ID");
-        System.out.println("(2) Filter Patient Record");
-        System.out.println("(3) Reset Filters");
-        System.out.println("(4) Exit");
-        System.out.println("==============================");
-    }
-
-    public void showFilterMenu() {
-        System.out.println("\n==============================");
-        System.out.println("Filter Patients By:");
-        System.out.println("(1) Name");
-        System.out.println("(2) Identification");
-        System.out.println("(3) Contact Number");
-        System.out.println("(4) Gender");
-    }
-
-    public void showGenderFilterMenu() {
-        System.out.println("\n==============================");
-        System.out.println("Filter by:");
-        System.out.println("(1) Male");
-        System.out.println("(2) Female");
-    }
-
-    public void showPatientNotFound(int id) {
-        System.out.println("Patient with ID (" + id + ") not found. Please re-enter Patient ID...");
-    }
-
-    public void showPatientSelected(Patient p) {
-        System.out.println("\nPatient (" + p.getName() + ") with ID (" + p.getId() + ") selected!");
-    }
-
-    public void displayTable(Tabulate<Patient> table) {
-        System.out.println();
-        table.display();
-    }
-
-    //prompt helper
-    public String prompt(String msg, Scanner scanner) {
-        System.out.print(msg);
-        return scanner.nextLine();
-    }
-
-    public int promptInt(String msg, Scanner scanner) {
-        System.out.print(msg);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Invalid input. " + msg);
-            scanner.next();
-        }
-        int value = scanner.nextInt();
+    public void filterPatient(Tabulate<Patient> table) {
+        System.out.println("-".repeat(30));
+        System.out.println("Filters:");
+        System.out.println("(1) name");
+        System.out.println("(2) identification");
+        System.out.println("(3) contact number");
+        System.out.println("(4) gender");
+        System.out.println("(0) exit");
+        System.out.println("-".repeat(30));
+        System.out.print("Filter by: ");
+        var opt = scanner.nextInt();
         scanner.nextLine();
-        return value;
-    }
 
-    public int getFilterOption(Scanner scanner) {
-        System.out.println("==============================");
-        return promptInt("Filter by: ", scanner);
-    }
+        switch (opt) {
+            case 1: {
+                System.out.print("Search name by: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                patientController.filterPatients(table, "name", value);
+                break;
+            }
+            case 2: {
+                System.out.print("Search identification by: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                patientController.filterPatients(table, "identification", value);
+                break;
+            }
+            case 3: {
+                System.out.print("Search contact number by: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                patientController.filterPatients(table, "contact", value);
+            }
+            case 4: {
+                System.out.println();
+                System.out.println("-".repeat(30));
+                System.out.println("Filter gender by: ");
+                System.out.println("(1) male");
+                System.out.println("(2) female");
+                System.out.println("-".repeat(30));
+                System.out.print("Selection : ");
+                var value = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println();
 
-    public String getSearchValue(String field, Scanner scanner) {
-        return prompt("Search " + field + " by: ", scanner);
-    }
-
-    public int getGenderOption(Scanner scanner) {
-        return promptInt("Selection: ", scanner);
+                if (value == 1) {
+                    patientController.filterPatients(table, "gender", null, "male");
+                } else if (value == 2) {
+                    patientController.filterPatients(table, "gender", null, "female");
+                }
+                break;
+            }
+            default:
+                System.out.println();
+                table.display();
+                break;
+        }
     }
 }
