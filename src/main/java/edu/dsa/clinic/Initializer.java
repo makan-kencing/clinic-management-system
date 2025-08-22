@@ -10,7 +10,9 @@ import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Specialization;
+import edu.dsa.clinic.entity.Treatment;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class Initializer {

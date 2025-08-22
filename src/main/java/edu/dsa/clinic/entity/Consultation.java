@@ -68,6 +68,13 @@ public class Consultation extends IdentifiableEntity {
         return diagnoses;
     }
 
+    public Consultation addDiagnosis(Diagnosis diagnosis) {
+        diagnosis.setConsultation(this);
+
+        this.diagnoses.add(diagnosis);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Consultation{" +
