@@ -3,7 +3,12 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Consultation;
+import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.entity.Prescription;
+import edu.dsa.clinic.entity.Treatment;
+
+import javax.xml.crypto.Data;
 
 public class MedicalController {
 
@@ -28,5 +33,16 @@ public class MedicalController {
         return Database.consultationsList.findFirst(c -> c.getId() == id);
     }
 
+   public Diagnosis selectDiagnosis(ListInterface<Diagnosis> diagnosis,int id){
+        return  diagnosis.findFirst(d -> d.getId() == id);
+   }
+
+   public Treatment selectTreatment(ListInterface<Treatment> treatment,int id){
+        return  treatment.findFirst(t -> t.getId() == id);
+   }
+
+   public Prescription selectPrescription(ListInterface<Prescription> prescription,int id){
+        return prescription.findFirst(t -> t.getId() == id);
+   }
 
 }
