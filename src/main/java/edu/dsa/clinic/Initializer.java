@@ -6,12 +6,18 @@ import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
+import edu.dsa.clinic.entity.Medicine;
+import edu.dsa.clinic.entity.MedicineAdministrationType;
+import edu.dsa.clinic.entity.Product;
+import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Specialization;
+import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.dto.ConsultationQueue;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -109,6 +115,255 @@ public class Initializer {
                         .setSchedule(null)
         );
 
+        // Medicines data
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(1))
+                        .setName("Acetylsalicylic acid")
+                        .addType(MedicineType.ANALGESICS)
+                        .addType(MedicineType.ANTIPYRETICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(2))
+                        .setName("Paracetamol")
+                        .addType(MedicineType.ANALGESICS)
+                        .addType(MedicineType.ANTIPYRETICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(3))
+                        .setName("Ibuprofen")
+                        .addType(MedicineType.ANALGESICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(4))
+                        .setName("Penicillin")
+                        .addType(MedicineType.ANTIBIOTICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(5))
+                        .setName("Diphenhydramine")
+                        .addType(MedicineType.ANTIHISTAMINES)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(6))
+                        .setName("Centrizine")
+                        .addType(MedicineType.ANTIHISTAMINES)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(7))
+                        .setName("Loratadine")
+                        .addType(MedicineType.ANTIHISTAMINES)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(8))
+                        .setName("Warfarin")
+                        .addType(MedicineType.ANTICOAGULANTS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(9))
+                        .setName("Heparin")
+                        .addType(MedicineType.ANTICOAGULANTS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(10))
+                        .setName("Clozapine")
+                        .addType(MedicineType.ANTIPSYCHOTICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(11))
+                        .setName("Dexamethasone")
+                        .addType(MedicineType.CORTICOSTEROIDS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(12))
+                        .setName("Rosuvastatin")
+                        .addType(MedicineType.STATINS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(13))
+                        .setName("Calcium Carbonate")
+                        .addType(MedicineType.ANTACIDS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(13))
+                        .setName("Magnesium Hydroxide")
+                        .addType(MedicineType.ANTACIDS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(14))
+                        .setName("Ondansetron")
+                        .addType(MedicineType.ANTIEMETICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(15))
+                        .setName("Metaclopramide")
+                        .addType(MedicineType.ANTIEMETICS)
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(16))
+                        .setName("Insulin")
+                        .addType(MedicineType.ANTIDIABETICS)
+        );
+
+        // Products data
+        // https://ndclist.com/ndc/0536-1054/package/0536-1054-29/price
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(1))
+                        .setName("Acetylsalicyclic acid")
+                        .setBrand("Aspirin")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0.01529"))
+                        .setPrice(new BigDecimal("1"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(32)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(15))
+                        .addStock(new Stock()
+                                .setStockInQuantity(32)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(32))
+        );
+        Database.productList.add(  // https://ndclist.com/ndc/0135-7021
+                ((Product) new Product()
+                        .setId(2))
+                        .setName("Panadol PM")
+                        .setBrand("Panadol")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0"))
+                        .setPrice(new BigDecimal("0"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(100)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(3))
+                        .addStock(new Stock()
+                                .setStockInQuantity(100)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(100))
+                        .addStock(new Stock()
+                                .setStockInQuantity(62)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(62))
+        );
+        Database.productList.add(  // https://ndclist.com/ndc/0135-0620
+                ((Product) new Product()
+                        .setId(3))
+                        .setName("Panadol Extra")
+                        .setBrand("Panadol")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0"))
+                        .setPrice(new BigDecimal("0"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(100)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(3))
+                        .addStock(new Stock()
+                                .setStockInQuantity(100)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(100))
+                        .addStock(new Stock()
+                                .setStockInQuantity(62)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(62))
+        );
+        Database.productList.add(  // https://ndclist.com/ndc/0135-0609
+                ((Product) new Product()
+                        .setId(4))
+                        .setName("Panadol Extra Strength")
+                        .setBrand("Panadol")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0"))
+                        .setPrice(new BigDecimal("0"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(100)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(3))
+                        .addStock(new Stock()
+                                .setStockInQuantity(100)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(100))
+                        .addStock(new Stock()
+                                .setStockInQuantity(62)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(62))
+        );
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(5))
+                        .setName("Paracetamol")
+                        .setBrand("Tylenol")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0"))
+                        .setPrice(new BigDecimal("0"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(30)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(27))
+        );
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(6))
+                        .setName("Ibuprofen")
+                        .setBrand("Advil")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 3))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0"))
+                        .setPrice(new BigDecimal("0"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(30)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(13))
+        );
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(7))
+                        .setName("Centrizine")
+                        .setBrand("")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 6))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0"))
+                        .setPrice(new BigDecimal("0"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(30)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(13))
+        );
+
         // Appointments data
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
@@ -172,7 +427,7 @@ public class Initializer {
                                         .setSymptom("hhhhhhhhhhhhhhhh")
                                         .setNotes("uuuuuuuuuuuuuuuuuuuu")
                                         .addPrescription(new Prescription()
-                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
                                                 .setQuantity(1)
                                                 .setNotes("llllll"))))
                         .addDiagnosis(new Diagnosis()
@@ -183,11 +438,11 @@ public class Initializer {
                                         .setSymptom("hhhhhhhhhhhhhhhh")
                                         .setNotes("uuuuuuuuuuuuuuuuuuuu")
                                         .addPrescription(new Prescription()
-                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
                                                 .setQuantity(1)
                                                 .setNotes("llllll"))
                                         .addPrescription(new Prescription()
-                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
                                                 .setQuantity(1)
                                                 .setNotes("llllll"))))
 
@@ -209,7 +464,7 @@ public class Initializer {
                                         .setSymptom("hhhhhhhhhhhhhhhh")
                                         .setNotes("uuuuuuuuuuuuuuuuuuuu")
                                         .addPrescription(new Prescription()
-                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
                                                 .setQuantity(1)
                                                 .setNotes("llllll"))))
                         .addDiagnosis(new Diagnosis()
@@ -220,15 +475,13 @@ public class Initializer {
                                         .setSymptom("hhhhhhhhhhhhhhhh")
                                         .setNotes("uuuuuuuuuuuuuuuuuuuu")
                                         .addPrescription(new Prescription()
-                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 2))
                                                 .setQuantity(1)
                                                 .setNotes("llllll"))
                                         .addPrescription(new Prescription()
-                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 2))
                                                 .setQuantity(1)
                                                 .setNotes("llllll"))))
-
-
         );
 
         // Consultation queues data
