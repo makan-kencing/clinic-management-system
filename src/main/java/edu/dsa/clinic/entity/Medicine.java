@@ -78,8 +78,22 @@ public class Medicine extends IdentifiableEntity {
         return substitutes;
     }
 
+    public Medicine addSubstitute(Medicine medicine) {
+        medicine.substitutesFor.add(this);
+
+        this.substitutes.add(medicine);
+        return this;
+    }
+
     public ListInterface<Medicine> getSubstitutesFor() {
         return substitutesFor;
+    }
+
+    public Medicine addSubstituteFor(Medicine medicine) {
+        medicine.substitutes.add(this);
+
+        this.substitutesFor.add(medicine);
+        return this;
     }
 
     public ListInterface<Stock> getStocks() {
