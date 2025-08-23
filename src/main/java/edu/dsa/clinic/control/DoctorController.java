@@ -7,21 +7,25 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Patient;
 
 public class DoctorController {
     public DoctorController() {
+
     }
     
     public void addDoctorRecord(){
         
     }
     
-    public void updateDoctorInfo(){
-        
-    }
+
     
-    public void deleteDoctorInfo(){
-        
+    public Doctor deleteDoctorbyID(int id){
+        return  Database.doctorList.removeFirst(m -> m.getId() == id);
+    }
+
+    public Doctor selectDoctorByID(int id) {
+        return Database.doctorList.findFirst(d -> d.getId() == id);
     }
 
     public static int getDoctorCount(){
@@ -31,6 +35,7 @@ public class DoctorController {
     public ListInterface<Doctor> getDoctors(){
         return Database.doctorList;
     }
+
 
     public void addShift(){
         

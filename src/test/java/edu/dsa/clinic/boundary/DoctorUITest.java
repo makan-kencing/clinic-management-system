@@ -1,6 +1,7 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Initializer;
+import edu.dsa.clinic.entity.Doctor;
 
 import java.util.Scanner;
 
@@ -10,6 +11,6 @@ public class DoctorUITest {
         var scanner = new Scanner(System.in);
 
         var ui = new DoctorUI(scanner);
-        ui.viewDoctorsList();
+        ui.selectDoctor();
     }
 }
