@@ -528,9 +528,8 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + "{" +
-                "reference=" + reference +
-                ", length=" + length +
+        return this.getClass().getName() + "{" +
+                "length=" + length +
                 '}';
     }
 
