@@ -24,4 +24,9 @@ public class MedicalController {
         return Database.consultationsList;
     }
 
+    public Consultation selectConsultationById(int id) {
+        return Database.consultationsList.findFirst(c -> c.getId() == id);
+    }
+
+
 }
