@@ -286,7 +286,7 @@ public class MedicalUI extends UI {
         // choose the diagnosis (getId)
         System.out.print("Select the part wanted edit:");
         int id = this.scanner.nextInt();
-        var editDiagnosis = diagnosis.findFirst(d -> d.getId() == id);
+        var editDiagnosis = medicalController.selectDiagnosis(diagnosis,id);
         if (editDiagnosis != null) {
             editDiagnosis(editDiagnosis);
         }
@@ -362,7 +362,7 @@ public class MedicalUI extends UI {
             ListInterface<Treatment> treatments = diagnosis.getTreatments();
             System.out.print("Select the part wanted edit:");
             int id = this.scanner.nextInt();
-            var editTreatment = treatments.findFirst(t -> t.getId() == id);
+            var editTreatment = medicalController.selectTreatment(treatments,id);
             System.out.println();
             System.out.println("=".repeat(30));
             System.out.println("1. Edit Symptom");
@@ -423,7 +423,7 @@ public class MedicalUI extends UI {
             viewPrescription(treatment);
             System.out.print("Select the part wanted edit:");
             int id = this.scanner.nextInt();
-            var editPrescription = prescriptions.findFirst(t -> t.getId() == id);
+            var editPrescription = medicalController.selectPrescription(prescriptions,id);
             System.out.println();
             System.out.println("=".repeat(30));
             System.out.println("1. Edit Medicine");
