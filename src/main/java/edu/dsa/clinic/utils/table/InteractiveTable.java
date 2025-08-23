@@ -2,9 +2,9 @@ package edu.dsa.clinic.utils.table;
 
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.utils.Filter;
-import edu.dsa.clinic.utils.MultiComparator;
-import edu.dsa.clinic.utils.MultiFilter;
+import edu.dsa.clinic.lambda.Filter;
+import edu.dsa.clinic.lambda.MultiComparator;
+import edu.dsa.clinic.lambda.MultiFilter;
 
 import java.util.Comparator;
 import java.util.StringJoiner;

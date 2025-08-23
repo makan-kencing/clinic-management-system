@@ -26,4 +26,22 @@ public final class StringUtils {
                 + s
                 + Character.toString(padding).repeat(repeats + offset);
     }
+
+    public static String toTitlecase(String s) {
+        // https://stackoverflow.com/questions/1086123/is-there-a-method-for-string-conversion-to-title-case
+        final String ACTIONABLE_DELIMITERS = " '-/"; // these cause the character following
+        // to be capitalized
+
+        StringBuilder sb = new StringBuilder();
+        boolean capNext = true;
+
+        for (char c : s.toCharArray()) {
+            c = (capNext)
+                    ? Character.toUpperCase(c)
+                    : Character.toLowerCase(c);
+            sb.append(c);
+            capNext = (ACTIONABLE_DELIMITERS.indexOf((int) c) >= 0); // explicit cast not needed
+        }
+        return sb.toString();
+    }
 }

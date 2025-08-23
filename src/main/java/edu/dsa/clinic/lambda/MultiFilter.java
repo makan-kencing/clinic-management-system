@@ -1,4 +1,4 @@
-package edu.dsa.clinic.utils;
+package edu.dsa.clinic.lambda;
 
 import edu.dsa.clinic.adt.ListInterface;
 

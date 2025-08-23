@@ -26,9 +26,8 @@ public class AppointmentController {
     }
 
 
-
-    public void cancelAppointment(int id){
-
+    public void cancelAppointment(int index){
+        Database.appointmentList.remove(index);
     }
 
     public void findClosestAvailableTime(){
@@ -38,5 +37,7 @@ public class AppointmentController {
     public boolean hasOverLappingAppointments(Appointment appointment, Doctor doctor){
         return true;
     }
+
+
 
 }

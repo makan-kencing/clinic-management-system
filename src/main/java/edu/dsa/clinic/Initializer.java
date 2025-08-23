@@ -10,7 +10,7 @@ import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.entity.Treatment;
-import edu.dsa.clinic.utils.ConsultationQueue;
+import edu.dsa.clinic.dto.ConsultationQueue;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

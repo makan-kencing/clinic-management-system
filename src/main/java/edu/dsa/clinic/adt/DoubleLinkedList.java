@@ -1,7 +1,7 @@
 package edu.dsa.clinic.adt;
 
-import edu.dsa.clinic.utils.Filter;
-import edu.dsa.clinic.utils.Mapper;
+import edu.dsa.clinic.lambda.Filter;
+import edu.dsa.clinic.lambda.Mapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -524,6 +524,14 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         clone.extend(this);
 
         return clone;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getCanonicalName() + "{" +
+                "reference=" + reference +
+                ", length=" + length +
+                '}';
     }
 
     protected static class LinkedListIterator<K> implements Iterator<K>, Iterable<K> {
