@@ -166,7 +166,7 @@ public class PatientUI extends UI {
                                 ? DATE_FORMAT.format(c.getConsultedAt()) : "N/A"),
                         new Cell(t != null && t.getSymptom() != null ? t.getSymptom() : "N/A"),
                         new Cell(d != null && d.getDiagnosis() != null ? d.getDiagnosis() : "N/A"),
-                        new Cell(p != null && p.getMedicine() != null ? p.getMedicine().toString() : "N/A")
+                        new Cell(p != null && p.getProduct().getName() != null ? p.getProduct().getName() : "N/A")
                 };
             }
         };
@@ -244,7 +244,6 @@ public class PatientUI extends UI {
                 case "1" -> {
                     System.out.print("Enter New Patient Name : ");
                     editPatient.setName(this.scanner.nextLine().trim());
-                    break;
                 }
                 case "2" -> {
                     System.out.println("| (M) for Male | (F) for Female |");
@@ -261,7 +260,6 @@ public class PatientUI extends UI {
                     } while (!input.equals("M") && !input.equals("F"));
                     Gender gender = input.equals("M") ? Gender.MALE : Gender.FEMALE;
                     editPatient.setGender(gender);
-                    break;
                 }
                 case "3" -> {
                     String ic;
@@ -273,7 +271,6 @@ public class PatientUI extends UI {
                         }
                     } while (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$"));
                     editPatient.setIdentification(ic);
-                    break;
                 }
                 case "4" -> {
                     String phone;
@@ -285,7 +282,6 @@ public class PatientUI extends UI {
                         }
                     } while (!phone.matches("^\\+60\\d{8,11}$"));
                     editPatient.setContactNumber(phone);
-                    break;
                 }
                 case "0" -> {
                     System.out.println("Exiting without changes.\n");
