@@ -1,5 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.DoubleLinkedList;
+import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
@@ -16,7 +18,7 @@ public class Prescription extends IdentifiableEntity {
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int quantity;
     private @Nullable String notes;
-    private final ListInterface<Dispensing> dispensedMedications = new DoubleLinkedList<>();
+    private final ListInterface<Dispensing> dispensing = new DoubleLinkedList<>();
 
     public Treatment getTreatment() {
         return treatment;
@@ -54,14 +56,14 @@ public class Prescription extends IdentifiableEntity {
         return this;
     }
 
-    public ListInterface<Dispensing> getDispensedMedications() {
-        return dispensedMedications;
+    public ListInterface<Dispensing> getDispensing() {
+        return dispensing;
     }
 
-    public Prescription addDispensedMedication(Dispensing dispensing) {
+    public Prescription addDispensing(Dispensing dispensing) {
         dispensing.setPrescription(this);
 
-        this.dispensedMedications.add(dispensing);
+        this.dispensing.add(dispensing);
         return this;
     }
 
@@ -73,7 +75,7 @@ public class Prescription extends IdentifiableEntity {
                 ", medicine=" + product +
                 ", quantity=" + quantity +
                 ", notes='" + notes + '\'' +
-                ", dispensedMedications=" + dispensedMedications +
+                ", dispensedMedications=" + dispensing +
                 '}';
     }
 }
