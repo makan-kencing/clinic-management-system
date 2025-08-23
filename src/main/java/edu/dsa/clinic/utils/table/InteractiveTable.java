@@ -21,7 +21,7 @@ abstract public class InteractiveTable<T> extends Table<T> {
     protected final ListInterface<T> unfilteredData;
 
     public InteractiveTable(Column[] columns, ListInterface<T> data) {
-        super(columns);
+        super(columns, data);
         this.unfilteredData = data;
     }
 
