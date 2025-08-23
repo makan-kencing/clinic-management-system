@@ -12,31 +12,61 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.entity.Consultation;
+import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.entity.Prescription;
+import edu.dsa.clinic.entity.Treatment;
 
 public class PatientController {
 
-    private ListInterface<Patient> patientList = new DoubleLinkedList<>();
-
-    public boolean createPatientRecord(Patient patient) {
-        return true;
+    public void createPatientRecord(Patient patient) {
+        Database.patientsList.add(patient);
     }
 
-    public void editPatientRecord() {
-
+    public Patient editPatientRecord(Patient newPatient) {
+        Patient oldPatient = Database.patientsList.findFirst(p -> p.getId() == newPatient.getId());
+        if (oldPatient != null) {
+            oldPatient.setName(newPatient.getName())
+                    .setGender(newPatient.getGender())
+                    .setIdentification(newPatient.getIdentification())
+                    .setContactNumber(newPatient.getContactNumber());
+        }
+        return oldPatient;
     }
 
-    public void removePatientRecord() {
-
+    public void removePatientRecord(Patient patient) {
+        Database.patientsList.removeFirst(p -> p.getId() == patient.getId());
     }
 
-    public void viewPatientList() {
-
+    public ListInterface<Consultation> getPatientConsultations(Patient patient) {
+        return Database.consultationsList.filtered(c -> c.getPatient().equals(patient));
     }
 
-    public void viewPatientDetail() {
-
+    public ListInterface<Diagnosis> getPatientDiagnoses(Patient patient) {
+        ListInterface<Diagnosis> patientDiagnoses = new DoubleLinkedList<>();
+        for (Consultation c : getPatientConsultations(patient)) {
+            patientDiagnoses.extend(c.getDiagnoses());
+        }
+        return patientDiagnoses;
     }
+
+    public ListInterface<Treatment> getPatientTreatments(Patient patient) {
+        ListInterface<Treatment> patientTreatments = new DoubleLinkedList<>();
+        for (Diagnosis d : getPatientDiagnoses(patient)) {
+            patientTreatments.extend(d.getTreatments());
+        }
+        return patientTreatments;
+    }
+
+    public ListInterface<Prescription> getPatientPrescriptions(Patient patient) {
+        ListInterface<Prescription> patientPrescriptions = new DoubleLinkedList<>();
+        for (Treatment t : getPatientTreatments(patient)) {
+            patientPrescriptions.extend(t.getPrescriptions());
+        }
+        return patientPrescriptions;
+    }
+
 
     public void createQueueNumber() {
 
@@ -52,33 +82,6 @@ public class PatientController {
 
     public void viewSummaryReport() {
 
-    }
-
-    public static DoubleLinkedList<Patient> sortPatients(DoubleLinkedList<Patient> patients, String column, boolean ascending) {
-        switch (column.toLowerCase()) {
-            case "id":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? Integer.compare(a.getId(), b.getId())
-                        : Integer.compare(b.getId(), a.getId()));
-            case "name":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getName().compareToIgnoreCase(b.getName())
-                        : b.getName().compareToIgnoreCase(a.getName()));
-            case "identification":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getIdentification().compareToIgnoreCase(b.getIdentification())
-                        : b.getIdentification().compareToIgnoreCase(a.getIdentification()));
-            case "contact":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getContactNumber().compareTo(b.getContactNumber())
-                        : b.getContactNumber().compareTo(a.getContactNumber()));
-            case "gender":
-                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
-                        ? a.getGender().compareTo(b.getGender())
-                        : b.getGender().compareTo(a.getGender()));
-            default:
-                throw new IllegalArgumentException("Invalid column: " + column);
-        }
     }
 
     public Patient performSelect(int selectedId) {
