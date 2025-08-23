@@ -96,7 +96,7 @@ public class DoctorUI extends UI {
             System.out.println("3. Ophthalmology");
             System.out.println("4. Otorhinolaryngology");
             System.out.println("5. Orthopedics");
-            option = sc.nextInt();
+            option = sc.nextInt();  // 4
 
             if(Character.isDigit(option)) {
                 switch (option){
