@@ -5,12 +5,12 @@ import org.jetbrains.annotations.Range;
 import java.time.LocalDateTime;
 
 /**
- * The actual physical instance of a {@link Medicine} in storage.
+ * The actual physical instance of a {@link Product} in storage.
  *
  * @author makan-kencing
  */
 public class Stock extends IdentifiableEntity {
-    private Medicine medicine;
+    private Product product;
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int stockInQuantity;
     private LocalDateTime stockInDate;
@@ -18,12 +18,12 @@ public class Stock extends IdentifiableEntity {
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int quantityLeft;
 
-    public Medicine getMedicine() {
-        return medicine;
+    public Product getMedicine() {
+        return product;
     }
 
-    public Stock setMedicine(Medicine medicine) {
-        this.medicine = medicine;
+    public Stock setMedicine(Product product) {
+        this.product = product;
         return this;
     }
 
@@ -67,7 +67,7 @@ public class Stock extends IdentifiableEntity {
     public String toString() {
         return "Stock{" +
                 "id=" + id +
-                ", medicine=" + medicine +
+                ", medicine=" + product +
                 ", stockInQuantity=" + stockInQuantity +
                 ", stockInDate=" + stockInDate +
                 ", location='" + location + '\'' +

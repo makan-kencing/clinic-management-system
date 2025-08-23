@@ -1,7 +1,7 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.entity.Medicine;
+import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.lambda.Filter;
 
@@ -19,7 +19,7 @@ public class InventoryController {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public ListInterface<SimilarStock> findSuitableStocks(Medicine medicine) {
+    public ListInterface<SimilarStock> findSuitableStocks(Product medicine) {
         throw new UnsupportedOperationException("Not implemented");
     }
 

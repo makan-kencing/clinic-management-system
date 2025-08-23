@@ -1,10 +1,10 @@
 package edu.dsa.clinic.dto;
 
-import edu.dsa.clinic.entity.Medicine;
+import edu.dsa.clinic.entity.Product;
 import org.jetbrains.annotations.Range;
 
 /**
- * The inventory definition of a {@link Medicine}.
+ * The inventory definition of a {@link Product}.
  *
  * @author makan-kencing
  */
