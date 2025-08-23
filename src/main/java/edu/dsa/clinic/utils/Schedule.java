@@ -2,7 +2,6 @@ package edu.dsa.clinic.utils;
 
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
-import edu.dsa.clinic.entity.Shift;
 
 public record Schedule(
         ListInterface<Shift> monday,
@@ -30,5 +29,40 @@ public record Schedule(
                 s1.getTimeRange().from()
                         .compareTo(s2.getTimeRange().from())
         );
+    }
+
+    public Schedule addMondayShift(Shift shift) {
+        this.monday.add(shift);
+        return this;
+    }
+
+    public Schedule addTuesdayShift(Shift shift) {
+        this.tuesday.add(shift);
+        return this;
+    }
+
+    public Schedule addWednesdayShift(Shift shift) {
+        this.wednesday.add(shift);
+        return this;
+    }
+
+    public Schedule addThursdayShift(Shift shift) {
+        this.thursday.add(shift);
+        return this;
+    }
+
+    public Schedule addFridayShift(Shift shift) {
+        this.friday.add(shift);
+        return this;
+    }
+
+    public Schedule addSaturdayShift(Shift shift) {
+        this.saturday.add(shift);
+        return this;
+    }
+
+    public Schedule addSundayShift(Shift shift) {
+        this.sunday.add(shift);
+        return this;
     }
 }

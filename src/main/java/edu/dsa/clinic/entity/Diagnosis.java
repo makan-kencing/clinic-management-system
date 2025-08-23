@@ -57,4 +57,11 @@ public class Diagnosis extends IdentifiableEntity {
     public ListInterface<Treatment> getTreatments() {
         return treatments;
     }
+
+    public Diagnosis addTreatment(Treatment treatment) {
+        treatment.setDiagnosis(this);
+
+        this.treatments.add(treatment);
+        return this;
+    }
 }

@@ -27,6 +27,12 @@ public abstract class IdentifiableEntity {
         return id;
     }
 
+    public IdentifiableEntity setId(@Range(from = 1, to = Integer.MAX_VALUE) int id) {
+        this.id = id;
+        lastId = Math.max(lastId, id);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

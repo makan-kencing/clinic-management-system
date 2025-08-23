@@ -1,6 +1,6 @@
-package edu.dsa.clinic.entity;
+package edu.dsa.clinic.utils;
 
-import edu.dsa.clinic.utils.Range;
+import edu.dsa.clinic.entity.Doctor;
 
 import java.time.LocalTime;
 
@@ -11,18 +11,8 @@ import java.time.LocalTime;
  * @see Doctor
  */
 public class Shift {
-    private Doctor doctor;
     private ShiftType type;
     private Range<LocalTime> timeRange;
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public Shift setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-        return this;
-    }
 
     public ShiftType getType() {
         return type;
@@ -45,8 +35,7 @@ public class Shift {
     @Override
     public String toString() {
         return "Shift{" +
-                "doctor=" + doctor +
-                ", type=" + type +
+                "type=" + type +
                 ", timeRange=" + timeRange +
                 '}';
     }

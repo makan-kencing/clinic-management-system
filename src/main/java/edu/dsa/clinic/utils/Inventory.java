@@ -1,7 +1,6 @@
-package edu.dsa.clinic.entity;
+package edu.dsa.clinic.utils;
 
-import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.adt.SortedDoubleLinkedList;
+import edu.dsa.clinic.entity.Medicine;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -16,9 +15,6 @@ public class Inventory {
     private int maxQuantity;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int autoOrderThreshold;
-    private final ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
-            s1.getStockInDate().compareTo(s2.getStockInDate())
-    );
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMinQuantity() {
         return minQuantity;
@@ -47,17 +43,12 @@ public class Inventory {
         return this;
     }
 
-    public ListInterface<Stock> getStocks() {
-        return stocks;
-    }
-
     @Override
     public String toString() {
         return "Inventory{" +
                 "minQuantity=" + minQuantity +
                 ", maxQuantity=" + maxQuantity +
                 ", autoOrderThreshold=" + autoOrderThreshold +
-                ", stocks=" + stocks +
                 '}';
     }
 }

@@ -1,10 +1,9 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Consultation;
-import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.entity.Prescription;
 
 public class MedicalController {
 
@@ -19,6 +18,10 @@ public class MedicalController {
             }
         }
         return null;
+    }
+
+    public ListInterface<Consultation> getConsultationList() {
+        return Database.consultationsList;
     }
 
 }

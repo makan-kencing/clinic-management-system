@@ -9,36 +9,32 @@ package edu.dsa.clinic.control;
  * @author Bincent
  */
 
+import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.adt.SortedDoubleLinkedList;
-import edu.dsa.clinic.entity.ConsultationQueue;
 import edu.dsa.clinic.entity.Patient;
-
-import java.util.Comparator;
 
 public class PatientController {
 
     private ListInterface<Patient> patientList = new DoubleLinkedList<>();
-    private ListInterface<ConsultationQueue> queueList = new SortedDoubleLinkedList<>(Comparator.comparingInt(ConsultationQueue::getQueueNo));
 
-    public boolean createPatientRecord(Patient patient){
+    public boolean createPatientRecord(Patient patient) {
         return true;
     }
 
-    public void editPatientRecord(){
+    public void editPatientRecord() {
 
     }
 
-    public void removePatientRecord(){
+    public void removePatientRecord() {
 
     }
 
-    public void viewPatientList(){
+    public void viewPatientList() {
 
     }
 
-    public void viewPatientDetail(){
+    public void viewPatientDetail() {
 
     }
 
@@ -50,11 +46,42 @@ public class PatientController {
 
     }
 
-    public void viewConnsultationQueue() {
+    public void viewConsultationQueue() {
 
     }
 
     public void viewSummaryReport() {
 
+    }
+
+    public static DoubleLinkedList<Patient> sortPatients(DoubleLinkedList<Patient> patients, String column, boolean ascending) {
+        switch (column.toLowerCase()) {
+            case "id":
+                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
+                        ? Integer.compare(a.getId(), b.getId())
+                        : Integer.compare(b.getId(), a.getId()));
+            case "name":
+                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
+                        ? a.getName().compareToIgnoreCase(b.getName())
+                        : b.getName().compareToIgnoreCase(a.getName()));
+            case "identification":
+                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
+                        ? a.getIdentification().compareToIgnoreCase(b.getIdentification())
+                        : b.getIdentification().compareToIgnoreCase(a.getIdentification()));
+            case "contact":
+                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
+                        ? a.getContactNumber().compareTo(b.getContactNumber())
+                        : b.getContactNumber().compareTo(a.getContactNumber()));
+            case "gender":
+                return (DoubleLinkedList<Patient>) patients.sorted((a, b) -> ascending
+                        ? a.getGender().compareTo(b.getGender())
+                        : b.getGender().compareTo(a.getGender()));
+            default:
+                throw new IllegalArgumentException("Invalid column: " + column);
+        }
+    }
+
+    public Patient performSelect(int selectedId) {
+        return Database.patientsList.findFirst(p -> p.getId() == selectedId);
     }
 }

@@ -1,12 +1,16 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
-import edu.dsa.clinic.utils.Tabulate;
+import edu.dsa.clinic.utils.table.Alignment;
+import edu.dsa.clinic.utils.table.Cell;
+import edu.dsa.clinic.utils.table.Column;
+import edu.dsa.clinic.utils.table.InteractiveTable;
+import edu.dsa.clinic.utils.table.Table;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Scanner;
@@ -15,134 +19,97 @@ import java.util.Scanner;
 public class MedicalUI extends UI {
     private final MedicalController medicalController;
     private final MedicineUI medicineUI;
+    private final PatientUI patientUI;
 
     public MedicalUI(Scanner scanner) {
         super(scanner);
         this.medicalController = new MedicalController();
         this.medicineUI = new MedicineUI(scanner);
+        this.patientUI = new PatientUI(scanner);
     }
 
     public void viewConsultationRecord() {
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 4, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Name", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Gender", 10, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Identification", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Contact No", 20, Tabulate.Alignment.CENTER)
-        }, Database.consultationsList.clone()) {
+        var consultations = this.medicalController.getConsultationList();
+
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Patient Name", Alignment.CENTER, 20),
+                new Column("Doctor Name", Alignment.CENTER, 20),
+                new Column("Consulted At", Alignment.CENTER, 20),
+                new Column("Notes", Alignment.CENTER, 40),
+                new Column("Diagnoses", Alignment.CENTER, 20)
+        }, consultations) {
             @Override
-            protected Cell[] getRow(Consultation element) {
+            protected Cell[] getRow(Consultation o) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId())),
-                        new Cell(element.getPatient().getName()),
-                        new Cell(element.getDoctor().getName()),
-                        new Cell(element.getConsultedAt().toString()),
-                        new Cell(element.getNotes()),
-                        new Cell(element.getDiagnoses().toString() != null ? element.getDiagnoses().toString() : ""),
+                        new Cell(o.getId()),
+                        new Cell(o.getPatient().getName()),
+                        new Cell(o.getDoctor().getName()),
+                        new Cell(o.getConsultedAt()),
+                        new Cell(o.getNotes()),
+                        new Cell(o.getDiagnoses().size()),
                 };
             }
         };
+        table.display();
     }
 
-    public void viewSelectConsultationRecord() {
-        viewConsultationRecord();
-        System.out.println("Select the part wanted edit:");
-        int id = this.scanner.nextInt();  // TODO: get actual id
-        var selectConsultation = Database.consultationsList.findFirst(c -> c.getId() == id);
-        viewMenu(selectConsultation);
-    }
 
-    public void viewMenu(Consultation consultation) {
+    public void viewMenu() {
         System.out.println("Consultation Menu");
-        System.out.println("-".repeat(30));
-        System.out.println(" Patient ");
-        System.out.println("-".repeat(30));
-        System.out.println("Name: " + consultation.getPatient().getName());
-        System.out.println("Gender: " + consultation.getPatient().getGender());
-        System.out.println("Identification: " + consultation.getPatient().getIdentification());
-        System.out.println("-".repeat(30));
-
-        System.out.println("Doctor: " + consultation.getDoctor().getName());
         System.out.println("Please Select an Option");
-        System.out.println("-".repeat(30));
-        System.out.println("1.Consultation Record");
-        System.out.println("2 Delete Consultation Record");
+        System.out.println("=".repeat(30));
+        System.out.println("1.Create Consultation Record");
+        System.out.println("2 View Consultation Record");
         System.out.println("3. List Out Consultation Record");
         System.out.println("5. Back");
+        System.out.println("=".repeat(30));
+        System.out.printf("Enter your choice :");
         int choice = this.scanner.nextInt();
         switch (choice) {
             case 1:
-                startConsultationSession();
+                createConsultationInfo();
                 break;
             case 2:
-                //list consultation
+                viewSelectConsultationRecord();
                 break;
+            case 3:
+
         }
 
     }
 
-
-    public Consultation createConsultationInfo() {
+    // create consultation
+    public @Nullable Consultation createConsultationInfo() {
         var consultation = new Consultation();
         // set consultation info (doctor, patient)
-        //
+
+        //patient selection
+        int id = this.scanner.nextInt();  // TODO: get actual id
+        var selectPatient = this.patientUI.selectPatient();
+        if (selectPatient == null) {
+            return null;
+        }
+
+        //doctor selection
+        int id2 = this.scanner.nextInt();
 
         return consultation;
     }
 
-    public void startConsultationSession(@Nullable Consultation consultation) {
-        if (consultation == null)
-            consultation = this.createConsultationInfo();
-
-        // let doctor choose to
-        // 1. make diagnosis (add, edit, *delete)
-        // 2. write notes
-        System.out.println("Please Select an Option");
-        System.out.println("1. Add diagnosis");
-        System.out.println("2 Edit diagnosis");
-        System.out.println("3 Delete Consultation Record");
-        System.out.println("4 Write Note");
-        System.out.println("5. Back");
-        int choice = this.scanner.nextInt();
-        switch (choice) {
-            case 1:
-                writeUpDiagnosis(consultation);
-                break;
-            case 2:
-                editDiagnosis(consultation);
-                break;
-            case 3:
-                deleteDiagnosis(consultation);
-            case 4:
-                //writeNote
-            case 5:
-                viewMenu(consultation);
-
-        }
-
-
-        //
-        // case make diagnosis
-        // - add
-        //   - add treatments
-        //     - add prescription
-        // - edit
-        //   - edit
-
-        // save consultation
-    }
-
-    public void startConsultationSession() {
-        this.startConsultationSession(null);
-    }
 
     public void writeUpDiagnosis(Consultation consultation) {
         var diagnosis = new Diagnosis();
         diagnosis.setConsultation(consultation);
 
-        System.out.println(consultation.getDoctor().toString());
+        System.out.println(consultation.getDoctor().getName());
+        System.out.println(consultation.getDoctor().getSpecialization());
+        System.out.println(consultation.getDoctor().getGender());
         System.out.println("-".repeat(30));
-        System.out.println(consultation.getPatient().toString());
+        System.out.println(consultation.getPatient().getName());
+        System.out.println(consultation.getPatient().getIdentification());
+        System.out.println(consultation.getPatient().getGender());
+        System.out.println(consultation.getType());
         System.out.println("-".repeat(30));
         System.out.println("| Diagnosis |");
         System.out.println("-".repeat(30));
@@ -150,6 +117,7 @@ public class MedicalUI extends UI {
         while (true) {
             System.out.print("Enter diagnosis description: ");
             String description = this.scanner.nextLine().trim();
+            this.scanner.nextLine();
 
             if (description.isEmpty())
                 System.out.println("Description cannot be empty. Please enter again.");
@@ -159,9 +127,9 @@ public class MedicalUI extends UI {
             }
         }
 
-        System.out.println("Diagnosis notes (optional): ");
+        System.out.print("Diagnosis notes (optional): ");
         String notes = this.scanner.nextLine();
-
+        this.scanner.nextLine();
         diagnosis.setNotes(notes.isBlank() ? null : notes);
 
         while (true) {
@@ -185,7 +153,7 @@ public class MedicalUI extends UI {
         System.out.println("| Treatment |");
         System.out.println("-".repeat(50));
 
-        System.out.println("Symptom for this treatment (e.g., Fever/Cough/Nasal Congestion): ");
+        System.out.print("Symptom for this treatment (e.g., Fever/Cough/Nasal Congestion): ");
         while (true) {
             var symptom = this.scanner.nextLine();
 
@@ -230,47 +198,191 @@ public class MedicalUI extends UI {
         diagnosis.getTreatments().add(treatment);
     }
 
-    public void editDiagnosis(Consultation consultation) {
-        viewDiagnosis(consultation);
-        var diagnosis = consultation.getDiagnoses();
-
-        // show this consultation diagnoses
-
-        // choose the diagnosis (getId)
-        System.out.println("Select the part wanted edit:");
-        int id = 1;  // TODO: get actual id
-
-        var editDiagnosis = diagnosis.findFirst(d -> d.getId() == id);
-
-
+    public void startConsultationSession() {
+        this.startConsultationSession(null);
     }
 
-    public void deleteDiagnosis(Consultation consultation) {
+    public void viewSelectConsultationRecord() {
+        viewConsultationRecord();
+        System.out.printf("Select the consultation need to edit:");
+        int id = this.scanner.nextInt();  // TODO: get actual id
+        var selectConsultation = medicalController.getConsultationList().findFirst(c -> c.getId() == id);
+        if (selectConsultation != null) {
+            startConsultationSession(selectConsultation);
+        }
+    }
+    //diagnosis
+    public void startConsultationSession(@Nullable Consultation consultation) {
+        if (consultation == null)
+            consultation = this.createConsultationInfo();
 
+        while (true) {
+            // let doctor choose to
+            // 1. make diagnosis (add, edit, *delete)
+            // 2. write notes
+
+            System.out.println("Please Select an Option");
+            System.out.println("1. Add diagnosis");
+            System.out.println("2. Edit diagnosis");
+            System.out.println("3. Delete Consultation Record");
+            System.out.println("4. Write Note");
+            System.out.println("5. Back");
+            System.out.print("Enter your choice :");
+            int choice = this.scanner.nextInt();
+            this.scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    this.writeUpDiagnosis(consultation);
+                    break;
+                case 2:
+                    this.viewEditDiagnosis(consultation);
+                    break;
+                case 3:
+                    //deleteDiagnosis(consultation);
+                case 4:
+                    //writeNote
+                case 5:
+                    // save consultation
+                    return;
+            }
+
+
+            //
+            // case make diagnosis
+            // - add
+            //   - add treatments
+            //     - add prescription
+            // - edit
+            //   - edit
+
+        }
     }
 
-    public void deleteConsultation(Consultation consultation) {
-
-    }
-
+    // edit diagnosis
     public void viewDiagnosis(Consultation consultation) {
-        var table = new Tabulate<>(new Tabulate.Header[]{
-                new Tabulate.Header("Id", 4, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Diagnosis", 10, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Diagnoses", 20, Tabulate.Alignment.CENTER),
-                new Tabulate.Header("Notes", 20, Tabulate.Alignment.CENTER)
+        var table = new Table<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Diagnosis", Alignment.CENTER, 40),
+                new Column("Diagnoses", Alignment.CENTER, 40),
+                new Column("Notes", Alignment.CENTER, 40),
+                new Column("Treatment", Alignment.CENTER, 10)
         }, consultation.getDiagnoses().clone()) {
             @Override
-            protected Cell[] getRow(Diagnosis element) {
+            protected Cell[] getRow(Diagnosis o) {
                 return new Cell[]{
-                        new Cell(String.valueOf(element.getId())),
-                        new Cell(element.getDiagnosis()),
-                        new Cell(element.getDescription()),
-                        new Cell(element.getNotes() != null ? element.getNotes() : "")
+                        new Cell(o.getId()),
+                        new Cell(o.getDiagnosis()),
+                        new Cell(o.getDescription()),
+                        new Cell(o.getNotes() != null ? o.getNotes() : ""),
+                        new Cell(o.getTreatments().size())
                 };
             }
         };
+
+        table.display();
     }
+
+    public void viewEditDiagnosis(Consultation consultation) {
+        // show this consultation diagnoses
+        viewDiagnosis(consultation);
+        var diagnosis = consultation.getDiagnoses();
+        // choose the diagnosis (getId)
+        System.out.print("Select the part wanted edit:");
+        int id = this.scanner.nextInt();
+        var editDiagnosis = diagnosis.findFirst(d -> d.getId() == id);
+        if (editDiagnosis != null) {
+            editDiagnosis(editDiagnosis);
+        }
+    }
+
+    // viewMenu -> viewSelectConsultationRecord -> startConsultationSession
+    public void editDiagnosis(Diagnosis diagnosis) {
+        while (true) {
+            System.out.println("-".repeat(30));
+            System.out.println("| Diagnosis |");
+            System.out.println("-".repeat(30));
+            System.out.println("Diagnosis: " + diagnosis.getDiagnosis());
+            System.out.println("Description: " + diagnosis.getDescription());
+            System.out.println("Notes: " + diagnosis.getNotes());
+            System.out.println("-".repeat(30));
+            System.out.println("1. Edit diagnosis");
+            System.out.println("2. Edit description");
+            System.out.println("3. Edit Note");
+            System.out.println("4. Edit treatment");
+            System.out.println("5. Back");
+            System.out.print("Select the part wanted edit: ");
+            int choice = this.scanner.nextInt();
+            this.scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new Diagnosis :");
+                    String newDiagnosis = this.scanner.nextLine();
+                    diagnosis.setDiagnosis(newDiagnosis);
+                    return;
+                case 2:
+                    System.out.println("Enter new Description");
+                    String newDescription = this.scanner.nextLine();
+                    diagnosis.setDescription(newDescription);
+                case 3:
+                    System.out.println("Enter new Notes");
+                    String newNotes = this.scanner.nextLine();
+                    diagnosis.setNotes(newNotes);
+                case 4:
+                    this.viewTreatment(diagnosis);
+                case 5:
+                    return;
+            }
+        }
+    }
+    //edit treatment
+    public void viewTreatment(Diagnosis diagnosis) {
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Symptom", Alignment.CENTER, 20),
+                new Column("Prescriptions", Alignment.CENTER, 40),
+                new Column("Notes", Alignment.CENTER, 40)
+        }, diagnosis.getTreatments().clone()) {
+            @Override
+            protected Cell[] getRow(Treatment o) {
+                return new Cell[]{
+                        new Cell(o.getId()),
+                        new Cell(o.getSymptom()),
+                        new Cell(o.getPrescriptions()),
+                        new Cell(o.getNotes())
+                };
+            }
+        };
+        table.display();
+    }
+
+    public void editTreatmentPage(Diagnosis diagnosis) {
+        viewTreatment(diagnosis);
+        ListInterface<Treatment> treatments = diagnosis.getTreatments();
+        int id = this.scanner.nextInt();
+        var editTreatment = treatments.findFirst(t -> t.getId() == id);
+        System.out.println("Select the Treatment wanted edit: ");
+        System.out.println("1. Edit Symptom");
+        System.out.println("2. Edit Note");
+        System.out.println("3. Edit Prescriptions");
+        int choice = this.scanner.nextInt();
+        switch (choice) {
+            case 1:
+                System.out.println("Enter new Symptom");
+                String newDiagnosis = this.scanner.nextLine();
+                if (editTreatment != null) {
+                    editTreatment.setSymptom(newDiagnosis);
+                }
+            case 2:
+                System.out.println("Enter new Note");
+                String newDescription = this.scanner.nextLine();
+                diagnosis.setDescription(newDescription);
+            case 3:
+                //prescription
+
+        }
+    }
+
 
 
 }

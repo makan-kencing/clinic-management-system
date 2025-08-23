@@ -1,11 +1,9 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.utils.Filter;
-import edu.dsa.clinic.utils.Pager;
 import edu.dsa.clinic.utils.Utils;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,108 +22,86 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Medicine searchMedicine() {
-        var pager = new Pager<Medicine>(this.scanner) {
-            @Override
-            public void resetSorters() {
-                super.resetSorters();
-                this.sorters.add((m1, m2) -> m1.getId() - m2.getId());
-            }
-
-            @Override
-            protected ListInterface<Medicine> fetch(ListInterface<Filter<Medicine>> filters, ListInterface<Comparator<Medicine>> sorters) {
-                return medicineController.getAllMedicines(this.filters, this.sorters);
-            }
-
-            @Override
-            protected void displayAll(ListInterface<Medicine> data) {
-                var i = 0;
-                for (var medicine : data)
-                    if (i++ < this.numberOfRows)
-                        System.out.printf("%d. %s%n", i, medicine);
-            }
-
-            @Override
-            protected @Nullable Filter<Medicine> promptFilter() {
-                System.out.println("Filters:");
-                System.out.println("(1) name");
-                System.out.println("(2) type");
-                System.out.println("(3) brand");
-                System.out.println("(4) unit cost");
-                System.out.println("(5) unit price");
-                System.out.print("Filter by: ");
-
-                var opt = this.scanner.nextInt();
-
-                switch (opt) {
-                    case 1:
-                        System.out.print("Search name by: ");
-
-                        var name = this.scanner.nextLine();
-                        return m -> m.getName().toLowerCase().contains(name.toLowerCase());
-                    case 2:
-                        System.out.print("Search type by: ");
-
-                        var type = MedicineType.valueOf(this.scanner.nextLine());
-                        return m -> m.getType().equals(type);
-                    case 3:
-                        System.out.print("Search by brand: ");
-
-                        var brand = this.scanner.nextLine();
-                        return m -> m.getName().toLowerCase().contains(brand.toLowerCase());
-                    case 4:
-                    case 5:
-                        System.out.print("From: ");
-
-                        var low = this.scanner.nextBigDecimal();
-
-                        System.out.print("To: ");
-
-                        var high = this.scanner.nextBigDecimal();
-
-                        if (opt == 4)
-                            return m -> Utils.isBetween(m.getCost(), low, high);
-                        else
-                            return m -> Utils.isBetween(m.getPrice(), low, high);
-                    default:
-                        return null;
-                }
-            }
-
-            @Override
-            protected @Nullable Comparator<Medicine> promptSorter() {
-                System.out.println("Sorts");
-                System.out.println("(1) default");
-                System.out.println("(2) unit cost");
-                System.out.println("(3) unit price");
-                System.out.print("Sort by: ");
-
-                var opt = this.scanner.nextInt();
-
-                switch (opt) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        System.out.println("Orderings");
-                        System.out.println("(1) ASC (default)");
-                        System.out.println("(2) DESC");
-                        System.out.print("Order by: ");
-
-                        var isDescending = this.scanner.nextInt() == 2 ? -1 : 1;
-
-                        return switch (opt) {
-                            case 1 -> (m1, m2) -> m1.getId() - m2.getId() * isDescending;
-                            case 2 -> (m1, m2) -> m1.getCost().compareTo(m2.getCost()) * isDescending;
-                            case 3 -> (m1, m2) -> m1.getPrice().compareTo(m2.getPrice()) * isDescending;
-                            default -> throw new IllegalStateException("Unexpected value: " + opt);
-                        };
-                    default:
-                        return null;
-                }
-            }
-        };
-
-        return pager.promptSelection();
+        throw new UnsupportedOperationException("Not implemented");
     }
+
+    public Filter<Medicine> promptFilter() {
+        System.out.println("Filters:");
+        System.out.println("(1) name");
+        System.out.println("(2) type");
+        System.out.println("(3) brand");
+        System.out.println("(4) unit cost");
+        System.out.println("(5) unit price");
+        System.out.print("Filter by: ");
+
+        var opt = this.scanner.nextInt();
+
+        switch (opt) {
+            case 1:
+                System.out.print("Search name by: ");
+
+                var name = this.scanner.nextLine();
+                return m -> m.getName().toLowerCase().contains(name.toLowerCase());
+            case 2:
+                System.out.print("Search type by: ");
+
+                var type = MedicineType.valueOf(this.scanner.nextLine());
+                return m -> m.getType().equals(type);
+            case 3:
+                System.out.print("Search by brand: ");
+
+                var brand = this.scanner.nextLine();
+                return m -> m.getName().toLowerCase().contains(brand.toLowerCase());
+            case 4:
+            case 5:
+                System.out.print("From: ");
+
+                var low = this.scanner.nextBigDecimal();
+
+                System.out.print("To: ");
+
+                var high = this.scanner.nextBigDecimal();
+
+                if (opt == 4)
+                    return m -> Utils.isBetween(m.getCost(), low, high);
+                else
+                    return m -> Utils.isBetween(m.getPrice(), low, high);
+            default:
+                return null;
+        }
+    }
+
+    public @Nullable Comparator<Medicine> promptSorter() {
+        System.out.println("Sorts");
+        System.out.println("(1) default");
+        System.out.println("(2) unit cost");
+        System.out.println("(3) unit price");
+        System.out.print("Sort by: ");
+
+        var opt = this.scanner.nextInt();
+
+        switch (opt) {
+            case 1:
+            case 2:
+            case 3:
+                System.out.println("Orderings");
+                System.out.println("(1) ASC (default)");
+                System.out.println("(2) DESC");
+                System.out.print("Order by: ");
+
+                var isDescending = this.scanner.nextInt() == 2 ? -1 : 1;
+
+                return switch (opt) {
+                    case 1 -> (m1, m2) -> m1.getId() - m2.getId() * isDescending;
+                    case 2 -> (m1, m2) -> m1.getCost().compareTo(m2.getCost()) * isDescending;
+                    case 3 -> (m1, m2) -> m1.getPrice().compareTo(m2.getPrice()) * isDescending;
+                    default -> throw new IllegalStateException("Unexpected value: " + opt);
+                };
+            default:
+                return null;
+        }
+    }
+
 
     public void viewMedicineDetails(Medicine medicine) {
         System.out.println("Medicine details");
