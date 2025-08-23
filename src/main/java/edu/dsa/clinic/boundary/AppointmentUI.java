@@ -381,7 +381,7 @@ public class AppointmentUI extends UI {
         }while(!option.equals("0"));
     }
 
-    public void cancelAppointment(InteractiveTable<Appointment> table, DateTimeFormatter formatter, ListInterface<Appointment> appointmentList) {
+    public void cancelAppointment(ListInterface<Appointment> appointmentList) {
 
         System.out.println("Select an appointment to cancel (enter by id) : ");
         String selectedAppointmentId = this.scanner.nextLine();
@@ -469,7 +469,7 @@ public class AppointmentUI extends UI {
                     filter(table, "created name", null, createdTime1, createdTime2, formatter);
                 }
                 case "6" -> table.resetFilters();
-                case "7" -> cancelAppointment(table, formatter, appointments);
+                case "7" -> cancelAppointment(appointments);
                 case "0" ->System.out.println("Returning...");
                 default -> System.out.println("Please enter a valid option");
 
