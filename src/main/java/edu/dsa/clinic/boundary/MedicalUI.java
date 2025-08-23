@@ -64,7 +64,7 @@ public class MedicalUI extends UI {
         System.out.println("3. List Out Consultation Record");
         System.out.println("5. Back");
         System.out.println("=".repeat(30));
-        System.out.printf("Enter your choice :");
+        System.out.print("Enter your choice :");
         int choice = this.scanner.nextInt();
         switch (choice) {
             case 1:
@@ -85,15 +85,13 @@ public class MedicalUI extends UI {
         // set consultation info (doctor, patient)
 
         //patient selection
-        int id = this.scanner.nextInt();  // TODO: get actual id
         var selectPatient = this.patientUI.selectPatient();
-        if (selectPatient == null) {
-            return null;
-        }
 
         //doctor selection
-        int id2 = this.scanner.nextInt();
+        //var selectDoctor;
 
+        consultation.setPatient(selectPatient);
+        consultation.getDoctor();
         return consultation;
     }
 
@@ -164,7 +162,6 @@ public class MedicalUI extends UI {
                 break;
             }
         }
-
         // create prescriptions
         while (true) {
             var prescription = new Prescription();
@@ -204,13 +201,14 @@ public class MedicalUI extends UI {
 
     public void viewSelectConsultationRecord() {
         viewConsultationRecord();
-        System.out.printf("Select the consultation need to edit:");
+        System.out.print("Select the consultation need to edit:");
         int id = this.scanner.nextInt();  // TODO: get actual id
-        var selectConsultation = medicalController.getConsultationList().findFirst(c -> c.getId() == id);
+        var selectConsultation = medicalController.selectConsultationById(id);
         if (selectConsultation != null) {
             startConsultationSession(selectConsultation);
         }
     }
+
     //diagnosis
     public void startConsultationSession(@Nullable Consultation consultation) {
         if (consultation == null)
@@ -242,8 +240,7 @@ public class MedicalUI extends UI {
                 case 4:
                     //writeNote
                 case 5:
-                    // save consultation
-                    return;
+                    viewMenu();
             }
 
 
@@ -321,34 +318,37 @@ public class MedicalUI extends UI {
                     diagnosis.setDiagnosis(newDiagnosis);
                     return;
                 case 2:
-                    System.out.println("Enter new Description");
+                    System.out.print("Enter new Description :");
                     String newDescription = this.scanner.nextLine();
                     diagnosis.setDescription(newDescription);
+                    return;
                 case 3:
-                    System.out.println("Enter new Notes");
+                    System.out.print("Enter new Notes :");
                     String newNotes = this.scanner.nextLine();
                     diagnosis.setNotes(newNotes);
+                    return;
                 case 4:
-                    this.viewTreatment(diagnosis);
+                    editTreatmentPage(diagnosis);
                 case 5:
                     return;
             }
         }
     }
+
     //edit treatment
     public void viewTreatment(Diagnosis diagnosis) {
         var table = new InteractiveTable<>(new Column[]{
                 new Column("Id", Alignment.CENTER, 4),
                 new Column("Symptom", Alignment.CENTER, 20),
                 new Column("Prescriptions", Alignment.CENTER, 40),
-                new Column("Notes", Alignment.CENTER, 40)
+                new Column("Notes", Alignment.CENTER, 50)
         }, diagnosis.getTreatments().clone()) {
             @Override
             protected Cell[] getRow(Treatment o) {
                 return new Cell[]{
                         new Cell(o.getId()),
                         new Cell(o.getSymptom()),
-                        new Cell(o.getPrescriptions()),
+                        new Cell(o.getPrescriptions().size()),
                         new Cell(o.getNotes())
                 };
             }
@@ -357,32 +357,111 @@ public class MedicalUI extends UI {
     }
 
     public void editTreatmentPage(Diagnosis diagnosis) {
-        viewTreatment(diagnosis);
-        ListInterface<Treatment> treatments = diagnosis.getTreatments();
-        int id = this.scanner.nextInt();
-        var editTreatment = treatments.findFirst(t -> t.getId() == id);
-        System.out.println("Select the Treatment wanted edit: ");
-        System.out.println("1. Edit Symptom");
-        System.out.println("2. Edit Note");
-        System.out.println("3. Edit Prescriptions");
-        int choice = this.scanner.nextInt();
-        switch (choice) {
-            case 1:
-                System.out.println("Enter new Symptom");
-                String newDiagnosis = this.scanner.nextLine();
-                if (editTreatment != null) {
-                    editTreatment.setSymptom(newDiagnosis);
-                }
-            case 2:
-                System.out.println("Enter new Note");
-                String newDescription = this.scanner.nextLine();
-                diagnosis.setDescription(newDescription);
-            case 3:
-                //prescription
-
+        while (true) {
+            viewTreatment(diagnosis);
+            ListInterface<Treatment> treatments = diagnosis.getTreatments();
+            System.out.print("Select the part wanted edit:");
+            int id = this.scanner.nextInt();
+            var editTreatment = treatments.findFirst(t -> t.getId() == id);
+            System.out.println();
+            System.out.println("=".repeat(30));
+            System.out.println("1. Edit Symptom");
+            System.out.println("2. Edit Note");
+            System.out.println("3. Edit Prescriptions");
+            System.out.println("4. Back");
+            System.out.print("Select the Treatment wanted edit: ");
+            int choice = this.scanner.nextInt();
+            this.scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new Symptom :");
+                    String newDiagnosis = this.scanner.nextLine();
+                    if (editTreatment != null) {
+                        editTreatment.setSymptom(newDiagnosis);
+                    }
+                    return;
+                case 2:
+                    System.out.print("Enter new Note :");
+                    String newDescription = this.scanner.nextLine();
+                    if (editTreatment != null) {
+                        editTreatment.setNotes(newDescription);
+                    }
+                    return;
+                case 3:
+                    //prescription
+                   if (editTreatment != null) {editPrescriptionPage(editTreatment);}
+                   return;
+                case 4:
+                    return;
+            }
         }
     }
 
+    public void viewPrescription(Treatment treatment) {
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", Alignment.CENTER, 4),
+                new Column("Medicine", Alignment.CENTER, 40),
+                new Column("Quantity", Alignment.CENTER, 4),
+                new Column("Notes", Alignment.CENTER, 50)
+        }, treatment.getPrescriptions().clone()) {
+            @Override
+            protected Cell[] getRow(Prescription o) {
+                return new Cell[]{
+                        new Cell(o.getId()),
+                        //new Cell(o.getMedicine().getName()),
+                        new Cell(o.getQuantity()),
+                        new Cell(o.getNotes()),
+                };
+            }
+        };
+        table.display();
+    }
+
+    public void editPrescriptionPage(Treatment treatment) {
+        while (true) {
+            var prescriptions = treatment.getPrescriptions();
+            viewPrescription(treatment);
+            System.out.print("Select the part wanted edit:");
+            int id = this.scanner.nextInt();
+            var editPrescription = prescriptions.findFirst(t -> t.getId() == id);
+            System.out.println();
+            System.out.println("=".repeat(30));
+            System.out.println("1. Edit Medicine");
+            System.out.println("2. Edit Quantity");
+            System.out.println("3. Edit Notes");
+            System.out.println("4. Back");
+            System.out.println("=".repeat(30));
+            System.out.print("Select the Treatment wanted edit: ");
+            int choice = this.scanner.nextInt();
+            this.scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    var medicine = this.medicineUI.searchMedicine();
+                    if (medicine == null)
+                        break;
+                    if (editPrescription != null) {
+                        editPrescription.setMedicine(medicine);
+                    }
+                    return;
+                case 2:
+                    System.out.print("Enter new Quantity :");
+                    int newQuantity = this.scanner.nextInt();
+                    if (editPrescription != null) {
+                        editPrescription.setQuantity(newQuantity);
+                    }
+                    return;
+                case 3:
+                    System.out.print("Enter new Notes :");
+                    String newNotes = this.scanner.nextLine();
+                    if (editPrescription != null) {
+                        editPrescription.setNotes(newNotes);
+                    }
+                    return;
+                case 4:
+                    return;
+            }
+        }
+    }
 
 
 }
