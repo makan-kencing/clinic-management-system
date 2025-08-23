@@ -3,11 +3,15 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
-import edu.dsa.clinic.lambda.Filter;
-import edu.dsa.clinic.utils.Utils;
+import edu.dsa.clinic.entity.Product;
+import edu.dsa.clinic.utils.table.Cell;
+import edu.dsa.clinic.utils.table.Column;
+import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
+import org.jline.terminal.Terminal;
+import org.jline.utils.InfoCmp;
 
-import java.util.Comparator;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
@@ -17,97 +21,84 @@ import java.util.StringJoiner;
 public class MedicineUI extends UI {
     private final MedicineController medicineController = new MedicineController();
 
+    public MedicineUI(Scanner scanner, Terminal terminal) {
+        super(scanner, terminal);
+    }
+
     public MedicineUI(Scanner scanner) {
         super(scanner);
     }
 
-    public @Nullable Medicine searchMedicine() {
-        throw new UnsupportedOperationException("Not implemented");
+    public void startMenu() {
+        this.searchProduct();
     }
 
-    public Filter<Medicine> promptFilter() {
-        System.out.println("Filters:");
-        System.out.println("(1) name");
-        System.out.println("(2) type");
-        System.out.println("(3) brand");
-        System.out.println("(4) unit cost");
-        System.out.println("(5) unit price");
-        System.out.print("Filter by: ");
+    public @Nullable Product searchProduct() {
+        var medicines = this.medicineController.getAllProducts();
 
-        var opt = this.scanner.nextInt();
-
-        switch (opt) {
-            case 1:
-                System.out.print("Search name by: ");
-
-                var name = this.scanner.nextLine();
-                return m -> m.getName().toLowerCase().contains(name.toLowerCase());
-            case 2:
-                System.out.print("Search type by: ");
-
-                var type = MedicineType.valueOf(this.scanner.nextLine());
-                return m -> m.getType().equals(type);
-            case 3:
-                System.out.print("Search by brand: ");
-
-                var brand = this.scanner.nextLine();
-                return m -> m.getName().toLowerCase().contains(brand.toLowerCase());
-            case 4:
-            case 5:
-                System.out.print("From: ");
-
-                var low = this.scanner.nextBigDecimal();
-
-                System.out.print("To: ");
-
-                var high = this.scanner.nextBigDecimal();
-
-                if (opt == 4)
-                    return m -> Utils.isBetween(m.getCost(), low, high);
-                else
-                    return m -> Utils.isBetween(m.getPrice(), low, high);
-            default:
-                return null;
-        }
-    }
-
-    public @Nullable Comparator<Medicine> promptSorter() {
-        System.out.println("Sorts");
-        System.out.println("(1) default");
-        System.out.println("(2) unit cost");
-        System.out.println("(3) unit price");
-        System.out.print("Sort by: ");
-
-        var opt = this.scanner.nextInt();
-
-        switch (opt) {
-            case 1:
-            case 2:
-            case 3:
-                System.out.println("Orderings");
-                System.out.println("(1) ASC (default)");
-                System.out.println("(2) DESC");
-                System.out.print("Order by: ");
-
-                var isDescending = this.scanner.nextInt() == 2 ? -1 : 1;
-
-                return switch (opt) {
-                    case 1 -> (m1, m2) -> m1.getId() - m2.getId() * isDescending;
-                    case 2 -> (m1, m2) -> m1.getCost().compareTo(m2.getCost()) * isDescending;
-                    case 3 -> (m1, m2) -> m1.getPrice().compareTo(m2.getPrice()) * isDescending;
-                    default -> throw new IllegalStateException("Unexpected value: " + opt);
+        var table = new InteractiveTable<>(new Column[]{
+                new Column("Id", 4),
+                new Column("Name", 30),
+                new Column("Type", 30),
+                new Column("Brand", 15),
+                new Column("Unit Cost", 10),
+                new Column("Unit Price", 10),
+                new Column("In stock", 10),
+                new Column("Last stocked", 20)
+        }, medicines) {
+            @Override
+            protected Cell[] getRow(Product o) {
+                return new Cell[]{
+                        new Cell(o.getId()),
+                        new Cell(o.getName()),
+                        new Cell(o.getMedicine().getName()),
+                        new Cell(o.getBrand()),
+                        new Cell(o.getCost()),
+                        new Cell(o.getPrice()),
+                        new Cell(MedicineController.getAvailableStocks(o)),
+                        new Cell(MedicineController.getLatestStocked(o))
                 };
-            default:
-                return null;
+            }
+        };
+
+        try (var writer = this.terminal.writer();
+             var reader = this.terminal.reader()) {
+            while (true) {
+                this.terminal.puts(InfoCmp.Capability.clear_screen);
+
+                table.display(false);
+
+                writer.println("[<] Previous page  [>] Next page");
+                writer.println("[n] New record");
+                writer.println("[q] Quit");
+
+                this.terminal.flush();
+
+                var read = reader.read();
+                switch (read) {
+                    case '<':
+                        table.previousPage();
+                        break;
+                    case '>':
+                        table.nextPage();
+                        break;
+                    case 'n':
+                        break;
+                    case 'q': return null;
+                }
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-
-    public void viewMedicineDetails(Medicine medicine) {
+    public void viewMedicineDetails(Product medicine) {
+        // TODO
         System.out.println("Medicine details");
         System.out.println("================");
         System.out.printf("Name: %s%n", medicine.getName());
-        System.out.printf("Type: %s%n", medicine.getType());
+        System.out.printf("Type: %s%n", medicine.getMedicine());
         System.out.printf("Brand: %s%n", medicine.getBrand());
         System.out.printf("Unit Cost: RM %f%n", medicine.getCost());
         System.out.printf("Unit Price: RM %f%n", medicine.getPrice());
@@ -125,59 +116,8 @@ public class MedicineUI extends UI {
         System.out.print("Name: ");
         medicine.setName(this.scanner.nextLine());
 
-        System.out.print("Type: ");
-        medicine.setType(MedicineType.valueOf(this.scanner.nextLine()));
-
-        System.out.print("Brand: ");
-        medicine.setBrand(this.scanner.nextLine());
-
-        System.out.print("Unit Cost (RM): ");
-        medicine.setCost(this.scanner.nextBigDecimal());
-
-        System.out.print("Unit Price (RM): ");
-        medicine.setPrice(this.scanner.nextBigDecimal());
-
-        while (true) {
-            System.out.print("Does this medicine have any substitutes? (Y/N) ");
-
-            var sentinel = this.scanner.next().equalsIgnoreCase("Y");
-            if (!sentinel)
-                break;
-
-            var substitute = this.searchMedicine();
-            if (substitute == null)
-                continue;
-
-            medicine.getSubstitutes().add(substitute);
-            substitute.getSubstitutesFor().add(medicine);
-
-            System.out.printf(
-                    "%s added as substitute for %s.%n",
-                    substitute.getName(),
-                    medicine.getName()
-            );
-        }
-
-        while (true) {
-            System.out.print("Does this substitute any medicine? (Y/N) ");
-
-            var sentinel = this.scanner.next().equalsIgnoreCase("Y");
-            if (!sentinel)
-                break;
-
-            var substituteFor = this.searchMedicine();
-            if (substituteFor == null)
-                continue;
-
-            medicine.getSubstitutesFor().add(substituteFor);
-            substituteFor.getSubstitutes().add(medicine);
-
-            System.out.printf(
-                    "%s added as substitute for %s.%n",
-                    medicine.getName(),
-                    substituteFor.getName()
-            );
-        }
+        System.out.print("Types: ");
+        medicine.addType(MedicineType.valueOf(this.scanner.nextLine()));
 
         medicineController.createMedicineEntry(medicine);
 
@@ -185,25 +125,5 @@ public class MedicineUI extends UI {
         this.scanner.next();
 
         return medicine;
-    }
-
-    public void deleteMedicine() {
-        var medicine = this.searchMedicine();
-        if (medicine == null)
-            return;
-
-        this.viewMedicineDetails(medicine);
-
-        System.out.print("Are you sure to delete this entry? (Y/N) ");
-
-        if (this.scanner.next().equalsIgnoreCase("Y"))
-            medicineController.deleteMedicineEntry(medicine);
-
-        System.out.printf("Medicine `%s` deleted.%n", medicine.getName());
-        this.scanner.next();
-    }
-
-    public void editMedicine() {
-
     }
 }
