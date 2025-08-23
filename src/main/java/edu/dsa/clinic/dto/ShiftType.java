@@ -1,4 +1,4 @@
-package edu.dsa.clinic.utils;
+package edu.dsa.clinic.dto;
 
 /**
  * The type of {@link Shift}.

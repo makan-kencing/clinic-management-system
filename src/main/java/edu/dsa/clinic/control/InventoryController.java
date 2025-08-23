@@ -3,7 +3,7 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Stock;
-import edu.dsa.clinic.utils.Filter;
+import edu.dsa.clinic.lambda.Filter;
 
 import java.util.Comparator;
 

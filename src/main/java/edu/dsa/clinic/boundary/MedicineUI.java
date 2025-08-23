@@ -3,7 +3,7 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
-import edu.dsa.clinic.utils.Filter;
+import edu.dsa.clinic.lambda.Filter;
 import edu.dsa.clinic.utils.Utils;
 import org.jetbrains.annotations.Nullable;
 

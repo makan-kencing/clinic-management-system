@@ -1,4 +1,4 @@
-package edu.dsa.clinic.utils;
+package edu.dsa.clinic.dto;
 
 import edu.dsa.clinic.entity.Medicine;
 import org.jetbrains.annotations.Range;

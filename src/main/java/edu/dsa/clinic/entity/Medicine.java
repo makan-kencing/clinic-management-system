@@ -3,7 +3,7 @@ package edu.dsa.clinic.entity;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
-import edu.dsa.clinic.utils.Inventory;
+import edu.dsa.clinic.dto.Inventory;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package edu.dsa.clinic.utils;
+package edu.dsa.clinic.dto;
 
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Patient;

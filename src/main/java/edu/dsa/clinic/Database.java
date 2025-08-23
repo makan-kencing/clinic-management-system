@@ -8,7 +8,7 @@ import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Patient;
-import edu.dsa.clinic.utils.ConsultationQueue;
+import edu.dsa.clinic.dto.ConsultationQueue;
 
 import java.util.Comparator;
 

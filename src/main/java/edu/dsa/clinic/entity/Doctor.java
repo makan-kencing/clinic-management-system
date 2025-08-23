@@ -1,6 +1,6 @@
 package edu.dsa.clinic.entity;
 
-import edu.dsa.clinic.utils.Schedule;
+import edu.dsa.clinic.dto.Schedule;
 
 /**
  * The doctor responsible for consulting with {@link Patient} about their problems for {@link Diagnosis} and {@link Prescription}.
