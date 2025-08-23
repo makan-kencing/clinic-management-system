@@ -7,6 +7,7 @@ import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
+import edu.dsa.clinic.lambda.Filter;
 
 import javax.xml.crypto.Data;
 
@@ -16,14 +17,14 @@ public class MedicalController {
         Database.consultationsList.add(consultation);
     }
 
-    public Consultation listConsultations(Patient patient) {
-        for (Consultation consultation : Database.consultationsList) {
-            if (consultation.getPatient().equals(patient)) {
-                return consultation;
-            }
-        }
-        return null;
-    }
+//    public Consultation listConsultations(Patient patient) {
+//        for (Consultation consultation : Database.consultationsList) {
+//            if (consultation.getPatient().equals(patient)) {
+//                return consultation;
+//            }
+//        }
+//        return null;
+//    }
 
     public ListInterface<Consultation> getConsultationList() {
         return Database.consultationsList;
@@ -44,5 +45,23 @@ public class MedicalController {
    public Prescription selectPrescription(ListInterface<Prescription> prescription,int id){
         return prescription.findFirst(t -> t.getId() == id);
    }
+
+   public boolean deleteConsultation(int id) {
+       var removed=Database.consultationsList.removeFirst(c -> c.getId() == id);
+       return removed != null;
+   }
+
+   public boolean deleteDiagnosis(ListInterface<Diagnosis> diagnosis,int id) {
+        var removed =diagnosis.removeFirst(d -> d.getId() == id);
+        return removed != null;
+   }
+
+
+
+   public boolean deleteTreatment(ListInterface<Treatment> treatment,int id) {
+        var removed =treatment.removeFirst(t-> t.getId() == id);
+        return removed != null;
+   }
+
 
 }
