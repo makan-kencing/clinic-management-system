@@ -526,6 +526,14 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
         return clone;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getCanonicalName() + "{" +
+                "reference=" + reference +
+                ", length=" + length +
+                '}';
+    }
+
     protected static class LinkedListIterator<K> implements Iterator<K>, Iterable<K> {
         private final Node.NodeIterator<K> iterator;
 
