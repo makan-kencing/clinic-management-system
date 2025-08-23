@@ -3,7 +3,10 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.entity.Consultation;
+import  edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Gender;
+import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.utils.table.Alignment;
@@ -20,24 +23,27 @@ public class MedicalUI extends UI {
     private final MedicalController medicalController;
     private final MedicineUI medicineUI;
     private final PatientUI patientUI;
+    private final DoctorUI doctorUI;
 
     public MedicalUI(Scanner scanner) {
         super(scanner);
         this.medicalController = new MedicalController();
         this.medicineUI = new MedicineUI(scanner);
         this.patientUI = new PatientUI(scanner);
+        this.doctorUI = new DoctorUI(scanner);
     }
 
-    public void viewConsultationRecord() {
+    public Consultation viewConsultationRecord() {
         var consultations = this.medicalController.getConsultationList();
-
+        Consultation selectionConsultation = null;
         var table = new InteractiveTable<>(new Column[]{
                 new Column("Id", Alignment.CENTER, 4),
                 new Column("Patient Name", Alignment.CENTER, 20),
                 new Column("Doctor Name", Alignment.CENTER, 20),
+                new Column("Consultation Type", Alignment.CENTER, 20),
                 new Column("Consulted At", Alignment.CENTER, 20),
                 new Column("Notes", Alignment.CENTER, 40),
-                new Column("Diagnoses", Alignment.CENTER, 20)
+                new Column("Diagnoses", Alignment.CENTER, 100)
         }, consultations) {
             @Override
             protected Cell[] getRow(Consultation o) {
@@ -45,14 +51,162 @@ public class MedicalUI extends UI {
                         new Cell(o.getId()),
                         new Cell(o.getPatient().getName()),
                         new Cell(o.getDoctor().getName()),
+                        new Cell(o.getType()),
                         new Cell(o.getConsultedAt()),
                         new Cell(o.getNotes()),
-                        new Cell(o.getDiagnoses().size()),
+                        new Cell(o.getDiagnoses().size())
                 };
             }
         };
         table.display();
+        int opt;
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Patient ID " +
+                    "\n(2) Filter Patient Record " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextInt();
+            this.scanner.nextLine();
+
+            System.out.println();
+
+            if (opt != 4) {
+                switch (opt) {
+                    case 1: {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Consultation ID (0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (selectedId == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                break;
+                            }
+                            selectionConsultation = medicalController.selectConsultationById(selectedId);
+                            if (selectionConsultation == null) {
+                                System.out.println("Consultation with ID (" + selectedId + ") not found. Please re-enter Patient ID...");
+                            } else {
+                                System.out.println("Consultation with ID (" + selectionConsultation.getId() + ") selected!");
+                            }
+                        } while (selectionConsultation == null);
+                        break;
+                    }
+                    case 2: {
+                        filterConsultationRecord(table);
+                        break;
+                    }
+                    case 3: {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                table.display();
+                break;
+            }
+        } while (opt > 1 && opt < 4);
+
+        return selectionConsultation;
     }
+
+    public void filterConsultationRecord(InteractiveTable<Consultation> table) {
+        System.out.println("=".repeat(30));
+        System.out.println("Consultations filtered");
+        System.out.println("(1)Patient Name");
+        System.out.println("(2)Doctor Name");
+        System.out.println("(3)Consultation Type");
+        System.out.println("(0) exit");
+        System.out.println("=".repeat(30));
+        System.out.print("Filter by: ");
+        var opt = scanner.nextInt();
+        scanner.nextLine();
+        switch (opt){
+            case 1:{
+                System.out.print("Filter by Patient Name: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                filter(table,"patient name",value);
+                break;}
+            case 2:{
+                System.out.print("Filter by Doctor Name: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                filter(table,"doctor name",value);
+                break;}
+            case 3: {
+                System.out.println("Filter by Consultation Type: ");
+                System.out.println("(1) GENERAL");
+                System.out.println("(2) SPECIALIST");
+                System.out.println("(3) EMERGENCY");
+                System.out.println("(4) FOLLOW_UP");
+                int value = scanner.nextInt();
+                this.scanner.nextLine();
+                if (value == 1){ filter(table,"ConsultationType",null,"GENERAL");}
+                else if (value == 2){ filter(table,"ConsultationType",null,"SPECIALIST");}
+                else if (value == 3){ filter(table,"ConsultationType",null,"EMERGENCY");}
+                else if (value == 4){ filter(table,"ConsultationType",null,"FOLLOW_UP");}
+                break;
+            }
+            default:
+                System.out.println();
+                table.display();
+                break;
+        }
+
+
+    }
+
+    public void filter(InteractiveTable<Consultation> table, String column, String value) {
+        filter(table, column, value, null);
+    }
+
+    public void filter(InteractiveTable<Consultation> table, String column, String value, String type) {
+        switch (column) {
+            case"patient name":{
+                table.addFilter("Filter by"+column + " \"" + value + "\"",
+                        c->c.getPatient().getName().toLowerCase().contains(value.toLowerCase()));
+                table.display();
+                break;
+            }
+            case"doctor name":{
+                table.addFilter("Filter by"+column + " \"" + value + "\"",
+                        c->c.getDoctor().getName().toLowerCase().contains(value.toLowerCase()));
+                table.display();
+                break;
+            }
+            case"ConsultationType":{
+                if (type.equals("GENERAL")){
+                    table.addFilter("GENERAL",c->c.getType()==ConsultationType.GENERAL);
+                    table.display();
+                }
+                else if (type.equals("SPECIALIST")){
+                    table.addFilter("SPECIALIST",c->c.getType()==ConsultationType.SPECIALIST);
+                    table.display();
+
+                }
+                else if (type.equals("EMERGENCY")){
+                    table.addFilter("EMERGENCY",c->c.getType()==ConsultationType.EMERGENCY);
+                    table.display();
+                }
+                else if (type.equals("FOLLOW_UP")){
+                    table.addFilter("FOLLOW_UP",c->c.getType()==ConsultationType.FOLLOW_UP);
+                    table.display();
+                }
+
+            }
+            default:
+                break;
+        }
+    }
+
 
 
     public void viewMenu() {
@@ -93,10 +247,12 @@ public class MedicalUI extends UI {
         var selectPatient = this.patientUI.selectPatient();
 
         //doctor selection
+        var selectDoctor = this.doctorUI.selectDoctor();
         //var selectDoctor;
 
+
         consultation.setPatient(selectPatient);
-        consultation.getDoctor();
+        consultation.setDoctor(selectDoctor);
         return consultation;
     }
 
@@ -205,10 +361,8 @@ public class MedicalUI extends UI {
     }
 
     public void viewSelectConsultationRecord() {
-        viewConsultationRecord();
-        System.out.print("Select the consultation need to edit:");
-        int id = this.scanner.nextInt();  // TODO: get actual id
-        var selectConsultation = medicalController.selectConsultationById(id);
+        ;
+        var selectConsultation = viewConsultationRecord();
         if (selectConsultation != null) {
             startConsultationSession(selectConsultation);
         }
@@ -306,6 +460,7 @@ public class MedicalUI extends UI {
             System.out.println("-".repeat(30));
             System.out.println("Diagnosis: " + diagnosis.getDiagnosis());
             System.out.println("Description: " + diagnosis.getDescription());
+            System.out.println("Consultation Type: " + diagnosis.getConsultation().getType());
             System.out.println("Notes: " + diagnosis.getNotes());
             System.out.println("-".repeat(30));
             System.out.println("1. Edit diagnosis");
@@ -473,7 +628,6 @@ public class MedicalUI extends UI {
     }
 
     //delete
-
     public void deleteConsultationPage() {
         while (true) {
             viewConsultationRecord();
