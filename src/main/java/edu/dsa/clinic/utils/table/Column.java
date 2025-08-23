@@ -11,6 +11,11 @@ public class Column extends Cell {
         this.padLength = padLength;
     }
 
+    public Column(String text, @Range(from = 0, to = Integer.MAX_VALUE) int padLength) {
+        super(text);
+        this.padLength = padLength;
+    }
+
     public @Range(from = 0, to = Integer.MAX_VALUE) int padLength() {
         return padLength;
     }

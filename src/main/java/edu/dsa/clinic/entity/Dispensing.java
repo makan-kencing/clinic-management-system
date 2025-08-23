@@ -1,6 +1,6 @@
 package edu.dsa.clinic.entity;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 /**
  * The actual {@link Medicine} dispensed for a written {@link Prescription}
@@ -8,11 +8,9 @@ import org.jetbrains.annotations.Nullable;
  * @author makan-kencing
  */
 public class Dispensing extends IdentifiableEntity {
-    public record Dispense(Stock stock, int quantity, String notes) {
-    }
-
     private Prescription prescription;
-    private @Nullable Dispense dispense;
+    private Stock stock;
+    private @Range(from = 1, to = Integer.MAX_VALUE) int quantity;
 
     public Prescription getPrescription() {
         return prescription;
@@ -23,12 +21,21 @@ public class Dispensing extends IdentifiableEntity {
         return this;
     }
 
-    public @Nullable Dispense getDispense() {
-        return dispense;
+    public Stock getStock() {
+        return stock;
     }
 
-    public Dispensing setDispense(@Nullable Dispense dispense) {
-        this.dispense = dispense;
+    public Dispensing setStock(Stock stock) {
+        this.stock = stock;
+        return this;
+    }
+
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getQuantity() {
+        return quantity;
+    }
+
+    public Dispensing setQuantity(@Range(from = 1, to = Integer.MAX_VALUE) int quantity) {
+        this.quantity = quantity;
         return this;
     }
 
@@ -37,7 +44,8 @@ public class Dispensing extends IdentifiableEntity {
         return "Dispensing{" +
                 "id=" + id +
                 ", prescription=" + prescription +
-                ", dispense=" + dispense +
+                ", stock=" + stock +
+                ", quantity=" + quantity +
                 '}';
     }
 }

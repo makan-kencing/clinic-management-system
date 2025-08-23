@@ -176,7 +176,7 @@ public class MedicalUI extends UI {
             System.out.println("| Prescription |");
             System.out.println("-".repeat(30));
 
-            var medicine = this.medicineUI.searchMedicine();
+            var medicine = this.medicineUI.searchProduct();
             if (medicine == null)
                 break;
 
@@ -186,7 +186,7 @@ public class MedicalUI extends UI {
             System.out.println("Prescription notes (optional): ");
             String notes = this.scanner.nextLine();
 
-            prescription.setMedicine(medicine);
+            prescription.setProduct(medicine);
             prescription.setQuantity(quantity);
             prescription.setNotes(notes.isBlank() ? null : notes);
 
@@ -445,11 +445,11 @@ public class MedicalUI extends UI {
             this.scanner.nextLine();
             switch (choice) {
                 case 1:
-                    var medicine = this.medicineUI.searchMedicine();
+                    var medicine = this.medicineUI.searchProduct();
                     if (medicine == null)
                         break;
                     if (editPrescription != null) {
-                        editPrescription.setMedicine(medicine);
+                        editPrescription.setProduct(medicine);
                     }
                     return;
                 case 2:
