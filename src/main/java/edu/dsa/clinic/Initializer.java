@@ -185,7 +185,50 @@ public class Initializer {
                                         .addPrescription(new Prescription()
                                                 .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
                                                 .setQuantity(1)
+                                                .setNotes("llllll"))
+                                        .addPrescription(new Prescription()
+                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setQuantity(1)
                                                 .setNotes("llllll"))))
+
+
+        );
+
+        Database.consultationsList.add(
+                new Consultation()
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 2))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 2))
+                        .setType(ConsultationType.GENERAL)
+                        .setNotes("This is a consultation")
+                        .setConsultedAt(Instant.parse("2025-06-05T10:15:30Z"))
+                        .addDiagnosis(new Diagnosis()
+                                .setDiagnosis("Fever")
+                                .setDescription("Let patient become ok ")
+                                .setNotes("good")
+                                .addTreatment(new Treatment()
+                                        .setSymptom("hhhhhhhhhhhhhhhh")
+                                        .setNotes("uuuuuuuuuuuuuuuuuuuu")
+                                        .addPrescription(new Prescription()
+                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                                                .setQuantity(1)
+                                                .setNotes("llllll"))))
+                        .addDiagnosis(new Diagnosis()
+                                .setDiagnosis("Fever")
+                                .setDescription("Let patient become ok ")
+                                .setNotes("good")
+                                .addTreatment(new Treatment()
+                                        .setSymptom("hhhhhhhhhhhhhhhh")
+                                        .setNotes("uuuuuuuuuuuuuuuuuuuu")
+                                        .addPrescription(new Prescription()
+                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                                                .setQuantity(1)
+                                                .setNotes("llllll"))
+                                        .addPrescription(new Prescription()
+                                                .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                                                .setQuantity(1)
+                                                .setNotes("llllll"))))
+
+
         );
 
         // Consultation queues data
