@@ -62,42 +62,9 @@ public class DoctorController {
     public void editShift(){
         
     }
-
-    public static Filter<Doctor> getIsOnShiftFilter(DayOfWeek dayOfWeek, Range<LocalTime> timeRange) {
-        return d -> {
-            var schedule = d.getSchedule();
-
-            var shiftsOfTheDay = schedule.getShifts(dayOfWeek);
-            shiftsOfTheDay = shiftsOfTheDay.filtered(s -> s.getType() == ShiftType.WORK);
-            if (shiftsOfTheDay.size() == 0)
-                return false;
-
-            for (var shift : shiftsOfTheDay) {
-                var workingHours = shift.getTimeRange();
-                if (!workingHours.contains(timeRange))
-                    return false;
-            }
-
-            return true;
-        };
-    }
-
-    public static Filter<Doctor> getIsOnShiftFilter(LocalDate date, Range<LocalTime> timeRange) {
-        return getIsOnShiftFilter(date.getDayOfWeek(), timeRange);
-    }
-
-    public static Filter<Doctor> getIsAvailableFilter(LocalDate date, Range<LocalTime> timeRange) {
-        var filters = new DoubleLinkedList<Filter<Doctor>>();
-        filters.add(DoctorController.getIsOnShiftFilter(date, timeRange));
-        filters.add(AppointmentController.getNotOccupiedFilter(date, timeRange));
-
-        return new MultiFilter<>(filters);
     }
 
     public void removeShift(){
         
     }
-
-
-
 }
