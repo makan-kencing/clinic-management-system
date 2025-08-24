@@ -38,6 +38,8 @@ public class MedicalUI extends UI {
         this.doctorUI = new DoctorUI(scanner);
     }
 
+
+
     public Consultation viewConsultationRecord() {
         var consultations = this.medicalController.getConsultationList();
 
@@ -87,7 +89,7 @@ public class MedicalUI extends UI {
                             table.display();
                             System.out.print("\nEnter Consultation ID (0 to exit): ");
                             int selectedId = scanner.nextInt();
-                            scanner.nextLine();
+                            this.scanner.nextLine();
                             System.out.println();
 
                             if (selectedId == 0) {
@@ -119,7 +121,7 @@ public class MedicalUI extends UI {
                 table.display();
                 break;
             }
-        } while (true);
+        } while (opt>4 || opt<1);
 
         return selectionConsultation;
     }
@@ -298,7 +300,7 @@ public class MedicalUI extends UI {
                     break;
                 default:
                     System.out.println("Invalid choice, please re-enter.");
-                    choice = -1; // 保证循环继续
+                    choice = -1;
             }
         } while (choice < 1 || choice >4);
 
@@ -312,10 +314,17 @@ public class MedicalUI extends UI {
         consultation.setPatient(selectPatient);
         consultation.setDoctor(selectDoctor);
         consultation.setNotes(note);
-        Instant now = Instant.now();
-        String isoString = DateTimeFormatter.ISO_INSTANT.format(now);
         consultation.setConsultedAt(Instant.now());
-        writeUpDiagnosis(consultation);
+             writeUpDiagnosis(consultation);
+        boolean check =medicalController.saveConsultationRecord(consultation);
+        if (!check){
+            System.out.println("Consultation record Field added. Please try again.");
+        }
+        else {
+            System.out.println("Consultation record added. ");
+
+        }
+        viewMenu();
     }
 
     //consultation
@@ -376,16 +385,6 @@ public class MedicalUI extends UI {
         }
 
         consultation.getDiagnoses().add(diagnosis);
-        boolean check =medicalController.saveConsultationRecord(consultation);
-        if (!check){
-            System.out.println("Consultation record Field added. Please try again.");
-        }
-        else {
-            System.out.println("Consultation record added. ");
-
-        }
-
-        viewMenu();
     }
 
     public void writeUpTreatment(Diagnosis diagnosis) {
@@ -465,7 +464,6 @@ public class MedicalUI extends UI {
 
 // Add treatment to diagnosis
         diagnosis.getTreatments().add(treatment);
-
     }
 
     public void startConsultationSession() {
@@ -499,7 +497,7 @@ public class MedicalUI extends UI {
             switch (choice) {
                 case 1:
                     this.writeUpDiagnosis(consultation);
-                    return;
+                     viewMenu();
                 case 2:
                     this.viewEditDiagnosis(consultation);
                     break;
@@ -645,10 +643,10 @@ public class MedicalUI extends UI {
             @Override
             protected Cell[] getRow(Treatment o) {
                 return new Cell[]{
-                        new Cell(o.getId()),
-                        new Cell(o.getSymptom()),
-                        new Cell(o.getPrescriptions().size()),
-                        new Cell(o.getNotes())
+                        new Cell(o.getId()),                    // id
+                        new Cell(o.getSymptom() != null ? o.getSymptom() : ""),          // symptom
+                        new Cell(o.getPrescriptions() != null ? o.getPrescriptions().size() : 0),  // prescriptions count
+                        new Cell(o.getNotes() != null ? o.getNotes() : "")               // notes
                 };
             }
         };
@@ -703,7 +701,7 @@ public class MedicalUI extends UI {
         var table = new InteractiveTable<>(new Column[]{
                 new Column("Id", Alignment.CENTER, 4),
                 new Column("Medicine", Alignment.CENTER, 40),
-                new Column("Quantity", Alignment.CENTER, 4),
+                new Column("Quantity", Alignment.CENTER, 10),
                 new Column("Notes", Alignment.CENTER, 50)
         }, treatment.getPrescriptions().clone()) {
             @Override
@@ -712,7 +710,7 @@ public class MedicalUI extends UI {
                         new Cell(o.getId()),
                         new Cell(o.getProduct().getName()),
                         new Cell(o.getQuantity()),
-                        new Cell(o.getNotes()),
+                        new Cell(o.getNotes())
                 };
             }
         };
