@@ -1,7 +1,12 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.DoctorController;
+import edu.dsa.clinic.dto.Range;
+import edu.dsa.clinic.dto.Schedule;
+import edu.dsa.clinic.dto.Shift;
+import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Specialization;
@@ -11,6 +16,12 @@ import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class DoctorUI extends UI {
@@ -20,9 +31,9 @@ public class DoctorUI extends UI {
 
     public DoctorUI(Scanner scanner) {
         super(scanner);
-
     }
 
+    //Doctor Menu
     public int getDoctorMenu() {
         Scanner sc = new Scanner(System.in);
         int choice = 0;
@@ -58,26 +69,6 @@ public class DoctorUI extends UI {
         } while (choice != 0);
     }
 
-    public int getShiftsMenu() {
-        Scanner sc = new Scanner(System.in);
-        int choice = 0;
-        do {
-            System.out.println("\nDoctor Shifts Menu");
-            System.out.println("1. Assign Doctor Shift");
-            System.out.println("2. Change Doctor Shift");
-            System.out.println("3. View Weekly Schedule");
-            System.out.println("0. Exit To Doctor Menu");
-            System.out.print("Enter choice: ");
-
-            choice = sc.nextInt();
-            sc.nextLine();
-            System.out.println();
-
-
-            return choice;
-        } while (choice != 0);
-    }
-
     //Create Doctor
     public void createDoctor() {
         Scanner sc = new Scanner(System.in);
@@ -105,8 +96,6 @@ public class DoctorUI extends UI {
             switch (option) {
                 case 1:
                     doctor.setSpecialization(Specialization.Neurosurgery);
-
-//                    filter(Column, "specialization", Specialization.Neurosurgery.name());
                     break;
                 case 2:
                     doctor.setSpecialization(Specialization.Pediatrics);
@@ -187,41 +176,6 @@ public class DoctorUI extends UI {
 
     }
 
-//    public void modifyName(Doctor doctor, Scanner sc) {
-//        int id;
-//        viewDoctorsList();
-//        System.out.println("Enter the Doctor Id that you want to modify: ");
-//        id = sc.nextInt();
-//
-//        if (selectDoctor == null) {
-//            System.out.println("Doctor Id not found.");
-//        }
-//
-//
-//    }
-
-    public void findDoctor(Doctor doctor) {
-
-        Scanner sc = new Scanner(System.in);
-        int id;
-        viewDoctorsList();
-        System.out.println("Enter the Doctor Id that you want to modify: ");
-        id = sc.nextInt();
-        var selectDoctor = Database.doctorList.findFirst(d -> d.getId() == id);
-        if (selectDoctor == null) {
-            System.out.println("Doctor Id not found.");
-            return;
-        }
-
-        System.out.println("\n--- Modifying Doctor: " + selectDoctor.getName() + " ---");
-        System.out.println("(Leave field empty to keep current value)");
-        System.out.print("Current Name: " + doctor.getName());
-        System.out.print("Enter new Name: ");
-        String newName = sc.nextLine();
-        if (!newName.trim().isEmpty()) {
-            doctor.setName(newName);
-        }
-    }
 
     //delete Doctor
     public void deleteDoctor(Doctor doctor) {
@@ -283,7 +237,6 @@ public class DoctorUI extends UI {
             System.out.print("Selection : ");
             opt = this.scanner.nextInt();
             this.scanner.nextLine();
-
             System.out.println();
 
             if (opt != 4) {
@@ -326,10 +279,11 @@ public class DoctorUI extends UI {
                 break;
             }
         } while (opt > 1 && opt < 4);
-
         return selectedDoctor;
     }
 
+
+    //filter Doctor Menu
     public void filterDoctor(InteractiveTable<Doctor> table) {
         System.out.println("-".repeat(30));
         System.out.println("Filters:");
@@ -379,9 +333,9 @@ public class DoctorUI extends UI {
             case 4: {
                 // show all specializations
                 var availableSpecialization = Specialization.values();
-                for (int i = 0; i < availableSpecialization.length; i++)
+                for (int i = 0; i < availableSpecialization.length; i++) {
                     System.out.printf("%d. %s%n", i + 1, availableSpecialization[i]);
-
+                }
                 System.out.print("Enter the Specialization number of the doctor that you want to find: ");
                 var index = scanner.nextInt();
 
@@ -403,6 +357,7 @@ public class DoctorUI extends UI {
         }
     }
 
+    //filter  function
     public void filter(InteractiveTable<Doctor> table, String column, String value) {
         switch (column) {
             case "name": {
@@ -425,8 +380,6 @@ public class DoctorUI extends UI {
                 break;
             }
             case "gender": {
-//                var gender = Gender.valueOf(value.toUpperCase());
-//                table.addFilter(StringUtils.toTitlecase(gender.name()) + " only", d -> d.getGender() == gender);
                 if (value.equals("male")) {
                     table.addFilter("Male only", d -> d.getGender() == Gender.MALE);
                     table.display();
@@ -436,11 +389,170 @@ public class DoctorUI extends UI {
                 }
                 break;
             }
+
+            case "Availability": {
+
+            }
             default:
                 break;
         }
 
     }
 
+    //ShiftsMenu
+    public int getShiftsMenu() {
+        Scanner sc = new Scanner(System.in);
+        int choice = 0;
+        do {
+            System.out.println("\nDoctor Shifts Menu");
+            System.out.println("1. Assign Doctor Shift");
+            System.out.println("2. Change Doctor Shift");
+            System.out.println("3. View Weekly Schedule");
+            System.out.println("0. Exit To Doctor Menu");
+            System.out.print("Enter choice: ");
+
+            choice = sc.nextInt();
+            sc.nextLine();
+            System.out.println();
+
+            return choice;
+        } while (choice != 0);
+    }
+
+    public void assignDoctorShift(InteractiveTable<Doctor> table, Doctor doctor) {
+        int id;
+        Doctor selectedDoctor;
+
+        table.display();
+        System.out.print("\nEnter Doctor ID (0 to exit): ");
+        id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println();
+        do {
+            table.display();
+            System.out.print("\nEnter Doctor ID (0 to exit): ");
+            id = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println();
+
+            if (id == 0) {
+                System.out.println("-".repeat(30));
+                System.out.println();
+                break;
+            }
+            selectedDoctor = doctorController.selectDoctorByID(id);
+            if (selectedDoctor == null) {
+                System.out.println("Doctor with ID (" + id + ") not found. Please re-enter Doctor ID...");
+            } else {
+                System.out.println("Which day do you wish to assign Doctor " + selectedDoctor.getName() + "?");
+                String[] days = {
+                        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+                };
+
+                for (int i = 0; i < days.length; i++) {
+                    System.out.printf("%d. %s%n", i + 1, days[i]);
+                }
+
+                System.out.print("Enter the day number: ");
+                var index = scanner.nextInt();
+
+                Schedule schedule = selectedDoctor.getSchedule();
+
+                ListInterface<Shift> dayShifts;
+                try {
+                    dayShifts = switch (index) {
+                        case 1 -> schedule.monday();
+                        case 2 -> schedule.tuesday();
+                        case 3 -> schedule.wednesday();
+                        case 4 -> schedule.thursday();
+                        case 5 -> schedule.friday();
+                        case 6 -> schedule.saturday();
+                        case 7 -> schedule.sunday();
+                        default -> throw new IllegalStateException("Invalid day number");
+                    };
+                } catch (IllegalArgumentException e) {
+                    return;
+                }
+
+                var shift = createShiftFromInput();
+
+                this.doctorController.addShift(dayShifts, shift);
+                System.out.println("Assigned " + shift + " to Dr. " + doctor.getName() + " on " + index);
+            }
+        } while (selectedDoctor == null);
+
+        if (doctor.getSchedule() == null) {
+            doctor.setSchedule(new Schedule());
+        }
+
+
+
+
+
+
+
+    }
+
+    //Sub Method For Assign Doctor Shift
+    public @Nullable Shift createShiftFromInput() {
+        try {
+            System.out.print("Enter start time (hh:mm): ");
+            LocalTime start = LocalTime.parse(this.scanner.nextLine().trim());
+
+            System.out.print("Enter end time (hh:mm): ");
+            LocalTime end = LocalTime.parse(this.scanner.nextLine().trim());
+
+            // 7 - 12
+            // 9 - 15
+
+            // ideal
+            // 7 - 15
+
+            // bad
+            // 7 - 12, 9 - 15
+
+            // work, break
+            // 7 - 15 (work)
+            // 12 - 13 (break)
+
+            // ideal
+            // 7 - 12 (work), 12 - 13 (break), 13 - 15 (work)
+            return new Shift().setTimeRange(new Range<>(start, end));
+
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid time format. Please use hh:mm (e.g. 07:00).");
+        }
+        return null;
+    }
+
+    public void changeDoctorShift() {
+
+    }
+    public void viewWeeklySchedule(Doctor doctor) {
+
+            Schedule schedule = doctor.getSchedule();
+            System.out.println("Weekly Schedule for Dr. " + doctor.getName());
+
+            printDay("Monday", schedule.monday());
+            printDay("Tuesday", schedule.tuesday());
+            printDay("Wednesday", schedule.wednesday());
+            printDay("Thursday", schedule.thursday());
+            printDay("Friday", schedule.friday());
+            printDay("Saturday", schedule.saturday());
+            printDay("Sunday", schedule.sunday());
+        }
+
+        private void printDay(String day, ListInterface<Shift> shifts) {
+            System.out.print(day + ": ");
+            if (shifts == null) {
+                System.out.println("No shifts assigned.");
+                return;
+            }
+            for (int i = 0; i < shifts.size(); i++) {
+                Shift shift = shifts.get(i);
+                System.out.print(shift.getType() + " (" + shift.getTimeRange().from() + "-" + shift.getTimeRange().to() + ") ");
+            }
+            System.out.println();
+        }
 }
 
