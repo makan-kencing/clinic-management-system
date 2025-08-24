@@ -1,5 +1,10 @@
 package edu.dsa.clinic;
 
+import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.Range;
+import edu.dsa.clinic.dto.Schedule;
+import edu.dsa.clinic.dto.Shift;
+import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
@@ -8,18 +13,18 @@ import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineAdministrationType;
-import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
+import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.entity.Treatment;
-import edu.dsa.clinic.dto.ConsultationQueue;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Initializer {
     private Initializer() {
@@ -94,7 +99,13 @@ public class Initializer {
                         .setGender(Gender.FEMALE)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Orthopedics)
-                        .setSchedule(null)
+                        .setSchedule(new Schedule()
+                                .addMondayShift(new Shift()
+                                        .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                        .setType(ShiftType.WORK))
+                                .addMondayShift(new Shift()
+                                        .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                        .setType(ShiftType.WORK)))
         );
         Database.doctorList.add(
                 ((Doctor) new Doctor()
