@@ -22,6 +22,7 @@ import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.entity.Treatment;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -100,12 +101,14 @@ public class Initializer {
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Orthopedics)
                         .setSchedule(new Schedule()
-                                .addMondayShift(new Shift()
-                                        .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
-                                        .setType(ShiftType.WORK))
-                                .addMondayShift(new Shift()
-                                        .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
-                                        .setType(ShiftType.WORK)))
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                                .setType(ShiftType.WORK))
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                                .setType(ShiftType.WORK)))
         );
         Database.doctorList.add(
                 ((Doctor) new Doctor()
