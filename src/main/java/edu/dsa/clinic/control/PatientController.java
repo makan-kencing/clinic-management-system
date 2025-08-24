@@ -12,6 +12,7 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
@@ -67,24 +68,31 @@ public class PatientController {
         return patientPrescriptions;
     }
 
-
-    public void createQueueNumber() {
-
+    public void createQueue(ConsultationQueue queue) {
+        Database.queueList.add(queue);
     }
 
-    public void removeQueueNumber() {
-
+    public void removeQueue(ConsultationQueue queue) {
+        Database.queueList.removeFirst(c -> c.queueNo() == queue.queueNo());
     }
 
-    public void viewConsultationQueue() {
-
+    public ConsultationQueue getFirstQueue() {
+        return Database.queueList.popFirst();
     }
 
     public void viewSummaryReport() {
 
     }
 
-    public Patient performSelect(int selectedId) {
-        return Database.patientsList.findFirst(p -> p.getId() == selectedId);
+    public Object performSelect(int selectedId, String field) {
+        return switch (field) {
+            case "patient" -> Database.patientsList.findFirst(p -> p.getId() == selectedId);
+            case "consultation" -> Database.queueList.findFirst(c -> c.queueNo() == selectedId);
+            default -> null;
+        };
+    }
+
+    public ConsultationQueue validateUnique(Patient patient) {
+        return Database.queueList.findFirst(c -> c.patient().getId() == patient.getId());
     }
 }
