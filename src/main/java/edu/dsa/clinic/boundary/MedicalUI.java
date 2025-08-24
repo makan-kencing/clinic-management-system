@@ -493,7 +493,7 @@ public class MedicalUI extends UI {
             switch (choice) {
                 case 1:
                     this.writeUpDiagnosis(consultation);
-                    return;
+                    break;
                 case 2:
                     this.viewEditDiagnosis(consultation);
                     break;
