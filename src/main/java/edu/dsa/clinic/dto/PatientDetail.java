@@ -45,15 +45,13 @@ public final class PatientDetail {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append("Consultation: ")
-                .append(consultation != null ? consultation.getId() : "N/A")
-                .append(" | Diagnosis: ")
-                .append(diagnosis != null ? diagnosis.getDescription() : "N/A")
-                .append(" | Treatment: ")
-                .append(treatment != null ? treatment.getSymptom() : "N/A")
-                .append(" | Prescription: ")
-                .append(prescription != null ? prescription.getMedicine() : "N/A")
-                .toString();
+        return "Consultation: " +
+                (consultation != null ? consultation.getId() : "N/A") +
+                " | Diagnosis: " +
+                (diagnosis != null ? diagnosis.getDescription() : "N/A") +
+                " | Treatment: " +
+                (treatment != null ? treatment.getSymptom() : "N/A") +
+                " | Prescription: " +
+                (prescription != null ? prescription.getProduct().getName() : "N/A");
     }
 }
