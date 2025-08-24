@@ -139,6 +139,20 @@ public class MedicineUI extends UI {
 
     }
 
+    public static void main(String[] args) throws IOException {
+        Initializer.initialize();
+
+        try (var terminal = TerminalBuilder.builder()
+                .system(true)
+                .build()
+        ) {
+            terminal.puts(InfoCmp.Capability.clear_screen);
+            var ui = new MedicineUI(terminal);
+            ui.startMenu();
+            // Entrypoint to the main UI.
+        }
+    }
+
     public static class MedicineTable extends InteractiveTable<Medicine> {
         public MedicineTable(ListInterface<Medicine> medicines) {
             super(new Column[]{
