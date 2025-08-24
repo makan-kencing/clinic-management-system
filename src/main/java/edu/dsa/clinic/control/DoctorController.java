@@ -5,15 +5,15 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.dto.Range;
+import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.dto.Shift;
 import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Doctor;
-import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.lambda.Filter;
 import edu.dsa.clinic.lambda.MultiFilter;
-
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
