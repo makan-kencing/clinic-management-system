@@ -31,10 +31,8 @@ import java.util.StringJoiner;
  * This UI is responsible for managing medicine definitions
  */
 public class MedicineUI extends UI {
-    private final MedicineController medicineController = new MedicineController();
-
-    public MedicineUI(Scanner scanner, Terminal terminal) {
-        super(scanner, terminal);
+    public MedicineUI(Terminal terminal) {
+        super(terminal);
     }
 
     public MedicineUI(Scanner scanner) {

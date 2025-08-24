@@ -8,13 +8,14 @@ public abstract class UI {
     protected final Scanner scanner;
     protected final Terminal terminal;
 
-    public UI(Scanner scanner,  Terminal terminal) {
-        this.scanner = scanner;
+    public UI(Terminal terminal) {
+        this.scanner = null;
         this.terminal = terminal;
     }
 
     public UI(Scanner scanner) {
-        this(scanner, null);
+        this.scanner = scanner;
+        this.terminal = null;
     }
 
 
