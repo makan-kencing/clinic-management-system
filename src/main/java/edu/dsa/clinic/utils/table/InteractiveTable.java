@@ -16,12 +16,29 @@ abstract public class InteractiveTable<T> extends Table<T> {
     public record NamedSorter<T>(String name, Comparator<T> sorter) {
     }
 
-    protected final ListInterface<NamedFilter<T>> filters = new DoubleLinkedList<>();
-    protected final ListInterface<NamedSorter<T>> sorters = new DoubleLinkedList<>();
+    protected ListInterface<NamedFilter<T>> defaultFilters = new DoubleLinkedList<>();
+    protected ListInterface<NamedSorter<T>> defaultSorters = new DoubleLinkedList<>();
+    protected ListInterface<NamedFilter<T>> filters;
+    protected ListInterface<NamedSorter<T>> sorters;
     protected final ListInterface<T> unfilteredData;
+
+    public InteractiveTable(
+            Column[] columns,
+            ListInterface<T> data,
+            ListInterface<NamedFilter<T>> defaultFilters,
+            ListInterface<NamedSorter<T>> defaultSorters
+    ) {
+        this(columns, data);
+        this.defaultFilters.extend(defaultFilters);
+        this.defaultSorters.extend(defaultSorters);
+        this.resetFilters();
+        this.resetSorters();
+    }
 
     public InteractiveTable(Column[] columns, ListInterface<T> data) {
         super(columns, data);
+        this.filters = this.defaultFilters.clone();
+        this.sorters = this.defaultSorters.clone();
         this.unfilteredData = data;
     }
 
@@ -34,7 +51,7 @@ abstract public class InteractiveTable<T> extends Table<T> {
     }
 
     public void resetFilters() {
-        this.filters.clear();
+        this.filters = this.defaultFilters.clone();
     }
 
     public void addSorter(String name, Comparator<T> sorter) {
@@ -46,7 +63,25 @@ abstract public class InteractiveTable<T> extends Table<T> {
     }
 
     public void resetSorters() {
-        this.sorters.clear();
+        this.sorters = this.defaultSorters.clone();
+    }
+
+    public ListInterface<NamedFilter<T>> getDefaultFilters() {
+        return defaultFilters;
+    }
+
+    public ListInterface<NamedSorter<T>> getDefaultSorters() {
+        return defaultSorters;
+    }
+
+    public InteractiveTable<T> setDefaultFilters(ListInterface<NamedFilter<T>> defaultFilters) {
+        this.defaultFilters = defaultFilters;
+        return this;
+    }
+
+    public InteractiveTable<T> setDefaultSorters(ListInterface<NamedSorter<T>> defaultSorters) {
+        this.defaultSorters = defaultSorters;
+        return this;
     }
 
     public void updateData() {
