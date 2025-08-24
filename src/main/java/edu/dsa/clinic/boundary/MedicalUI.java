@@ -3,10 +3,8 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.entity.Consultation;
-import  edu.dsa.clinic.entity.ConsultationType;
+import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
-import edu.dsa.clinic.entity.Gender;
-import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.utils.table.Alignment;
@@ -128,19 +126,21 @@ public class MedicalUI extends UI {
         System.out.print("Filter by: ");
         var opt = scanner.nextInt();
         scanner.nextLine();
-        switch (opt){
-            case 1:{
+        switch (opt) {
+            case 1: {
                 System.out.print("Filter by Patient Name: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                filter(table,"patient name",value);
-                break;}
-            case 2:{
+                filter(table, "patient name", value);
+                break;
+            }
+            case 2: {
                 System.out.print("Filter by Doctor Name: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                filter(table,"doctor name",value);
-                break;}
+                filter(table, "doctor name", value);
+                break;
+            }
             case 3: {
                 System.out.println("Filter by Consultation Type: ");
                 System.out.println("(1) GENERAL");
@@ -149,10 +149,15 @@ public class MedicalUI extends UI {
                 System.out.println("(4) FOLLOW_UP");
                 int value = scanner.nextInt();
                 this.scanner.nextLine();
-                if (value == 1){ filter(table,"ConsultationType",null,"GENERAL");}
-                else if (value == 2){ filter(table,"ConsultationType",null,"SPECIALIST");}
-                else if (value == 3){ filter(table,"ConsultationType",null,"EMERGENCY");}
-                else if (value == 4){ filter(table,"ConsultationType",null,"FOLLOW_UP");}
+                if (value == 1) {
+                    filter(table, "ConsultationType", ConsultationType.GENERAL.name());
+                } else if (value == 2) {
+                    filter(table, "ConsultationType", ConsultationType.SPECIALIST.name());
+                } else if (value == 3) {
+                    filter(table, "ConsultationType", ConsultationType.EMERGENCY.name());
+                } else if (value == 4) {
+                    filter(table, "ConsultationType", ConsultationType.FOLLOW_UP.name());
+                }
                 break;
             }
             default:
@@ -160,53 +165,36 @@ public class MedicalUI extends UI {
                 table.display();
                 break;
         }
-
-
     }
 
     public void filter(InteractiveTable<Consultation> table, String column, String value) {
-        filter(table, column, value, null);
-    }
-
-    public void filter(InteractiveTable<Consultation> table, String column, String value, String type) {
         switch (column) {
-            case"patient name":{
-                table.addFilter("Filter by"+column + " \"" + value + "\"",
-                        c->c.getPatient().getName().toLowerCase().contains(value.toLowerCase()));
+            case "patient name": {
+                table.addFilter(
+                        "Filter by" + column + " \"" + value + "\"",
+                        MedicalController.getConsultationPatientFilter(value)
+                );
                 table.display();
                 break;
             }
-            case"doctor name":{
-                table.addFilter("Filter by"+column + " \"" + value + "\"",
-                        c->c.getDoctor().getName().toLowerCase().contains(value.toLowerCase()));
+            case "doctor name": {
+                table.addFilter(
+                        "Filter by" + column + " \"" + value + "\"",
+                        MedicalController.getConsultationDoctorFilter(value)
+                );
                 table.display();
                 break;
             }
-            case"ConsultationType":{
-                if (type.equals("GENERAL")){
-                    table.addFilter("GENERAL",c->c.getType()==ConsultationType.GENERAL);
-                    table.display();
-                }
-                else if (type.equals("SPECIALIST")){
-                    table.addFilter("SPECIALIST",c->c.getType()==ConsultationType.SPECIALIST);
-                    table.display();
+            case "ConsultationType": {
+                var consultationType = ConsultationType.valueOf(value);
 
-                }
-                else if (type.equals("EMERGENCY")){
-                    table.addFilter("EMERGENCY",c->c.getType()==ConsultationType.EMERGENCY);
-                    table.display();
-                }
-                else if (type.equals("FOLLOW_UP")){
-                    table.addFilter("FOLLOW_UP",c->c.getType()==ConsultationType.FOLLOW_UP);
-                    table.display();
-                }
-
+                table.addFilter(consultationType.name(), MedicalController.getConsultationTypeFilter(consultationType));
+                table.display();
             }
             default:
                 break;
         }
     }
-
 
 
     public void viewMenu() {
@@ -361,7 +349,6 @@ public class MedicalUI extends UI {
     }
 
     public void viewSelectConsultationRecord() {
-        ;
         var selectConsultation = viewConsultationRecord();
         if (selectConsultation != null) {
             startConsultationSession(selectConsultation);
