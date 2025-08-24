@@ -21,6 +21,18 @@ public record Range<T extends Comparable<T>>(
     }
 
     /**
+     * Check if the other {@link Range} is exclusively overlapped by this {@link Range}
+     *
+     * @param other The other {@link Range} to check overlaps.
+     * @return If this {@link Range} overlaps the given {@link Range}
+     */
+    public boolean overlapsExclusively(Range<T> other) {
+        // a <= d && b >= c
+        return Ordered.isLessThan(this.from, other.to)
+                && Ordered.isGreaterThan(this.to, other.from);
+    }
+
+    /**
      * Check if the other {@link Range} is inclusively contained by this {@link Range}
      *
      * @param other The other {@link Range} to check contains.
