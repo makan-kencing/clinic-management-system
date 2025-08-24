@@ -4,19 +4,20 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Product;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
 public class MedicineController {
-    public void createMedicineEntry(Medicine medicine) {
+    public static void createMedicineEntry(Medicine medicine) {
         Database.medicineList.add(medicine);
     }
 
-    public void createProductEntry(Product product) {
+    public static void createProductEntry(Product product) {
         Database.productList.add(product);
     }
 
-    public Product deleteMedicineEntry(int id) {
+    public static Product deleteMedicineEntry(int id) {
         var removed = Database.productList.removeFirst(m -> m.getId() == id);
         if (removed == null)
             return null;
@@ -30,15 +31,15 @@ public class MedicineController {
         return removed;
     }
 
-    public Product deleteMedicineEntry(Medicine medicine) {
+    public static Product deleteMedicineEntry(Medicine medicine) {
         return deleteMedicineEntry(medicine.getId());
     }
 
-    public ListInterface<Medicine> getAllMedicines() {
+    public static ListInterface<Medicine> getAllMedicines() {
         return Database.medicineList.clone();
     }
 
-    public ListInterface<Product> getAllProducts() {
+    public static ListInterface<Product> getAllProducts() {
         return Database.productList.clone();
     }
 
@@ -49,11 +50,34 @@ public class MedicineController {
         return sum;
     }
 
-    public static LocalDateTime getLatestStocked(Product product) {
+    public static int getAvailableStocks(Medicine medicine) {
+        var sum = 0;
+        for (var product: Database.productList.filtered(p -> p.getMedicine() == medicine))
+            for (var stock : product.getStocks())
+                sum += stock.getQuantityLeft();
+        return sum;
+    }
+
+    public static @Nullable LocalDateTime getLatestStocked(Product product) {
         var latest = LocalDateTime.MIN;
         for (var stock : product.getStocks())
             if (stock.getStockInDate().isAfter(latest))
                 latest = stock.getStockInDate();
+
+        if (latest.equals(LocalDateTime.MIN))
+            return null;
+        return latest;
+    }
+
+    public static @Nullable LocalDateTime getLatestStocked(Medicine medicine) {
+        var latest = LocalDateTime.MIN;
+        for (var product : Database.productList.filtered(p -> p.getMedicine() == medicine))
+            for (var stock : product.getStocks())
+                if (stock.getStockInDate().isAfter(latest))
+                    latest = stock.getStockInDate();
+
+        if (latest.equals(LocalDateTime.MIN))
+            return null;
         return latest;
     }
 }
