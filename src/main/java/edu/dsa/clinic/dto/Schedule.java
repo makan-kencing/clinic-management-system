@@ -3,6 +3,10 @@ package edu.dsa.clinic.dto;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public record Schedule(
         ListInterface<Shift> monday,
         ListInterface<Shift> tuesday,
@@ -29,6 +33,22 @@ public record Schedule(
                 s1.getTimeRange().from()
                         .compareTo(s2.getTimeRange().from())
         );
+    }
+
+    public ListInterface<Shift> getShifts(DayOfWeek dayOfWeek) {
+        return switch (dayOfWeek) {
+            case MONDAY -> this.monday();
+            case TUESDAY -> this.tuesday();
+            case WEDNESDAY -> this.wednesday();
+            case THURSDAY -> this.thursday();
+            case FRIDAY -> this.friday();
+            case SATURDAY -> this.saturday();
+            case SUNDAY -> this.sunday();
+        };
+    }
+
+    public ListInterface<Shift> getShifts(LocalDate date) {
+        return this.getShifts(date.getDayOfWeek());
     }
 
     public Schedule addMondayShift(Shift shift) {
@@ -63,6 +83,12 @@ public record Schedule(
 
     public Schedule addSundayShift(Shift shift) {
         this.sunday.add(shift);
+        return this;
+    }
+
+    public Schedule addShift(DayOfWeek dayOfWeek, Shift shift) {
+        var shifts = this.getShifts(dayOfWeek);
+        shifts.add(shift);
         return this;
     }
 }

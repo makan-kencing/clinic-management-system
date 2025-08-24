@@ -1,7 +1,9 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
@@ -9,6 +11,8 @@ import edu.dsa.clinic.dto.Shift;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Specialization;
+import edu.dsa.clinic.lambda.Filter;
+import edu.dsa.clinic.lambda.MultiFilter;
 import edu.dsa.clinic.utils.Ordered;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
@@ -16,23 +20,26 @@ import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.geom.Arc2D;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class DoctorUI extends UI {
-    private final DoctorController doctorController = new DoctorController();
-    Doctor doctor = new Doctor();
+    private final DoctorController doctorController;
 
 
     public DoctorUI(Scanner scanner) {
         super(scanner);
+        this.doctorController = new DoctorController();
     }
 
     //Doctor Menu
     public int getDoctorMenu() {
         Scanner sc = new Scanner(System.in);
-        int choice = 0;
+        int choice;
         do {
             System.out.println("\nDoctor Menu");
             System.out.println("1. Create new Doctor");
@@ -44,7 +51,7 @@ public class DoctorUI extends UI {
             System.out.print("Enter choice: ");
 
             choice = sc.nextInt();
-            sc.nextLine();
+
             System.out.println();
 
             switch (choice) {
@@ -55,7 +62,7 @@ public class DoctorUI extends UI {
                     viewDoctorsList();
                     break;
                 case 3:
-                    deleteDoctor(doctor);
+                    deleteDoctor();
                     break;
                 default:
                     System.out.println("Invalid choice. Try again.");
@@ -174,7 +181,7 @@ public class DoctorUI extends UI {
 
 
     //delete Doctor
-    public void deleteDoctor(Doctor doctor) {
+    public void deleteDoctor() {
         Scanner sc = new Scanner(System.in);
         int id;
         viewDoctorsList();
@@ -197,7 +204,7 @@ public class DoctorUI extends UI {
     }
 
     //Select Doctor
-    public Doctor selectDoctor() {
+    public @Nullable Doctor selectDoctor() {
         Doctor selectedDoctor = null;
 
         var doctors = this.doctorController.getDoctors();
@@ -287,6 +294,7 @@ public class DoctorUI extends UI {
         System.out.println("(2) gender");
         System.out.println("(3) contact number");
         System.out.println("(4) Specialization");
+        System.out.println("(5) Availability");
         System.out.println("(0) exit");
         System.out.println("-".repeat(30));
         System.out.print("Filter by: ");
@@ -346,6 +354,23 @@ public class DoctorUI extends UI {
                 filter(table, "Specialization", specialization.name());
                 break;
             }
+            case 5: {
+
+                System.out.println("Choose the day to filter (YYYY-MM-DD): ");
+                var date = LocalDate.parse(this.scanner.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                System.out.println("Choose the starting time to filter (HH:mm): ");
+                var startingTime = LocalTime.parse(this.scanner.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
+
+                System.out.println("Choose the ending time to filter (HH:mm): ");
+                var endingTime = LocalTime.parse(this.scanner.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
+
+                var timeRange = new Range<>(startingTime, endingTime);
+
+                table.addFilter("Available", DoctorController.getIsAvailableFilter(date, timeRange));
+            }
+
+                break;
             default:
                 System.out.println();
                 table.display();
