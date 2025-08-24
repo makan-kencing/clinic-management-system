@@ -5,28 +5,27 @@ import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Medicine;
+import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
+import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.lambda.Filter;
 
 public class MedicalController {
 
-    public void saveConsultationRecord(Consultation consultation) {
-        Database.consultationsList.add(consultation);
-    }
+    MedicineController medicineController = new MedicineController();
 
-//    public Consultation listConsultations(Patient patient) {
-//        for (Consultation consultation : Database.consultationsList) {
-//            if (consultation.getPatient().equals(patient)) {
-//                return consultation;
-//            }
-//        }
-//        return null;
-//    }
+    public boolean saveConsultationRecord(Consultation consultation) {
+        if (consultation == null) {return false;}
+        Database.consultationsList.add(consultation);
+       return true;
+    }
 
     public ListInterface<Consultation> getConsultationList() {
         return Database.consultationsList;
     }
+
 
     public Consultation selectConsultationById(int id) {
         return Database.consultationsList.findFirst(c -> c.getId() == id);
@@ -44,6 +43,13 @@ public class MedicalController {
         return prescription.findFirst(t -> t.getId() == id);
    }
 
+   public Product selectProduct(){
+       var allMedicine = medicineController.getAllProducts();
+       return allMedicine.findFirst(m -> m.getId() == 1);
+   }
+
+
+
    public boolean deleteConsultation(int id) {
        var removed=Database.consultationsList.removeFirst(c -> c.getId() == id);
        return removed != null;
@@ -54,13 +60,10 @@ public class MedicalController {
         return removed != null;
    }
 
-
-
    public boolean deleteTreatment(ListInterface<Treatment> treatment,int id) {
         var removed =treatment.removeFirst(t-> t.getId() == id);
         return removed != null;
    }
-
 
    public static Filter<Consultation> getConsultationTypeFilter(ConsultationType type) {
         return c -> c.getType() == type;
