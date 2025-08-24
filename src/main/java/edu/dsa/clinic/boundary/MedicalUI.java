@@ -159,13 +159,13 @@ public class MedicalUI extends UI {
                 int value = scanner.nextInt();
                 this.scanner.nextLine();
                 if (value == 1) {
-                    filter(table, "ConsultationType", null, "GENERAL");
+                    filter(table, "ConsultationType", ConsultationType.GENERAL.name());
                 } else if (value == 2) {
-                    filter(table, "ConsultationType", null, "SPECIALIST");
+                    filter(table, "ConsultationType", ConsultationType.SPECIALIST.name());
                 } else if (value == 3) {
-                    filter(table, "ConsultationType", null, "EMERGENCY");
+                    filter(table, "ConsultationType", ConsultationType.EMERGENCY.name());
                 } else if (value == 4) {
-                    filter(table, "ConsultationType", null, "FOLLOW_UP");
+                    filter(table, "ConsultationType", ConsultationType.FOLLOW_UP.name());
                 }
                 break;
             }
@@ -174,44 +174,31 @@ public class MedicalUI extends UI {
                 table.display();
                 break;
         }
-
-
     }
 
     public void filter(InteractiveTable<Consultation> table, String column, String value) {
-        filter(table, column, value, null);
-    }
-
-    public void filter(InteractiveTable<Consultation> table, String column, String value, String type) {
         switch (column) {
             case "patient name": {
-                table.addFilter("Filter by" + column + " \"" + value + "\"",
-                        c -> c.getPatient().getName().toLowerCase().contains(value.toLowerCase()));
+                table.addFilter(
+                        "Filter by" + column + " \"" + value + "\"",
+                        MedicalController.getConsultationPatientFilter(value)
+                );
                 table.display();
                 break;
             }
             case "doctor name": {
-                table.addFilter("Filter by" + column + " \"" + value + "\"",
-                        c -> c.getDoctor().getName().toLowerCase().contains(value.toLowerCase()));
+                table.addFilter(
+                        "Filter by" + column + " \"" + value + "\"",
+                        MedicalController.getConsultationDoctorFilter(value)
+                );
                 table.display();
                 break;
             }
             case "ConsultationType": {
-                if (type.equals("GENERAL")) {
-                    table.addFilter("GENERAL", c -> c.getType() == ConsultationType.GENERAL);
-                    table.display();
-                } else if (type.equals("SPECIALIST")) {
-                    table.addFilter("SPECIALIST", c -> c.getType() == ConsultationType.SPECIALIST);
-                    table.display();
+                var consultationType = ConsultationType.valueOf(value);
 
-                } else if (type.equals("EMERGENCY")) {
-                    table.addFilter("EMERGENCY", c -> c.getType() == ConsultationType.EMERGENCY);
-                    table.display();
-                } else if (type.equals("FOLLOW_UP")) {
-                    table.addFilter("FOLLOW_UP", c -> c.getType() == ConsultationType.FOLLOW_UP);
-                    table.display();
-                }
-
+                table.addFilter(consultationType.name(), MedicalController.getConsultationTypeFilter(consultationType));
+                table.display();
             }
             default:
                 break;

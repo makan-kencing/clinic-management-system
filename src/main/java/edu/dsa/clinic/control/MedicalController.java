@@ -3,6 +3,7 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Consultation;
+import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Patient;
@@ -10,8 +11,6 @@ import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.lambda.Filter;
-
-import javax.xml.crypto.Data;
 
 public class MedicalController {
 
@@ -66,6 +65,15 @@ public class MedicalController {
         return removed != null;
    }
 
+   public static Filter<Consultation> getConsultationTypeFilter(ConsultationType type) {
+        return c -> c.getType() == type;
+   }
 
+   public static Filter<Consultation> getConsultationDoctorFilter(String doctorName) {
+        return c -> c.getDoctor().getName().toLowerCase().contains(doctorName.toLowerCase());
+   }
 
+   public static Filter<Consultation> getConsultationPatientFilter(String patientName) {
+        return c -> c.getPatient().getName().toLowerCase().contains(patientName.toLowerCase());
+   }
 }

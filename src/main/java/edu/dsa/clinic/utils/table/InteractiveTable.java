@@ -29,12 +29,20 @@ abstract public class InteractiveTable<T> extends Table<T> {
         this.filters.add(new NamedFilter<>(name, filter));
     }
 
+    public void clearFilter(Filter<String> exclude) {
+        this.filters.filter(nf -> !exclude.filter(nf.name));
+    }
+
     public void resetFilters() {
         this.filters.clear();
     }
 
     public void addSorter(String name, Comparator<T> sorter) {
         this.sorters.add(new NamedSorter<>(name, sorter));
+    }
+
+    public void clearSorter(Filter<String> exclude) {
+        this.sorters.filter(ns -> !exclude.filter(ns.name));
     }
 
     public void resetSorters() {
