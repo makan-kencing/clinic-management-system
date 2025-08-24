@@ -79,6 +79,10 @@ public abstract class Table<T> {
         this.padding = padding;
     }
 
+    public ListInterface<T> getData() {
+        return data;
+    }
+
     public void setData(ListInterface<T> data) {
         this.data = data;
         this.page = Math.min(this.page, this.getMaxPage());

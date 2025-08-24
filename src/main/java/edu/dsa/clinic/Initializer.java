@@ -1,5 +1,10 @@
 package edu.dsa.clinic;
 
+import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.Range;
+import edu.dsa.clinic.dto.Schedule;
+import edu.dsa.clinic.dto.Shift;
+import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
@@ -8,18 +13,18 @@ import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineAdministrationType;
-import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
+import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.entity.Treatment;
-import edu.dsa.clinic.dto.ConsultationQueue;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Initializer {
     private Initializer() {
@@ -94,7 +99,13 @@ public class Initializer {
                         .setGender(Gender.FEMALE)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Orthopedics)
-                        .setSchedule(null)
+                        .setSchedule(new Schedule()
+                                .addMondayShift(new Shift()
+                                        .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                        .setType(ShiftType.WORK))
+                                .addMondayShift(new Shift()
+                                        .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                        .setType(ShiftType.WORK)))
         );
         Database.doctorList.add(
                 ((Doctor) new Doctor()
@@ -226,8 +237,8 @@ public class Initializer {
         Database.productList.add(
                 ((Product) new Product()
                         .setId(1))
-                        .setName("Acetylsalicyclic acid")
-                        .setBrand("Aspirin")
+                        .setName("Aspirin")
+                        .setBrand("Recadin")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0.01529"))
@@ -243,9 +254,29 @@ public class Initializer {
                                 .setLocation("Storage")
                                 .setQuantityLeft(32))
         );
-        Database.productList.add(  // https://ndclist.com/ndc/0135-7021
+        Database.productList.add(
                 ((Product) new Product()
                         .setId(2))
+                        .setName("Aspirin")
+                        .setBrand("Viquprin")
+                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("0.01529"))
+                        .setPrice(new BigDecimal("1"))
+                        .addStock(new Stock()
+                                .setStockInQuantity(60)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                                .setLocation("Storage")
+                                .setQuantityLeft(14))
+                        .addStock(new Stock()
+                                .setStockInQuantity(40)
+                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                                .setLocation("Storage")
+                                .setQuantityLeft(40))
+        );
+        Database.productList.add(  // https://ndclist.com/ndc/0135-7021
+                ((Product) new Product()
+                        .setId(3))
                         .setName("Panadol PM")
                         .setBrand("Panadol")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
@@ -270,7 +301,7 @@ public class Initializer {
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-0620
                 ((Product) new Product()
-                        .setId(3))
+                        .setId(4))
                         .setName("Panadol Extra")
                         .setBrand("Panadol")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
@@ -295,7 +326,7 @@ public class Initializer {
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-0609
                 ((Product) new Product()
-                        .setId(4))
+                        .setId(5))
                         .setName("Panadol Extra Strength")
                         .setBrand("Panadol")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
@@ -320,7 +351,7 @@ public class Initializer {
         );
         Database.productList.add(
                 ((Product) new Product()
-                        .setId(5))
+                        .setId(6))
                         .setName("Paracetamol")
                         .setBrand("Tylenol")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
@@ -335,7 +366,7 @@ public class Initializer {
         );
         Database.productList.add(
                 ((Product) new Product()
-                        .setId(6))
+                        .setId(7))
                         .setName("Ibuprofen")
                         .setBrand("Advil")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 3))
@@ -350,7 +381,7 @@ public class Initializer {
         );
         Database.productList.add(
                 ((Product) new Product()
-                        .setId(7))
+                        .setId(8))
                         .setName("Centrizine")
                         .setBrand("")
                         .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 6))
