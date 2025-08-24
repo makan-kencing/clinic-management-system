@@ -13,8 +13,10 @@ import javax.xml.crypto.Data;
 
 public class MedicalController {
 
-    public void saveConsultationRecord(Consultation consultation) {
+    public boolean saveConsultationRecord(Consultation consultation) {
+        if (consultation == null) {return false;}
         Database.consultationsList.add(consultation);
+       return true;
     }
 
 //    public Consultation listConsultations(Patient patient) {
@@ -55,8 +57,6 @@ public class MedicalController {
         var removed =diagnosis.removeFirst(d -> d.getId() == id);
         return removed != null;
    }
-
-
 
    public boolean deleteTreatment(ListInterface<Treatment> treatment,int id) {
         var removed =treatment.removeFirst(t-> t.getId() == id);
