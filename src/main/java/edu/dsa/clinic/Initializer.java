@@ -447,7 +447,8 @@ public class Initializer {
 
         // Consultations data
         Database.consultationsList.add(
-                new Consultation()
+                ((Consultation)new Consultation()
+                        .setId(1))
                         .setPatient(Database.patientsList.findFirst(p -> p.getId() == 1))
                         .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 1))
                         .setType(ConsultationType.GENERAL)
@@ -484,7 +485,8 @@ public class Initializer {
         );
 
         Database.consultationsList.add(
-                new Consultation()
+                ((Consultation)new Consultation()
+                        .setId(2))
                         .setPatient(Database.patientsList.findFirst(p -> p.getId() == 2))
                         .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 2))
                         .setType(ConsultationType.GENERAL)
