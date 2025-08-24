@@ -1,6 +1,6 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.control.DispensaryController;
+import edu.dsa.clinic.dto.DispensaryQueue;
 import org.jline.terminal.Terminal;
 
 import java.util.Scanner;
@@ -23,7 +23,7 @@ public class DispensaryUI extends UI {
 
     }
 
-    public void clearDispensing(DispensaryController.DispensaryQueue dispensing) {
+    public void clearDispensing(DispensaryQueue dispensing) {
 
     }
 }
