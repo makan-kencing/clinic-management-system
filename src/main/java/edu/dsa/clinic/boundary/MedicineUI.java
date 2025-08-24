@@ -4,6 +4,7 @@ import edu.dsa.clinic.Initializer;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicineController;
+import edu.dsa.clinic.dto.Inventory;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Product;
@@ -28,7 +29,10 @@ import java.util.Scanner;
 import java.util.StringJoiner;
 
 /**
- * This UI is responsible for managing medicine definitions
+ * This UI is managing everything medicinal related. (e.g. {@link Medicine}, {@link Product},
+ * {@link Stock}, {@link Inventory})
+ *
+ * @author makan-kencing
  */
 public class MedicineUI extends UI {
     public MedicineUI(Terminal terminal) {

@@ -2,6 +2,15 @@ package edu.dsa.clinic.dto;
 
 import edu.dsa.clinic.utils.Ordered;
 
+/**
+ * A pair of two values usually relating to upper bound and lower bound.
+ *
+ * @param from The lower value of the {@link Range}.
+ * @param to The upper value of the {@link Range}.
+ * @param <T> The datatype of the values.
+ *
+ * @author makan-kencing
+ */
 public record Range<T extends Comparable<T>>(
         T from,
         T to

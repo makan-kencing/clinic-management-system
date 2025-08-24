@@ -2,11 +2,16 @@ package edu.dsa.clinic.dto;
 
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
+import edu.dsa.clinic.entity.Doctor;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+/**
+ * The representation of a weekly schedule for a {@link Doctor}
+ *
+ * @author makan-kencing
+ */
 public record Schedule(
         ListInterface<Shift> monday,
         ListInterface<Shift> tuesday,

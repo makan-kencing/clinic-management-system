@@ -5,6 +5,11 @@ import org.jline.terminal.Terminal;
 
 import java.util.Scanner;
 
+/**
+ * UI for viewing prescriptions to be dispensed and checklist.
+ *
+ * @author makan-kencing
+ */
 public class DispensaryUI extends UI {
 
     public DispensaryUI(Terminal terminal) {

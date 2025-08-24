@@ -2,12 +2,20 @@ package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.Inventory;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Product;
+import edu.dsa.clinic.entity.Stock;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
+/**
+ * Logics for managing everything medicinal related. (e.g. {@link Medicine}, {@link Product},
+ * {@link Stock}, {@link Inventory})
+ *
+ * @author makan-kencing
+ */
 public class MedicineController {
     public static void createMedicineEntry(Medicine medicine) {
         Database.medicineList.add(medicine);
