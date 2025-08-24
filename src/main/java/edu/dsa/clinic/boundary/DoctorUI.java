@@ -6,22 +6,18 @@ import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.dto.Shift;
-import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Specialization;
-import edu.dsa.clinic.utils.Utils;
+import edu.dsa.clinic.utils.Ordered;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
+import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class DoctorUI extends UI {
@@ -340,7 +336,7 @@ public class DoctorUI extends UI {
                 var index = scanner.nextInt();
 
                 // get the selected specialization
-                if (!Utils.isBetween(index, 0, availableSpecialization.length)) {  // prevent indexoutofbounds
+                if (!Ordered.isBetween(index, 0, availableSpecialization.length)) {  // prevent indexoutofbounds
                     System.out.println("Invalid specialization number");
                     break;
                 }
