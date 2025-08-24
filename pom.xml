@@ -43,5 +43,24 @@
             <artifactId>jline-terminal-jansi</artifactId>
             <version>3.30.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline-console-ui</artifactId>
+            <version>3.30.0</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <executable>java</executable>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
