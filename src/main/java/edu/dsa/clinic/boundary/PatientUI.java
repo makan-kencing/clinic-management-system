@@ -4,8 +4,10 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.PatientController;
+import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.dto.PatientDetail;
 import edu.dsa.clinic.entity.Consultation;
+import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
@@ -31,12 +33,11 @@ public class PatientUI extends UI {
     }
 
     public void patientMenu() {
-        System.out.println("=".repeat(29));
-        System.out.println("| Welcome to Patient Module |");
-        System.out.println("=".repeat(29));
-
         String opt;
         do {
+            System.out.println("=".repeat(29));
+            System.out.println("| Welcome to Patient Module |");
+            System.out.println("=".repeat(29));
             System.out.println("-".repeat(30));
             System.out.println("(1) Display Patient List");
             System.out.println("(2) View Patient Details");
@@ -60,7 +61,18 @@ public class PatientUI extends UI {
                     System.out.println();
                 }
                 case "4" -> {
-                    // To be implemented
+                    int subOpt;
+                    do {
+                        subOpt = queueMenu();
+                        switch (subOpt) {
+                            case 1 -> listConsultationQueue();
+                            case 2 -> addConsultationQueue();
+                            case 3 -> removeConsultationQueue();
+                            case 0 -> System.out.println("Exiting Queue Menu...");
+                            default -> System.out.println("Invalid selection! Try again.");
+                        }
+                    } while (subOpt != 0);
+                    System.out.println();
                 }
                 case "5" -> {
                     // To be implemented
@@ -69,6 +81,147 @@ public class PatientUI extends UI {
                 default -> System.out.println("Invalid input. Try again.\n");
             }
         } while (!opt.equals("6"));
+    }
+
+    public void listConsultationQueue() {
+        var table = initializeQueueTable();
+        table.display();
+
+        String opt;
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Sort Consultation Queue " +
+                    "\n(2) Filter Consultation Queue " +
+                    "\n(3) Reset Sorters " +
+                    "\n(4) Reset Filters " +
+                    "\n(5) Exit");
+            System.out.println("Use P/N arrow keys to change pages");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextLine();
+
+            System.out.println();
+
+            if (!opt.equals("5")) {
+                switch (opt) {
+                    case "1": {
+                        sortQueue(table);
+                        break;
+                    }
+                    case "2": {
+                        filterQueue(table);
+                        break;
+                    }
+                    case "3": {
+                        table.resetSorters();
+                        table.display();
+                        break;
+                    }
+                    case "4": {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                    default: {
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+        } while (true);
+    }
+
+    public void addConsultationQueue() {
+        Patient selectedPatient;
+        ConsultationQueue addQueue;
+
+        while (true) {
+            selectedPatient = selectPatient();
+
+            if (selectedPatient == null) {
+                return;
+            }
+
+            addQueue = patientController.validateUnique(selectedPatient);
+
+            if (addQueue != null) {
+                System.out.println("Existing queue for patient (" + addQueue.patient().getName() + ") found! Please select another patient...\n");
+            } else {
+                break;
+            }
+        }
+
+        System.out.println("-".repeat(18));
+        System.out.println("| (1) General    |");
+        System.out.println("| (2) Specialist |");
+        System.out.println("| (3) Emergency  |");
+        System.out.println("| (4) Follow-up  |");
+        System.out.println("-".repeat(18));
+
+        int input;
+        do {
+            System.out.println("Select Consultation Type: ");
+            input = scanner.nextInt();
+            scanner.nextLine();
+
+            if (input < 1 || input > ConsultationType.values().length) {
+                System.out.println("Invalid type selected!");
+                System.out.println();
+            }
+        } while (input < 1 || input > ConsultationType.values().length);
+
+        System.out.println();
+        ConsultationType selectedType = ConsultationType.values()[input - 1];
+
+        addQueue = new ConsultationQueue(selectedPatient, selectedType);
+
+        System.out.println();
+        patientController.createQueue(addQueue);
+        System.out.println("Queue for Patient (" + addQueue.patient().getName() + ") with Consultation Type (" + addQueue.type() + ") Generated Successfully!\n");
+    }
+
+    public void removeConsultationQueue() {
+        ConsultationQueue deleteQueue = selectConsultationQueue();
+        if (deleteQueue == null) {
+            System.out.println("No queue selected.\n");
+            return;
+        }
+
+        System.out.println("Are you sure to delete this entry? (Y/N)");
+        if (this.scanner.next().equalsIgnoreCase("Y")) {
+            patientController.removeQueue(deleteQueue);
+            System.out.println();
+            System.out.println("Consultation Queue with No (" + deleteQueue.queueNo() + ") Deleted.\n");
+        }
+        this.scanner.nextLine();
+        System.out.println();
+    }
+
+    public ConsultationQueue appointQueue() {
+        ConsultationQueue popQueue = patientController.getFirstQueue();
+        System.out.println();
+        System.out.println("-".repeat(30));
+        System.out.println("Queue to be Appointed");
+        System.out.println("-".repeat(30));
+        System.out.println("Queue No          : " + popQueue.queueNo());
+        System.out.println("Patient ID        : " + popQueue.patient().getId());
+        System.out.println("Patient Name      : " + popQueue.patient().getName());
+        System.out.println("Consultation Type : " + popQueue.type().name());
+        System.out.println("-".repeat(30));
+        System.out.println();
+        return popQueue;
     }
 
     public void listPatient() {
@@ -131,7 +284,6 @@ public class PatientUI extends UI {
             }
         } while (true);
     }
-
 
     public void listPatientDetail() {
         Patient selectedPatient = selectPatient();
@@ -357,7 +509,7 @@ public class PatientUI extends UI {
                                 break;
                             }
 
-                            selectedPatient = patientController.performSelect(selectedId);
+                            selectedPatient = (Patient) patientController.performSelect(selectedId, "patient");
                             if (selectedPatient == null) {
                                 System.out.println("Patient with ID (" + selectedId + ") not found. Please re-enter Patient ID...");
                             } else {
@@ -400,6 +552,7 @@ public class PatientUI extends UI {
         return selectedPatient;
     }
 
+    //Patient Sorters and Filters
     public void sortPatient(InteractiveTable<Patient> table) {
         System.out.println("-".repeat(30));
         System.out.println("Sorters:");
@@ -418,31 +571,31 @@ public class PatientUI extends UI {
             case 1: {
                 var value = orderByMenu();
                 System.out.println();
-                sort(table, "id", value);
+                applyPatientSorter(table, "id", value);
                 break;
             }
             case 2: {
                 var value = orderByMenu();
                 System.out.println();
-                sort(table, "name", value);
+                applyPatientSorter(table, "name", value);
                 break;
             }
             case 3: {
                 var value = orderByMenu();
                 System.out.println();
-                sort(table, "identification", value);
+                applyPatientSorter(table, "identification", value);
                 break;
             }
             case 4: {
                 var value = orderByMenu();
                 System.out.println();
-                sort(table, "contact", value);
+                applyPatientSorter(table, "contact", value);
                 break;
             }
             case 5: {
                 var value = orderByMenu();
                 System.out.println();
-                sort(table, "gender", value);
+                applyPatientSorter(table, "gender", value);
                 break;
             }
             default:
@@ -470,21 +623,21 @@ public class PatientUI extends UI {
                 System.out.print("Search name by: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                filter(table, "name", value);
+                applyPatientFilter(table, "name", value);
                 break;
             }
             case 2: {
                 System.out.print("Search identification by: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                filter(table, "identification", value);
+                applyPatientFilter(table, "identification", value);
                 break;
             }
             case 3: {
                 System.out.print("Search contact number by: ");
                 var value = scanner.nextLine();
                 System.out.println();
-                filter(table, "contact", value);
+                applyPatientFilter(table, "contact", value);
             }
             case 4: {
                 System.out.println();
@@ -499,9 +652,9 @@ public class PatientUI extends UI {
                 System.out.println();
 
                 if (value == 1) {
-                    filter(table, "gender", "male");
+                    applyPatientFilter(table, "gender", "MALE");
                 } else if (value == 2) {
-                    filter(table, "gender", "female");
+                    applyPatientFilter(table, "gender", "FEMALE");
                 }
                 break;
             }
@@ -512,12 +665,11 @@ public class PatientUI extends UI {
         }
     }
 
-    public void filter(InteractiveTable<Patient> table, String column, String value) {
+    public void applyPatientFilter(InteractiveTable<Patient> table, String column, String value) {
         switch (column) {
             case "id": {
                 table.addFilter("Search " + column + " \"" + value + "\"",
-                        p -> p.getName().toLowerCase().contains(value.toLowerCase()));
-                table.addSorter("Name Ascending", (p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));
+                        p -> String.valueOf(p.getId()).contains(value));
                 table.display();
                 break;
             }
@@ -554,7 +706,7 @@ public class PatientUI extends UI {
         }
     }
 
-    public void sort(InteractiveTable<Patient> table, String column, boolean ascending) {
+    public void applyPatientSorter(InteractiveTable<Patient> table, String column, boolean ascending) {
         switch (column) {
             case "id": {
                 table.addSorter(
@@ -609,6 +761,301 @@ public class PatientUI extends UI {
             default:
                 break;
         }
+    }
+
+    public ConsultationQueue selectConsultationQueue() {
+        ConsultationQueue selectedQueue = null;
+
+        var table = initializeQueueTable();
+        table.display();
+
+        String opt;
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Consultation Queue " +
+                    "\n(2) Filter Consultation Queue " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("Use P/N arrow keys to change pages");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextLine();
+
+            System.out.println();
+
+            if (!opt.equals("4")) {
+                switch (opt) {
+                    case "1": {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Queue No (0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (selectedId == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                table.display();
+                                break;
+                            }
+
+                            selectedQueue = (ConsultationQueue) patientController.performSelect(selectedId, "consultation");
+                            if (selectedQueue == null) {
+                                System.out.println("Consultation Queue with No (" + selectedId + ") not found. Please re-enter Queue No...");
+                            } else {
+                                System.out.println("Consultation Queue with No (" + selectedId + ") selected!");
+                                return selectedQueue;
+                            }
+                        } while (selectedQueue == null);
+                        break;
+                    }
+                    case "2": {
+                        filterQueue(table);
+                        break;
+                    }
+                    case "3": {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                    default: {
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                break;
+            }
+        } while (true);
+
+        return selectedQueue;
+    }
+
+    //Consultation Queue Filters and Sorters
+    public void sortQueue(InteractiveTable<ConsultationQueue> table) {
+        System.out.println("-".repeat(30));
+        System.out.println("Sorters:");
+        System.out.println("(1) queue no");
+        System.out.println("(2) patient id");
+        System.out.println("(3) patient id");
+        System.out.println("(4) consultation type");
+        System.out.println("(0) exit");
+        System.out.println("-".repeat(30));
+        System.out.print("Sort by: ");
+        var opt = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opt) {
+            case 1: {
+                var value = orderByMenu();
+                System.out.println();
+                applyQueueSorter(table, "queue", value);
+                break;
+            }
+            case 2: {
+                var value = orderByMenu();
+                System.out.println();
+                applyQueueSorter(table, "id", value);
+                break;
+            }
+            case 3: {
+                var value = orderByMenu();
+                System.out.println();
+                applyQueueSorter(table, "name", value);
+                break;
+            }
+            case 4: {
+                var value = orderByMenu();
+                System.out.println();
+                applyQueueSorter(table, "type", value);
+                break;
+            }
+            case 5: {
+                var value = orderByMenu();
+                System.out.println();
+                applyQueueSorter(table, "gender", value);
+                break;
+            }
+            default:
+                System.out.println();
+                table.display();
+                break;
+        }
+    }
+
+    public void filterQueue(InteractiveTable<ConsultationQueue> table) {
+        System.out.println("-".repeat(30));
+        System.out.println("Filters:");
+        System.out.println("(1) patient id");
+        System.out.println("(2) patient name");
+        System.out.println("(3) consultation type");
+        System.out.println("(0) exit");
+        System.out.println("-".repeat(30));
+        System.out.print("Filter by: ");
+        var opt = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opt) {
+            case 1: {
+                System.out.print("Search patient id by: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                applyQueueFilter(table, "id", value);
+                break;
+            }
+            case 2: {
+                System.out.print("Search patient name by: ");
+                var value = scanner.nextLine();
+                System.out.println();
+                applyQueueFilter(table, "name", value);
+                break;
+            }
+            case 3: {
+                System.out.println();
+                System.out.println("-".repeat(30));
+                System.out.println("Filter gender by: ");
+                System.out.println("(1) general");
+                System.out.println("(2) specialist");
+                System.out.println("(3) emergency");
+                System.out.println("(4) follow-up");
+                System.out.println("-".repeat(30));
+                System.out.print("Selection : ");
+                var value = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println();
+
+                if (value == 1) {
+                    applyQueueFilter(table, "type", "GENERAL");
+                } else if (value == 2) {
+                    applyQueueFilter(table, "type", "SPECIALIST");
+                } else if (value == 3) {
+                    applyQueueFilter(table, "type", "EMERGENCY");
+                } else if (value == 4) {
+                    applyQueueFilter(table, "type", "FOLLOW_UP");
+                }
+                break;
+            }
+            default:
+                System.out.println();
+                table.display();
+                break;
+        }
+    }
+
+    public void applyQueueFilter(InteractiveTable<ConsultationQueue> table, String column, String value) {
+        switch (column) {
+            case "id": {
+                table.addFilter("Search " + column + " \"" + value + "\"",
+                        c -> String.valueOf(c.patient().getId()).contains(value));
+                table.display();
+                break;
+            }
+            case "name": {
+                table.addFilter("Search " + column + " \"" + value + "\"",
+                        c -> c.patient().getName().toLowerCase().contains(value.toLowerCase()));
+                table.display();
+                break;
+            }
+            case "type": {
+                if (value.equals(ConsultationType.GENERAL.name())) {
+                    table.addFilter("General only", c -> c.type() == ConsultationType.GENERAL);
+                    table.display();
+                } else if (value.equals(ConsultationType.SPECIALIST.name())) {
+                    table.addFilter("Specialist only", c -> c.type() == ConsultationType.SPECIALIST);
+                    table.display();
+                } else if (value.equals(ConsultationType.EMERGENCY.name())) {
+                    table.addFilter("Emergency only", c -> c.type() == ConsultationType.EMERGENCY);
+                    table.display();
+                } else if (value.equals(ConsultationType.FOLLOW_UP.name())) {
+                    table.addFilter("Follow-up only", c -> c.type() == ConsultationType.FOLLOW_UP);
+                    table.display();
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    public void applyQueueSorter(InteractiveTable<ConsultationQueue> table, String column, boolean ascending) {
+        switch (column) {
+            case "queue": {
+                table.addSorter(
+                        ascending ? "Queue No Ascending" : "Queue No Descending",
+                        ascending
+                                ? (c1, c2) -> Integer.compare(c1.queueNo(), c2.queueNo())
+                                : (c1, c2) -> Integer.compare(c2.queueNo(), c1.queueNo())
+                );
+                table.display();
+                break;
+            }
+            case "id": {
+                table.addSorter(
+                        ascending ? "ID Ascending" : "ID Descending",
+                        ascending
+                                ? (c1, c2) -> Integer.compare(c1.patient().getId(), c2.patient().getId())
+                                : (c1, c2) -> Integer.compare(c2.patient().getId(), c1.patient().getId())
+                );
+                table.display();
+                break;
+            }
+            case "name": {
+                table.addSorter(
+                        ascending ? "Name Ascending" : "Name Descending",
+                        ascending
+                                ? (c1, c2) -> c1.patient().getName().compareToIgnoreCase(c2.patient().getName())
+                                : (c1, c2) -> c2.patient().getName().compareToIgnoreCase(c1.patient().getName())
+                );
+                table.display();
+                break;
+            }
+            case "type": {
+                table.addSorter(
+                        ascending ? "Type Ascending" : "Type Descending",
+                        ascending
+                                ? (c1, c2) -> c1.type().compareTo(c2.type())
+                                : (c1, c2) -> c2.type().compareTo(c1.type())
+                );
+                table.display();
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    public int queueMenu() {
+        int opt;
+        do {
+            System.out.println();
+            System.out.println("-".repeat(30));
+            System.out.println("(1) List Consultation Queue");
+            System.out.println("(2) Generate Consultation Queue");
+            System.out.println("(3) Remove Consultation Queue");
+            System.out.println("(0) Exit");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = scanner.nextInt();
+            scanner.nextLine();
+
+            if (opt < 0 || opt > 3) {
+                System.out.println("Invalid input! Try again.");
+            }
+        } while (opt < 0 || opt > 3);
+        System.out.println();
+        return opt;
     }
 
     public int maintenanceMenu() {
@@ -668,6 +1115,25 @@ public class PatientUI extends UI {
                         new Cell(o.getGender(), Alignment.CENTER),
                         new Cell(o.getIdentification()),
                         new Cell(o.getContactNumber())
+                };
+            }
+        };
+    }
+
+    public InteractiveTable<ConsultationQueue> initializeQueueTable() {
+        return new InteractiveTable<>(new Column[]{
+                new Column("Queue No", Alignment.CENTER, 10),
+                new Column("Patient Id", Alignment.CENTER, 10),
+                new Column("Patient Name", Alignment.CENTER, 30),
+                new Column("Consultation Type", Alignment.CENTER, 20)
+        }, Database.queueList.clone()) {
+            @Override
+            protected Cell[] getRow(ConsultationQueue o) {
+                return new Cell[]{
+                        new Cell(o.queueNo()),
+                        new Cell(o.patient() != null ? o.patient().getId() : "N/A"),
+                        new Cell(o.patient() != null ? o.patient().getName() : "N/A"),
+                        new Cell(o.type() != null ? o.type().toString() : "N/A")
                 };
             }
         };
