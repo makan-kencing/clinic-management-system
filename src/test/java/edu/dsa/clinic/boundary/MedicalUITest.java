@@ -11,6 +11,6 @@ public class MedicalUITest {
         var scanner = new Scanner(System.in);
 
         var medicalUI = new MedicalUI(scanner);
-        medicalUI.viewMenu();
+        medicalUI.startMenu();
     }
 }
