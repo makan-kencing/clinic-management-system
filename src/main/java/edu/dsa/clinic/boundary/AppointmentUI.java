@@ -3,6 +3,7 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.AppointmentController;
+import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Patient;
@@ -19,6 +20,7 @@ import java.time.format.DateTimeParseException;
 
 public class AppointmentUI extends UI {
     private AppointmentController appointmentController = new AppointmentController();
+    private PatientUI patientUI = new PatientUI(this.scanner);
 
     public AppointmentUI(Scanner scanner) {
         super(scanner);
@@ -39,7 +41,7 @@ public class AppointmentUI extends UI {
             System.out.println();
 
             switch (choice) {
-                case "1" -> createAppointment();
+                case "1" -> createWalkInAppointment();
                 case "2" -> viewAppointment();
 //                case "3"  -> editAppointment();
                 case "4"  -> filterAndCancelAppointment();
@@ -59,6 +61,21 @@ public class AppointmentUI extends UI {
         appointment.setExpectedStartAt(startTime);
 
         appointment.setExpectedEndAt(inputAppointmentEndTime(startTime));
+        appointment.setCreatedAt(LocalDateTime.now());
+
+        this.appointmentController.saveAppointment(appointment);
+    }
+
+    public void createWalkInAppointment() {
+        Appointment appointment = new Appointment();
+
+        ConsultationQueue queue = patientUI.appointQueue();
+        appointment.setDoctor(selectAppointmentDoctor());
+
+        appointment.setPatient(queue.patient());
+        appointment.setAppointmentType(queue.type());
+        appointment.setExpectedStartAt(LocalDateTime.now());
+        appointment.setExpectedEndAt(LocalDateTime.now().plusMinutes(30));
         appointment.setCreatedAt(LocalDateTime.now());
 
         this.appointmentController.saveAppointment(appointment);
