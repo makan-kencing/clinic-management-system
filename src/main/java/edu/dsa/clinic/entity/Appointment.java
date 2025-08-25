@@ -1,5 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.dto.ConsultationQueue;
+
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +17,7 @@ public class Appointment extends IdentifiableEntity {
     private LocalDateTime createdAt;
     private LocalDateTime expectedStartAt;
     private LocalDateTime expectedEndAt;
+    private ConsultationType appointmentType;
 
     public Patient getPatient() {
         return patient;
@@ -61,6 +64,15 @@ public class Appointment extends IdentifiableEntity {
         return this;
     }
 
+    public ConsultationType getAppointmentType() {
+        return appointmentType;
+    }
+
+    public Appointment setAppointmentType(ConsultationType appointmentType) {
+        this.appointmentType = appointmentType;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Appointment{" +
@@ -70,6 +82,7 @@ public class Appointment extends IdentifiableEntity {
                 ", createdAt=" + createdAt +
                 ", expectedStartAt=" + expectedStartAt +
                 ", expectedEndAt=" + expectedEndAt +
+                ", appointmentType=" + appointmentType +
                 '}';
     }
 }
