@@ -118,19 +118,10 @@ public class DoctorUI extends UI {
 
         System.out.println("Doctor created successfully: " + doctor);
     }
-
+    //Modify Doctor
     public void modifyDoctor(Doctor doctor) {
-        System.out.println("Current name: " + doctor.getName());
 
-        System.out.print("Enter new name: ");
-        String newName = scanner.nextLine();
 
-        if (!newName.trim().isEmpty()) {
-            doctor.setName(newName);
-            System.out.println("Name updated successfully!");
-        } else {
-            System.out.println("Name cannot be empty. No changes made.");
-        }
     }
 
     public void deleteDoctor(Doctor doctor) {
@@ -148,6 +139,129 @@ public class DoctorUI extends UI {
             this.scanner.next();
         }
     }
+
+    public Doctor modifyDoctor(InteractiveTable<Doctor> table, Doctor doctor) {
+        Doctor modifyDoctor = null;
+        Doctor newDoctor = new Doctor();
+
+        do {
+            table.display();
+            System.out.print("\nEnter Doctor ID that you want to modify (0 to exit): ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println();
+
+            if (id == 0) {
+                System.out.println("-".repeat(30));
+                System.out.println();
+                break;
+            }
+            modifyDoctor = DoctorController.selectDoctorByID(id);
+            if (modifyDoctor == null) {
+                System.out.println("Doctor with ID (" + id + ") not found. Please re-enter Doctor ID...");
+            } else {
+                System.out.println("Doctor (" + modifyDoctor.getName() + ") with ID (" + modifyDoctor.getId() + ") selected!");
+            }
+        } while (modifyDoctor == null);
+
+        System.out.println("-".repeat(30));
+        System.out.println("Doctor Modify Menu:");
+        System.out.println("(1) name");
+        System.out.println("(2) gender");
+        System.out.println("(3) contact number");
+        System.out.println("(4) Specialization");
+        System.out.println("(0) exit");
+        System.out.println("-".repeat(30));
+        System.out.print("Enter the number of the info that you want to modify: ");
+        var opt = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opt) {
+            case 1: {
+                System.out.println("Current name: " + modifyDoctor.getName());
+                System.out.print("Enter new name: ");
+                String newName = scanner.nextLine();
+
+                if (!newName.trim().isEmpty()) {
+                    doctor.setName(newName);
+                    System.out.println("Name updated successfully!");
+                } else {
+                    System.out.println("Name cannot be empty. No changes made.");
+                }
+                 newDoctor.setName(newName);
+                break;
+            }
+            case 2: {
+                int gender; ;
+                do{
+                    System.out.println("Current gender: " + modifyDoctor.getGender());
+                    System.out.print("-".repeat(30));
+                    System.out.println("(1) male");
+                    System.out.println("(2) female");
+                    System.out.print("Enter new gender number: ");
+                    gender = scanner.nextInt();
+
+                    var newGender = switch (gender){
+                        case 1 -> Gender.MALE;
+                        case 2 -> Gender.FEMALE;
+                        default -> null;
+                    };
+                    if (newGender == null) {
+                        System.out.println("Invalid option. Try again.");
+                        continue;
+                    }
+                    newDoctor.setGender(newGender);
+                    break;
+                }while(true);
+                break;
+            }
+            case 3: {
+                System.out.print("Current contact number: " + modifyDoctor.getContactNumber());
+                System.out.print("Enter new contact number: ");
+                var newNumber = scanner.nextLine();
+                if (!newNumber.trim().isEmpty()) {
+                    newDoctor.setContactNumber(newNumber);
+                    System.out.println("New contact number updated successfully!");
+                } else  {
+                    System.out.println("New contact number cannot be empty. Try again.");
+                }
+                break;
+            }
+            case 4: {
+                System.out.println("Current Doctor Specialization: " + modifyDoctor.getSpecialization());
+                int option;
+                do {
+                    System.out.print("Enter new specialization you wish to choose: ");
+                    System.out.println("1. Neurosurgery");
+                    System.out.println("2. Pediatrics");
+                    System.out.println("3. Ophthalmology");
+                    System.out.println("4. Otorhinolaryngology");
+                    System.out.println("5. Orthopedics");
+                    option = this.scanner.nextInt();  // 4
+
+                    var specialization = switch (option) {
+                        case 1 -> Specialization.Neurosurgery;
+                        case 2 -> Specialization.Pediatrics;
+                        case 3 -> Specialization.Ophthalmology;
+                        case 4 -> Specialization.Otorhinolaryngology;
+                        case 5 -> Specialization.Orthopedics;
+                        default -> null;
+                    };
+                    if (specialization == null) {
+                        System.out.println("Invalid option. Try again.");
+                        continue;
+                    }
+
+                    newDoctor.setSpecialization(specialization);
+                    break;
+                } while (true);
+            }
+            default:
+                break;
+        }
+        return newDoctor;
+    }
+
 
     //Select Doctor
     public @Nullable Doctor selectDoctor() {
@@ -373,6 +487,7 @@ public class DoctorUI extends UI {
                 dayOfWeek = DayOfWeek.of(index);
             } catch (DateTimeException e) {
                 // request reprompt for invalid dayOfWeek
+                System.out.println("Please enter a valid day number");
             }
         }
 
