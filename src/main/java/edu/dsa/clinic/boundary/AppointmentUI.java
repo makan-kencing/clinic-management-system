@@ -31,7 +31,6 @@ public class AppointmentUI extends UI {
 
     public void appointmentMenu() {
         String choice;
-        Appointment test;
         do {
             System.out.println("\nAppointment MENU");
             System.out.println("1. Schedule An Appointment");
