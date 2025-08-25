@@ -17,8 +17,13 @@ public class AppointmentController {
             Database.appointmentList.add(appointment);
 //        }
 
+    }
 
-
+    public Object performSelect(int selectedId, String field) {
+        return switch (field) {
+            case "appointment" -> Database.appointmentList.findFirst(p -> p.getId() == selectedId);
+            default -> null;
+        };
     }
 
     public ListInterface<Appointment> getAppointments() {
