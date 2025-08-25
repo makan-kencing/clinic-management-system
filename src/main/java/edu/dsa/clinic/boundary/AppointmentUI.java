@@ -27,7 +27,7 @@ public class AppointmentUI extends UI {
         super(scanner);
     }
 
-    public void getMenuChoice() {
+    public void appointmentMenu() {
         String choice;
         do {
             System.out.println("\nAppointment MENU");
@@ -45,7 +45,7 @@ public class AppointmentUI extends UI {
                 case "1" -> createWalkInAppointment();
                 case "2" -> viewAppointment();
 //                case "3"  -> editAppointment();
-                case "4"  -> filterAndCancelAppointment();
+                case "4"  -> cancelAppointment();
 //                case 0  -> quit();
                 default -> System.out.println("Invalid Choice");
             }
@@ -282,129 +282,21 @@ public class AppointmentUI extends UI {
             }
         };
 
-        String option, searchOption;
+        String option;
 
         do{
             table.display();
-
             System.out.println("Choose an Option :");
-            System.out.println("1. Search An Appointment");
-            System.out.println("2. Sort By Id");
-            System.out.println("3. Sort By Patent Name");
-            System.out.println("4. Sort By Doctor");
-            System.out.println("5. Sort By Start Time");
-            System.out.println("6. Sort By End Time");
-            System.out.println("7. Sort By Created Time");
-            System.out.println("8. Sort By Appointment Type");
-            System.out.println("9. Reset sorters");
+            System.out.println("1. Filter Appointments");
+            System.out.println("2. Sort Appointments");
             System.out.println("0. Exit");
             System.out.print("Enter Option: ");
-
             option = this.scanner.nextLine();
+
             switch (option) {
-                case "1" -> {
-                    do {
-                        table.display();
-                        searchOption = getSearchByOption();
-                        switch (searchOption) {
-                            case "1" -> {
-                                System.out.println("Search Patient name: ");
-                                String name = this.scanner.nextLine();
-
-                                filter(table, "patient name", name);
-                            }
-                            case "2" -> {
-                                System.out.println("Search Doctor name: ");
-                                String name = this.scanner.nextLine();
-
-                                filter(table, "doctor name", name);
-                            }
-                            case "3" -> {
-                                System.out.println("Search Start Time: ");
-                                LocalDateTime startTime1 = inputSearchAppointmentTime("Start", "(first)");
-                                LocalDateTime startTime2 = inputSearchAppointmentTime("Start", "(second)");
-
-                                filter(table, "start name", null, startTime1, startTime2, formatter);
-                            }
-                            case "4" -> {
-                                System.out.println("Search End Time: ");
-                                LocalDateTime endTime1 = inputSearchAppointmentTime("End", "(first)");
-                                LocalDateTime endTime2 = inputSearchAppointmentTime("End", "(second)");
-
-                                filter(table, "end name", null, endTime1, endTime2, formatter);
-                            }
-                            case "5" -> {
-                                System.out.println("Search Created Time: ");
-                                LocalDateTime createdTime1 = inputSearchAppointmentTime("Created", "(first)");
-                                LocalDateTime createdTime2 = inputSearchAppointmentTime("Created", "(second)");
-
-                                filter(table, "created name", null, createdTime1, createdTime2, formatter);
-                            }
-                            case "6" -> table.resetFilters();
-                            case "0" ->System.out.println("Returning...");
-                            default -> System.out.println("Please enter a valid option");
-
-                        }
-                    }while(!searchOption.equals("0"));
-                }
-                case "2" -> {
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("by Id (Asc)", Comparator.comparingInt(Appointment::getId));
-                        case "2" -> table.addSorter("by Id (Desc)", Comparator.comparingInt(Appointment::getId).reversed());
-                        case "0" -> System.out.println("Returning...");
-                    }
-                }
-                case "3" ->{
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("By Patient Name (Asc)", (a1, a2) -> a1.getPatient().getName().
-                                    compareToIgnoreCase(a2.getPatient().getName()));
-                        case "2" -> table.addSorter("By Patient Name (Desc)", (a1, a2) -> a2.getPatient().getName().
-                                    compareToIgnoreCase(a1.getPatient().getName()));
-                        case "0" -> System.out.println("Returning...");
-                    }
-                }
-                case "4" ->{
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("By Doctor Name (Asc)", (a1, a2) -> a1.getDoctor().getName().
-                                    compareToIgnoreCase(a2.getDoctor().getName()));
-                        case "2" -> table.addSorter("By Doctor Name (Desc)", (a1, a2) -> a2.getDoctor().getName().
-                                    compareToIgnoreCase(a1.getDoctor().getName()));
-                        case "0" -> System.out.println("Returning...");
-                    }
-                }
-                case "5" -> {
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("By Start Time (Asc)", Comparator.comparing(Appointment::getExpectedStartAt));
-                        case "2" -> table.addSorter("By Start Time (Desc)", Comparator.comparing(Appointment::getExpectedStartAt).reversed());
-                        case "0" -> System.out.println("Returning...");
-                    }
-                }
-                case "6" ->{
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("By End Time (Asc)", Comparator.comparing(Appointment::getExpectedEndAt));
-                        case "2" -> table.addSorter("By End Time (Desc)", Comparator.comparing(Appointment::getExpectedEndAt).reversed());
-                        case "0" -> System.out.println("Returning...");
-                    }
-                }
-                case "7" -> {
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("By Created Time (Asc)", Comparator.comparing(Appointment::getCreatedAt));
-                        case "2" -> table.addSorter("By Created Time (Desc)", Comparator.comparing(Appointment::getCreatedAt).reversed());
-                        case "0" -> System.out.println("Returning...");
-
-                    }
-                }
-                case "8" -> {
-                    switch (getSortOrderOption()) {
-                        case "1" -> table.addSorter("By Appointment Type (Asc)", (c1, c2) -> c1.getAppointmentType().compareTo(c2.getAppointmentType()));
-                        case "2" -> table.addSorter("By Appointment Type (Desc)", (c1, c2) -> c2.getAppointmentType().compareTo(c1.getAppointmentType()));
-                        case "0" -> System.out.println("Returning...");
-
-                    }
-                }
-                case "9" -> table.resetSorters();
-                case "0" -> System.out.println("Returning...");
-                default -> System.out.println("Invalid Choice");
+                case "1" -> filterAppointment(table, formatter);
+                case "2" -> sortAppointment(table);
+                case "0" -> System.out.println("Exiting...");
             }
 
         }while(!option.equals("0"));
@@ -434,7 +326,7 @@ public class AppointmentUI extends UI {
         }
     }
 
-    public void filterAndCancelAppointment(){
+    public void cancelAppointment(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         var appointments = this.appointmentController.getAppointments();
@@ -445,7 +337,8 @@ public class AppointmentUI extends UI {
                 new Column("Doctor", Alignment.CENTER, 25),
                 new Column("Start At", Alignment.CENTER, 25),
                 new Column("End At", Alignment.CENTER, 25),
-                new Column("Created At", Alignment.CENTER, 25)
+                new Column("Created At", Alignment.CENTER, 25),
+                new Column("Appointment Type", Alignment.CENTER, 25)
         }, appointments) {
             @Override
             protected Cell[] getRow(Appointment o) {
@@ -455,55 +348,31 @@ public class AppointmentUI extends UI {
                         new Cell(o.getDoctor().getName()),
                         new Cell(o.getExpectedStartAt().format(formatter)),
                         new Cell(o.getExpectedEndAt().format(formatter)),
-                        new Cell(o.getCreatedAt().format(formatter))
+                        new Cell(o.getCreatedAt().format(formatter)),
+                        new Cell(o.getAppointmentType().name(), Alignment.CENTER)
                 };
             }
         };
-        String filterOption;
+        String option;
         do{
             table.display();
-            filterOption = getFilterByOption();
-            switch (filterOption) {
-                case "1" -> {
-                    System.out.println("Filter Patient name: ");
-                    String name = this.scanner.nextLine();
+            System.out.println("Select an option:");
+            System.out.println("1. Cancel An Appointment");
+            System.out.println("2. Filter Appointment");
+            System.out.println("3. Sort Appointment");
+            System.out.println("0. Return");
+            System.out.print("Enter Option: ");
+            option = this.scanner.nextLine();
 
-                    filter(table, "patient name", name);
-                }
-                case "2" -> {
-                    System.out.println("Filter Doctor name: ");
-                    String name = this.scanner.nextLine();
-
-                    filter(table, "doctor name", name);
-                }
-                case "3" -> {
-                    System.out.println("Filter Start Time: ");
-                    LocalDateTime startTime1 = inputSearchAppointmentTime("Start", "(first)");
-                    LocalDateTime startTime2 = inputSearchAppointmentTime("Start", "(second)");
-
-                    filter(table, "start name", null, startTime1, startTime2, formatter);
-                }
-                case "4" -> {
-                    System.out.println("Filter End Time: ");
-                    LocalDateTime endTime1 = inputSearchAppointmentTime("End", "(first)");
-                    LocalDateTime endTime2 = inputSearchAppointmentTime("End", "(second)");
-
-                    filter(table, "end name", null, endTime1, endTime2, formatter);
-                }
-                case "5" -> {
-                    System.out.println("Filter Created Time: ");
-                    LocalDateTime createdTime1 = inputSearchAppointmentTime("Created", "(first)");
-                    LocalDateTime createdTime2 = inputSearchAppointmentTime("Created", "(second)");
-
-                    filter(table, "created name", null, createdTime1, createdTime2, formatter);
-                }
-                case "6" -> table.resetFilters();
-                case "7" -> cancelAppointment(appointments);
+            switch (option) {
+                case "1" -> cancelAppointment(appointments);
+                case "2" -> filterAppointment(table, formatter);
+                case "3" -> sortAppointment(table);
                 case "0" ->System.out.println("Returning...");
                 default -> System.out.println("Please enter a valid option");
-
             }
-        }while (!filterOption.equals("0") && !filterOption.equals("7"));
+
+        }while (!option.equals("0") && !option.equals("1"));
     }
 
     public String updateAppointmentConfirmation(String state){
@@ -529,13 +398,36 @@ public class AppointmentUI extends UI {
         return choice;
     }
 
-    public String getSortOrderOption() {
+    public String getSortByOption(){
+        String option;
+        do{
+            System.out.println("Sorting by:");
+            System.out.println("1. Sort By Id");
+            System.out.println("2. Sort By Patient Name");
+            System.out.println("3. Sort By Doctor");
+            System.out.println("4. Sort By Start Time");
+            System.out.println("5. Sort By End Time");
+            System.out.println("6. Sort By Created Time");
+            System.out.println("7. Sort By Appointment Type");
+            System.out.println("8. Reset sorters");
+            System.out.println("0. Return");
+            System.out.print("Select an option: ");
+            option = this.scanner.nextLine();
+
+            if (!option.matches("[0-8]")) {
+                System.out.println("Invalid choice. Please enter 0–6.");
+            }
+        } while (!option.matches("[0-8]"));
+
+        return option;
+    }
+
+    public boolean getSortOrderOption() {
         String option;
         do {
             System.out.println("Select a sort order :");
-            System.out.println("1. Ascending");
-            System.out.println("2. Descending");
-            System.out.println("0. Return");
+            System.out.println("1. Ascending order");
+            System.out.println("2. Descending order");
             System.out.print("Select an Option: ");
             option = this.scanner.nextLine();
 
@@ -544,10 +436,10 @@ public class AppointmentUI extends UI {
             }
         } while (!option.matches("[0-2]"));
 
-        return option;
+        return option.equalsIgnoreCase("A");
     }
 
-    public String getSearchByOption() {
+    public String getFilterByOption() {
         String option;
         do {
             System.out.println("Search by:");
@@ -570,35 +462,122 @@ public class AppointmentUI extends UI {
         return option;
     }
 
-    public String getFilterByOption(){
+    public void sortAppointment(InteractiveTable<Appointment> table) {
+        String sortOption;
+        do{
+            table.display();
+            sortOption = getSortByOption();
+            switch (sortOption){
+                case "1" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "id", orderBy);
+                }
+                case "2" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "patient name", orderBy);
+                }
+                case "3" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "doctor name", orderBy);
+                }
+                case "4" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "start time", orderBy);
+                }
+                case "5" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "end time", orderBy);
+                }
+                case "6" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "created time", orderBy);
+                }
+                case "7" -> {
+                    var orderBy = getSortOrderOption();
+                    applyAppointmentSorter(table, "appointment type", orderBy);
+                }
+                case "8" -> table.resetSorters();
+                case "0" -> System.out.println("Returning...");
+            }
+        }while(!sortOption.equals("0"));
+    }
+
+    public void filterAppointment(InteractiveTable<Appointment> table, DateTimeFormatter formatter){
+        String filterOption;
+        do {
+            table.display();
+            filterOption = getFilterByOption();
+            switch (filterOption) {
+                case "1" -> {
+                    System.out.println("Search Patient name: ");
+                    String name = this.scanner.nextLine();
+
+                    applyAppointmentFilter(table, "patient name", name);
+                }
+                case "2" -> {
+                    System.out.println("Search Doctor name: ");
+                    String name = this.scanner.nextLine();
+
+                    applyAppointmentFilter(table, "doctor name", name);
+                }
+                case "3" -> {
+                    System.out.println("Search Start Time: ");
+                    LocalDateTime startTime1 = inputSearchAppointmentTime("Start", "(first)");
+                    LocalDateTime startTime2 = inputSearchAppointmentTime("Start", "(second)");
+
+                    applyAppointmentFilter(table, "start name", null, startTime1, startTime2, formatter);
+                }
+                case "4" -> {
+                    System.out.println("Search End Time: ");
+                    LocalDateTime endTime1 = inputSearchAppointmentTime("End", "(first)");
+                    LocalDateTime endTime2 = inputSearchAppointmentTime("End", "(second)");
+
+                    applyAppointmentFilter(table, "end name", null, endTime1, endTime2, formatter);
+                }
+                case "5" -> {
+                    System.out.println("Search Created Time: ");
+                    LocalDateTime createdTime1 = inputSearchAppointmentTime("Created", "(first)");
+                    LocalDateTime createdTime2 = inputSearchAppointmentTime("Created", "(second)");
+
+                    applyAppointmentFilter(table, "created name", null, createdTime1, createdTime2, formatter);
+                }
+                case "6" -> applyAppointmentFilter(table, "appointment type", null);
+                case "7" -> table.resetFilters();
+                case "0" ->System.out.println("Returning...");
+                default -> System.out.println("Please enter a valid option");
+
+            }
+        }while(!filterOption.equals("0"));
+    }
+
+    public String filterAppointmentTypeMenu() {
         String option;
         do {
-            System.out.println("Filter by:");
-            System.out.println("1. Patient name");
-            System.out.println("2. Doctor name");
-            System.out.println("3. Start Time");
-            System.out.println("4. End Time");
-            System.out.println("5. Created Time");
-            System.out.println("6. Appointment Type");
-            System.out.println("7. Reset Filters");
-            System.out.println("8. Cancel An Appointment");
-            System.out.println("0. Return");
-            System.out.print("Select an option: ");
-            option = this.scanner.nextLine();
+            System.out.println();
+            System.out.println("-".repeat(30));
+            System.out.println("Filter Type by: ");
+            System.out.println("(1) general");
+            System.out.println("(2) specialist");
+            System.out.println("(3) emergency");
+            System.out.println("(4) follow-up");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            option = scanner.nextLine();
 
-            if (!option.matches("[0-7]")) {
-                System.out.println("Invalid choice. Please enter 0–6.");
+            if (!option.matches("[0-4]")) {
+                System.out.println("Invalid choice. Please enter 0–4.");
             }
-        } while (!option.matches("[0-7]"));
+
+        }while(!option.matches("[0-4]"));
 
         return option;
     }
 
-    public void filter(InteractiveTable<Appointment> table, String column, String value) {
-        filter(table, column, value, null, null, null);
+    public void applyAppointmentFilter(InteractiveTable<Appointment> table, String column, String value) {
+        applyAppointmentFilter(table, column, value, null, null, null);
     }
 
-    public void filter(InteractiveTable<Appointment> table, String column, String value, LocalDateTime value1, LocalDateTime value2, DateTimeFormatter formatter){
+    public void applyAppointmentFilter(InteractiveTable<Appointment> table, String column, String value, LocalDateTime value1, LocalDateTime value2, DateTimeFormatter formatter){
         switch (column) {
             case "patient name": {
                 table.addFilter(column + " contains " + "\"" + value.trim() + "\"",
@@ -629,7 +608,7 @@ public class AppointmentUI extends UI {
                 );
             }
             case "appointment type": {
-                String opt = typeMenu();
+                String opt = filterAppointmentTypeMenu();
                 switch (opt) {
                     case "1" ->
                             table.addFilter("General only", c -> c.getAppointmentType() == ConsultationType.GENERAL);
@@ -646,20 +625,75 @@ public class AppointmentUI extends UI {
         }
     }
 
-    public String typeMenu() {
-        System.out.println();
-        System.out.println("-".repeat(30));
-        System.out.println("Filter gender by: ");
-        System.out.println("(1) general");
-        System.out.println("(2) specialist");
-        System.out.println("(3) emergency");
-        System.out.println("(4) follow-up");
-        System.out.println("-".repeat(30));
-        System.out.print("Selection : ");
-        var value = scanner.nextLine();
-        System.out.println();
-
-        return value;
+    public void applyAppointmentSorter(InteractiveTable<Appointment> table, String column, boolean ascending) {
+        switch (column) {
+            case "id": {
+                table.addSorter(
+                        ascending ? "by Id (Asc)" : "by Id (Desc)",
+                        ascending
+                                ? (p1, p2) -> Integer.compare(p1.getId(), p2.getId())
+                                : (p1, p2) -> Integer.compare(p2.getId(), p1.getId())
+                );
+                break;
+            }
+            case "patient name": {
+                table.addSorter(
+                        ascending ? "by Patient name (Asc)" : "by Patient name (Desc)",
+                        ascending
+                                ? (p1, p2) -> p1.getPatient().getName().compareToIgnoreCase(p2.getPatient().getName())
+                                : (p1, p2) -> p1.getPatient().getName().compareToIgnoreCase(p2.getPatient().getName())
+                );
+                break;
+            }
+            case "doctor name": {
+                table.addSorter(
+                        ascending ? "by Doctor name (Asc)" : "by Doctor name (Desc)",
+                        ascending
+                                ? (p1, p2) -> p1.getDoctor().getName().compareToIgnoreCase(p2.getDoctor().getName())
+                                : (p1, p2) -> p1.getDoctor().getName().compareToIgnoreCase(p2.getDoctor().getName())
+                );
+                break;
+            }
+            case "start time": {
+                table.addSorter(
+                        ascending ? "by Start Time (Asc)" : "by Start Time (Desc)",
+                        ascending
+                                ? Comparator.comparing(Appointment::getExpectedStartAt)
+                                : Comparator.comparing(Appointment::getExpectedStartAt).reversed()
+                );
+                break;
+            }
+            case "end time": {
+                table.addSorter(
+                        ascending ? "by End Time (Asc)" : "by End Time (Desc)",
+                        ascending
+                                ? Comparator.comparing(Appointment::getExpectedEndAt)
+                                : Comparator.comparing(Appointment::getExpectedEndAt).reversed()
+                );
+                break;
+            }
+            case "created time": {
+                table.addSorter(
+                        ascending ? "by Created Time (Asc)" : "by Created Time (Desc)",
+                        ascending
+                                ? Comparator.comparing(Appointment::getCreatedAt)
+                                : Comparator.comparing(Appointment::getCreatedAt).reversed()
+                );
+                break;
+            }
+            case "appointment type": {
+                table.addSorter(
+                        ascending ? "by Appointment Type (Asc)" : "by Appointment Typee (Desc)",
+                        ascending
+                                ? (c1, c2) -> c1.getAppointmentType().compareTo(c2.getAppointmentType())
+                                : (c1, c2) -> c2.getAppointmentType().compareTo(c1.getAppointmentType())
+                );
+                break;
+            }
+            default:
+                break;
+        }
     }
+
 
 }
