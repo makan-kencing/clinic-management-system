@@ -5,6 +5,7 @@ import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * The meeting session between a {@link Patient} and a {@link Doctor}.
@@ -15,7 +16,7 @@ public class Consultation extends IdentifiableEntity {
     private Patient patient;
     private Doctor doctor;
     private ConsultationType type;
-    private Instant consultedAt;
+    private LocalDateTime consultedAt;
     private @Nullable String notes;
     private final ListInterface<Diagnosis> diagnoses = new DoubleLinkedList<>();
 
@@ -46,11 +47,11 @@ public class Consultation extends IdentifiableEntity {
         return this;
     }
 
-    public Instant getConsultedAt() {
+    public LocalDateTime getConsultedAt() {
         return consultedAt;
     }
 
-    public Consultation setConsultedAt(Instant consultedAt) {
+    public Consultation setConsultedAt(LocalDateTime consultedAt) {
         this.consultedAt = consultedAt;
         return this;
     }
