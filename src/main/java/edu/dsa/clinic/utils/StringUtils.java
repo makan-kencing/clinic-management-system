@@ -44,4 +44,50 @@ public final class StringUtils {
         }
         return sb.toString();
     }
+
+    public static String stripStart(String s, char c) {
+        int strLen = s.length();
+        if (strLen == 0)
+            return s;
+
+        int start = 0;
+        while (start != strLen && c == s.charAt(start))
+            start++;
+
+        return s.substring(start);
+    }
+
+    public static String stripEnd(String s, char c) {
+        int end = s.length();
+        if (end == 0) {
+            return s;
+        }
+
+        while (end != 0 && c == s.charAt(end - 1))
+            end--;
+
+        return s.substring(0, end);
+    }
+
+    public static String strip(String s, char c) {
+        s = stripStart(s, c);
+        return stripEnd(s, c);
+    }
+
+    /**
+     * Convert string in the format of an {@code array} into an array of strings.
+     *
+     * @param arrayString The string. Example {@code ["elem1", "elem2"]}
+     * @return The array of strings.
+     */
+    public static String[] convertArrayStringToArray(String arrayString) {
+        // trim the leading and tail "[" and "]" from the string
+        arrayString = stripStart(arrayString, '[');
+        arrayString = stripStart(arrayString, ']');
+
+        if (arrayString.isEmpty())
+            return new String[0];
+
+        return arrayString.split(", ");
+    }
 }
