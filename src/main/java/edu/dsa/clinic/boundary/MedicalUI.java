@@ -57,7 +57,7 @@ public class MedicalUI extends UI {
             Consultation consultation;
             switch (choice) {
                 case 1:
-                    createConsultationInfo();
+                    createConsultationMenu();
                     break;
                 case 2:
                     consultation = this.selectConsultation();
@@ -678,6 +678,38 @@ public class MedicalUI extends UI {
 
     }
 
+    public void createConsultationMenu(){
+       while(true){
+           System.out.println("""
+                    Create Consultation Menu
+                    Please Select an Option""");
+           System.out.println("=".repeat(30));
+           System.out.println("""
+                    1. Create Consultation Record by Appointment
+                    2. Create Consultation Record by Manually
+                    3. Back""");
+           System.out.println("=".repeat(30));
+           System.out.print("Enter your choice :");
+
+           int choice = this.scanner.nextInt();
+           this.scanner.nextLine();
+
+           Consultation consultation;
+           switch (choice) {
+               case 1:
+                   createConsultationInfoByAppointment();
+                   break;
+               case 2:
+                   createConsultationInfo();
+                   break;
+               case 3:
+                  return;
+
+           }
+
+       }
+    }
+
     public void writeUpDiagnosis(Consultation consultation) {
         var diagnosis = new Diagnosis();
         diagnosis.setConsultation(consultation);
@@ -784,8 +816,8 @@ public class MedicalUI extends UI {
 
         Product product;
         while (true) {
-            product = medicineUI.searchProduct();
-
+            //product = medicineUI.searchProduct();
+            product =medicalController.selectProduct();
             if (product != null)
                 break;
 
@@ -883,7 +915,7 @@ public class MedicalUI extends UI {
                     new Cell(o.getPatient().getName()),
                     new Cell(o.getDoctor().getName()),
                     new Cell(o.getType()),
-                    new Cell(DateTimeFormatter.ISO_INSTANT.format(o.getConsultedAt())),
+                    new Cell(o.getConsultedAt()),
                     new Cell(o.getNotes()),
                     new Cell(o.getDiagnoses().size()),
             };
