@@ -5,6 +5,7 @@ import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.entity.Appointment;
+import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.utils.table.Alignment;
@@ -264,7 +265,8 @@ public class AppointmentUI extends UI {
                 new Column("Doctor", Alignment.CENTER, 25),
                 new Column("Start At", Alignment.CENTER, 25),
                 new Column("End At", Alignment.CENTER, 25),
-                new Column("Created At", Alignment.CENTER, 25)
+                new Column("Created At", Alignment.CENTER, 25),
+                new Column("Appointment Type", Alignment.CENTER, 25),
         }, appointments) {
             @Override
             protected Cell[] getRow(Appointment o) {
@@ -274,7 +276,8 @@ public class AppointmentUI extends UI {
                         new Cell(o.getDoctor().getName()),
                         new Cell(o.getExpectedStartAt().format(formatter)),
                         new Cell(o.getExpectedEndAt().format(formatter)),
-                        new Cell(o.getCreatedAt().format(formatter))
+                        new Cell(o.getCreatedAt().format(formatter)),
+                        new Cell(o.getAppointmentType().name(), Alignment.CENTER)
                 };
             }
         };
@@ -292,7 +295,8 @@ public class AppointmentUI extends UI {
             System.out.println("5. Sort By Start Time");
             System.out.println("6. Sort By End Time");
             System.out.println("7. Sort By Created Time");
-            System.out.println("8. Reset sorters");
+            System.out.println("8. Sort By Appointment Type");
+            System.out.println("9. Reset sorters");
             System.out.println("0. Exit");
             System.out.print("Enter Option: ");
 
@@ -385,12 +389,20 @@ public class AppointmentUI extends UI {
                 case "7" -> {
                     switch (getSortOrderOption()) {
                         case "1" -> table.addSorter("By Created Time (Asc)", Comparator.comparing(Appointment::getCreatedAt));
-                        case "2" -> table.addSorter("By Created Time (Asc)", Comparator.comparing(Appointment::getCreatedAt).reversed());
+                        case "2" -> table.addSorter("By Created Time (Desc)", Comparator.comparing(Appointment::getCreatedAt).reversed());
                         case "0" -> System.out.println("Returning...");
 
                     }
                 }
-                case "8" -> table.resetSorters();
+                case "8" -> {
+                    switch (getSortOrderOption()) {
+                        case "1" -> table.addSorter("By Appointment Type (Asc)", (c1, c2) -> c1.getAppointmentType().compareTo(c2.getAppointmentType()));
+                        case "2" -> table.addSorter("By Appointment Type (Desc)", (c1, c2) -> c2.getAppointmentType().compareTo(c1.getAppointmentType()));
+                        case "0" -> System.out.println("Returning...");
+
+                    }
+                }
+                case "9" -> table.resetSorters();
                 case "0" -> System.out.println("Returning...");
                 default -> System.out.println("Invalid Choice");
             }
@@ -544,15 +556,16 @@ public class AppointmentUI extends UI {
             System.out.println("3. Start Time");
             System.out.println("4. End Time");
             System.out.println("5. Created Time");
-            System.out.println("6. Reset Filters");
+            System.out.println("6. Appointment Type");
+            System.out.println("7. Reset Filters");
             System.out.println("0. Return");
             System.out.print("Select an option: ");
             option = this.scanner.nextLine();
 
-            if (!option.matches("[0-6]")) {
+            if (!option.matches("[0-7]")) {
                 System.out.println("Invalid choice. Please enter 0–6.");
             }
-        } while (!option.matches("[0-6]"));
+        } while (!option.matches("[0-7]"));
 
         return option;
     }
@@ -566,8 +579,9 @@ public class AppointmentUI extends UI {
             System.out.println("3. Start Time");
             System.out.println("4. End Time");
             System.out.println("5. Created Time");
-            System.out.println("6. Reset Filters");
-            System.out.println("7. Cancel An Appointment");
+            System.out.println("6. Appointment Type");
+            System.out.println("7. Reset Filters");
+            System.out.println("8. Cancel An Appointment");
             System.out.println("0. Return");
             System.out.print("Select an option: ");
             option = this.scanner.nextLine();
@@ -614,10 +628,38 @@ public class AppointmentUI extends UI {
                                 !a.getExpectedStartAt().isAfter(value2)
                 );
             }
+            case "appointment type": {
+                String opt = typeMenu();
+                switch (opt) {
+                    case "1" ->
+                            table.addFilter("General only", c -> c.getAppointmentType() == ConsultationType.GENERAL);
+                    case "2" ->
+                            table.addFilter("Specialist only", c -> c.getAppointmentType() == ConsultationType.SPECIALIST);
+                    case "3" ->
+                            table.addFilter("Emergency only", c -> c.getAppointmentType() == ConsultationType.EMERGENCY);
+                    case "4" ->
+                            table.addFilter("Follow-up only", c -> c.getAppointmentType() == ConsultationType.FOLLOW_UP);
+                }
+            }
             default:
                 break;
         }
+    }
 
+    public String typeMenu() {
+        System.out.println();
+        System.out.println("-".repeat(30));
+        System.out.println("Filter gender by: ");
+        System.out.println("(1) general");
+        System.out.println("(2) specialist");
+        System.out.println("(3) emergency");
+        System.out.println("(4) follow-up");
+        System.out.println("-".repeat(30));
+        System.out.print("Selection : ");
+        var value = scanner.nextLine();
+        System.out.println();
+
+        return value;
     }
 
 }
