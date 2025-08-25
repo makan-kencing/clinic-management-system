@@ -22,6 +22,8 @@ import java.time.format.DateTimeParseException;
 public class AppointmentUI extends UI {
     private AppointmentController appointmentController = new AppointmentController();
     private PatientUI patientUI = new PatientUI(this.scanner);
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public AppointmentUI(Scanner scanner) {
         super(scanner);
@@ -29,6 +31,7 @@ public class AppointmentUI extends UI {
 
     public void appointmentMenu() {
         String choice;
+        Appointment test;
         do {
             System.out.println("\nAppointment MENU");
             System.out.println("1. Schedule An Appointment");
@@ -223,7 +226,6 @@ public class AppointmentUI extends UI {
     }
 
     public LocalDateTime validateInputSearchDateTime(String inputTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime timeConvert;
         try {
             timeConvert = LocalDateTime.parse(inputTime, formatter);
@@ -236,7 +238,6 @@ public class AppointmentUI extends UI {
     }
 
     public LocalDateTime validateInputDateTime(String inputTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime timeConvert;
         try {
             timeConvert = LocalDateTime.parse(inputTime, formatter);
@@ -254,12 +255,8 @@ public class AppointmentUI extends UI {
         }
     }
 
-    public void viewAppointment() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        var appointments = this.appointmentController.getAppointments();
-
-        var table = new InteractiveTable<>(new Column[]{
+    public InteractiveTable<Appointment> initializeAppointmentTable (){
+        return new InteractiveTable<>(new Column[]{
                 new Column("Id", Alignment.CENTER, 5),
                 new Column("Patient Name", Alignment.CENTER, 25),
                 new Column("Doctor", Alignment.CENTER, 25),
@@ -267,10 +264,10 @@ public class AppointmentUI extends UI {
                 new Column("End At", Alignment.CENTER, 25),
                 new Column("Created At", Alignment.CENTER, 25),
                 new Column("Appointment Type", Alignment.CENTER, 25),
-        }, appointments) {
+        }, Database.appointmentList.clone()) {
             @Override
             protected Cell[] getRow(Appointment o) {
-                return new Cell[] {
+                return new Cell[]{
                         new Cell(o.getId(), Alignment.LEFT),
                         new Cell(o.getPatient().getName()),
                         new Cell(o.getDoctor().getName()),
@@ -281,6 +278,58 @@ public class AppointmentUI extends UI {
                 };
             }
         };
+    }
+
+    public Appointment selectAppointment() {
+        Appointment selectedAppointment = null;
+
+        var table = initializeAppointmentTable();
+
+        String option;
+
+        do{
+            table.display();
+            System.out.println("Choose an Option :");
+            System.out.println("1. Select A Appointment");
+            System.out.println("2. Filter Appointments");
+            System.out.println("3. Sort Appointments");
+            System.out.println("0. Exit");
+            System.out.print("Enter Option: ");
+            option = this.scanner.nextLine();
+
+            switch (option) {
+                case "1" -> {
+                    do {
+                        System.out.print("\nEnter Appointment ID (0 to return): ");
+                        String selectedId = scanner.nextLine();
+
+                        if (Integer.parseInt(selectedId) == 0) {
+                            System.out.println("-".repeat(30));
+                            System.out.println();
+                            break;
+                        }
+
+                        selectedAppointment = (Appointment) appointmentController.performSelect(Integer.parseInt(selectedId), "appointment");
+                        if (selectedAppointment == null) {
+                            System.out.println("Appointment with ID (" + selectedId + ") not found. Please re-enter Appointment ID...");
+                        } else {
+                            System.out.println("Appointment with ID (" + selectedAppointment.getId() + ")  selected");
+                            return selectedAppointment;
+                        }
+                    } while (selectedAppointment == null);
+                }
+                case "2" -> filterAppointment(table, formatter);
+                case "3" -> sortAppointment(table);
+                case "0" -> System.out.println("Exiting...");
+            }
+
+        }while(!option.equals("0") && !option.equals("1"));
+
+        return selectedAppointment;
+    }
+
+    public void viewAppointment() {
+        var table = initializeAppointmentTable();
 
         String option;
 
@@ -327,32 +376,10 @@ public class AppointmentUI extends UI {
     }
 
     public void cancelAppointment(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
         var appointments = this.appointmentController.getAppointments();
 
-        var table = new InteractiveTable<>(new Column[]{
-                new Column("Id", Alignment.CENTER, 5),
-                new Column("Patient Name", Alignment.CENTER, 25),
-                new Column("Doctor", Alignment.CENTER, 25),
-                new Column("Start At", Alignment.CENTER, 25),
-                new Column("End At", Alignment.CENTER, 25),
-                new Column("Created At", Alignment.CENTER, 25),
-                new Column("Appointment Type", Alignment.CENTER, 25)
-        }, appointments) {
-            @Override
-            protected Cell[] getRow(Appointment o) {
-                return new Cell[] {
-                        new Cell(o.getId(), Alignment.LEFT),
-                        new Cell(o.getPatient().getName()),
-                        new Cell(o.getDoctor().getName()),
-                        new Cell(o.getExpectedStartAt().format(formatter)),
-                        new Cell(o.getExpectedEndAt().format(formatter)),
-                        new Cell(o.getCreatedAt().format(formatter)),
-                        new Cell(o.getAppointmentType().name(), Alignment.CENTER)
-                };
-            }
-        };
+        var table = initializeAppointmentTable();
+
         String option;
         do{
             table.display();
@@ -683,10 +710,10 @@ public class AppointmentUI extends UI {
             }
             case "appointment type": {
                 table.addSorter(
-                        ascending ? "by Appointment Type (Asc)" : "by Appointment Typee (Desc)",
+                        ascending ? "by Appointment Type (Asc)" : "by Appointment Type (Desc)",
                         ascending
-                                ? (c1, c2) -> c1.getAppointmentType().compareTo(c2.getAppointmentType())
-                                : (c1, c2) -> c2.getAppointmentType().compareTo(c1.getAppointmentType())
+                                ? (c1, c2) -> String.valueOf(c1.getAppointmentType()).compareTo(String.valueOf(c2.getAppointmentType()))
+                                : (c1, c2) -> String.valueOf(c2.getAppointmentType()).compareTo(String.valueOf(c1.getAppointmentType()))
                 );
                 break;
             }
