@@ -1,7 +1,12 @@
 package edu.dsa.clinic.boundary;
 
+import org.jline.consoleui.prompt.ConsolePrompt;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
+import org.jline.utils.NonBlockingReader;
 
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public abstract class UI {
@@ -18,5 +23,21 @@ public abstract class UI {
         this.terminal = null;
     }
 
+    public LineReader getLineReader() {
+        return LineReaderBuilder.builder()
+                .terminal(this.terminal)
+                .build();
+    }
 
+    public ConsolePrompt getPrompt() {
+        return new ConsolePrompt(this.terminal);
+    }
+
+    public PrintWriter getWriter() {
+        return this.terminal.writer();
+    }
+
+    public NonBlockingReader getReader() {
+        return this.terminal.reader();
+    }
 }

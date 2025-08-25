@@ -13,11 +13,10 @@ import edu.dsa.clinic.filter.MedicineFilter;
 import edu.dsa.clinic.sorter.MedicineSorter;
 import edu.dsa.clinic.sorter.ProductSorter;
 import edu.dsa.clinic.utils.SelectTable;
+import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
-import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
-import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
@@ -43,24 +42,91 @@ public class MedicineUI extends UI {
         super(scanner);
     }
 
-    public void startMenu() {
+    public void startMenu() throws IOException {
+        this.manageProductMenu();
+    }
+
+    public void manageProductMenu() throws IOException {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
+
+        while (true) {
+            var product = this.searchProduct();
+            if (product == null)
+                return;
+
+            // handle selected product
+            builder.createListPrompt()
+                    .name("option")
+                    .message("What do you want to do with it?")
+                    .newItem("view").text("View details").add()
+                    .newItem("delete").text("Delete record").add()
+                    .newItem("edit").text("Edit record").add()
+                    .newItem("add_stock").text("Add stock").add()
+                    .newItem("manage_stock").text("Manage stocks").add()
+                    .newItem("cancel").text("Back").add()
+                    .addPrompt();
+
+            var result = prompt.prompt(builder.build());
+            switch (result.get("option")
+                    .getResult()) {
+                case "view":
+                    this.viewProductDetails(product);
+                    break;
+                case "delete":
+                    this.deleteProduct(product);
+                    break;
+                case "edit":
+                    this.editProduct(product);
+                    break;
+                case "add_stock":
+                    this.addStockMenu(product);
+                    break;
+                case "manage_stock":
+                    this.manageProductStockMenu(product);
+                    break;
+                case "cancel":
+                    return;
+            }
+        }
+    }
+
+    public void viewProductMenu(Product product) {
+
+    }
+
+    public void addStockMenu(Product product) {
+
+    }
+
+    public void manageProductStockMenu(Product product) {
+
+    }
+
+    public void manageStockMenu() {
 
     }
 
     public @Nullable Medicine searchMedicine() {
         var medicines = MedicineController.getAllMedicines();
-        var table = new MedicineTable(medicines);
+        var table = new SelectMedicineTable(medicines, this.terminal);
 
-        var selector = new SelectMedicineTable(this.terminal, table);
-        return selector.select();
+        try {
+            return table.select();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public @Nullable Product searchProduct() {
         var products = MedicineController.getAllProducts();
-        var table = new ProductTable(products);
+        var table = new SelectProductTable(products, this.terminal);
 
-        var selector = new SelectProductTable(this.terminal, table);
-        return selector.select();
+        try {
+            return table.select();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void viewMedicineDetails(Medicine medicine) {
@@ -69,19 +135,26 @@ public class MedicineUI extends UI {
 
     public void viewProductDetails(Product product) {
         // TODO
-        System.out.println("Medicine details");
-        System.out.println("================");
-        System.out.printf("Name: %s%n", product.getName());
-        System.out.printf("Type: %s%n", product.getMedicine());
-        System.out.printf("Brand: %s%n", product.getBrand());
-        System.out.printf("Unit Cost: RM %f%n", product.getCost());
-        System.out.printf("Unit Price: RM %f%n", product.getPrice());
+        var writer = this.getWriter();
+        var reader = this.getLineReader();
 
-        System.out.print("Suitable substitutes: ");
+        writer.println("Product details");
+        writer.println("================");
+        writer.printf("Name: %s%n", product.getName());
+        writer.printf("Type: %s%n", product.getMedicine());
+        writer.printf("Brand: %s%n", product.getBrand());
+        writer.printf("Unit Cost: RM %f%n", product.getCost());
+        writer.printf("Unit Price: RM %f%n", product.getPrice());
+
+        writer.print("Suitable substitutes: ");
         var joiner = new StringJoiner(", ");
         for (var substitute : product.getSubstitutes())
             joiner.add(substitute.getName());
-        System.out.println(joiner);
+        writer.println(joiner);
+
+        writer.flush();
+
+        reader.readLine();
     }
 
     public void viewStockDetails(Stock stock) {
@@ -93,18 +166,37 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Medicine createMedicine() {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
+        builder.createInputPrompt()
+                .name("name")
+                .message("Name: ")
+                .addPrompt();
+
+        var medicineTypeCheckbox = builder.createCheckboxPrompt()
+                .name("type")
+                .message("What medicine types?");
+        for (var type : MedicineType.values())
+            medicineTypeCheckbox = medicineTypeCheckbox.newItem(type.name())
+                    .text(type.type)
+                    .add();
+        medicineTypeCheckbox.addPrompt();
+
         var medicine = new Medicine();
+        try {
+            var result = prompt.prompt(builder.build());
 
-        System.out.print("Name: ");
-        medicine.setName(this.scanner.nextLine());
+            medicine.setName(result.get("name").getResult());
+            for (var type : StringUtils.convertArrayStringToArray(
+                    result.get("types").getResult()
+            ))
+                medicine.addType(MedicineType.valueOf(type));
+        } catch (IOException e) {
+            var writer = this.getWriter();
 
-        System.out.print("Types: ");
-        medicine.addType(MedicineType.valueOf(this.scanner.nextLine()));
-
-        MedicineController.createMedicineEntry(medicine);
-
-        System.out.printf("Medicine `%s` added.%n", medicine.getName());
-        this.scanner.next();
+            writer.println("Failed to read the inputs.");
+            writer.flush();
+        }
 
         return medicine;
     }
@@ -129,10 +221,6 @@ public class MedicineUI extends UI {
 
     }
 
-    public void addStock(Product product) {
-
-    }
-
     public void deleteMedicine(Medicine medicine) {
 
     }
@@ -150,20 +238,20 @@ public class MedicineUI extends UI {
         ) {
             terminal.puts(InfoCmp.Capability.clear_screen);
             var ui = new MedicineUI(terminal);
-            ui.startMenu();
+            ui.manageProductMenu();
             // Entrypoint to the main UI.
         }
     }
 
-    public static class MedicineTable extends InteractiveTable<Medicine> {
-        public MedicineTable(ListInterface<Medicine> medicines) {
+    public static class SelectMedicineTable extends SelectTable<Medicine> {
+        public SelectMedicineTable(ListInterface<Medicine> medicines, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
                     new Column("Name", 30),
                     new Column("Types", 40),
                     new Column("In stock", 10),
                     new Column("Last stocked", 20)
-            }, medicines);
+            }, medicines, terminal);
         }
 
         @Override
@@ -180,12 +268,6 @@ public class MedicineUI extends UI {
                     new Cell(Objects.requireNonNullElse(MedicineController.getLatestStocked(o), ""))
             };
         }
-    }
-
-    public static class SelectMedicineTable extends SelectTable<Medicine> {
-        public SelectMedicineTable(Terminal terminal, InteractiveTable<Medicine> table) {
-            super(terminal, table);
-        }
 
         @Override
         protected void promptSearch() throws IOException {
@@ -199,12 +281,12 @@ public class MedicineUI extends UI {
             var query = result.get("query")
                     .getResult();
 
-            this.table.clearFilter(s -> s.startsWith("Searching"));
+            this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
                 return;
 
-            this.table.addFilter("Searching `" + query + "`", MedicineFilter.byNameLike(query));
-            this.table.updateData();
+            this.addFilter("Searching `" + query + "`", MedicineFilter.byNameLike(query));
+            this.updateData();
         }
 
         @Override
@@ -225,8 +307,8 @@ public class MedicineUI extends UI {
                     this.promptAddFilter();
                     break;
                 case "clear":
-                    this.table.resetFilters();
-                    this.table.updateData();
+                    this.resetFilters();
+                    this.updateData();
                     break;
                 default:
                     break;
@@ -248,11 +330,11 @@ public class MedicineUI extends UI {
                     .getResult()) {
                 case "type":
                     if (this.setTypeFilter())
-                        this.table.updateData();
+                        this.updateData();
                     break;
                 case "stock":
                     if (this.setStockFilter())
-                        this.table.updateData();
+                        this.updateData();
                     break;
                 default:
                     break;
@@ -266,7 +348,7 @@ public class MedicineUI extends UI {
             var builder = this.prompt.getPromptBuilder();
             var checkboxPrompt = builder.createCheckboxPrompt()
                     .name("types")
-                    .message("Types");
+                    .message("What medicine types?");
             for (var type : MedicineType.values())
                 checkboxPrompt = checkboxPrompt.newItem(type.name())
                         .text(type.type)
@@ -276,23 +358,17 @@ public class MedicineUI extends UI {
 
             var result = this.prompt.prompt(builder.build());
 
-            var typesInput = result.get("types")
-                    .getResult();  // returns a string format of `["item1", "item2", ...]`
-            typesInput = typesInput.substring(1, typesInput.length() - 1);
-
-            // if not selected any
-            if (typesInput.isEmpty())
-                return false;
-
-            for (var type : typesInput.split(", "))
+            for (var type : StringUtils.convertArrayStringToArray(
+                    result.get("types").getResult()  // returns a string format of `["item1", "item2", ...]`
+            ))
                 types.add(MedicineType.valueOf(type));
 
             // didnt filter any
-            if (types.size() == MedicineType.values().length)
+            if (types.size() == 0 || types.size() == MedicineType.values().length)
                 return false;
 
-            this.table.clearFilter(s -> s.equals("By types"));
-            this.table.addFilter("By types", MedicineFilter.hasTypes(types));
+            this.clearFilter(s -> s.equals("By types"));
+            this.addFilter("By types", MedicineFilter.hasTypes(types));
             return true;
         }
 
@@ -333,8 +409,8 @@ public class MedicineUI extends UI {
             else
                 filterName = "Stock between " + from + " and " + to;
 
-            this.table.clearFilter(s -> s.startsWith("Stock "));
-            this.table.addFilter(filterName, MedicineFilter.byStockCount(from, to));
+            this.clearFilter(s -> s.startsWith("Stock "));
+            this.addFilter(filterName, MedicineFilter.byStockCount(from, to));
             return true;
         }
 
@@ -356,34 +432,10 @@ public class MedicineUI extends UI {
                     this.promptAddSorter();
                     break;
                 case "clear":
-                    this.table.resetSorters();
-                    this.table.updateData();
+                    this.resetSorters();
+                    this.updateData();
                     break;
             }
-        }
-
-        protected @Nullable Medicine promptSelect() {
-            var lineReader = LineReaderBuilder.builder()
-                    .terminal(this.terminal)
-                    .build();
-
-            int id;
-            try {
-                id = Integer.parseInt(lineReader.readLine("Select Medicine ID: "));
-
-                var selected = this.table.getData().findFirst(MedicineFilter.byId(id));
-                if (selected != null)
-                    return selected;
-            } catch (NumberFormatException _) {
-            }
-
-            var writer = this.terminal.writer();
-            writer.println("Medicine is not found");
-            writer.flush();
-
-            lineReader.readLine();
-
-            return null;
         }
 
         protected void promptAddSorter() throws IOException {
@@ -412,25 +464,25 @@ public class MedicineUI extends UI {
 
             switch (type) {
                 case "name":
-                    this.table.clearSorter(s -> s.startsWith("By name"));
+                    this.clearSorter(s -> s.startsWith("By name"));
 
                     name = "By name (" + order + ")";
                     comparator = MedicineSorter.byName(true);
                     break;
                 case "type":
-                    this.table.clearSorter(s -> s.startsWith("By type"));
+                    this.clearSorter(s -> s.startsWith("By type"));
 
                     name = "By type (" + order + ")";
                     comparator = MedicineSorter.byType();
                     break;
                 case "stock":
-                    this.table.clearSorter(s -> s.startsWith("By stock"));
+                    this.clearSorter(s -> s.startsWith("By stock"));
 
                     name = "By stock (" + order + ")";
                     comparator = MedicineSorter.byStock();
                     break;
                 case "last_stock":
-                    this.table.clearSorter(s -> s.startsWith("By latest stocked"));
+                    this.clearSorter(s -> s.startsWith("By latest stocked"));
 
                     name = "By latest stock (" + order + ")";
                     comparator = MedicineSorter.byLatestStocked();
@@ -442,13 +494,13 @@ public class MedicineUI extends UI {
             if (descFlag)
                 comparator = comparator.reversed();
 
-            this.table.addSorter(name, comparator);
-            this.table.updateData();
+            this.addSorter(name, comparator);
+            this.updateData();
         }
     }
 
-    public static class ProductTable extends InteractiveTable<Product> {
-        public ProductTable(ListInterface<Product> products) {
+    public static class SelectProductTable extends SelectTable<Product> {
+        public SelectProductTable(ListInterface<Product> products, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
                     new Column("Name", 30),
@@ -458,7 +510,7 @@ public class MedicineUI extends UI {
                     new Column("Unit Price", 10),
                     new Column("In stock", 10),
                     new Column("Last stocked", 20)
-            }, products);
+            }, products, terminal);
         }
 
         @Override
@@ -473,12 +525,6 @@ public class MedicineUI extends UI {
                     new Cell(MedicineController.getAvailableStocks(o)),
                     new Cell(Objects.requireNonNullElse(MedicineController.getLatestStocked(o), ""))
             };
-        }
-    }
-
-    public static class SelectProductTable extends SelectTable<Product> {
-        public SelectProductTable(Terminal terminal, InteractiveTable<Product> table) {
-            super(terminal, table);
         }
 
         @Override
@@ -524,43 +570,43 @@ public class MedicineUI extends UI {
 
             switch (type) {
                 case "name":
-                    this.table.clearSorter(s -> s.startsWith("By name"));
+                    this.clearSorter(s -> s.startsWith("By name"));
 
                     name = "By name (" + order + ")";
                     comparator = ProductSorter.byName(true);
                     break;
                 case "type":
-                    this.table.clearSorter(s -> s.startsWith("By type"));
+                    this.clearSorter(s -> s.startsWith("By type"));
 
                     name = "By type (" + order + ")";
                     comparator = ProductSorter.byMedicineName(true);
                     break;
                 case "brand":
-                    this.table.clearSorter(s -> s.startsWith("By brand"));
+                    this.clearSorter(s -> s.startsWith("By brand"));
 
                     name = "By brand (" + order + ")";
                     comparator = ProductSorter.byBrandName(true);
                     break;
                 case "unit_cost":
-                    this.table.clearSorter(s -> s.startsWith("By unit cost"));
+                    this.clearSorter(s -> s.startsWith("By unit cost"));
 
                     name = "By unit cost (" + order + ")";
                     comparator = ProductSorter.byUnitCost();
                     break;
                 case "unit_price":
-                    this.table.clearSorter(s -> s.startsWith("By unit price"));
+                    this.clearSorter(s -> s.startsWith("By unit price"));
 
                     name = "By unit price (" + order + ")";
                     comparator = ProductSorter.byUnitPrice();
                     break;
                 case "stock":
-                    this.table.clearSorter(s -> s.startsWith("By stock"));
+                    this.clearSorter(s -> s.startsWith("By stock"));
 
                     name = "By stock (" + order + ")";
                     comparator = ProductSorter.byStock();
                     break;
                 case "last_stock":
-                    this.table.clearSorter(s -> s.startsWith("By latest stock"));
+                    this.clearSorter(s -> s.startsWith("By latest stock"));
 
                     name = "By latest stock (" + order + ")";
                     comparator = ProductSorter.byLatestStocked();
@@ -572,13 +618,8 @@ public class MedicineUI extends UI {
             if (descFlag)
                 comparator = comparator.reversed();
 
-            this.table.addSorter(name, comparator);
-            this.table.updateData();
-        }
-
-        @Override
-        protected @Nullable Product promptSelect() throws IOException {
-            return null;
+            this.addSorter(name, comparator);
+            this.updateData();
         }
     }
 }
