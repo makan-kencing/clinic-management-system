@@ -117,6 +117,13 @@ public abstract class Table<T> {
     }
 
     protected void displayBody() {
+        if (this.data.size() == 0)
+            System.out.println("|" + Alignment.CENTER.pad(
+                    "No records",
+                    ' ',
+                    this.getWidth() - 2
+            ) + "|");
+
         var n = -1;
         for (var row : this.data) {
             n++;
