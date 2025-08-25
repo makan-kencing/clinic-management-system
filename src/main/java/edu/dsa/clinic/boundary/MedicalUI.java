@@ -14,7 +14,7 @@ import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -24,6 +24,7 @@ public class MedicalUI extends UI {
     private final MedicineUI medicineUI;
     private final PatientUI patientUI;
     private final DoctorUI doctorUI;
+    private final AppointmentUI appointmentUI;
 
 
     public MedicalUI(Scanner scanner) {
@@ -32,6 +33,7 @@ public class MedicalUI extends UI {
         this.medicineUI = new MedicineUI(scanner);
         this.patientUI = new PatientUI(scanner);
         this.doctorUI = new DoctorUI(scanner);
+        this.appointmentUI = new AppointmentUI(scanner);
     }
 
     public void startMenu() {
@@ -137,16 +139,18 @@ public class MedicalUI extends UI {
 
     public @Nullable Diagnosis selectDiagnosis(Consultation consultation) {
         var table = new DiagnosisTable(consultation.getDiagnoses());
+        int id;
 
         table.display();
 
         System.out.print("Select the diagnosis:");
-        int id = this.scanner.nextInt();
+        id = this.scanner.nextInt();
 
         var diagnosis = medicalController.selectDiagnosis(consultation, id);
         if (diagnosis == null)
             System.out.println("The diagnosis specified is not found.");
         return diagnosis;
+
     }
 
     public @Nullable Treatment selectTreatment(Diagnosis diagnosis) {
@@ -184,7 +188,6 @@ public class MedicalUI extends UI {
         System.out.println("Consultation Type: " + diagnosis.getConsultation().getType());
         System.out.println("Notes: " + diagnosis.getNotes());
     }
-
 
     public void editDiagnosis(Diagnosis diagnosis) {
         while (true) {
@@ -349,7 +352,7 @@ public class MedicalUI extends UI {
     }
 
     public void deleteConsultation(Consultation consultation) {
-        System.out.println("Are you sure you want to delete this consultation?");
+        System.out.println("Are you sure you want to delete this consultation?(Y/N)");
 
         var confirmation = this.scanner.nextLine();
         if (!confirmation.equalsIgnoreCase("y"))
@@ -363,16 +366,22 @@ public class MedicalUI extends UI {
     }
 
     public void deleteDiagnosis(Consultation consultation, Diagnosis diagnosis) {
-        System.out.print("Are you sure you want to delete this diagnosis info? (Y/N): ");
-
-        var confirmation = this.scanner.nextLine();
-        if (!confirmation.equalsIgnoreCase("y"))
-            return;
-
-        if (medicalController.deleteDiagnosis(consultation, diagnosis.getId())) {
-            System.out.println("Deleted consultation successfully.");
+        if (diagnosis == null) {
+            System.out.println("Diagnosis data is empty.");
         } else {
-            System.out.println("Failed to delete consultation. Please try again.");
+            System.out.print("Are you sure you want to delete this diagnosis info? (Y/N): ");
+
+            var confirmation = this.scanner.nextLine();
+            if (!confirmation.equalsIgnoreCase("y"))
+                return;
+
+            if (medicalController.deleteDiagnosis(consultation, diagnosis.getId())) {
+                medicalController.deleteAllTreatment(diagnosis);
+                System.out.println("Deleted consultation successfully.");
+            } else {
+                System.out.println("Failed to delete consultation. Please try again.");
+            }
+
         }
     }
 
@@ -384,6 +393,21 @@ public class MedicalUI extends UI {
             return;
 
         if (medicalController.deleteTreatment(diagnosis, treatment.getId())) {
+            medicalController.deleteAllPrescription(treatment);
+            System.out.println("Deleted consultation successfully.");
+        } else {
+            System.out.println("Failed to delete consultation. Please try again.");
+        }
+    }
+
+    public void deletePrescription(Treatment treatment, Prescription prescription) {
+        System.out.print("Are you sure you want to delete this treatment info? (Y/N): ");
+
+        var confirmation = this.scanner.nextLine();
+        if (!confirmation.equalsIgnoreCase("y"))
+            return;
+
+        if (medicalController.deletePrescription(treatment, prescription.getId())) {
             System.out.println("Deleted consultation successfully.");
         } else {
             System.out.println("Failed to delete consultation. Please try again.");
@@ -411,8 +435,37 @@ public class MedicalUI extends UI {
                 case 2:
                     var treatment = this.selectTreatment(diagnosis);
                     if (treatment != null)
-                        this.deleteTreatment(diagnosis, treatment);
+                        deleteTreatmentMenu(diagnosis, treatment);
+                    break;
+                case 3:
+                    return;
+            }
 
+        }
+    }
+
+    public void deleteTreatmentMenu(Diagnosis diagnosis, Treatment treatment) {
+        while (true) {
+            System.out.println("=".repeat(30));
+            System.out.println("""
+                    1. Delete Treatment
+                    2. Delete Prescription
+                    3. Cancel""");
+            System.out.println("=".repeat(30));
+
+            System.out.print("Select the info you want to delete: ");
+
+            int choice = this.scanner.nextInt();
+            this.scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    this.deleteTreatment(diagnosis, treatment);
+                    break;
+                case 2:
+                    var prescription = this.selectPrescription(treatment);
+                    if (prescription != null)
+                        this.deletePrescription(treatment, prescription);
                     break;
                 case 3:
                     return;
@@ -576,7 +629,7 @@ public class MedicalUI extends UI {
         consultation.setDoctor(selectDoctor);
         consultation.setNotes(note);
         consultation.setType(type);
-        consultation.setConsultedAt(Instant.now());
+        consultation.setConsultedAt(LocalDateTime.now());
 
         while (true) {
             this.writeUpDiagnosis(consultation);
@@ -592,6 +645,37 @@ public class MedicalUI extends UI {
             System.out.println("Consultation record added.");
         else
             System.out.println("Consultation record failed to be added. Please try again.");
+    }
+
+    public void createConsultationInfoByAppointment() {
+        var consultation = new Consultation();
+
+
+        System.out.println();
+        var appointment = this.appointmentUI.selectAppointment();
+        System.out.print("Enter Consultation Note (optional) :");
+        String note = this.scanner.nextLine();
+        consultation.setPatient(appointment.getPatient());
+        consultation.setDoctor(appointment.getDoctor());
+        consultation.setConsultedAt(appointment.getExpectedStartAt());
+        consultation.setType(appointment.getAppointmentType());
+        consultation.setNotes(note);
+
+        while (true) {
+            this.writeUpDiagnosis(consultation);
+
+            System.out.print("Add another diagnosis? (y/n): ");
+
+            String more = this.scanner.nextLine().trim();
+            if (!more.equalsIgnoreCase("y"))
+                break;
+        }
+
+        if (medicalController.saveConsultationRecord(consultation))
+            System.out.println("Consultation record added.");
+        else
+            System.out.println("Consultation record failed to be added. Please try again.");
+
     }
 
     public void writeUpDiagnosis(Consultation consultation) {
