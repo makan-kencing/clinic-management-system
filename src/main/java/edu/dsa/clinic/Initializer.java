@@ -407,6 +407,7 @@ public class Initializer {
                         .setCreatedAt(LocalDateTime.of(2025, 8, 21, 11, 30))
                         .setExpectedStartAt(LocalDateTime.of(2025, 8, 22, 8, 30))
                         .setExpectedEndAt(LocalDateTime.of(2025, 8, 22, 9, 30))
+                        .setAppointmentType(ConsultationType.GENERAL)
         );
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
@@ -416,6 +417,7 @@ public class Initializer {
                         .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
                         .setExpectedStartAt(LocalDateTime.of(2025, 8, 24, 9, 00))
                         .setExpectedEndAt(LocalDateTime.of(2025, 8, 24, 10, 00))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
         );
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
@@ -425,6 +427,7 @@ public class Initializer {
                         .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
                         .setExpectedStartAt(LocalDateTime.of(2025, 8, 25, 9, 00))
                         .setExpectedEndAt(LocalDateTime.of(2025, 8, 25, 10, 00))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
         );
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
@@ -434,6 +437,7 @@ public class Initializer {
                         .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
                         .setExpectedStartAt(LocalDateTime.of(2025, 8, 26, 14, 00))
                         .setExpectedEndAt(LocalDateTime.of(2025, 8, 26, 15, 00))
+                        .setAppointmentType(ConsultationType.GENERAL)
         );
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
@@ -443,6 +447,7 @@ public class Initializer {
                         .setCreatedAt(LocalDateTime.of(2025, 9, 21, 16, 45))
                         .setExpectedStartAt(LocalDateTime.of(2025, 9, 26, 11, 00))
                         .setExpectedEndAt(LocalDateTime.of(2025, 10, 1, 12, 00))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
         );
 
         // Consultations data
