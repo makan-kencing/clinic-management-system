@@ -96,27 +96,53 @@ public abstract class Table<T> {
         );
     }
 
-    protected void displayBorder() {
+    protected String renderBorder() {
         var joiner = this.getRowBuilder('-', '+');
 
         for (var column : this.columns)
             joiner.add("-".repeat(column.padLength()));
 
-        System.out.println(joiner);
+        return joiner.toString();
     }
 
 
-    protected void displayHeader() {
+    protected String renderHeader() {
         var joiner = this.getRowBuilder(' ', '|');
 
         for (var column : this.columns) {
             joiner.add(column.padded(' '));
         }
 
-        System.out.println(joiner);
+        return joiner.toString();
     }
 
-    protected void displayBody() {
+    protected String renderBodyRow(T o, int index) {
+        var cells = this.getRow(o);
+        
+        var joiner = this.getRowBuilder(' ', '|');
+        for (int i = 0; i < this.columns.length; i++) {
+            var column = this.columns[i];
+            var cell = cells[i];
+
+            joiner.add(cell.padded(' ', column.padLength()));
+        }
+
+        return joiner.toString();
+    }
+
+    protected String renderFooter() {
+        return "|" + Alignment.CENTER.pad(
+                this.page + " / " + this.getMaxPage(),
+                ' ',
+                this.getWidth() - 2
+        ) + "|";
+    }
+
+    public void display() {
+        System.out.println(this.renderBorder());
+        System.out.println(this.renderHeader());
+        System.out.println(this.renderBorder());
+
         if (this.data.size() == 0)
             System.out.println("|" + Alignment.CENTER.pad(
                     "No records",
@@ -133,37 +159,12 @@ public abstract class Table<T> {
             else if (n >= (this.page) * this.pageSize)
                 break;
 
-            var cells = this.getRow(row);
-            var joiner = this.getRowBuilder(' ', '|');
-            for (int i = 0; i < this.columns.length; i++) {
-                var column = this.columns[i];
-                var cell = cells[i];
-
-                joiner.add(cell.padded(' ', column.padLength()));
-            }
-
-            System.out.println(joiner);
+            System.out.println(this.renderBodyRow(row, n));
         }
-    }
 
-    protected void displayFooter() {
-        System.out.println("|" + Alignment.CENTER.pad(
-                this.page + " / " + this.getMaxPage(),
-                ' ',
-                this.getWidth() - 2
-        ) + "|");
-    }
-
-    public void display() {
-        this.displayBorder();
-        this.displayHeader();
-
-        this.displayBorder();
-        this.displayBody();
-        this.displayBorder();
-
-        this.displayFooter();
-        this.displayBorder();
+        System.out.println(this.renderBorder());
+        System.out.println(this.renderFooter());
+        System.out.println(this.renderBorder());
     }
 
     protected abstract Cell[] getRow(T o);

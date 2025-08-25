@@ -97,8 +97,8 @@ abstract public class InteractiveTable<T> extends Table<T> {
     }
 
     @Override
-    protected void displayFooter() {
-        super.displayFooter();
+    protected String renderFooter() {
+        var footer = super.renderFooter();
 
         var rowJoiner = this.getRowBuilder(' ', '|');
         if (this.filters.size() > 0) {
@@ -111,7 +111,7 @@ abstract public class InteractiveTable<T> extends Table<T> {
                     ' ',
                     this.getWidth() - 2 - 2 * this.getPadding()
             ));
-            System.out.println(rowJoiner);
+            footer += "\n" + rowJoiner;
         }
 
         rowJoiner = this.getRowBuilder(' ', '|');
@@ -125,8 +125,9 @@ abstract public class InteractiveTable<T> extends Table<T> {
                     ' ',
                     this.getWidth() - 2 - 2 * this.getPadding()
             ));
-            System.out.println(rowJoiner);
+            footer += "\n" + rowJoiner;
         }
+        return footer;
     }
 
     public void display(boolean update) {
