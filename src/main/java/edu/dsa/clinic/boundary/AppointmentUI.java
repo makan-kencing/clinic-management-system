@@ -7,6 +7,7 @@ import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeParseException;
 public class AppointmentUI extends UI {
     private AppointmentController appointmentController = new AppointmentController();
     private PatientUI patientUI = new PatientUI(this.scanner);
+    private DoctorUI doctorUI = new DoctorUI(this.scanner);
     
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -33,10 +35,11 @@ public class AppointmentUI extends UI {
         String choice;
         do {
             System.out.println("\nAppointment MENU");
-            System.out.println("1. Schedule An Appointment");
-            System.out.println("2. View All Appointments");
-            System.out.println("3. Edit An Appointment");
-            System.out.println("4. Cancel An Appointment");
+            System.out.println("1. Create Future Appointment");
+            System.out.println("2. Create Walk-In Appointment");
+            System.out.println("3. View All Appointments");
+            System.out.println("4. Edit An Appointment");
+            System.out.println("5. Cancel An Appointment");
             System.out.println("0. Quit");
             System.out.print("Enter choice: ");
 
@@ -44,10 +47,11 @@ public class AppointmentUI extends UI {
             System.out.println();
 
             switch (choice) {
-                case "1" -> createWalkInAppointment();
-                case "2" -> viewAppointment();
-//                case "3"  -> editAppointment();
-                case "4"  -> cancelAppointment();
+                case "1" -> createFutureAppointment();
+                case "2" -> createWalkInAppointment();
+                case "3" -> viewAppointment();
+//                case "4"  -> editAppointment();
+                case "5"  -> cancelAppointment();
 //                case 0  -> quit();
                 default -> System.out.println("Invalid Choice");
             }
@@ -55,10 +59,14 @@ public class AppointmentUI extends UI {
         } while (!choice.equals("0"));
     }
 
-    public void createAppointment() {
+
+    public void createFutureAppointment() {
         Appointment appointment = new Appointment();
-        appointment.setDoctor(selectAppointmentDoctor());
-        appointment.setPatient(selectAppointmentPatient());
+        Doctor selectedDoctor = doctorUI.selectDoctor();
+
+        appointment.setPatient(patientUI.selectPatient());
+        appointment.setDoctor(selectedDoctor);
+
 
         LocalDateTime startTime = inputAppointmentStartTime();
         appointment.setExpectedStartAt(startTime);
@@ -66,14 +74,18 @@ public class AppointmentUI extends UI {
         appointment.setExpectedEndAt(inputAppointmentEndTime(startTime));
         appointment.setCreatedAt(LocalDateTime.now());
 
-        this.appointmentController.saveAppointment(appointment);
+        if(updateAppointmentConfirmation("add")) {
+            this.appointmentController.saveAppointment(appointment);
+        }else{
+            System.out.println("Operation cancelled");
+        }
     }
 
     public void createWalkInAppointment() {
         Appointment appointment = new Appointment();
 
         ConsultationQueue queue = patientUI.appointQueue();
-        appointment.setDoctor(selectAppointmentDoctor());
+        appointment.setDoctor(doctorUI.selectDoctor());
 
         appointment.setPatient(queue.patient());
         appointment.setAppointmentType(queue.type());
@@ -81,98 +93,11 @@ public class AppointmentUI extends UI {
         appointment.setExpectedEndAt(LocalDateTime.now().plusMinutes(30));
         appointment.setCreatedAt(LocalDateTime.now());
 
-        this.appointmentController.saveAppointment(appointment);
-    }
-
-    public Doctor selectAppointmentDoctor() {
-        String selectedDoctorId;
-        Doctor selectedDoctor = null;
-        boolean valid = false;
-
-        do {
-            var table = new InteractiveTable<>(new Column[]{
-                    new Column("Id", Alignment.RIGHT, 5),
-                    new Column("Name", Alignment.CENTER, 20),
-                    new Column("Gender", Alignment.CENTER, 10),
-                    new Column("Contact No", Alignment.CENTER, 15),
-                    new Column("Specialization", Alignment.CENTER, 20)
-            }, Database.doctorList.clone()) {
-                @Override
-                protected Cell[] getRow(Doctor o) {
-                    return new Cell[] {
-                            new Cell(o.getId(), Alignment.CENTER),
-                            new Cell(o.getName()),
-                            new Cell(o.getGender(), Alignment.CENTER),
-                            new Cell(o.getContactNumber()),
-                            new Cell(o.getSpecialization(), Alignment.CENTER)
-                    };
-                }
-            };
-
-            table.display();
-            System.out.print("Select a doctor (enter id): ");
-            selectedDoctorId = this.scanner.nextLine();
-
-            for (int i = 0; i < Database.doctorList.size(); i++) {
-                if (String.valueOf(Database.doctorList.get(i).getId()).equals(selectedDoctorId)) {
-                    valid = true;
-                    selectedDoctor = Database.doctorList.get(i);
-                }
-            }
-
-            if (!valid) {
-                System.out.println("Invalid doctor ID! Please try again.");
-            }
-
-        } while (!valid);
-
-        return selectedDoctor;
-    }
-
-    //TODO: Appointment queue from consultation
-    public Patient selectAppointmentPatient() {
-        String selectedPatientId;
-        Patient selectedPatient = null;
-        boolean valid = false;
-
-        do {
-            var table = new InteractiveTable<>(new Column[]{
-                    new Column("Id", Alignment.RIGHT, 5),
-                    new Column("Name", Alignment.CENTER, 20),
-                    new Column("Gender", Alignment.CENTER, 10),
-                    new Column("Identification", Alignment.CENTER, 20),
-                    new Column("Contact No", Alignment.CENTER, 20)
-            }, Database.patientsList.clone()) {
-                @Override
-                protected Cell[] getRow(Patient o) {
-                    return new Cell[] {
-                            new Cell(o.getId(), Alignment.CENTER),
-                            new Cell(o.getName()),
-                            new Cell(o.getGender(), Alignment.CENTER),
-                            new Cell(o.getIdentification()),
-                            new Cell(o.getContactNumber())
-                    };
-                }
-            };
-
-            table.display();
-            System.out.print("Select a patient (enter id): ");
-            selectedPatientId = this.scanner.nextLine();
-
-            for (int i = 0; i < Database.patientsList.size(); i++) {
-                if (String.valueOf(Database.patientsList.get(i).getId()).equals(selectedPatientId)) {
-                    valid = true;
-                    selectedPatient = Database.patientsList.get(i);
-                }
-            }
-
-            if (!valid) {
-                System.out.println("Invalid patient ID! Please try again.");
-            }
-
-        } while (!valid);
-
-        return selectedPatient;
+        if(updateAppointmentConfirmation("add")) {
+            this.appointmentController.saveAppointment(appointment);
+        }else{
+            System.out.println("Operation cancelled");
+        }
     }
 
     //TODO: get doctor time
@@ -363,8 +288,7 @@ public class AppointmentUI extends UI {
         }
 
         if(appointmentIndex != -1){
-            String choice = updateAppointmentConfirmation("cancel");
-            if(choice.equalsIgnoreCase("Y")){
+            if(updateAppointmentConfirmation("cancel")){
                 this.appointmentController.cancelAppointment(appointmentIndex);
             } else{
                 System.out.println("Operation Cancelled");
@@ -401,7 +325,7 @@ public class AppointmentUI extends UI {
         }while (!option.equals("0") && !option.equals("1"));
     }
 
-    public String updateAppointmentConfirmation(String state){
+    public Boolean updateAppointmentConfirmation(String state){
         String choice;
 
         do{
@@ -411,17 +335,13 @@ public class AppointmentUI extends UI {
             System.out.print("Choice : ");
             choice = this.scanner.nextLine();
 
-            if(choice.equalsIgnoreCase("Y")){
-                return choice;
-            }else if(choice.equalsIgnoreCase("N")){
-                return choice;
-            }else{
+            if((!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"))){
                 System.out.println("Invalid choice. Please try again.");
             }
 
         }while((!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N")));
 
-        return choice;
+        return choice.equalsIgnoreCase("Y");
     }
 
     public String getSortByOption(){
