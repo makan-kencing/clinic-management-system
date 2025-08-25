@@ -13,8 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class MedicalController {
 
-    MedicineController medicineController = new MedicineController();
-
     public static Filter<Consultation> getConsultationTypeFilter(ConsultationType type) {
         return c -> c.getType() == type;
     }
@@ -84,7 +82,6 @@ public class MedicalController {
     }
 
     public boolean deleteDiagnosis(Consultation consultation, int id) {
-
         return this.deleteDiagnosis(consultation.getDiagnoses(), id);
     }
 

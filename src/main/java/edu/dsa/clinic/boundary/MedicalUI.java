@@ -38,6 +38,7 @@ public class MedicalUI extends UI {
 
     public void startMenu() {
         while (true) {
+            int choice;
             System.out.println("""
                     Consultation Menu
                     Please Select an Option""");
@@ -50,10 +51,8 @@ public class MedicalUI extends UI {
                     5. Back""");
             System.out.println("=".repeat(30));
             System.out.print("Enter your choice :");
-
-            int choice = this.scanner.nextInt();
+            choice = this.scanner.nextInt();
             this.scanner.nextLine();
-
             Consultation consultation;
             switch (choice) {
                 case 1:
@@ -140,7 +139,7 @@ public class MedicalUI extends UI {
     public @Nullable Diagnosis selectDiagnosis(Consultation consultation) {
         var table = new DiagnosisTable(consultation.getDiagnoses());
         int id;
-
+        viewConsultationDetails(consultation);
         table.display();
 
         System.out.print("Select the diagnosis:");
@@ -187,6 +186,23 @@ public class MedicalUI extends UI {
         System.out.println("Description: " + diagnosis.getDescription());
         System.out.println("Consultation Type: " + diagnosis.getConsultation().getType());
         System.out.println("Notes: " + diagnosis.getNotes());
+    }
+
+    public void viewConsultationDetails(Consultation consultation){
+        System.out.println("-".repeat(30));
+        System.out.println("Doctor");
+        System.out.println("-".repeat(30));
+        System.out.println("Name :" + consultation.getDoctor().getName());
+        System.out.println("Specialization :" + consultation.getDoctor().getSpecialization());
+        System.out.println("Gender :" + consultation.getDoctor().getGender());
+        System.out.println("-".repeat(30));
+        System.out.println("Patient");
+        System.out.println("-".repeat(30));
+        System.out.println("Name :" + consultation.getPatient().getName());
+        System.out.println("Identification :" + consultation.getPatient().getIdentification());
+        System.out.println("Gender :" + consultation.getPatient().getGender());
+        System.out.println("Consultation Type :" + consultation.getType());
+        System.out.println("-".repeat(30));
     }
 
     public void editDiagnosis(Diagnosis diagnosis) {
@@ -713,21 +729,8 @@ public class MedicalUI extends UI {
     public void writeUpDiagnosis(Consultation consultation) {
         var diagnosis = new Diagnosis();
         diagnosis.setConsultation(consultation);
+        viewConsultationDetails(consultation);
 
-        System.out.println("-".repeat(30));
-        System.out.println("Doctor");
-        System.out.println("-".repeat(30));
-        System.out.println("Name :" + consultation.getDoctor().getName());
-        System.out.println("Specialization :" + consultation.getDoctor().getSpecialization());
-        System.out.println("Gender :" + consultation.getDoctor().getGender());
-        System.out.println("-".repeat(30));
-        System.out.println("Patient");
-        System.out.println("-".repeat(30));
-        System.out.println("Name :" + consultation.getPatient().getName());
-        System.out.println("Identification :" + consultation.getPatient().getIdentification());
-        System.out.println("Gender :" + consultation.getPatient().getGender());
-        System.out.println("Consultation Type :" + consultation.getType());
-        System.out.println("-".repeat(30));
         System.out.println("| Diagnosis |");
         System.out.println("-".repeat(30));
 
@@ -903,7 +906,7 @@ public class MedicalUI extends UI {
                     new Column("Doctor Name", Alignment.CENTER, 20),
                     new Column("Consultation Type", Alignment.CENTER, 20),
                     new Column("Consulted At", Alignment.CENTER, 20),
-                    new Column("Notes", Alignment.CENTER, 40),
+                    new Column("Notes", Alignment.CENTER, 70),
                     new Column("Diagnoses", Alignment.CENTER, 40)
             }, consultations);
         }
@@ -987,4 +990,8 @@ public class MedicalUI extends UI {
             };
         }
     }
+
+    //diagnosis report
+
+    //Treatment Report
 }
