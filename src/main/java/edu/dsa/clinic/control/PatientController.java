@@ -13,6 +13,7 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.PatientDetail;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
@@ -92,7 +93,38 @@ public class PatientController {
         };
     }
 
-    public ConsultationQueue validateUnique(Patient patient) {
-        return Database.queueList.findFirst(c -> c.patient().getId() == patient.getId());
+    public Object validateUnique(String value, String field) {
+        return switch (field) {
+            case "identification" -> Database.patientsList.findFirst(p -> p.getIdentification().equals(value));
+            case "queue" -> Database.queueList.findFirst(c -> String.valueOf(c.patient().getId()).equals(value));
+            default -> null;
+        };
+    }
+
+    public ListInterface<PatientDetail> getPatientDetail(Patient patient) {
+        ListInterface<PatientDetail> rows = new DoubleLinkedList<>();
+
+        for (Consultation consult : getPatientConsultations(patient)) {
+            if (consult.getDiagnoses() == null) {
+                rows.add(new PatientDetail(consult, null, null, null));
+            } else {
+                for (Diagnosis diag : consult.getDiagnoses()) {
+                    if (diag.getTreatments() == null) {
+                        rows.add(new PatientDetail(consult, diag, null, null));
+                    } else {
+                        for (Treatment treat : diag.getTreatments()) {
+                            if (treat.getPrescriptions() == null) {
+                                rows.add(new PatientDetail(consult, diag, treat, null));
+                            } else {
+                                for (Prescription pres : treat.getPrescriptions()) {
+                                    rows.add(new PatientDetail(consult, diag, treat, pres));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return rows;
     }
 }

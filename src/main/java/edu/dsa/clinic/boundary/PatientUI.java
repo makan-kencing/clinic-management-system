@@ -1,7 +1,6 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Database;
-import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.PatientController;
 import edu.dsa.clinic.dto.ConsultationQueue;
@@ -154,7 +153,7 @@ public class PatientUI extends UI {
                 return;
             }
 
-            addQueue = patientController.validateUnique(selectedPatient);
+            addQueue = (ConsultationQueue) patientController.validateUnique(String.valueOf(selectedPatient.getId()), "queue");
 
             if (addQueue != null) {
                 System.out.println("Existing queue for patient (" + addQueue.patient().getName() + ") found! Please select another patient...\n");
@@ -287,19 +286,28 @@ public class PatientUI extends UI {
 
     public void listPatientDetail() {
         Patient selectedPatient = selectPatient();
-        ListInterface<PatientDetail> rows = flattenDetails(selectedPatient);
+        ListInterface<PatientDetail> rows = patientController.getPatientDetail(selectedPatient);
 
-        var detailTable = new InteractiveTable<>(new Column[]{
+        var table = new InteractiveTable<>(new Column[]{
                 new Column("Consultation Id", Alignment.CENTER, 15),
-                new Column("Diagnosis Id", Alignment.CENTER, 15),
-                new Column("Treatment Id", Alignment.CENTER, 15),
-                new Column("Prescription Id", Alignment.CENTER, 15),
                 new Column("Doctor", Alignment.CENTER, 20),
                 new Column("Consulted At", Alignment.CENTER, 25),
-                new Column("Symptom", Alignment.CENTER, 30),
+                new Column("Diagnosis Id", Alignment.CENTER, 15),
                 new Column("Diagnosis", Alignment.CENTER, 30),
+                new Column("Treatment Id", Alignment.CENTER, 15),
+                new Column("Symptom", Alignment.CENTER, 30),
+                new Column("Prescription Id", Alignment.CENTER, 15),
                 new Column("Medicine", Alignment.CENTER, 30),
         }, rows) {
+            private String lastConsultationId = null;
+            private String lastDiagnosisId = null;
+            private String lastTreatmentId = null;
+            private String lastPrescriptionId = null;
+            private String lastDoctor = null;
+            private String lastConsultedAt = null;
+            private String lastDiagnosis = null;
+            private String lastSymptom = null;
+            private String lastMedicine = null;
 
             @Override
             protected Cell[] getRow(PatientDetail r) {
@@ -308,22 +316,94 @@ public class PatientUI extends UI {
                 Treatment t = r.getTreatment();
                 Prescription p = r.getPrescription();
 
+                String consultationId = c != null ? String.valueOf(c.getId()) : "N/A";
+                String diagnosisId = d != null ? String.valueOf(d.getId()) : "N/A";
+                String treatmentId = t != null ? String.valueOf(t.getId()) : "N/A";
+                String prescriptionId = p != null ? String.valueOf(p.getId()) : "N/A";
+                String doctor = c != null && c.getDoctor() != null ? c.getDoctor().getName() : "N/A";
+                String consultedAt = c != null && c.getConsultedAt() != null ? DATE_FORMAT.format(c.getConsultedAt()) : "N/A";
+                String symptom = t != null && t.getSymptom() != null ? t.getSymptom() : "N/A";
+                String diagnosis = d != null && d.getDiagnosis() != null ? d.getDiagnosis() : "N/A";
+                String medicine = p != null && p.getProduct() != null && p.getProduct().getName() != null ? p.getProduct().getName() : "N/A";
+
+                if (!consultationId.equals(lastConsultationId)) {
+                    lastDoctor = null;
+                    lastConsultedAt = null;
+                    lastDiagnosisId = null;
+                    lastTreatmentId = null;
+                    lastPrescriptionId = null;
+                    lastSymptom = null;
+                    lastDiagnosis = null;
+                    lastMedicine = null;
+                }
+                if (!diagnosisId.equals(lastDiagnosisId)) {
+                    lastTreatmentId = null;
+                    lastPrescriptionId = null;
+                    lastSymptom = null;
+                    lastDiagnosis = null;
+                    lastMedicine = null;
+                }
+                if (!treatmentId.equals(lastTreatmentId)) {
+                    lastPrescriptionId = null;
+                    lastMedicine = null;
+                }
+                if (!prescriptionId.equals(lastPrescriptionId)) {
+                    lastMedicine = null;
+                }
+
+                if (consultationId.equals(lastConsultationId)) consultationId = " ";
+                else lastConsultationId = consultationId;
+
+                if (diagnosisId.equals(lastDiagnosisId)) diagnosisId = " ";
+                else lastDiagnosisId = diagnosisId;
+
+                if (treatmentId.equals(lastTreatmentId)) treatmentId = " ";
+                else lastTreatmentId = treatmentId;
+
+                if (prescriptionId.equals(lastPrescriptionId)) prescriptionId = " ";
+                else lastPrescriptionId = prescriptionId;
+
+                if (doctor.equals(lastDoctor)) doctor = " ";
+                else lastDoctor = doctor;
+
+                if (consultedAt.equals(lastConsultedAt)) consultedAt = " ";
+                else lastConsultedAt = consultedAt;
+
+                if (symptom.equals(lastSymptom)) symptom = " ";
+                else lastSymptom = symptom;
+
+                if (diagnosis.equals(lastDiagnosis)) diagnosis = " ";
+                else lastDiagnosis = diagnosis;
+
+                if (medicine.equals(lastMedicine)) medicine = " ";
+                else lastMedicine = medicine;
+
                 return new Cell[]{
-                        new Cell(c != null ? c.getId() : "N/A"),
-                        new Cell(d != null ? d.getId() : "N/A"),
-                        new Cell(t != null ? t.getId() : "N/A"),
-                        new Cell(p != null ? p.getId() : "N/A"),
-                        new Cell(c != null && c.getDoctor() != null ? c.getDoctor().getName() : "N/A"),
-                        new Cell(c != null && c.getConsultedAt() != null
-                                ? DATE_FORMAT.format(c.getConsultedAt()) : "N/A"),
-                        new Cell(t != null && t.getSymptom() != null ? t.getSymptom() : "N/A"),
-                        new Cell(d != null && d.getDiagnosis() != null ? d.getDiagnosis() : "N/A"),
-                        new Cell(p != null && p.getProduct().getName() != null ? p.getProduct().getName() : "N/A")
+                        new Cell(consultationId),
+                        new Cell(doctor),
+                        new Cell(consultedAt),
+                        new Cell(diagnosisId),
+                        new Cell(diagnosis),
+                        new Cell(treatmentId),
+                        new Cell(symptom),
+                        new Cell(prescriptionId),
+                        new Cell(medicine)
                 };
             }
         };
 
-        detailTable.display();
+        table.addSorter("Consultation ID", (p1, p2) -> Integer.compare(p1.getConsultation().getId(), p2.getConsultation().getId()));
+        table.addSorter("Diagnosis ID", (p1, p2) -> Integer.compare(p1.getDiagnosis().getId(), p2.getDiagnosis().getId()));
+        table.addSorter("Treatment ID", (p1, p2) -> Integer.compare(p1.getTreatment().getId(), p2.getTreatment().getId()));
+        table.addSorter("Prescription ID", (p1, p2) -> Integer.compare(p1.getPrescription().getId(), p2.getPrescription().getId()));
+
+        System.out.println();
+        System.out.println("+" + "-".repeat(30) + "+");
+        System.out.println("| Patient Detail Summary Table |");
+        System.out.println("+" + "-".repeat(30) + "+");
+
+        table.display();
+        System.out.println();
     }
 
     public void addPatient() {
@@ -351,10 +431,14 @@ public class PatientUI extends UI {
         do {
             System.out.print("Enter Patient Identification (YYMMDD-XX-XXXX): ");
             ic = scanner.nextLine().trim();
+
+            if (patientController.validateUnique(ic, "identification") != null) {
+                System.out.println("This identification is in-use! Please enter  Example: 010203-14-5678");
+            }
             if (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$")) {
                 System.out.println("Invalid IC format! Example: 010203-14-5678");
             }
-        } while (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$"));
+        } while (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$") || patientController.validateUnique(ic, "identification") != null);
         addPatient.setIdentification(ic);
 
         String phone;
@@ -418,10 +502,14 @@ public class PatientUI extends UI {
                     do {
                         System.out.print("Enter Patient Identification (YYMMDD-XX-XXXX): ");
                         ic = scanner.nextLine().trim();
+
+                        if (patientController.validateUnique(ic, "identification") != null) {
+                            System.out.println("This identification is in-use! Please enter  Example: 010203-14-5678");
+                        }
                         if (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$")) {
                             System.out.println("Invalid IC format! Example: 010203-14-5678");
                         }
-                    } while (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$"));
+                    } while (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$") || patientController.validateUnique(ic, "identification") != null);
                     editPatient.setIdentification(ic);
                 }
                 case "4" -> {
@@ -1137,32 +1225,5 @@ public class PatientUI extends UI {
                 };
             }
         };
-    }
-
-    private ListInterface<PatientDetail> flattenDetails(Patient patient) {
-        ListInterface<PatientDetail> rows = new DoubleLinkedList<>();
-
-        for (Consultation consult : patientController.getPatientConsultations(patient)) {
-            if (consult.getDiagnoses() == null) {
-                rows.add(new PatientDetail(consult, null, null, null));
-            } else {
-                for (Diagnosis diag : consult.getDiagnoses()) {
-                    if (diag.getTreatments() == null) {
-                        rows.add(new PatientDetail(consult, diag, null, null));
-                    } else {
-                        for (Treatment treat : diag.getTreatments()) {
-                            if (treat.getPrescriptions() == null) {
-                                rows.add(new PatientDetail(consult, diag, treat, null));
-                            } else {
-                                for (Prescription pres : treat.getPrescriptions()) {
-                                    rows.add(new PatientDetail(consult, diag, treat, pres));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return rows;
     }
 }
