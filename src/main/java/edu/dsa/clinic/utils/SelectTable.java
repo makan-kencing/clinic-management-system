@@ -31,9 +31,10 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
 
     public @Nullable T select() throws IOException {
         var originalAttributes = this.terminal.enterRawMode();
+        var writer = this.terminal.writer();
+        var reader = this.terminal.reader();
 
-        try (var writer = this.terminal.writer();
-             var reader = this.terminal.reader()) {
+        try {
             while (true) {
                 this.terminal.puts(InfoCmp.Capability.clear_screen);
                 this.terminal.flush();
