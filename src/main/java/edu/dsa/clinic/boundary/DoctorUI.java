@@ -466,7 +466,8 @@ public class DoctorUI extends UI {
             System.out.println("\nDoctor Shifts Menu");
             System.out.println("1. Assign Doctor Shift");
             System.out.println("2. Change Doctor Shift");
-            System.out.println("3. View Weekly Schedule");
+            System.out.println("3. View Doctor Schedule");
+            System.out.println("4. View Weekly Schedule");
             System.out.println("0. Exit To Doctor Menu");
             System.out.print("Enter choice: ");
 
@@ -492,17 +493,11 @@ public class DoctorUI extends UI {
                     doctor = selectDoctor();
                     if (doctor == null)
                         break;
-                    viewWeeklySchedule(null);
+                    viewDoctorSchedule(doctor);
                     break;
                 case 4:
-                    // editDoctorInformation
-                    doctor = selectDoctor();
-                    if (doctor == null)
-                        break;
-                    break;
-                case 5:
-                    // doctorShiftMenu
-                    shiftsMenu();
+                    // Weekly Schedule
+                    viewWeeklySchedule();
                     break;
                 case 0:
                     return;
@@ -559,7 +554,7 @@ public class DoctorUI extends UI {
     public void changeDoctorShift(Doctor doctor) {
     }
 
-    public void viewWeeklySchedule(Doctor doctor) {
+    public void viewDoctorSchedule(Doctor doctor) {
         Schedule schedule = doctor.getSchedule();
         System.out.println("Weekly Schedule for Dr. " + doctor.getName());
 
@@ -583,6 +578,10 @@ public class DoctorUI extends UI {
             System.out.print(shift.getType() + " (" + shift.getTimeRange().from() + "-" + shift.getTimeRange().to() + ") ");
         }
         System.out.println();
+    }
+
+    public void viewWeeklySchedule() {
+
     }
 
     public static class DoctorTable extends InteractiveTable<Doctor> {
