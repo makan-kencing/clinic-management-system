@@ -21,7 +21,7 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
     public final Terminal terminal;
     public final ConsolePrompt prompt;
     @Range(from = 1, to = Integer.MAX_VALUE)
-    public int selectedRow = 1;
+    public int selectedIndex = 0;
 
     public SelectTable(Column[] columns, ListInterface<T> data, Terminal terminal) {
         super(columns, data);
@@ -67,7 +67,7 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getSelectedIndex() {
-        return (this.getPage() - 1) * this.getPageSize() + this.selectedRow - 1;
+        return this.selectedIndex;
     }
 
     protected KeyEvent handleKey(int ch) throws IOException {
@@ -81,12 +81,10 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
                 this.nextPage();
                 break;
             case 65:  // up arrow
-                this.selectedRow--;
-                this.selectedRow = Math.max(this.selectedRow, 1);
+                this.setSelectedIndex(this.selectedIndex - 1);
                 break;
             case 66:  // down arrow
-                this.selectedRow++;
-                this.selectedRow = Math.min(this.selectedRow, this.getPageSize());
+                this.setSelectedIndex(this.selectedIndex + 1);
                 break;
             case 's':
                 this.promptSearch();
@@ -104,6 +102,30 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
                 return KeyEvent.EXIT;
         }
         return KeyEvent.NOOP;
+    }
+
+    public void setSelectedIndex(int index) {
+        this.selectedIndex = index;
+        this.selectedIndex = Math.max(this.selectedIndex, (this.getPage() - 1) * this.getPageSize());
+        this.selectedIndex = Math.min(this.selectedIndex, Math.min((this.getPage() * this.getPageSize() - 1), this.getData().size() - 1));
+    }
+
+    @Override
+    public void nextPage() {
+        super.nextPage();
+        this.setSelectedIndex(this.selectedIndex + this.getPageSize());
+    }
+
+    @Override
+    public void previousPage() {
+        super.previousPage();
+        this.setSelectedIndex(this.selectedIndex - this.getPageSize());
+    }
+
+    @Override
+    public void setData(ListInterface<T> data) {
+        super.setData(data);
+        this.selectedIndex = Math.min(this.selectedIndex, data.size());
     }
 
     @Override
