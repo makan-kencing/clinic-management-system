@@ -62,9 +62,15 @@ public class DoctorUI extends UI {
                     break;
                 case 4:
                     // editDoctorInformation
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+
+                    modifyDoctor(doctor);
                     break;
                 case 5:
                     // doctorShiftMenu
+                    shiftsMenu();
                     break;
                 case 0:
                     return;
@@ -119,10 +125,7 @@ public class DoctorUI extends UI {
         System.out.println("Doctor created successfully: " + doctor);
     }
     //Modify Doctor
-    public void modifyDoctor(Doctor doctor) {
 
-
-    }
 
     public void deleteDoctor(Doctor doctor) {
         System.out.print("Are you sure to delete this entry? (Y/N) ");
@@ -140,11 +143,13 @@ public class DoctorUI extends UI {
         }
     }
 
-    public Doctor modifyDoctor(InteractiveTable<Doctor> table, Doctor doctor) {
+    public Doctor modifyDoctor(Doctor doctor) {
         Doctor modifyDoctor = null;
         Doctor newDoctor = new Doctor();
+        var doctors = DoctorController.getDoctors();
 
         do {
+            var table = new DoctorTable(doctors);
             table.display();
             System.out.print("\nEnter Doctor ID that you want to modify (0 to exit): ");
             int id = scanner.nextInt();
@@ -192,7 +197,7 @@ public class DoctorUI extends UI {
                 break;
             }
             case 2: {
-                int gender; ;
+                int gender;
                 do{
                     System.out.println("Current gender: " + modifyDoctor.getGender());
                     System.out.print("-".repeat(30));
@@ -454,9 +459,9 @@ public class DoctorUI extends UI {
     }
 
     //ShiftsMenu
-    public int getShiftsMenu() {
+    public void shiftsMenu() {
         Scanner sc = new Scanner(System.in);
-        int choice = 0;
+        int choice;
         do {
             System.out.println("\nDoctor Shifts Menu");
             System.out.println("1. Assign Doctor Shift");
@@ -469,10 +474,47 @@ public class DoctorUI extends UI {
             sc.nextLine();
             System.out.println();
 
-            return choice;
-        } while (choice != 0);
+            Doctor doctor;
+            switch (choice) {
+                case 1:
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+                    assignDoctorShift(doctor);
+                    break;
+                case 2:
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+                    changeDoctorShift(null);
+                    break;
+                case 3:
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+                    viewWeeklySchedule(null);
+                    break;
+                case 4:
+                    // editDoctorInformation
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+                    break;
+                case 5:
+                    // doctorShiftMenu
+                    shiftsMenu();
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+
+            return;
+        } while (true);
     }
 
+    //Assign Shift to Doctor
     public void assignDoctorShift(Doctor doctor) {
         System.out.println("Which day do you wish to assign Doctor " + doctor.getName() + "?");
         for (int i = 1; i <= 7; i++)

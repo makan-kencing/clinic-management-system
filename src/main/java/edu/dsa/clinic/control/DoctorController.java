@@ -37,7 +37,8 @@ public class DoctorController {
     }
 
     public static void addShift(ListInterface<Shift> currentShifts, Shift shift) {
-
+        // Not sure whether this is how you add shift
+        currentShifts.add(shift);
     }
 
     public static Schedule getOverallSchedule() {
