@@ -451,44 +451,6 @@ public class Initializer {
         );
 
         // Consultations data
-        Database.consultationsList.add(
-                ((Consultation)new Consultation()
-                        .setId(1))
-                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 1))
-                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 1))
-                        .setType(ConsultationType.GENERAL)
-                        .setNotes("This is a consultation")
-                        .setConsultedAt(LocalDateTime.of(2025, 9, 26, 11, 00))
-                        .addDiagnosis(new Diagnosis()
-                                .setDiagnosis("Fever")
-                                .setDescription("Let patient become ok ")
-                                .setNotes("good")
-                                .addTreatment(new Treatment()
-                                        .setSymptom("hhhhhhhhhhhhhhhh")
-                                        .setNotes("uuuuuuuuuuuuuuuuuuuu")
-                                        .addPrescription(new Prescription()
-                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
-                                                .setQuantity(1)
-                                                .setNotes("llllll"))))
-                        .addDiagnosis(new Diagnosis()
-                                .setDiagnosis("Fever")
-                                .setDescription("Let patient become ok ")
-                                .setNotes("good")
-                                .addTreatment(new Treatment()
-                                        .setSymptom("hhhhhhhhhhhhhhhh")
-                                        .setNotes("uuuuuuuuuuuuuuuuuuuu")
-                                        .addPrescription(new Prescription()
-                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
-                                                .setQuantity(1)
-                                                .setNotes("llllll"))
-                                        .addPrescription(new Prescription()
-                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 1))
-                                                .setQuantity(1)
-                                                .setNotes("llllll"))))
-
-
-        );
-
         // 第1条咨询记录
         Database.consultationsList.add(
                 ((Consultation) new Consultation()

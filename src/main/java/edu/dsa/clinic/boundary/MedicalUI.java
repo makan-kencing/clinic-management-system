@@ -2,6 +2,7 @@ package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
+import edu.dsa.clinic.dto.MedicalDetail;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+
 
 
 public class MedicalUI extends UI {
@@ -36,7 +39,7 @@ public class MedicalUI extends UI {
         this.appointmentUI = new AppointmentUI(scanner);
     }
 
-    public void startMenu() {
+    public void startConsultationMenu() {
         while (true) {
             int choice;
 
@@ -46,7 +49,7 @@ public class MedicalUI extends UI {
             System.out.println("=".repeat(30));
             System.out.println("""
                     1. Create Consultation Record
-                    2. View Consultation Record
+                    2. View Consultation Medical Record
                     3. Delete Consultation Record
                     4. List Out Consultation Record
                     5. Back""");
@@ -65,17 +68,17 @@ public class MedicalUI extends UI {
                     case 2:
                         consultation = this.selectConsultation();
                         if (consultation != null)
-                            this.startConsultationSession(consultation);
+                            this.startMedicalSession(consultation);
 
                         break;
                     case 3:
                         consultation = this.selectConsultation();
                         if (consultation != null)
                             this.deleteConsultation(consultation);
-
                         break;
                     case 4:
-                        //
+                         patientUI.listPatientDetail();
+                         break;
                     case 5:
                         return;
                     default:
@@ -209,6 +212,13 @@ public class MedicalUI extends UI {
         if (prescription == null)
             System.out.println("The prescription specified is not found.");
         return prescription;
+    }
+
+    public void selectMedicalDetail(){
+        var selectPatient =patientUI.selectPatient();
+        ListInterface<MedicalDetail> rows = medicalController.getMedicalDetails(selectPatient);
+        var table = new ViewMedicalDetail(rows);
+        table.display();
     }
 
     public void viewDiagnosisDetails(Diagnosis diagnosis) {
@@ -399,7 +409,7 @@ public class MedicalUI extends UI {
                         return;
                 }
 
-            }catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid choice. Please select between 1 and 5.");
                 this.scanner.nextLine();
             }
@@ -407,11 +417,13 @@ public class MedicalUI extends UI {
     }
 
     public void deleteConsultation(Consultation consultation) {
-        System.out.println("Are you sure you want to delete this consultation?(Y/N)");
+        System.out.print("Are you sure you want to delete this consultation?(Y)");
 
         var confirmation = this.scanner.nextLine();
-        if (!confirmation.equalsIgnoreCase("y"))
+        if (!confirmation.equalsIgnoreCase("y")) {
+            System.out.println("Cancelled Delete Consultation.");
             return;
+        }
 
         if (medicalController.deleteConsultation(consultation.getId())) {
             System.out.println("Deleted consultation successfully.");
@@ -424,13 +436,15 @@ public class MedicalUI extends UI {
         System.out.print("Are you sure you want to delete this diagnosis info? (Y/N): ");
 
         var confirmation = this.scanner.nextLine();
-        if (!confirmation.equalsIgnoreCase("y"))
+        if (!confirmation.equalsIgnoreCase("y")) {
+            System.out.println("Cancelled Delete treatment.");
             return;
+        }
 
         if (medicalController.deleteDiagnosis(consultation, diagnosis.getId())) {
-            System.out.println("Deleted consultation successfully.");
+            System.out.println("Deleted Diagnosis successfully.");
         } else {
-            System.out.println("Failed to delete consultation. Please try again.");
+            System.out.println("Failed to delete Diagnosis. Please try again.");
         }
     }
 
@@ -439,14 +453,14 @@ public class MedicalUI extends UI {
 
         var confirmation = this.scanner.nextLine();
         if (!confirmation.equalsIgnoreCase("y")) {
-            System.out.println("Cancelled Delete treatment.");
+            System.out.println("Cancelled Delete Treatment.");
             return;
         }
 
         if (medicalController.deleteTreatment(diagnosis, treatment.getId())) {
-            System.out.println("Deleted consultation successfully.");
+            System.out.println("Deleted Treatment successfully.");
         } else {
-            System.out.println("Failed to delete consultation. Please try again.");
+            System.out.println("Failed to delete Treatment. Please try again.");
         }
     }
 
@@ -458,9 +472,9 @@ public class MedicalUI extends UI {
             return;
 
         if (medicalController.deletePrescription(treatment, prescription.getId())) {
-            System.out.println("Deleted consultation successfully.");
+            System.out.println("Deleted Prescription successfully.");
         } else {
-            System.out.println("Failed to delete consultation. Please try again.");
+            System.out.println("Failed to delete Prescription. Please try again.");
         }
     }
 
@@ -624,6 +638,7 @@ public class MedicalUI extends UI {
         }
     }
 
+    //create consultation
     public void createConsultationInfo() {
         var consultation = new Consultation();
         System.out.println("=".repeat(30));
@@ -703,6 +718,10 @@ public class MedicalUI extends UI {
 
         System.out.println();
         var appointment = this.appointmentUI.selectAppointment();
+        if (appointment == null) {
+            System.out.println("Appointment not selected.");
+            return;
+        }
         System.out.print("Enter Consultation Note (optional) :");
         String note = this.scanner.nextLine();
         consultation.setPatient(appointment.getPatient());
@@ -715,12 +734,12 @@ public class MedicalUI extends UI {
             try {
                 this.writeUpDiagnosis(consultation);
 
-                System.out.print("Add another diagnosis? (y/n): ");
+                System.out.print("Add another diagnosis? (y): ");
 
                 String more = this.scanner.nextLine().trim();
                 if (!more.equalsIgnoreCase("y"))
                     break;
-            }catch (IllegalStateException e) {
+            } catch (IllegalStateException e) {
                 System.out.println("Invalid choice, please re-enter.");
             }
         }
@@ -760,13 +779,14 @@ public class MedicalUI extends UI {
                         return;
 
                 }
-            }catch (InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid choice, please re-enter.");
                 this.scanner.nextLine();
             }
         }
     }
 
+    //create medical
     public void writeUpDiagnosis(Consultation consultation) {
         var diagnosis = new Diagnosis();
         diagnosis.setConsultation(consultation);
@@ -844,7 +864,7 @@ public class MedicalUI extends UI {
 
                 String more = this.scanner.nextLine().trim();
                 if (!more.equalsIgnoreCase("y")) break;
-            }catch (InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid choice, please re-enter.");
             }
         }
@@ -898,15 +918,17 @@ public class MedicalUI extends UI {
         treatment.getPrescriptions().add(prescription);
     }
 
-    public void startConsultationSession(Consultation consultation) {
+    public void startMedicalSession(Consultation consultation) {
         while (true) {
 
+
             System.out.println("Please Select an Option");
-            System.out.println("1. Add diagnosis");
-            System.out.println("2. Edit diagnosis");
-            System.out.println("3. Delete Diagnosis Record");
-            System.out.println("4. List Diagnosis Records");
-            System.out.println("5. Back");
+            System.out.println(""" 
+                    1. Add Medical record
+                    2. Edit Medical record
+                    3. Delete Medical Record
+                    4. List Medical Records
+                    5. Back""");
             System.out.print("Enter your choice :");
             try {
                 int choice = this.scanner.nextInt();
@@ -930,11 +952,12 @@ public class MedicalUI extends UI {
 
                         break;
                     case 4:
-                        //writeNote
+                        selectMedicalDetail();
+                        break;
                     case 5:
                         return;
                 }
-            }catch (InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid choice, please re-enter.");
                 this.scanner.nextLine();
             }
@@ -1033,6 +1056,109 @@ public class MedicalUI extends UI {
             };
         }
     }
+
+    public static class ViewMedicalDetail extends InteractiveTable<MedicalDetail> {
+        public ViewMedicalDetail(ListInterface<MedicalDetail> medicalDetails) {
+            super(new Column[]{
+                            new Column("Diagnosis Id", Alignment.CENTER, 15),
+                            new Column("Diagnosis", Alignment.CENTER, 30),
+                            new Column("Treatment Id", Alignment.CENTER, 15),
+                            new Column("Symptom", Alignment.CENTER, 30),
+                            new Column("Prescription Id", Alignment.CENTER, 15),
+                            new Column("Medicine", Alignment.CENTER, 30),
+                    },medicalDetails);
+        }
+        private String lastConsultationId = null;
+        private String lastDiagnosisId = null;
+        private String lastTreatmentId = null;
+        private String lastPrescriptionId = null;
+        private String lastDoctor = null;
+        private String lastConsultedAt = null;
+        private String lastDiagnosis = null;
+        private String lastSymptom = null;
+        private String lastMedicine = null;
+
+        @Override
+        protected Cell[] getRow(MedicalDetail m) {
+            Consultation c = m.getConsultation();
+            Diagnosis d = m.getDiagnosis();
+            Treatment t = m.getTreatment();
+            Prescription p = m.getPrescription();
+
+            String consultationId = c != null ? String.valueOf(c.getId()) : "N/A";
+            String diagnosisId = d != null ? String.valueOf(d.getId()) : "N/A";
+            String treatmentId = t != null ? String.valueOf(t.getId()) : "N/A";
+            String prescriptionId = p != null ? String.valueOf(p.getId()) : "N/A";
+            String doctor = c != null && c.getDoctor() != null ? c.getDoctor().getName() : "N/A";
+            //String consultedAt = c != null && c.getConsultedAt() != null ;//? //c.getConsultedAt(): "N/A";
+            String symptom = t != null && t.getSymptom() != null ? t.getSymptom() : "N/A";
+            String diagnosis = d != null && d.getDiagnosis() != null ? d.getDiagnosis() : "N/A";
+            String medicine = p != null && p.getProduct() != null && p.getProduct().getName() != null ? p.getProduct().getName() : "N/A";
+
+
+            if (!consultationId.equals(lastConsultationId)) {
+                lastDoctor = null;
+                lastConsultedAt = null;
+                lastDiagnosisId = null;
+                lastTreatmentId = null;
+                lastPrescriptionId = null;
+                lastSymptom = null;
+                lastDiagnosis = null;
+                lastMedicine = null;
+            }
+            if (!diagnosisId.equals(lastDiagnosisId)) {
+                lastTreatmentId = null;
+                lastPrescriptionId = null;
+                lastSymptom = null;
+                lastDiagnosis = null;
+                lastMedicine = null;
+            }
+            if (!treatmentId.equals(lastTreatmentId)) {
+                lastPrescriptionId = null;
+                lastMedicine = null;
+            }
+            if (!prescriptionId.equals(lastPrescriptionId)) {
+                lastMedicine = null;
+            }
+
+            if (consultationId.equals(lastConsultationId)) consultationId = " ";
+            else lastConsultationId = consultationId;
+
+            if (diagnosisId.equals(lastDiagnosisId)) diagnosisId = " ";
+            else lastDiagnosisId = diagnosisId;
+
+            if (treatmentId.equals(lastTreatmentId)) treatmentId = " ";
+            else lastTreatmentId = treatmentId;
+
+            if (prescriptionId.equals(lastPrescriptionId)) prescriptionId = " ";
+            else lastPrescriptionId = prescriptionId;
+
+            if (doctor.equals(lastDoctor)) doctor = " ";
+            else lastDoctor = doctor;
+//
+//            if (consultedAt.equals(lastConsultedAt)) consultedAt = " ";
+//            else lastConsultedAt = consultedAt;
+
+            if (symptom.equals(lastSymptom)) symptom = " ";
+            else lastSymptom = symptom;
+
+            if (diagnosis.equals(lastDiagnosis)) diagnosis = " ";
+            else lastDiagnosis = diagnosis;
+
+            if (medicine.equals(lastMedicine)) medicine = " ";
+            else lastMedicine = medicine;
+
+            return new Cell[]{
+                    new Cell(diagnosisId),
+                    new Cell(diagnosis),
+                    new Cell(treatmentId),
+                    new Cell(symptom),
+                    new Cell(prescriptionId),
+                    new Cell(medicine)
+            };
+        };
+    }
+
 
     //diagnosis report
 

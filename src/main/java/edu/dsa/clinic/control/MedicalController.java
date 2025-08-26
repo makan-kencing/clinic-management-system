@@ -1,10 +1,13 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.MedicalDetail;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
@@ -12,6 +15,8 @@ import edu.dsa.clinic.lambda.Filter;
 import org.jetbrains.annotations.Nullable;
 
 public class MedicalController {
+
+    PatientController patientController = new PatientController();
 
     public static Filter<Consultation> getConsultationTypeFilter(ConsultationType type) {
         return c -> c.getType() == type;
@@ -40,6 +45,12 @@ public class MedicalController {
     public Consultation selectConsultationById(int id) {
         return Database.consultationsList.findFirst(c -> c.getId() == id);
     }
+
+    public Consultation selectConsultationByObject(Patient patient) {
+        return Database.consultationsList.findFirst(c -> c.getPatient().equals(patient));
+    }
+
+
 
     public @Nullable Diagnosis selectDiagnosis(ListInterface<Diagnosis> diagnosis, int id) {
         return diagnosis.findFirst(d -> d.getId() == id);
@@ -101,5 +112,34 @@ public class MedicalController {
 
     public boolean deletePrescription(Treatment treatment, int id) {
         return this.deletePrescription(treatment.getPrescriptions(), id);
+    }
+
+    public ListInterface<MedicalDetail> getMedicalDetails(Patient patient) {
+       ListInterface<MedicalDetail> row =new DoubleLinkedList<>();
+       for (Consultation consultation :patientController.getPatientConsultations(patient)) {
+           if (consultation.getDiagnoses()==null){
+               row.add(new MedicalDetail(consultation,null,null,null));
+           }else {
+                for (Diagnosis diagnosis : consultation.getDiagnoses()) {
+                    if (diagnosis.getTreatments()==null){
+                        row.add(new MedicalDetail(consultation,diagnosis,null,null));
+                    }
+                    else {
+                        for (Treatment treatment : diagnosis.getTreatments()) {
+                            if (treatment.getPrescriptions()==null){
+                                row.add(new MedicalDetail(consultation,diagnosis,treatment,null));
+                            }
+                            else {
+                               for (Prescription prescription : treatment.getPrescriptions()) {
+                                   row.add(new MedicalDetail(consultation,diagnosis,treatment,prescription));
+                               }
+
+                            }
+                        }
+                    }
+                }
+           }
+       }
+        return row;
     }
 }
