@@ -124,7 +124,6 @@ public class DoctorUI extends UI {
 
         System.out.println("Doctor created successfully: " + doctor);
     }
-    //Modify Doctor
 
 
     public void deleteDoctor(Doctor doctor) {
@@ -143,6 +142,7 @@ public class DoctorUI extends UI {
         }
     }
 
+    //modifyDoctor
     public Doctor modifyDoctor(Doctor doctor) {
         Doctor modifyDoctor = null;
         Doctor newDoctor = new Doctor();
@@ -516,10 +516,10 @@ public class DoctorUI extends UI {
             System.out.printf("%d. %s%n", i, DayOfWeek.of(i));
 
         DayOfWeek dayOfWeek = null;
+
         while (dayOfWeek == null) {
             System.out.print("Enter the day number: ");
             var index = scanner.nextInt();
-
             try {
                 dayOfWeek = DayOfWeek.of(index);
             } catch (DateTimeException e) {
@@ -531,8 +531,19 @@ public class DoctorUI extends UI {
         var dayShifts = doctor.getSchedule().getShifts(dayOfWeek);
 
         var shift = createShiftFromInput();
+        if (doctor.getSchedule() == null) {
+            doctor.setSchedule(new Schedule());
+        }
+
 
         DoctorController.addShift(dayShifts, shift);
+
+        if(shift == null){
+            System.out.println("Shift not assigned due to invalid input");
+            return;
+        }
+
+
         System.out.println("Assigned " + shift + " to Dr. " + doctor.getName() + " on " + dayOfWeek);
     }
 
@@ -543,6 +554,10 @@ public class DoctorUI extends UI {
 
             System.out.print("Enter end time (hh:mm): ");
             LocalTime end = LocalTime.parse(this.scanner.nextLine().trim());
+
+            if(end.isBefore(start)){
+                System.out.println("End time must be after start time. Please try again.");
+            }
 
             return new Shift().setTimeRange(new Range<>(start, end));
         } catch (DateTimeParseException e) {
