@@ -158,7 +158,7 @@ public class DoctorUI extends UI {
     public void deleteDoctor(Doctor doctor) {
         System.out.print("Are you sure to delete this entry? (Y/N) ");
 
-        if (this.scanner.next().equalsIgnoreCase("Y")) {
+        if (this.scanner.nextLine().equalsIgnoreCase("Y")) {
 
             var deletedDoctor = DoctorController.deleteDoctorByID(doctor.getId());
 
@@ -167,7 +167,7 @@ public class DoctorUI extends UI {
             } else {
                 System.out.printf("Doctor `%s` deleted", deletedDoctor.getName());
             }
-            this.scanner.next();
+            this.scanner.nextLine();
         }
     }
 
