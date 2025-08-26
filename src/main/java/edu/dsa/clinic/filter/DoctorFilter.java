@@ -1,14 +1,12 @@
 package edu.dsa.clinic.filter;
 
 import edu.dsa.clinic.Database;
-import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.lambda.Filter;
-import edu.dsa.clinic.lambda.MultiFilter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -81,10 +79,7 @@ public interface DoctorFilter {
     }
 
     static Filter<Doctor> isAvailable(LocalDate date, Range<LocalTime> timeRange) {
-        var filters = new DoubleLinkedList<Filter<Doctor>>();
-        filters.add(isWorkingDuring(date, timeRange));
-        filters.add(isUnoccupiedDuring(date, timeRange));
-
-        return new MultiFilter<>(filters);
+        return isWorkingDuring(date, timeRange)
+                .and(isUnoccupiedDuring(date, timeRange));
     }
 }
