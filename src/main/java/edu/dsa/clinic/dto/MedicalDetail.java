@@ -5,13 +5,13 @@ import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
 
-public final class ConsultationDetail {
+public final class MedicalDetail {
     private final Consultation consultation;
     private final Diagnosis diagnosis;
     private final Treatment treatment;
     private final Prescription prescription;
 
-    public ConsultationDetail(
+    public MedicalDetail(
             Consultation consultation,
             Diagnosis diagnosis,
             Treatment treatment,
