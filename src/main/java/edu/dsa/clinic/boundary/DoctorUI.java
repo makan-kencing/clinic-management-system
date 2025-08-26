@@ -42,6 +42,7 @@ public class DoctorUI extends UI {
             System.out.print("Enter choice: ");
 
             choice = this.scanner.nextInt();
+            this.scanner.nextLine();
 
             System.out.println();
 
@@ -81,27 +82,55 @@ public class DoctorUI extends UI {
         } while (true);
     }
 
+    public Gender selectAGender(){
+        Gender newGender;
+        while(true){
+            int gender;
+            System.out.print("-".repeat(30));
+            System.out.println("\n(1) male");
+            System.out.println("(2) female");
+            System.out.print("Enter gender number: ");
+            gender = scanner.nextInt();
+            this.scanner.nextLine();
+
+            newGender = switch (gender){
+                case 1 -> Gender.MALE;
+                case 2 -> Gender.FEMALE;
+                default -> null;
+            };
+            if (newGender == null) {
+                System.out.println("Invalid option. Try again.");
+                continue;
+            }
+
+            break;
+        }
+      return newGender;
+    }
+
     public void createDoctor() {
         Doctor doctor = new Doctor();
 
-        System.out.println("Enter Doctor Name: ");
+
+        System.out.print("Enter Doctor Name: ");
         doctor.setName(this.scanner.nextLine());
 
-        System.out.println("Enter Gender (Male/Female): ");
-        doctor.setGender(Gender.valueOf(this.scanner.nextLine().toUpperCase()));
+        doctor.setGender(selectAGender());
 
-        System.out.print("Enter Contact Number: ");
+        System.out.print("\nEnter Contact Number: ");
         doctor.setContactNumber(this.scanner.nextLine());
 
         int option;
         do {
-            System.out.print("Select Specialization: ");
+            System.out.println("\nSpecialization: ");
             System.out.println("1. Neurosurgery");
             System.out.println("2. Pediatrics");
             System.out.println("3. Ophthalmology");
             System.out.println("4. Otorhinolaryngology");
             System.out.println("5. Orthopedics");
+            System.out.print("\nSelect the doctor's Specialization: ");
             option = this.scanner.nextInt();  // 4
+            this.scanner.nextLine();
 
             var specialization = switch (option) {
                 case 1 -> Specialization.Neurosurgery;
@@ -122,7 +151,7 @@ public class DoctorUI extends UI {
 
         DoctorController.addDoctorRecord(doctor);
 
-        System.out.println("Doctor created successfully: " + doctor);
+        System.out.println("Doctor created successfully: ");
     }
 
 
@@ -326,7 +355,6 @@ public class DoctorUI extends UI {
                 }
             } else {
                 System.out.println();
-                table.display();
                 break;
             }
         } while (opt > 1 && opt < 4);
