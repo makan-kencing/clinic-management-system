@@ -10,11 +10,11 @@ import org.jetbrains.annotations.Range;
  */
 public class Inventory {
     @Range(from = 0, to = Integer.MAX_VALUE)
-    private int minQuantity;
+    private int minQuantity = 0;
     @Range(from = 0, to = Integer.MAX_VALUE)
-    private int maxQuantity;
+    private int maxQuantity = Integer.MAX_VALUE;
     @Range(from = 0, to = Integer.MAX_VALUE)
-    private int autoOrderThreshold;
+    private int autoOrderThreshold = Integer.MAX_VALUE;
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMinQuantity() {
         return minQuantity;
