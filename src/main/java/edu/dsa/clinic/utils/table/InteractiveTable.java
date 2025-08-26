@@ -52,7 +52,14 @@ abstract public class InteractiveTable<T> extends Table<T> {
             f = f.and(iterator.next().filter);
 
         return f;
+    }
 
+    public void addDefaultFilter(String name, Filter<T> filter) {
+        this.defaultFilters.add(new NamedFilter<>(name, filter));
+    }
+
+    public void clearDefaultFilter(Filter<String> exclude) {
+        this.defaultFilters.filter(nf -> exclude.not().filter(nf.name));
     }
 
     public void addFilter(String name, Filter<T> filter) {
@@ -60,7 +67,7 @@ abstract public class InteractiveTable<T> extends Table<T> {
     }
 
     public void clearFilter(Filter<String> exclude) {
-        this.filters.filter(nf -> !exclude.filter(nf.name));
+        this.filters.filter(nf -> exclude.not().filter(nf.name));
     }
 
     public void resetFilters() {
@@ -80,12 +87,20 @@ abstract public class InteractiveTable<T> extends Table<T> {
         return s;
     }
 
+    public void addDefaultSorter(String name, Comparator<T> sorter) {
+        this.defaultSorters.add(new NamedSorter<>(name, sorter));
+    }
+
+    public void clearDefaultSorter(Filter<String> exclude) {
+        this.defaultSorters.filter(ns -> exclude.not().filter(ns.name));
+    }
+
     public void addSorter(String name, Comparator<T> sorter) {
         this.sorters.add(new NamedSorter<>(name, sorter));
     }
 
     public void clearSorter(Filter<String> exclude) {
-        this.sorters.filter(ns -> !exclude.filter(ns.name));
+        this.sorters.filter(ns -> exclude.not().filter(ns.name));
     }
 
     public void resetSorters() {
