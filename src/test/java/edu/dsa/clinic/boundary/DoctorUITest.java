@@ -8,9 +8,10 @@ import java.util.Scanner;
 public class DoctorUITest {
     public static void main(String[] args) {
         Initializer.initialize();
+        Doctor doctor = new Doctor();
         var scanner = new Scanner(System.in);
 
         var ui = new DoctorUI(scanner);
-        ui.selectDoctor();
+        ui.startMenu();
     }
 }

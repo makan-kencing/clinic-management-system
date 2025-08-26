@@ -44,8 +44,6 @@ public class DoctorUI extends UI {
             choice = this.scanner.nextInt();
             this.scanner.nextLine();
 
-            System.out.println();
-
             Doctor doctor;
             switch (choice) {
                 case 1:
@@ -184,7 +182,7 @@ public class DoctorUI extends UI {
         System.out.print("Enter the number of the info that you want to modify: ");
 
         var opt = scanner.nextInt();
-        scanner.nextLine();
+        this.scanner.nextLine();
 
         switch (opt) {
             case 1: {
@@ -203,26 +201,7 @@ public class DoctorUI extends UI {
             }
             case 2: {
                 int gender;
-                do{
-                    System.out.println("Current gender: " + doctor.getGender());
-                    System.out.print("-".repeat(30));
-                    System.out.println("(1) male");
-                    System.out.println("(2) female");
-                    System.out.print("Enter new gender number: ");
-                    gender = scanner.nextInt();
-
-                    var newGender = switch (gender){
-                        case 1 -> Gender.MALE;
-                        case 2 -> Gender.FEMALE;
-                        default -> null;
-                    };
-                    if (newGender == null) {
-                        System.out.println("Invalid option. Try again.");
-                        continue;
-                    }
-                    doctor.setGender(newGender);
-                    break;
-                }while(true);
+                doctor.setGender(selectAGender());
                 break;
             }
             case 3: {
@@ -248,6 +227,7 @@ public class DoctorUI extends UI {
                     System.out.println("4. Otorhinolaryngology");
                     System.out.println("5. Orthopedics");
                     option = this.scanner.nextInt();  // 4
+                    scanner.nextLine();
 
                     var specialization = switch (option) {
                         case 1 -> Specialization.Neurosurgery;
@@ -370,7 +350,7 @@ public class DoctorUI extends UI {
                 scanner.nextLine();
                 System.out.println();
 
-                if (value == 1) {
+                if (value == 1) { //need check logic
                     filter(table, "gender", "male");
                 } else if (value == 2) {
                     filter(table, "gender", "female");
@@ -384,7 +364,7 @@ public class DoctorUI extends UI {
                 filter(table, "contact", value);
             }
             case 4: {
-                // show all specializations
+                // show all specializations (need to check)
                 var availableSpecialization = Specialization.values();
                 for (int i = 0; i < availableSpecialization.length; i++) {
                     System.out.printf("%d. %s%n", i + 1, availableSpecialization[i]);
@@ -426,37 +406,42 @@ public class DoctorUI extends UI {
 
     public void filter(InteractiveTable<Doctor> table, String column, String value) {
         switch (column) {
-            case "name":
+            case "name" ->{
                 table.addFilter(
-                        "Search " + column + " \"" + value + "\"",
+                        "Sort by" + column + " \"" + value + "\"",
                         DoctorFilter.byNameLike(value)
                 );
                 table.display();
                 break;
-            case "specialization":
+            }
+            case "specialization" -> {
                 var specialization = Specialization.valueOf(value);
 
                 table.addFilter(
-                        "Search " + column + " \"" + value + "\"",
+                        "Sort by" + column + " \"" + value + "\"",
                         DoctorFilter.bySpecialization(specialization)
                 );
                 table.display();
                 break;
-            case "contact":
+            }
+            case "contact" -> {
                 table.addFilter(
-                        "Search " + column + " \"" + value + "\"",
+                        "Sort by" + column + " \"" + value + "\"",
                         DoctorFilter.byContactNumberLike(value)
                 );
                 table.display();
                 break;
-            case "gender":
+            }
+            case "gender" -> {
                 var gender = Gender.valueOf(value);
 
                 table.addFilter(gender.name() + " only", DoctorFilter.byGender(gender));
                 table.display();
                 break;
-            default:
+            }
+            default -> {
                 break;
+            }
         }
 
     }
