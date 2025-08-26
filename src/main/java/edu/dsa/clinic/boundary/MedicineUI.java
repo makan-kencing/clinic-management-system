@@ -10,13 +10,18 @@ import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.filter.MedicineFilter;
+import edu.dsa.clinic.filter.ProductFilter;
 import edu.dsa.clinic.sorter.MedicineSorter;
 import edu.dsa.clinic.sorter.ProductSorter;
 import edu.dsa.clinic.utils.SelectTable;
-import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import org.jetbrains.annotations.Nullable;
+import org.jline.consoleui.elements.ConfirmChoice;
+import org.jline.consoleui.prompt.CheckboxResult;
+import org.jline.consoleui.prompt.ConfirmResult;
+import org.jline.consoleui.prompt.InputResult;
+import org.jline.consoleui.prompt.ListResult;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
@@ -129,12 +134,26 @@ public class MedicineUI extends UI {
         }
     }
 
+    public @Nullable Product searchProductInStock() {
+        var products = MedicineController.getAllProducts();
+        var table = new SelectProductTable(products, this.terminal);
+        table.addDefaultFilter("In stock", ProductFilter.hasStock());
+
+        try {
+            return table.select();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     public void viewMedicineDetails(Medicine medicine) {
 
     }
 
     public void viewProductDetails(Product product) {
         // TODO
+        this.terminal.puts(InfoCmp.Capability.clear_screen);
+
         var writer = this.getWriter();
         var reader = this.getLineReader();
 
@@ -166,31 +185,39 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Medicine createMedicine() {
-        var prompt = this.getPrompt();
-        var builder = prompt.getPromptBuilder();
-        builder.createInputPrompt()
-                .name("name")
-                .message("Name: ")
-                .addPrompt();
-
-        var medicineTypeCheckbox = builder.createCheckboxPrompt()
-                .name("type")
-                .message("What medicine types?");
-        for (var type : MedicineType.values())
-            medicineTypeCheckbox = medicineTypeCheckbox.newItem(type.name())
-                    .text(type.type)
-                    .add();
-        medicineTypeCheckbox.addPrompt();
-
         var medicine = new Medicine();
-        try {
-            var result = prompt.prompt(builder.build());
 
-            medicine.setName(result.get("name").getResult());
-            for (var type : StringUtils.convertArrayStringToArray(
-                    result.get("types").getResult()
-            ))
-                medicine.addType(MedicineType.valueOf(type));
+        var prompt = this.getPrompt();
+
+        try {
+            while (true) {
+                var builder = prompt.getPromptBuilder();
+                builder.createInputPrompt()
+                        .name("name")
+                        .message("Name: ")
+                        .defaultValue(medicine.getName())
+                        .addPrompt();
+
+                var medicineTypeCheckbox = builder.createCheckboxPrompt()
+                        .name("type")
+                        .message("What medicine types?");
+                for (var type : MedicineType.values())
+                    medicineTypeCheckbox = medicineTypeCheckbox.newItem(type.name())
+                            .text(type.type)
+                            .checked(MedicineFilter.hasType(type).filter(medicine))
+                            .add();
+                medicineTypeCheckbox.addPrompt();
+
+                var result = prompt.prompt(builder.build());
+
+                var name = ((InputResult) result.get("name"));
+                var typesResult = ((CheckboxResult) result.get("type"));
+
+                medicine.setName(name.toString());
+                for (var type : typesResult.getSelectedIds())
+                    medicine.addType(MedicineType.valueOf(type));
+                break;
+            }
         } catch (IOException e) {
             var writer = this.getWriter();
 
@@ -243,7 +270,7 @@ public class MedicineUI extends UI {
         }
     }
 
-    public static class SelectMedicineTable extends SelectTable<Medicine> {
+    public class SelectMedicineTable extends SelectTable<Medicine> {
         public SelectMedicineTable(ListInterface<Medicine> medicines, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
@@ -270,6 +297,38 @@ public class MedicineUI extends UI {
         }
 
         @Override
+        protected KeyEvent handleKey(int ch) throws IOException {
+            var resp = super.handleKey(ch);
+            if (resp != KeyEvent.NOOP)
+                return resp;
+
+            var prompt = getPrompt();
+            var builder = prompt.getPromptBuilder();
+
+            //noinspection SwitchStatementWithTooFewBranches
+            switch (ch) {
+                case 'n':
+                    var medicine = createMedicine();
+
+                    builder.createConfirmPromp()
+                            .name("confirm")
+                            .message("")
+                            .addPrompt();
+
+                    var result = prompt.prompt(builder.build());
+
+                    var confirmResult = (ConfirmResult) result.get("confirm");
+
+                    if (confirmResult.getConfirmed() != ConfirmChoice.ConfirmationValue.YES)
+                        break;
+
+                    MedicineController.addMedicineEntry(medicine);
+                    break;
+            }
+            return KeyEvent.NOOP;
+        }
+
+        @Override
         protected void promptSearch() throws IOException {
             var builder = this.prompt.getPromptBuilder();
             builder.createInputPrompt()
@@ -278,8 +337,10 @@ public class MedicineUI extends UI {
                     .addPrompt();
 
             var result = this.prompt.prompt(builder.build());
-            var query = result.get("query")
-                    .getResult();
+
+            var queryResult = (InputResult) result.get("query");
+
+            var query = queryResult.toString();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
@@ -301,8 +362,10 @@ public class MedicineUI extends UI {
                     .addPrompt();
 
             var result = this.prompt.prompt(builder.build());
-            switch (result.get("choice")
-                    .getResult()) {
+
+            var choiceResult = (ListResult) result.get("choice");
+
+            switch (choiceResult.getResult()) {
                 case "add":
                     this.promptAddFilter();
                     break;
@@ -311,6 +374,32 @@ public class MedicineUI extends UI {
                     this.updateData();
                     break;
                 default:
+                    break;
+            }
+        }
+
+        @Override
+        protected void promptSorterOption() throws IOException {
+            var builder = prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("choice")
+                    .message("Order by")
+                    .newItem("add").text("Add").add()
+                    .newItem("clear").text("Clear all").add()
+                    .newItem("back").text("Back").add()
+                    .addPrompt();
+
+            var result = prompt.prompt(builder.build());
+
+            var choiceResult = (ListResult) result.get("choice");
+
+            switch (choiceResult.getResult()) {
+                case "add":
+                    this.promptAddSorter();
+                    break;
+                case "clear":
+                    this.resetSorters();
+                    this.updateData();
                     break;
             }
         }
@@ -326,8 +415,10 @@ public class MedicineUI extends UI {
                     .addPrompt();
 
             var result = this.prompt.prompt(builder.build());
-            switch (result.get("filter")
-                    .getResult()) {
+
+            var filterResult = (ListResult) result.get("filter");
+
+            switch (filterResult.getResult()) {
                 case "type":
                     if (this.setTypeFilter())
                         this.updateData();
@@ -358,9 +449,9 @@ public class MedicineUI extends UI {
 
             var result = this.prompt.prompt(builder.build());
 
-            for (var type : StringUtils.convertArrayStringToArray(
-                    result.get("types").getResult()  // returns a string format of `["item1", "item2", ...]`
-            ))
+            var typesResult = (CheckboxResult) result.get("types");
+
+            for (var type : typesResult.getSelectedIds())
                 types.add(MedicineType.valueOf(type));
 
             // didnt filter any
@@ -387,12 +478,15 @@ public class MedicineUI extends UI {
 
             var result = this.prompt.prompt(builder.build());
 
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
             int from, to;
             try {
-                from = Integer.parseInt(result.get("from").getResult());
-                to = result.get("to").getResult().equals("max")
+                from = Integer.parseInt(fromResult.getResult());
+                to = toResult.getResult().equals("max")
                         ? Integer.MAX_VALUE
-                        : Integer.parseInt(result.get("to").getResult());
+                        : Integer.parseInt(toResult.getResult());
             } catch (NumberFormatException _) {
                 var writer = terminal.writer();
                 writer.write("Invalid quantity amount.");
@@ -414,30 +508,6 @@ public class MedicineUI extends UI {
             return true;
         }
 
-        @Override
-        protected void promptSorterOption() throws IOException {
-            var builder = prompt.getPromptBuilder();
-            builder.createListPrompt()
-                    .name("choice")
-                    .message("Order by")
-                    .newItem("add").text("Add").add()
-                    .newItem("clear").text("Clear all").add()
-                    .newItem("back").text("Back").add()
-                    .addPrompt();
-
-            var result = prompt.prompt(builder.build());
-            switch (result.get("choice")
-                    .getResult()) {
-                case "add":
-                    this.promptAddSorter();
-                    break;
-                case "clear":
-                    this.resetSorters();
-                    this.updateData();
-                    break;
-            }
-        }
-
         protected void promptAddSorter() throws IOException {
             var builder = this.prompt.getPromptBuilder();
             builder.createListPrompt()
@@ -450,12 +520,13 @@ public class MedicineUI extends UI {
                     .addPrompt()
                     .createListPrompt()
                     .name("order")
-                    .message("")
+                    .message("Order direction by?")
                     .newItem("asc").text("Ascending").add()
                     .newItem("desc").text("Descending").add()
                     .addPrompt();
 
             var result = this.prompt.prompt(builder.build());
+
             var type = result.get("type").getResult();
             var order = result.get("order").getResult();
 
@@ -499,7 +570,7 @@ public class MedicineUI extends UI {
         }
     }
 
-    public static class SelectProductTable extends SelectTable<Product> {
+    public class SelectProductTable extends SelectTable<Product> {
         public SelectProductTable(ListInterface<Product> products, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
@@ -525,6 +596,38 @@ public class MedicineUI extends UI {
                     new Cell(MedicineController.getAvailableStocks(o)),
                     new Cell(Objects.requireNonNullElse(MedicineController.getLatestStocked(o), ""))
             };
+        }
+
+        @Override
+        protected KeyEvent handleKey(int ch) throws IOException {
+            var resp = super.handleKey(ch);
+            if (resp != KeyEvent.NOOP)
+                return resp;
+
+            var prompt = getPrompt();
+            var builder = prompt.getPromptBuilder();
+
+            //noinspection SwitchStatementWithTooFewBranches
+            switch (ch) {
+                case 'n':
+                    var product = createProduct();
+
+                    builder.createConfirmPromp()
+                            .name("confirm")
+                            .message("")
+                            .addPrompt();
+
+                    var result = prompt.prompt(builder.build());
+
+                    var confirmResult = (ConfirmResult) result.get("confirm");
+
+                    if (confirmResult.getConfirmed() != ConfirmChoice.ConfirmationValue.YES)
+                        break;
+
+                    MedicineController.addProductEntry(product);
+                    break;
+            }
+            return KeyEvent.NOOP;
         }
 
         @Override
@@ -557,11 +660,12 @@ public class MedicineUI extends UI {
                     .addPrompt()
                     .createListPrompt()
                     .name("order")
-                    .message("")
+                    .message("Order direction by?")
                     .newItem("asc").text("Ascending").add()
                     .newItem("desc").text("Descending").add();
 
             var result = prompt.prompt(builder.build());
+
             var type = result.get("type").getResult();
             var order = result.get("order").getResult();
 

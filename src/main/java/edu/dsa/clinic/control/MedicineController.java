@@ -6,6 +6,7 @@ import edu.dsa.clinic.dto.Inventory;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
+import edu.dsa.clinic.filter.ProductFilter;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
@@ -17,11 +18,11 @@ import java.time.LocalDateTime;
  * @author makan-kencing
  */
 public class MedicineController {
-    public static void createMedicineEntry(Medicine medicine) {
+    public static void addMedicineEntry(Medicine medicine) {
         Database.medicineList.add(medicine);
     }
 
-    public static void createProductEntry(Product product) {
+    public static void addProductEntry(Product product) {
         Database.productList.add(product);
     }
 
@@ -44,11 +45,11 @@ public class MedicineController {
     }
 
     public static ListInterface<Medicine> getAllMedicines() {
-        return Database.medicineList.clone();
+        return Database.medicineList;
     }
 
     public static ListInterface<Product> getAllProducts() {
-        return Database.productList.clone();
+        return Database.productList;
     }
 
     public static int getAvailableStocks(Product product) {
@@ -60,7 +61,7 @@ public class MedicineController {
 
     public static int getAvailableStocks(Medicine medicine) {
         var sum = 0;
-        for (var product: Database.productList.filtered(p -> p.getMedicine() == medicine))
+        for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine)))
             for (var stock : product.getStocks())
                 sum += stock.getQuantityLeft();
         return sum;
