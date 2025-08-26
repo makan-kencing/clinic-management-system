@@ -124,7 +124,6 @@ public class DoctorUI extends UI {
 
         System.out.println("Doctor created successfully: " + doctor);
     }
-    //Modify Doctor
 
 
     public void deleteDoctor(Doctor doctor) {
@@ -143,32 +142,8 @@ public class DoctorUI extends UI {
         }
     }
 
-    public Doctor modifyDoctor(Doctor doctor) {
-        Doctor modifyDoctor = null;
-        Doctor newDoctor = new Doctor();
-        var doctors = DoctorController.getDoctors();
-
-        do {
-            var table = new DoctorTable(doctors);
-            table.display();
-            System.out.print("\nEnter Doctor ID that you want to modify (0 to exit): ");
-            int id = scanner.nextInt();
-            scanner.nextLine();
-            System.out.println();
-
-            if (id == 0) {
-                System.out.println("-".repeat(30));
-                System.out.println();
-                break;
-            }
-            modifyDoctor = DoctorController.selectDoctorByID(id);
-            if (modifyDoctor == null) {
-                System.out.println("Doctor with ID (" + id + ") not found. Please re-enter Doctor ID...");
-            } else {
-                System.out.println("Doctor (" + modifyDoctor.getName() + ") with ID (" + modifyDoctor.getId() + ") selected!");
-            }
-        } while (modifyDoctor == null);
-
+    //modifyDoctor
+    public void modifyDoctor(Doctor doctor) {
         System.out.println("-".repeat(30));
         System.out.println("Doctor Modify Menu:");
         System.out.println("(1) name");
@@ -178,12 +153,13 @@ public class DoctorUI extends UI {
         System.out.println("(0) exit");
         System.out.println("-".repeat(30));
         System.out.print("Enter the number of the info that you want to modify: ");
+
         var opt = scanner.nextInt();
         scanner.nextLine();
 
         switch (opt) {
             case 1: {
-                System.out.println("Current name: " + modifyDoctor.getName());
+                System.out.println("Current name: " + doctor.getName());
                 System.out.print("Enter new name: ");
                 String newName = scanner.nextLine();
 
@@ -193,13 +169,13 @@ public class DoctorUI extends UI {
                 } else {
                     System.out.println("Name cannot be empty. No changes made.");
                 }
-                 newDoctor.setName(newName);
+                 doctor.setName(newName);
                 break;
             }
             case 2: {
                 int gender;
                 do{
-                    System.out.println("Current gender: " + modifyDoctor.getGender());
+                    System.out.println("Current gender: " + doctor.getGender());
                     System.out.print("-".repeat(30));
                     System.out.println("(1) male");
                     System.out.println("(2) female");
@@ -215,17 +191,17 @@ public class DoctorUI extends UI {
                         System.out.println("Invalid option. Try again.");
                         continue;
                     }
-                    newDoctor.setGender(newGender);
+                    doctor.setGender(newGender);
                     break;
                 }while(true);
                 break;
             }
             case 3: {
-                System.out.print("Current contact number: " + modifyDoctor.getContactNumber());
+                System.out.print("Current contact number: " + doctor.getContactNumber());
                 System.out.print("Enter new contact number: ");
                 var newNumber = scanner.nextLine();
                 if (!newNumber.trim().isEmpty()) {
-                    newDoctor.setContactNumber(newNumber);
+                    doctor.setContactNumber(newNumber);
                     System.out.println("New contact number updated successfully!");
                 } else  {
                     System.out.println("New contact number cannot be empty. Try again.");
@@ -233,7 +209,7 @@ public class DoctorUI extends UI {
                 break;
             }
             case 4: {
-                System.out.println("Current Doctor Specialization: " + modifyDoctor.getSpecialization());
+                System.out.println("Current Doctor Specialization: " + doctor.getSpecialization());
                 int option;
                 do {
                     System.out.print("Enter new specialization you wish to choose: ");
@@ -257,14 +233,13 @@ public class DoctorUI extends UI {
                         continue;
                     }
 
-                    newDoctor.setSpecialization(specialization);
+                    doctor.setSpecialization(specialization);
                     break;
                 } while (true);
             }
             default:
                 break;
         }
-        return newDoctor;
     }
 
 
@@ -516,10 +491,10 @@ public class DoctorUI extends UI {
             System.out.printf("%d. %s%n", i, DayOfWeek.of(i));
 
         DayOfWeek dayOfWeek = null;
+
         while (dayOfWeek == null) {
             System.out.print("Enter the day number: ");
             var index = scanner.nextInt();
-
             try {
                 dayOfWeek = DayOfWeek.of(index);
             } catch (DateTimeException e) {
@@ -531,8 +506,19 @@ public class DoctorUI extends UI {
         var dayShifts = doctor.getSchedule().getShifts(dayOfWeek);
 
         var shift = createShiftFromInput();
+        if (doctor.getSchedule() == null) {
+            doctor.setSchedule(new Schedule());
+        }
+
 
         DoctorController.addShift(dayShifts, shift);
+
+        if(shift == null){
+            System.out.println("Shift not assigned due to invalid input");
+            return;
+        }
+
+
         System.out.println("Assigned " + shift + " to Dr. " + doctor.getName() + " on " + dayOfWeek);
     }
 
@@ -543,6 +529,10 @@ public class DoctorUI extends UI {
 
             System.out.print("Enter end time (hh:mm): ");
             LocalTime end = LocalTime.parse(this.scanner.nextLine().trim());
+
+            if(end.isBefore(start)){
+                System.out.println("End time must be after start time. Please try again.");
+            }
 
             return new Shift().setTimeRange(new Range<>(start, end));
         } catch (DateTimeParseException e) {

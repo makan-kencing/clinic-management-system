@@ -7,7 +7,6 @@ import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Doctor;
-import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
@@ -47,7 +46,7 @@ public class AppointmentUI extends UI {
             System.out.println();
 
             switch (choice) {
-                case "1" -> createFutureAppointment();
+                case "1" -> selectAppointment();
                 case "2" -> createWalkInAppointment();
                 case "3" -> viewAppointment();
 //                case "4"  -> editAppointment();
@@ -58,7 +57,6 @@ public class AppointmentUI extends UI {
 
         } while (!choice.equals("0"));
     }
-
 
     public void createFutureAppointment() {
         Appointment appointment = new Appointment();
@@ -226,6 +224,11 @@ public class AppointmentUI extends UI {
                     do {
                         System.out.print("\nEnter Appointment ID (0 to return): ");
                         String selectedId = scanner.nextLine();
+
+                        if (!selectedId.matches("\\d+")) {
+                            System.out.println("Invalid input. Please enter An Appointment ID.");
+                            continue;
+                        }
 
                         if (Integer.parseInt(selectedId) == 0) {
                             System.out.println("-".repeat(30));
