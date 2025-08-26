@@ -85,12 +85,6 @@ public class MedicalController {
         return this.deleteDiagnosis(consultation.getDiagnoses(), id);
     }
 
-    public void deleteAllTreatment(Diagnosis diagnosis) {
-        for (Treatment treatment : diagnosis.getTreatments()) {
-            deleteTreatment(diagnosis, treatment.getId());
-        }
-    }
-
     public boolean deleteTreatment(ListInterface<Treatment> treatment, int id) {
         var removed = treatment.removeFirst(t -> t.getId() == id);
         return removed != null;
@@ -98,12 +92,6 @@ public class MedicalController {
 
     public boolean deleteTreatment(Diagnosis diagnosis, int id) {
         return this.deleteTreatment(diagnosis.getTreatments(), id);
-    }
-
-    public void deleteAllPrescription(Treatment treatment) {
-        for (Prescription prescription : treatment.getPrescriptions()) {
-            deletePrescription(treatment, prescription.getId());
-        }
     }
 
     public boolean deletePrescription(ListInterface<Prescription> prescriptions, int id) {
