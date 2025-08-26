@@ -6,6 +6,7 @@ import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.lambda.Filter;
 import edu.dsa.clinic.utils.Ordered;
+import org.jetbrains.annotations.Range;
 
 import java.time.LocalDateTime;
 
@@ -38,12 +39,19 @@ public interface MedicineFilter {
         };
     }
 
-    static Filter<Medicine> byStockCount(int from, int to) {
+    static Filter<Medicine> byStockCount(
+            @Range(from = 0, to = Integer.MAX_VALUE) int from,
+            @Range(from = 1, to = Integer.MAX_VALUE) int to
+    ) {
         return m -> Ordered.isBetween(
                 MedicineController.getAvailableStocks(m),
                 from,
                 to
         );
+    }
+
+    static Filter<Medicine> hasStock() {
+        return m -> MedicineController.getAvailableStocks(m) > 0;
     }
 
     static Filter<Medicine> byLatestStocked(LocalDateTime from, LocalDateTime to) {
