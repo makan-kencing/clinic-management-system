@@ -371,9 +371,9 @@ public class DoctorUI extends UI {
                 System.out.println();
 
                 if (value == 1) {
-                    filter(table, "gender", "male");
+                    filter(table, "gender", Gender.MALE.name());
                 } else if (value == 2) {
-                    filter(table, "gender", "female");
+                    filter(table, "gender", Gender.FEMALE.name());
                 }
                 break;
             }
