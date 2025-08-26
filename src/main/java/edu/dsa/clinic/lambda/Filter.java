@@ -18,6 +18,10 @@ public interface Filter<T> {
         return o -> !this.filter(o);
     }
 
+    static <T> Filter<T> is(T o2) {
+        return o1 -> o1 == o2;
+    }
+
     static <T> Filter<T> not(@NotNull Filter<T> f) {
         return f.not();
     }

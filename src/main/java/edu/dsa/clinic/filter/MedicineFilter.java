@@ -10,19 +10,29 @@ import edu.dsa.clinic.utils.Ordered;
 import java.time.LocalDateTime;
 
 public interface MedicineFilter {
+
+
     static Filter<Medicine> byId(int id) {
         return m -> m.getId() == id;
     }
 
     static Filter<Medicine> byNameLike(String query) {
-        return m -> m.getName().toLowerCase()
-                .contains(query.toLowerCase());
+        return m -> StringFilter.like(query, true).filter(m.getName());
     }
 
     static Filter<Medicine> hasTypes(ListInterface<MedicineType> types) {
         return m -> {
-            for (var type : m.getTypes())
-                if (types.findFirst(t -> t == type) != null)
+            for (var t : m.getTypes())
+                if (MedicineTypeFilter.isIn(types).filter(t))
+                    return true;
+            return false;
+        };
+    }
+
+    static Filter<Medicine> hasType(MedicineType type) {
+        return m -> {
+            for (var t : m.getTypes())
+                if (Filter.is(t).filter(type))
                     return true;
             return false;
         };
