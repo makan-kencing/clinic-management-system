@@ -41,9 +41,18 @@ public class DoctorUI extends UI {
             System.out.println("0. Exit To Main Menu");
             System.out.print("Enter choice: ");
 
-            choice = this.scanner.nextInt();
-            this.scanner.nextLine();
-
+            while (true) {
+                try {
+                    choice = Integer.parseInt(scanner.nextLine());
+                    if (choice < 0 || choice > 5) {
+                        System.out.println("Invalid choice. Please enter a number between 0 and 5.");
+                    } else {
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                }
+            }
             System.out.println();
 
             Doctor doctor;
@@ -84,14 +93,28 @@ public class DoctorUI extends UI {
 
     public Gender selectAGender(){
         Gender newGender;
-        while(true){
-            int gender;
+        int gender;
+        do{
+
             System.out.print("-".repeat(30));
             System.out.println("\n(1) male");
             System.out.println("(2) female");
             System.out.print("Enter gender number: ");
             gender = scanner.nextInt();
             this.scanner.nextLine();
+
+            while (true) {
+                try {
+                    gender = Integer.parseInt(scanner.nextLine());
+                    if (gender < 1 || gender > 2) {
+                        System.out.println("Invalid option. Please enter 1 for male or 2 for female.");
+                    } else {
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number (1 or 2).");
+                }
+            }
 
             newGender = switch (gender){
                 case 1 -> Gender.MALE;
@@ -102,23 +125,31 @@ public class DoctorUI extends UI {
                 System.out.println("Invalid option. Try again.");
                 continue;
             }
-
             break;
-        }
+        }while(newGender == null);
       return newGender;
     }
 
     public void createDoctor() {
         Doctor doctor = new Doctor();
 
-
         System.out.print("Enter Doctor Name: ");
-        doctor.setName(this.scanner.nextLine());
+        doctor.setName(this.scanner.nextLine().trim());
+        do{
+            System.out.println("Name cannot be empty. Please enter a valid name.");
+        }while(this.scanner.nextLine().trim().isEmpty());
 
         doctor.setGender(selectAGender());
 
         System.out.print("\nEnter Contact Number: ");
-        doctor.setContactNumber(this.scanner.nextLine());
+        var number =this.scanner.nextLine();
+        if (!number.trim().isEmpty()) {
+            doctor.setContactNumber(number);
+            System.out.println("New contact number updated successfully!");
+        } else  {
+            System.out.println("New contact number cannot be empty. Try again.");
+        }
+
 
         int option;
         do {
@@ -132,6 +163,7 @@ public class DoctorUI extends UI {
             option = this.scanner.nextInt();  // 4
             this.scanner.nextLine();
 
+
             var specialization = switch (option) {
                 case 1 -> Specialization.Neurosurgery;
                 case 2 -> Specialization.Pediatrics;
@@ -140,6 +172,7 @@ public class DoctorUI extends UI {
                 case 5 -> Specialization.Orthopedics;
                 default -> null;
             };
+
             if (specialization == null) {
                 System.out.println("Invalid option. Try again.");
                 continue;
@@ -183,8 +216,20 @@ public class DoctorUI extends UI {
         System.out.println("-".repeat(30));
         System.out.print("Enter the number of the info that you want to modify: ");
 
-        var opt = scanner.nextInt();
-        scanner.nextLine();
+        int opt;
+
+        while (true) {
+            try {
+                opt = Integer.parseInt(scanner.nextLine());
+                if (opt < 0 || opt > 4) {
+                    System.out.println("Invalid option. Please select a number between 0 and 4.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
 
         switch (opt) {
             case 1: {
@@ -202,27 +247,7 @@ public class DoctorUI extends UI {
                 break;
             }
             case 2: {
-                int gender;
-                do{
-                    System.out.println("Current gender: " + doctor.getGender());
-                    System.out.print("-".repeat(30));
-                    System.out.println("(1) male");
-                    System.out.println("(2) female");
-                    System.out.print("Enter new gender number: ");
-                    gender = scanner.nextInt();
-
-                    var newGender = switch (gender){
-                        case 1 -> Gender.MALE;
-                        case 2 -> Gender.FEMALE;
-                        default -> null;
-                    };
-                    if (newGender == null) {
-                        System.out.println("Invalid option. Try again.");
-                        continue;
-                    }
-                    doctor.setGender(newGender);
-                    break;
-                }while(true);
+                doctor.setGender(selectAGender());
                 break;
             }
             case 3: {
@@ -470,7 +495,7 @@ public class DoctorUI extends UI {
             System.out.println("1. Assign Doctor Shift");
             System.out.println("2. Change Doctor Shift");
             System.out.println("3. View Doctor Schedule");
-            System.out.println("4. View Weekly Schedule");
+            System.out.println("4. Doctor Availability Menu");
             System.out.println("0. Exit To Doctor Menu");
             System.out.print("Enter choice: ");
 
@@ -500,7 +525,7 @@ public class DoctorUI extends UI {
                     break;
                 case 4:
                     // Weekly Schedule
-                    viewWeeklySchedule();
+                    availabilityMenu();
                     break;
                 case 0:
                     return;
@@ -598,7 +623,7 @@ public class DoctorUI extends UI {
         System.out.println();
     }
 
-    public void viewWeeklySchedule() {
+    public void availabilityMenu() {
 
     }
 
