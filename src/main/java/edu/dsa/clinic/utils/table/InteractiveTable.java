@@ -3,8 +3,7 @@ package edu.dsa.clinic.utils.table;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.lambda.Filter;
-import edu.dsa.clinic.lambda.MultiComparator;
-import edu.dsa.clinic.lambda.MultiFilter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.StringJoiner;
@@ -42,6 +41,20 @@ abstract public class InteractiveTable<T> extends Table<T> {
         this.unfilteredData = data;
     }
 
+    public @Nullable Filter<T> getCombinedFilter() {
+        if (this.filters.size() == 0)
+            return null;
+
+        var iterator = this.filters.iterator();
+        var f = iterator.next().filter;
+
+        while (iterator.hasNext())
+            f = f.and(iterator.next().filter);
+
+        return f;
+
+    }
+
     public void addFilter(String name, Filter<T> filter) {
         this.filters.add(new NamedFilter<>(name, filter));
     }
@@ -52,6 +65,19 @@ abstract public class InteractiveTable<T> extends Table<T> {
 
     public void resetFilters() {
         this.filters = this.defaultFilters.clone();
+    }
+
+    public Comparator<T> getCombinedSorter() {
+        if (this.sorters.size() == 0)
+            return null;
+
+        var iterator = this.sorters.iterator();
+        var s = iterator.next().sorter;
+
+        while (iterator.hasNext())
+            s = s.thenComparing(iterator.next().sorter);
+
+        return s;
     }
 
     public void addSorter(String name, Comparator<T> sorter) {
@@ -88,10 +114,10 @@ abstract public class InteractiveTable<T> extends Table<T> {
         var data = this.unfilteredData.clone();
 
         if (this.filters.size() != 0)
-            data.filter(new MultiFilter<>(this.filters.map(NamedFilter::filter)));
+            data.filter(this.getCombinedFilter());
 
         if (this.sorters.size() != 0)
-            data.sort(new MultiComparator<>(this.sorters.map(NamedSorter::sorter)));
+            data.sort(this.getCombinedSorter());
 
         this.setData(data);
     }
