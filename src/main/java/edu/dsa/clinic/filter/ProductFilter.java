@@ -11,6 +11,10 @@ import org.jetbrains.annotations.Range;
 import java.math.BigDecimal;
 
 public interface ProductFilter {
+    static Filter<Product> byId(int id) {
+        return p -> p.getId() == id;
+    }
+
     static Filter<Product> byNameLike(String name) {
         return p -> StringFilter.like(name, true).filter(p.getName());
     }
@@ -90,5 +94,22 @@ public interface ProductFilter {
 
     static Filter<Product> hasStock() {
         return p -> MedicineController.getAvailableStocks(p) > 0;
+    }
+
+    static Filter<Product> hasAvailableStock() {
+        return p -> {
+            var inventory = p .getInventory();
+            return byStockCount(
+                    inventory.getMinQuantity(),
+                    inventory.getMaxQuantity()
+            ).filter(p);
+        };
+    }
+
+    static Filter<Product> requireStockOrder() {
+        return p -> byStockCount(
+                0,
+                p.getInventory().getAutoOrderThreshold()
+        ).filter(p);
     }
 }
