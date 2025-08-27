@@ -4,6 +4,9 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.filter.AppointmentFilter;
+
+import java.time.temporal.TemporalAccessor;
 
 public class AppointmentController {
 
@@ -41,5 +44,12 @@ public class AppointmentController {
 
     public boolean hasOverLappingAppointments(Appointment appointment, Doctor doctor){
         return true;
+    }
+
+    public static ListInterface<Appointment> getDoctorAppointmentsForTheWeek(TemporalAccessor hasWeek, Doctor doctor) {
+        return Database.appointmentList.filtered(
+                AppointmentFilter.isSameWeek(hasWeek)
+                        .and(AppointmentFilter.byDoctor(doctor))
+        );
     }
 }
