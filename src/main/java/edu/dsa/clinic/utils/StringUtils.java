@@ -1,6 +1,9 @@
 package edu.dsa.clinic.utils;
 
+import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Range;
+
+import java.util.StringJoiner;
 
 public final class StringUtils {
     private StringUtils() {
@@ -89,5 +92,12 @@ public final class StringUtils {
             return new String[0];
 
         return arrayString.split(", ");
+    }
+
+    public static String join(CharSequence delimiter, ListInterface<String> items) {
+        var joiner = new StringJoiner(delimiter);
+        for (var item : items)
+            joiner.add(item);
+        return joiner.toString();
     }
 }
