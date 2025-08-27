@@ -124,7 +124,7 @@ public class AppointmentUI extends UI {
                         }
                         appointmentEndTime = generateAppointmentEndTime(appointmentStartTime);
 
-                        if (!appointmentController.isAvailable(
+                        if (appointmentController.isAvailable(
                                 selectedDoctor,
                                 appointmentStartTime.toLocalDate(),
                                 new Range<>(appointmentStartTime.toLocalTime(), appointmentEndTime.toLocalTime())
@@ -222,7 +222,7 @@ public class AppointmentUI extends UI {
                     appointmentStartTime = LocalDateTime.now();
                     appointmentEndTime = generateAppointmentEndTime(appointmentStartTime);
 
-                    if (!appointmentController.isAvailable(
+                    if (appointmentController.isAvailable(
                             selectedDoctor,
                             appointmentStartTime.toLocalDate(),
                             new Range<>(appointmentStartTime.toLocalTime(), appointmentEndTime.toLocalTime())
