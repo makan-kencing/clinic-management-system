@@ -23,7 +23,6 @@ import edu.dsa.clinic.entity.Treatment;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -249,12 +248,10 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(32)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(15))
                         .addStock(new Stock()
                                 .setStockInQuantity(32)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(32))
         );
         Database.productList.add(
@@ -269,12 +266,10 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(60)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(14))
                         .addStock(new Stock()
                                 .setStockInQuantity(40)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(40))
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-7021
@@ -289,17 +284,14 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(100)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(3))
                         .addStock(new Stock()
                                 .setStockInQuantity(100)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(100))
                         .addStock(new Stock()
                                 .setStockInQuantity(62)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(62))
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-0620
@@ -314,17 +306,14 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(100)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(3))
                         .addStock(new Stock()
                                 .setStockInQuantity(100)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(100))
                         .addStock(new Stock()
                                 .setStockInQuantity(62)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(62))
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-0609
@@ -339,17 +328,14 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(100)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(3))
                         .addStock(new Stock()
                                 .setStockInQuantity(100)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(100))
                         .addStock(new Stock()
                                 .setStockInQuantity(62)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setLocation("Storage")
                                 .setQuantityLeft(62))
         );
         Database.productList.add(
@@ -364,7 +350,6 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(30)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(27))
         );
         Database.productList.add(
@@ -379,7 +364,6 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(30)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(13))
         );
         Database.productList.add(
@@ -394,7 +378,6 @@ public class Initializer {
                         .addStock(new Stock()
                                 .setStockInQuantity(30)
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setLocation("Storage")
                                 .setQuantityLeft(13))
         );
 

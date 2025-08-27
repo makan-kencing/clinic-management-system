@@ -14,7 +14,6 @@ public class Stock extends IdentifiableEntity {
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int stockInQuantity;
     private LocalDateTime stockInDate;
-    private String location;
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int quantityLeft;
 
@@ -45,15 +44,6 @@ public class Stock extends IdentifiableEntity {
         return this;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public Stock setLocation(String location) {
-        this.location = location;
-        return this;
-    }
-
     public @Range(from = 0, to = Integer.MAX_VALUE) int getQuantityLeft() {
         return quantityLeft;
     }
@@ -70,7 +60,6 @@ public class Stock extends IdentifiableEntity {
                 ", medicine=" + product +
                 ", stockInQuantity=" + stockInQuantity +
                 ", stockInDate=" + stockInDate +
-                ", location='" + location + '\'' +
                 ", quantityLeft=" + quantityLeft +
                 '}';
     }
