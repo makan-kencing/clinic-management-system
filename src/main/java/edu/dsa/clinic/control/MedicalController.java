@@ -5,6 +5,7 @@ import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.dto.DiagnosisCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
+import edu.dsa.clinic.dto.ProductCounter;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
@@ -151,13 +152,27 @@ public class MedicalController {
             for (var diagnosis : consultation.getDiagnoses()) {
                 var diagnosedCondition = diagnosis.getDiagnosis();
 
-                var counter = counters.findFirst(dc -> dc.diagnosis().equals(diagnosedCondition));
+                var counter = counters.findFirst(dc -> dc.key().equals(diagnosedCondition));
                 if (counter == null) {
                     counter = new DiagnosisCounter(diagnosedCondition);
                     counters.add(counter);
                 }
 
                 counter.increment();
+
+                for (var treatment : diagnosis.getTreatments())
+                    for (var prescription : treatment.getPrescriptions()) {
+                        var product = prescription.getProduct();
+                        var productCounters = counter.productCounters();
+
+                        var productCounter = productCounters.findFirst(pc -> pc.key().equals(product));
+                        if (productCounter == null) {
+                            productCounter = new ProductCounter(product);
+                            productCounters.add(productCounter);
+                        }
+
+                        productCounter.increment();
+                    }
             }
         }
         return counters;

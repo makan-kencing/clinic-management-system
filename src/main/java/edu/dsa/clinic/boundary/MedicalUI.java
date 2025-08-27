@@ -970,8 +970,12 @@ public class MedicalUI extends UI {
         var counts = MedicalController.countDiagnosesOccurrence();
         counts.sort(Comparator.comparing(DiagnosisCounter::count).reversed());
 
-        for (var count : counts)
-            System.out.println(count.diagnosis() + ": " + count.count());
+        for (var count : counts) {
+            System.out.println(count.key() + ": " + count.count());
+
+            for (var productCount : count.productCounters())
+                System.out.println("     " + productCount.key().getName() + ": " + productCount.count());
+        }
     }
 
     public static class ConsultationTable extends InteractiveTable<Consultation> {

@@ -1,25 +1,16 @@
 package edu.dsa.clinic.dto;
 
-import org.jetbrains.annotations.Range;
+import edu.dsa.clinic.adt.DoubleLinkedList;
+import edu.dsa.clinic.adt.ListInterface;
 
-public class DiagnosisCounter {
-    private final String diagnosis;
-    @Range(from = 0, to = Integer.MAX_VALUE)
-    private int count = 0;
+public class DiagnosisCounter extends Counter<String> {
+    private final ListInterface<ProductCounter> productCounters = new DoubleLinkedList<>();
 
-    public String diagnosis() {
-        return this.diagnosis;
+    public DiagnosisCounter(String key) {
+        super(key);
     }
 
-    public @Range(from = 0, to = Integer.MAX_VALUE) int count() {
-        return this.count;
-    }
-
-    public DiagnosisCounter(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
-    public void increment() {
-        this.count++;
+    public ListInterface<ProductCounter> productCounters() {
+        return this.productCounters;
     }
 }
