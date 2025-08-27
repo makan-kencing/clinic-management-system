@@ -2,8 +2,10 @@ package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
+import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.dto.DiagnosisCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
+import edu.dsa.clinic.dto.ProductCounter;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
@@ -883,8 +885,7 @@ public class MedicalUI extends UI {
 
         Product product;
         while (true) {
-            //product = medicineUI.searchProduct();
-            product = medicalController.selectProduct();
+            product = medicineUI.selectProductInStock();
             if (product != null)
                 break;
 
@@ -896,21 +897,22 @@ public class MedicalUI extends UI {
         int quantity;
         while (true) {
             System.out.print("Quantity (>=1): ");
-            String quantityInput = this.scanner.nextLine().trim();  // 获取输入并去除空格
-
+            String quantityInput = this.scanner.nextLine().trim();
+            int availableStocks=MedicineController.getAvailableStocks(product);
             try {
                 quantity = Integer.parseInt(quantityInput);
-                if (quantity >= 1) {
+                if (availableStocks > quantity) {
+                    prescription.setQuantity(quantity);
                     break;
                 } else {
-                    System.out.println("Quantity must be >= 1. Please enter again.");
+                    System.out.println(product.getName()+ "Quantity remain" + availableStocks +". Goods insufficient.Please reduce quantity or notify pharmacy");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. The input must be an integer.");
             }
         }
 
-        prescription.setQuantity(quantity);
+
 
         System.out.println("Prescription notes (optional): ");
         String notes = this.scanner.nextLine().trim();
@@ -930,7 +932,8 @@ public class MedicalUI extends UI {
                     2. Edit Medical record
                     3. Delete Medical Record
                     4. List Medical Records
-                    5. Back""");
+                    5. View Medical Report
+                    6. Back""");
             System.out.print("Enter your choice :");
             try {
                 int choice = this.scanner.nextInt();
@@ -957,24 +960,15 @@ public class MedicalUI extends UI {
                         selectMedicalDetail();
                         break;
                     case 5:
+                        diagnosisReport();
+                        break;
+                    case 6:
                         return;
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid choice, please re-enter.");
                 this.scanner.nextLine();
             }
-        }
-    }
-
-    public void showDiagnosisOccurrence() {
-        var counts = MedicalController.countDiagnosesOccurrence();
-        counts.sort(Comparator.comparing(DiagnosisCounter::count).reversed());
-
-        for (var count : counts) {
-            System.out.println(count.key() + ": " + count.count());
-
-            for (var productCount : count.productCounters())
-                System.out.println("     " + productCount.key().getName() + ": " + productCount.count());
         }
     }
 
@@ -1086,8 +1080,6 @@ public class MedicalUI extends UI {
         private String lastDiagnosisId = null;
         private String lastTreatmentId = null;
         private String lastPrescriptionId = null;
-        private String lastDoctor = null;
-        private String lastConsultedAt = null;
         private String lastDiagnosis = null;
         private String lastSymptom = null;
         private String lastMedicine = null;
@@ -1103,16 +1095,12 @@ public class MedicalUI extends UI {
             String diagnosisId = d != null ? String.valueOf(d.getId()) : "N/A";
             String treatmentId = t != null ? String.valueOf(t.getId()) : "N/A";
             String prescriptionId = p != null ? String.valueOf(p.getId()) : "N/A";
-            String doctor = c != null && c.getDoctor() != null ? c.getDoctor().getName() : "N/A";
-            //String consultedAt = c != null && c.getConsultedAt() != null ;//? //c.getConsultedAt(): "N/A";
             String symptom = t != null && t.getSymptom() != null ? t.getSymptom() : "N/A";
             String diagnosis = d != null && d.getDiagnosis() != null ? d.getDiagnosis() : "N/A";
             String medicine = p != null && p.getProduct() != null && p.getProduct().getName() != null ? p.getProduct().getName() : "N/A";
 
 
             if (!consultationId.equals(lastConsultationId)) {
-                lastDoctor = null;
-                lastConsultedAt = null;
                 lastDiagnosisId = null;
                 lastTreatmentId = null;
                 lastPrescriptionId = null;
@@ -1135,9 +1123,6 @@ public class MedicalUI extends UI {
                 lastMedicine = null;
             }
 
-            if (consultationId.equals(lastConsultationId)) consultationId = " ";
-            else lastConsultationId = consultationId;
-
             if (diagnosisId.equals(lastDiagnosisId)) diagnosisId = " ";
             else lastDiagnosisId = diagnosisId;
 
@@ -1146,12 +1131,6 @@ public class MedicalUI extends UI {
 
             if (prescriptionId.equals(lastPrescriptionId)) prescriptionId = " ";
             else lastPrescriptionId = prescriptionId;
-
-            if (doctor.equals(lastDoctor)) doctor = " ";
-            else lastDoctor = doctor;
-//
-//            if (consultedAt.equals(lastConsultedAt)) consultedAt = " ";
-//            else lastConsultedAt = consultedAt;
 
             if (symptom.equals(lastSymptom)) symptom = " ";
             else lastSymptom = symptom;
@@ -1173,8 +1152,55 @@ public class MedicalUI extends UI {
         };
     }
 
+    public static  class ViewDiagnosisReport extends InteractiveTable<DiagnosisCounter>{
+        private String lastDiagnosis=null;
+        private String lastProductName = null;
+        private String lastProductNum = null;
+        public ViewDiagnosisReport(ListInterface<DiagnosisCounter> diagnosisCounters) {
+            super(new Column[]{
+                    new Column("Diagnosis",Alignment.CENTER,40),
+                    new Column("Doctor ",Alignment.CENTER,10),
+                    new Column("Medicine Product Using",Alignment.CENTER,50),
+                    new Column("Product Using Num",Alignment.CENTER,20)
+            },diagnosisCounters);
+        }
+
+
+        @Override
+        protected Cell[] getRow(DiagnosisCounter d) {
+            ListInterface<ProductCounter> p =d.productCounters();
+
+            StringBuilder productNames = new StringBuilder();
+            StringBuilder productCounts = new StringBuilder();
+
+            for (ProductCounter productCounter : p) {
+                productNames.append(productCounter.key().getName()).append(", ");
+                productCounts.append(productCounter.count()).append(", ");
+            }
+
+            if (!productNames.isEmpty()) productNames.setLength(productNames.length() - 2);
+            if (!productCounts.isEmpty()) productCounts.setLength(productCounts.length() - 2);
+
+
+
+            return new Cell[]{
+                    new Cell(d.key()),
+                    new Cell(d.count()),
+                    new Cell(productNames.toString()),
+                    new Cell(productCounts.toString())
+            };
+        }
+
+    }
 
     //diagnosis report
+    public void diagnosisReport(){
+        System.out.println("=".repeat(30));
+        System.out.println("Diagnosis Summary Report");
+        System.out.println("=".repeat(30));
+        var counts = MedicalController.countDiagnosesOccurrence();
+        var table = new ViewDiagnosisReport(counts);
+        table.display();
+    }
 
-    //Treatment Report
 }

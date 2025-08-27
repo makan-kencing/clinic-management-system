@@ -81,7 +81,15 @@ public class Initializer {
                         .setGender(Gender.MALE)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Neurosurgery)
-                        .setSchedule(null)
+                        .setSchedule(new Schedule()
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                                .setType(ShiftType.WORK))
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                                .setType(ShiftType.WORK)))
         );
         Database.doctorList.add(
                 ((Doctor) new Doctor()
@@ -90,7 +98,15 @@ public class Initializer {
                         .setGender(Gender.IDK)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Ophthalmology)
-                        .setSchedule(null)
+                        .setSchedule(new Schedule()
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                                .setType(ShiftType.WORK))
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                                .setType(ShiftType.WORK)))
         );
         Database.doctorList.add(
                 ((Doctor) new Doctor()
@@ -116,7 +132,15 @@ public class Initializer {
                         .setGender(Gender.FEMALE)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Pediatrics)
-                        .setSchedule(null)
+                        .setSchedule(new Schedule()
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                                .setType(ShiftType.WORK))
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                                .setType(ShiftType.WORK)))
         );
         Database.doctorList.add(
                 ((Doctor) new Doctor()
@@ -125,7 +149,19 @@ public class Initializer {
                         .setGender(Gender.MALE)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Otorhinolaryngology)
-                        .setSchedule(null)
+                        .setSchedule(new Schedule()
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(13, 0)))
+                                                .setType(ShiftType.WORK))
+                                .addShift(DayOfWeek.MONDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(14, 0), LocalTime.of(20, 0)))
+                                                .setType(ShiftType.WORK))
+                                .addShift(DayOfWeek.THURSDAY,
+                                        new Shift()
+                                                .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(16, 0)))
+                                                .setType(ShiftType.WORK)))
         );
 
         // Medicines data
@@ -427,14 +463,13 @@ public class Initializer {
                         .setId(5))
                         .setPatient(Database.patientsList.findFirst(p -> p.getId() == 5))
                         .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 5))
-                        .setCreatedAt(LocalDateTime.of(2025, 9, 21, 16, 45))
-                        .setExpectedStartAt(LocalDateTime.of(2025, 9, 26, 11, 00))
-                        .setExpectedEndAt(LocalDateTime.of(2025, 10, 1, 12, 00))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 16, 16, 45))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 28, 11, 00))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 28, 12, 00))
                         .setAppointmentType(ConsultationType.EMERGENCY)
         );
 
         // Consultations data
-        // 第1条咨询记录
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(1))
@@ -530,7 +565,16 @@ public class Initializer {
                                         .addPrescription(new Prescription()
                                                 .setProduct(Database.productList.findFirst(m -> m.getId() == 6)) // Ondansetron
                                                 .setQuantity(10)
-                                                .setNotes("Take 1 tablet every 12 hours"))))
+                                                .setNotes("Take 1 tablet every 12 hours")
+                                        )
+                                        .addPrescription(new Prescription()
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 7))
+                                                .setQuantity(10)
+                                                .setNotes("Take 1 tablet every 12 hours")
+                                        )
+                                )
+                        )
+
         );
 
         Database.consultationsList.add(
@@ -564,8 +608,6 @@ public class Initializer {
                                                 .setQuantity(30)
                                                 .setNotes("Take 1 tablet daily for 30 days"))))
         );
-
-// **上面是生成的4条模拟咨询记录数据**
 
 
         // Consultation queues data

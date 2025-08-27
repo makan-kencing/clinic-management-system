@@ -3,6 +3,8 @@ package edu.dsa.clinic.dto;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.entity.Doctor;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -20,7 +22,7 @@ public record Schedule(
         ListInterface<Shift> friday,
         ListInterface<Shift> saturday,
         ListInterface<Shift> sunday
-) {
+) implements Cloneable {
     public Schedule() {
         this(
                 newList(),
@@ -95,5 +97,20 @@ public record Schedule(
         var shifts = this.getShifts(dayOfWeek);
         shifts.add(shift);
         return this;
+    }
+
+    @Override
+    @Contract(" -> new")
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    public @NotNull Schedule clone() {
+        return new Schedule(
+            this.monday.clone(),
+            this.tuesday.clone(),
+            this.wednesday.clone(),
+            this.thursday.clone(),
+            this.friday.clone(),
+            this.saturday.clone(),
+            this.sunday.clone()
+        );
     }
 }
