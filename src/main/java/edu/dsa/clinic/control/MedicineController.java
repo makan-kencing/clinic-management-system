@@ -6,6 +6,7 @@ import edu.dsa.clinic.dto.Inventory;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
+import edu.dsa.clinic.filter.MedicineFilter;
 import edu.dsa.clinic.filter.ProductFilter;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +27,20 @@ public class MedicineController {
         Database.productList.add(product);
     }
 
-    public static Product deleteMedicineEntry(int id) {
-        var removed = Database.productList.removeFirst(m -> m.getId() == id);
+    public static Medicine deleteMedicineEntry(int id) {
+        var removed = Database.medicineList.removeFirst(MedicineFilter.byId(id));
+        if (removed == null)
+            return null;
+
+        return removed;
+    }
+
+    public static Medicine deleteMedicineEntry(Medicine medicine) {
+        return deleteMedicineEntry(medicine.getId());
+    }
+
+    public static Product deleteProductEntry(int id) {
+        var removed = Database.productList.removeFirst(ProductFilter.byId(id));
         if (removed == null)
             return null;
 
@@ -40,8 +53,8 @@ public class MedicineController {
         return removed;
     }
 
-    public static Product deleteMedicineEntry(Medicine medicine) {
-        return deleteMedicineEntry(medicine.getId());
+    public static Product deleteProductEntry(Product product) {
+        return deleteProductEntry(product.getId());
     }
 
     public static ListInterface<Medicine> getAllMedicines() {
@@ -80,7 +93,7 @@ public class MedicineController {
 
     public static @Nullable LocalDateTime getLatestStocked(Medicine medicine) {
         var latest = LocalDateTime.MIN;
-        for (var product : Database.productList.filtered(p -> p.getMedicine() == medicine))
+        for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine)))
             for (var stock : product.getStocks())
                 if (stock.getStockInDate().isAfter(latest))
                     latest = stock.getStockInDate();
