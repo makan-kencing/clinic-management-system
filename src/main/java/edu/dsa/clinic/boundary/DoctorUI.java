@@ -5,6 +5,7 @@ import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.dto.Shift;
+import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Specialization;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -360,7 +362,7 @@ public class DoctorUI extends UI {
         } while (opt > 1 && opt < 4);
         return selectedDoctor;
     }
-
+    //filter doctor menu
     public void filterDoctor(InteractiveTable<Doctor> table) {
         System.out.println("-".repeat(30));
         System.out.println("Filters:");
@@ -448,7 +450,7 @@ public class DoctorUI extends UI {
                 break;
         }
     }
-
+    //filter doctor function
     public void filter(InteractiveTable<Doctor> table, String column, String value) {
         switch (column) {
             case "name":
@@ -493,9 +495,9 @@ public class DoctorUI extends UI {
         do {
             System.out.println("\nDoctor Shifts Menu");
             System.out.println("1. Assign Doctor Shift");
-            System.out.println("2. Change Doctor Shift");
+            System.out.println("2. Add Doctor Break Time");
             System.out.println("3. View Doctor Schedule");
-            System.out.println("4. Doctor Availability Menu");
+            System.out.println("4. View Doctor Availability Schedule ");
             System.out.println("0. Exit To Doctor Menu");
             System.out.print("Enter choice: ");
 
@@ -515,7 +517,7 @@ public class DoctorUI extends UI {
                     doctor = selectDoctor();
                     if (doctor == null)
                         break;
-                    changeDoctorShift(null);
+                    addDoctorBreak(doctor);
                     break;
                 case 3:
                     doctor = selectDoctor();
@@ -524,8 +526,10 @@ public class DoctorUI extends UI {
                     viewDoctorSchedule(doctor);
                     break;
                 case 4:
-                    // Weekly Schedule
-                    availabilityMenu();
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+                    getDoctorAvailabilitySchedule(doctor);
                     break;
                 case 0:
                     return;
@@ -540,14 +544,14 @@ public class DoctorUI extends UI {
     //Assign Shift to Doctor
     public void assignDoctorShift(Doctor doctor) {
         System.out.println("Which day do you wish to assign Doctor " + doctor.getName() + "?");
-        for (int i = 1; i <= 7; i++)
-            System.out.printf("%d. %s%n", i, DayOfWeek.of(i));
+        viewDoctorSchedule(doctor);
 
         DayOfWeek dayOfWeek = null;
 
         while (dayOfWeek == null) {
             System.out.print("Enter the day number: ");
             var index = scanner.nextInt();
+            this.scanner.nextLine();
             try {
                 dayOfWeek = DayOfWeek.of(index);
             } catch (DateTimeException e) {
@@ -556,25 +560,23 @@ public class DoctorUI extends UI {
             }
         }
 
-        var dayShifts = doctor.getSchedule().getShifts(dayOfWeek);
-
-        var shift = createShiftFromInput();
         if (doctor.getSchedule() == null) {
             doctor.setSchedule(new Schedule());
         }
+        var dayShifts = doctor.getSchedule().getShifts(dayOfWeek);
 
-
-        DoctorController.addShift(dayShifts, shift);
-
-        if(shift == null){
+        var shift = createShiftFromInput();
+        if (shift == null) {
             System.out.println("Shift not assigned due to invalid input");
             return;
         }
 
+        DoctorController.addShift(dayShifts, shift);
 
-        System.out.println("Assigned " + shift + " to Dr. " + doctor.getName() + " on " + dayOfWeek);
+        System.out.println("Assigned" + " to Dr." + doctor.getName() + " on " + dayOfWeek);
     }
 
+    //Get User start & end time
     public @Nullable Shift createShiftFromInput() {
         try {
             System.out.print("Enter start time (hh:mm): ");
@@ -586,46 +588,97 @@ public class DoctorUI extends UI {
             if(end.isBefore(start)){
                 System.out.println("End time must be after start time. Please try again.");
             }
-
-            return new Shift().setTimeRange(new Range<>(start, end));
+            return new Shift()
+                    .setType(ShiftType.WORK)
+                    .setTimeRange(new Range<>(start, end));
         } catch (DateTimeParseException e) {
             System.out.println("Invalid time format. Please use hh:mm (e.g. 07:00).");
         }
         return null;
     }
 
-    public void changeDoctorShift(Doctor doctor) {
-    }
-
+    //view Specific Doctor Schedule
     public void viewDoctorSchedule(Doctor doctor) {
-        Schedule schedule = doctor.getSchedule();
-        System.out.println("Weekly Schedule for Dr. " + doctor.getName());
-
-        printDay("Monday", schedule.monday());
-        printDay("Tuesday", schedule.tuesday());
-        printDay("Wednesday", schedule.wednesday());
-        printDay("Thursday", schedule.thursday());
-        printDay("Friday", schedule.friday());
-        printDay("Saturday", schedule.saturday());
-        printDay("Sunday", schedule.sunday());
+        System.out.println("\nWeekly Schedule for Dr." + doctor.getName());
+        System.out.println("-".repeat(50));
+        this.viewSchedule(doctor.getSchedule());
+        System.out.println("-".repeat(50));
     }
 
+    public void viewDoctorAvailabilitySchedule(LocalDate date, Doctor doctor) {
+        System.out.println("\nWeekly Availability Schedule for Dr." + doctor.getName());
+        System.out.println("-".repeat(50));
+        this.viewSchedule(DoctorController.getAvailabilitySchedule(date, doctor));
+        System.out.println("-".repeat(50));
+    }
+
+    public void viewSchedule(Schedule schedule) {
+        printDay("1. Monday", schedule.monday());
+        printDay("2. Tuesday", schedule.tuesday());
+        printDay("3. Wednesday", schedule.wednesday());
+        printDay("4. Thursday", schedule.thursday());
+        printDay("5. Friday", schedule.friday());
+        printDay("6. Saturday", schedule.saturday());
+        printDay("7. Sunday", schedule.sunday());
+    }
+
+    //Doctor Schedule Formatting
     private void printDay(String day, ListInterface<Shift> shifts) {
         System.out.print(day + ": ");
-        if (shifts == null) {
+        if (shifts.size() == 0) {
             System.out.println("No shifts assigned.");
             return;
         }
-        for (int i = 0; i < shifts.size(); i++) {
-            Shift shift = shifts.get(i);
+
+        for (var shift : shifts)
             System.out.print(shift.getType() + " (" + shift.getTimeRange().from() + "-" + shift.getTimeRange().to() + ") ");
-        }
+
         System.out.println();
     }
 
-    public void availabilityMenu() {
+    //Deleting Doctor Shift
+    public void addDoctorBreak(Doctor doctor) {
+        System.out.println("Which day do you wish to give Doctor " + doctor.getName() + " a break?");
+        viewDoctorSchedule(doctor);
 
+        DayOfWeek dayOfWeek = null;
+
+        while (dayOfWeek == null) {
+            System.out.print("Enter the day number: ");
+            var index = scanner.nextInt();
+            this.scanner.nextLine();
+            try {
+                dayOfWeek = DayOfWeek.of(index);
+            } catch (DateTimeException e) {
+                // request reprompt for invalid dayOfWeek
+                System.out.println("Please enter a valid day number");
+            }
+        }
+
+        if (doctor.getSchedule() == null) {
+            doctor.setSchedule(new Schedule());
+        }
+        var dayShifts = doctor.getSchedule().getShifts(dayOfWeek);
+
+        var shift = createShiftFromInput();
+        if (shift == null) {
+            System.out.println("Break not granted due to invalid input");
+            return;
+        }
+
+        DoctorController.addBreak(dayShifts, shift);
+
+        System.out.println("Granted break" + " to Dr." + doctor.getName() + " on " + dayOfWeek);
     }
+
+    public void getDoctorAvailabilitySchedule(Doctor doctor) {
+        System.out.println("-".repeat(30));
+        System.out.print("Enter date (yyyy-MM-dd): ): ");
+        var date = LocalDate.parse(this.scanner.nextLine().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        this.viewDoctorAvailabilitySchedule(date, doctor);
+    }
+
 
     public static class DoctorTable extends InteractiveTable<Doctor> {
         public DoctorTable(ListInterface<Doctor> doctors) {
