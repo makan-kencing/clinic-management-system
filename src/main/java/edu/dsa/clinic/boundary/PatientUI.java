@@ -4,6 +4,7 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.PatientController;
 import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.PatientDetail;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
@@ -12,14 +13,15 @@ import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
+
+import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
-
+import java.util.Scanner;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class PatientUI extends UI {
     private final PatientController patientController = new PatientController();
@@ -74,7 +76,7 @@ public class PatientUI extends UI {
                     System.out.println();
                 }
                 case "5" -> {
-                    // To be implemented
+                    generateSummaryReport();
                 }
                 case "6" -> System.out.println("Exiting Patient Module...");
                 default -> System.out.println("Invalid input. Try again.\n");
@@ -171,7 +173,7 @@ public class PatientUI extends UI {
 
         int input;
         do {
-            System.out.println("Select Consultation Type: ");
+            System.out.print("Select Consultation Type: ");
             input = scanner.nextInt();
             scanner.nextLine();
 
@@ -558,6 +560,100 @@ public class PatientUI extends UI {
         }
         this.scanner.nextLine();
         System.out.println();
+    }
+
+    public void generateSummaryReport() {
+        int width = 200;
+        int topN = 10;
+
+        while (true) {
+            ListInterface<PatientCounter> counters = patientController.getPatientSummary();
+            System.out.println();
+
+            // header
+            System.out.println("=".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
+            System.out.println(StringUtils.pad("PATIENT MANAGEMENT MODULE", ' ', width));
+            System.out.println(StringUtils.pad("SUMMARY OF PATIENT REPORT", ' ', width));
+            System.out.println("=".repeat(width));
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY - HIGHLY CONFIDENTIAL DOCUMENT", ' ', width));
+            System.out.println("*".repeat(width));
+            System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
+            System.out.println();
+
+            InteractiveTable<PatientCounter> table = new InteractiveTable<>(new Column[] {
+                    new Column("Patient ID", Alignment.CENTER, 15),
+                    new Column("Patient Name", Alignment.CENTER, 40),
+                    new Column("Consultations Attended", Alignment.CENTER, 25),
+                    new Column("Total Medicines Prescribed", Alignment.CENTER, 100)
+            }, counters) {
+                @Override
+                protected Cell[] getRow(PatientCounter pc) {
+                    var patient = pc.key();
+
+                    String patientId = String.valueOf(patient.getId());
+                    String patientName = patient.getName();
+                    String consultationCount = String.valueOf(pc.getConsultationCount());
+                    ListInterface<String> medicines = patientController.getMedicineList(pc);
+
+                    return new Cell[]{
+                            new Cell(patientId, Alignment.CENTER),
+                            new Cell(patientName),
+                            new Cell(consultationCount, Alignment.CENTER),
+                            new Cell(StringUtils.join(", ", medicines))
+                    };
+                }
+            };
+            table.setPageSize(topN);
+            table.display();
+            System.out.println();
+
+            ListInterface<Integer> stats = patientController.getTotalStats(topN);
+            System.out.printf("Total Number of Patients (Top %d): %d%n", topN, stats.get(0));
+            System.out.printf("Total Number of Consultations (Top %d): %d%n", topN, stats.get(1));
+            System.out.printf("Total Number of Prescriptions (Top %d): %d%n", topN, stats.get(2));
+            System.out.println();
+
+            System.out.println("GRAPHICAL REPRESENTATION OF SUMMARY MODULE");
+            System.out.println("------------------------------------------");
+            var topConsultations = patientController.getTopPatientsByConsultations(topN);
+            var topPrescriptions = patientController.getTopPatientsByPrescriptions(topN);
+
+            printBarChart("Consultations", topConsultations, topN);
+            printBarChart("Prescriptions", topPrescriptions, topN);
+            System.out.println();
+
+            System.out.println("Global Highlights:");
+            System.out.println("Patient(s) with fewest consultations: " + StringUtils.join(", ", patientController.getExtremePatients(false)));
+            System.out.println("Patient(s) with most consultations: " + StringUtils.join(", ", patientController.getExtremePatients(true)));
+            System.out.println();
+
+            // footer
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("END OF THE REPORT", ' ', width));
+            System.out.println("*".repeat(width));
+            System.out.println();
+
+            System.out.printf("(0) Exit Report | Enter new Top filter (current %d): ", topN);
+            String input = scanner.nextLine().trim();
+
+            if (input.equals("0")) {
+                System.out.println();
+                break;
+            }
+
+            try {
+                int newN = Integer.parseInt(input);
+                if (newN > 0) {
+                    topN = newN;
+                } else {
+                    System.out.println("TopN must be greater than 0. Keeping current value.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, keeping current TopN.");
+            }
+        }
     }
 
     public Patient selectPatient() {
@@ -1225,5 +1321,49 @@ public class PatientUI extends UI {
                 };
             }
         };
+    }
+
+    private void printBarChart(String title, ListInterface<PatientCounter> list, int topN) {
+
+        int maxValue = 0;
+        for (var pc : list) {
+            int val = 0;
+            if (title.equalsIgnoreCase("Consultations")) {
+                val = pc.getConsultationCount();
+            } else if (title.equalsIgnoreCase("Prescriptions")) {
+                for (var prod : pc.productCounters()) val += prod.count();
+            }
+            if (val > maxValue) maxValue = val;
+        }
+
+        int barWidth = 70; // maximum bar length
+
+        String headerText = "Top " + topN + " Patients by " + title;
+        int borderLength = headerText.length() + 2;
+
+        System.out.println("+" + "-".repeat(borderLength) + "+");
+        System.out.println("| " + headerText + " |");
+        System.out.println("+" + "-".repeat(borderLength) + "+");
+
+        int shown = 0;
+        for (var pc : list) {
+            if (shown++ >= topN) break;
+
+            int value = 0;
+            if (title.equalsIgnoreCase("Consultations")) {
+                value = pc.getConsultationCount();
+            } else if (title.equalsIgnoreCase("Prescriptions")) {
+                for (var prod : pc.productCounters()) value += prod.count();
+            }
+
+            int scaled = maxValue == 0 ? 0 : (int) Math.round((value / (double) maxValue) * barWidth);
+
+            System.out.printf("%-20s | %s (%d)%n",
+                    pc.key().getName(),
+                    "█".repeat(Math.max(1, scaled)),
+                    value
+            );
+        }
+        System.out.println();
     }
 }

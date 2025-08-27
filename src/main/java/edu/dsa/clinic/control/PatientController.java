@@ -12,13 +12,18 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.PatientDetail;
+import edu.dsa.clinic.dto.ProductCounter;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Treatment;
+
+import java.util.Comparator;
 
 public class PatientController {
 
@@ -81,8 +86,146 @@ public class PatientController {
         return Database.queueList.popFirst();
     }
 
-    public void viewSummaryReport() {
+    public ListInterface<PatientCounter> getPatientSummary() {
+        ListInterface<PatientCounter> patientCounters = new DoubleLinkedList<>();
 
+        for (var consult : Database.consultationsList) {
+            var patient = consult.getPatient();
+
+            var existing = patientCounters.findFirst(pc -> pc.key().equals(patient));
+            if (existing == null) {
+                existing = new PatientCounter(patient);
+                patientCounters.add(existing);
+            }
+
+            existing.incrementConsultationCount();
+
+            for (var diag : consult.getDiagnoses()) {
+                for (var treat : diag.getTreatments()) {
+                    for (var prescription : treat.getPrescriptions()) {
+                        var product = prescription.getProduct();
+                        var productCounters = existing.productCounters();
+
+                        var productCounter = productCounters.findFirst(
+                                pc -> pc.key().getName().equalsIgnoreCase(product.getName())
+                        );
+                        if (productCounter == null) {
+                            productCounter = new ProductCounter(product);
+                            productCounters.add(productCounter);
+                        }
+                        productCounter.increment();
+                    }
+                }
+            }
+        }
+
+        SortedDoubleLinkedList<PatientCounter> sorted =
+                new SortedDoubleLinkedList<>((a, b) -> Integer.compare(b.getConsultationCount(), a.getConsultationCount()));
+
+        for (int i = 0; i < patientCounters.size(); i++) {
+            sorted.add(patientCounters.get(i));
+        }
+
+        return sorted;
+    }
+
+    private ListInterface<PatientCounter> getTopPatients(
+            int topN,
+            Comparator<PatientCounter> comparator
+    ) {
+        var counters = getPatientSummary();
+        var sorted = counters.sorted(comparator);
+
+        var result = new DoubleLinkedList<PatientCounter>();
+        for (int i = 0; i < Math.min(topN, sorted.size()); i++) {
+            result.add(sorted.get(i));
+        }
+        return result;
+    }
+
+    public ListInterface<PatientCounter> getTopPatientsByConsultations(int topN) {
+        return getTopPatients(
+                topN,
+                (a, b) -> Integer.compare(b.getConsultationCount(), a.getConsultationCount())
+        );
+    }
+
+    public ListInterface<PatientCounter> getTopPatientsByPrescriptions(int topN) {
+        return getTopPatients(
+                topN,
+                (a, b) -> {
+                    int aCount = 0, bCount = 0;
+                    for (var prod : a.productCounters()) aCount += prod.count();
+                    for (var prod : b.productCounters()) bCount += prod.count();
+                    return Integer.compare(bCount, aCount);
+                }
+        );
+    }
+
+    public ListInterface<String> getMedicineList(PatientCounter pc) {
+        ListInterface<String> medicineList = new DoubleLinkedList<>();
+
+        for (int j = 0; j < pc.productCounters().size(); j++) {
+            var productCounter = pc.productCounters().get(j);
+            medicineList.add(productCounter.key().getName() + "(" + productCounter.count() + ")");
+        }
+
+        return medicineList;
+    }
+
+    public ListInterface<String> getExtremePatients(boolean findMax) {
+        ListInterface<String> result = new DoubleLinkedList<>();
+        ListInterface<PatientCounter> counters = getPatientSummary();
+
+        if (counters == null) return result;
+
+        int extreme = findMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        for (int i = 0; i < counters.size(); i++) {
+            int count = counters.get(i).getConsultationCount();
+            if (findMax && count > extreme) {
+                extreme = count;
+            } else if (!findMax && count < extreme) {
+                extreme = count;
+            }
+        }
+
+        for (int i = 0; i < counters.size(); i++) {
+            PatientCounter pc = counters.get(i);
+            if (pc.getConsultationCount() == extreme) {
+                result.add(pc.key().getName() + " (" + pc.getConsultationCount() + ")");
+            }
+        }
+
+        return result;
+    }
+
+    public ListInterface<Integer> getTotalStats(int topN) {
+        ListInterface<PatientCounter> counters = getPatientSummary();
+
+        counters.sort((a, b) -> Integer.compare(b.getConsultationCount(), a.getConsultationCount()));
+
+        ListInterface<PatientCounter> topCounters = new DoubleLinkedList<>();
+        for (int i = 0; i < Math.min(topN, counters.size()); i++) {
+            topCounters.add(counters.get(i));
+        }
+
+        int totalConsultations = 0;
+        int totalPrescriptions = 0;
+
+        for (int i = 0; i < topCounters.size(); i++) {
+            PatientCounter pc = topCounters.get(i);
+            totalConsultations += pc.getConsultationCount();
+
+            for (int j = 0; j < pc.productCounters().size(); j++) {
+                totalPrescriptions += pc.productCounters().get(j).count();
+            }
+        }
+
+        ListInterface<Integer> result = new DoubleLinkedList<>();
+        result.add(topCounters.size());
+        result.add(totalConsultations);
+        result.add(totalPrescriptions);
+        return result;
     }
 
     public Object performSelect(int selectedId, String field) {
