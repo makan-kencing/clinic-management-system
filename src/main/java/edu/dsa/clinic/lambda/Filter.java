@@ -25,8 +25,4 @@ public interface Filter<T> {
     static <T> Filter<T> not(@NotNull Filter<T> f) {
         return f.not();
     }
-
-    static <T> Filter<T> true_() {
-        return _ -> true;
-    }
 }
