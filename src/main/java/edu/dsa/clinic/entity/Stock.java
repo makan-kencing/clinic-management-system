@@ -18,11 +18,11 @@ public class Stock extends IdentifiableEntity {
     @Range(from = 0, to = Integer.MAX_VALUE)
     private int quantityLeft;
 
-    public Product getMedicine() {
+    public Product getProduct() {
         return product;
     }
 
-    public Stock setMedicine(Product product) {
+    public Stock setProduct(Product product) {
         this.product = product;
         return this;
     }

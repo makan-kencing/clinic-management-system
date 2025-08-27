@@ -111,7 +111,7 @@ public class Product extends IdentifiableEntity {
     }
 
     public Product addStock(Stock stock) {
-        stock.setMedicine(this);
+        stock.setProduct(this);
 
         this.stocks.add(stock);
         return this;
