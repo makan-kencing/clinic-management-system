@@ -4,29 +4,43 @@ import edu.dsa.clinic.Initializer;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicineController;
+import edu.dsa.clinic.dto.CreateMedicineDTO;
+import edu.dsa.clinic.dto.CreateStockDTO;
 import edu.dsa.clinic.dto.Inventory;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.filter.MedicineFilter;
+import edu.dsa.clinic.filter.MedicineTypeFilter;
 import edu.dsa.clinic.filter.ProductFilter;
+import edu.dsa.clinic.lambda.Filter;
 import edu.dsa.clinic.sorter.MedicineSorter;
 import edu.dsa.clinic.sorter.ProductSorter;
 import edu.dsa.clinic.utils.SelectTable;
+import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import org.jetbrains.annotations.Nullable;
 import org.jline.consoleui.elements.ConfirmChoice;
 import org.jline.consoleui.prompt.CheckboxResult;
 import org.jline.consoleui.prompt.ConfirmResult;
+import org.jline.consoleui.prompt.ConsolePrompt;
 import org.jline.consoleui.prompt.InputResult;
 import org.jline.consoleui.prompt.ListResult;
+import org.jline.consoleui.prompt.builder.CheckboxPromptBuilder;
+import org.jline.consoleui.prompt.builder.ConfirmPromptBuilder;
+import org.jline.consoleui.prompt.builder.InputValueBuilder;
+import org.jline.consoleui.prompt.builder.PromptBuilder;
+import org.jline.consoleui.prompt.builder.TextBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Scanner;
@@ -56,7 +70,7 @@ public class MedicineUI extends UI {
         var builder = prompt.getPromptBuilder();
 
         while (true) {
-            var product = this.searchProduct();
+            var product = this.selectProduct();
             if (product == null)
                 return;
 
@@ -96,7 +110,7 @@ public class MedicineUI extends UI {
         }
     }
 
-    public void viewProductMenu(Product product) {
+    public void manageStockMenu() {
 
     }
 
@@ -108,11 +122,8 @@ public class MedicineUI extends UI {
 
     }
 
-    public void manageStockMenu() {
 
-    }
-
-    public @Nullable Medicine searchMedicine() {
+    public @Nullable Medicine selectMedicine() {
         var medicines = MedicineController.getAllMedicines();
         var table = new SelectMedicineTable(medicines, this.terminal);
 
@@ -123,7 +134,7 @@ public class MedicineUI extends UI {
         }
     }
 
-    public @Nullable Product searchProduct() {
+    public @Nullable Product selectProduct() {
         var products = MedicineController.getAllProducts();
         var table = new SelectProductTable(products, this.terminal);
 
@@ -134,7 +145,7 @@ public class MedicineUI extends UI {
         }
     }
 
-    public @Nullable Product searchProductInStock() {
+    public @Nullable Product selectProductInStock() {
         var products = MedicineController.getAllProducts();
         var table = new SelectProductTable(products, this.terminal);
         table.addDefaultFilter("In stock", ProductFilter.hasStock());
@@ -146,12 +157,28 @@ public class MedicineUI extends UI {
         }
     }
 
-    public void viewMedicineDetails(Medicine medicine) {
+    // alias for `selectProduct()`
+    public @Nullable Product searchProduct() {
+        return this.selectProduct();
+    }
 
+
+    public void viewMedicineDetails(Medicine medicine) {
+        var prompt = this.getPrompt();
+
+        var builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+
+        builder.createMedicineInfoText(medicine)
+                .addPrompt();
+
+        try {
+            prompt.prompt(builder.build());
+        } catch (IOException _) {
+        }
     }
 
     public void viewProductDetails(Product product) {
-        // TODO
+        // TODO: change
         this.terminal.puts(InfoCmp.Capability.clear_screen);
 
         var writer = this.getWriter();
@@ -177,7 +204,7 @@ public class MedicineUI extends UI {
     }
 
     public void viewStockDetails(Stock stock) {
-
+        // TODO
     }
 
     public @Nullable Stock searchStock() {
@@ -185,47 +212,52 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Medicine createMedicine() {
-        var medicine = new Medicine();
-
         var prompt = this.getPrompt();
 
         try {
+            var dto = new CreateMedicineDTO(
+                    "",
+                    new DoubleLinkedList<>()
+            );
             while (true) {
-                var builder = prompt.getPromptBuilder();
-                builder.createInputPrompt()
-                        .name("name")
-                        .message("Name: ")
-                        .defaultValue(medicine.getName())
+                var builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder.createText()
+                        .addLine("Creating new Medicine")
+                        .addPrompt();
+                builder.createMedicineNamePrompt()
+                        .defaultValue(dto.name())
+                        .addPrompt();
+                builder.createMedicineTypePrompt(MedicineTypeFilter.isIn(dto.types()))
                         .addPrompt();
 
-                var medicineTypeCheckbox = builder.createCheckboxPrompt()
-                        .name("type")
-                        .message("What medicine types?");
-                for (var type : MedicineType.values())
-                    medicineTypeCheckbox = medicineTypeCheckbox.newItem(type.name())
-                            .text(type.type)
-                            .checked(MedicineFilter.hasType(type).filter(medicine))
-                            .add();
-                medicineTypeCheckbox.addPrompt();
+                dto = builder.promptCreateMedicine(prompt);
 
-                var result = prompt.prompt(builder.build());
+                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder.createMedicineInfoText(dto)
+                        .addPrompt();
+                builder.createConfirmationPrompt("Continue editing?")
+                        .addPrompt();
 
-                var name = ((InputResult) result.get("name"));
-                var typesResult = ((CheckboxResult) result.get("type"));
+                if (builder.promptConfirmation(prompt))
+                    continue;
 
-                medicine.setName(name.toString());
-                for (var type : typesResult.getSelectedIds())
-                    medicine.addType(MedicineType.valueOf(type));
-                break;
+                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder.createConfirmationPrompt("Save?")
+                        .addPrompt();
+
+                if (!builder.promptConfirmation(prompt))
+                    return null;
+
+                return dto.create();
             }
         } catch (IOException e) {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
             writer.flush();
-        }
 
-        return medicine;
+            return null;
+        }
     }
 
     public @Nullable Product createProduct() {
@@ -233,27 +265,255 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Stock createStock() {
-        return null;
+        var prompt = this.getPrompt();
+
+        try {
+            var dto = new CreateStockDTO(
+                    null,
+                    1,
+                    LocalDateTime.now()
+            );
+            while (true) {
+                var builder = (StockPromptBuilder) prompt.getPromptBuilder();
+
+                if (dto.product() != null) {
+                    builder.createStockInfoText(dto)
+                            .addPrompt();
+                    builder.createConfirmationPrompt("Update the product information? ([" + dto.product().getBrand() + "] " + dto.product().getName() + ")")
+                            .addPrompt();
+
+                    if (builder.promptConfirmation(prompt)) {
+                        var product = this.selectProduct();
+                        if (product != null)
+                            dto = new CreateStockDTO(
+                                    product,
+                                    dto.stockInQuantity(),
+                                    dto.stockInDate()
+                            );
+                    }
+                } else {
+                    var product = this.selectProduct();
+                    if (product != null)
+                        dto = new CreateStockDTO(
+                                product,
+                                dto.stockInQuantity(),
+                                dto.stockInDate()
+                        );
+                }
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createText()
+                        .addLine("Creating new Stock")
+                        .addPrompt();
+                builder.createChosenProductText(dto.product())
+                        .addPrompt();
+                builder.createStockInPrompt()
+                        .defaultValue(String.valueOf(dto.stockInQuantity()))
+                        .addPrompt();
+                builder.createStockedAtPrompt()
+                        .defaultValue(dto.stockInDate().format(StockPromptBuilder.DATETIME_FORMAT))
+                        .addPrompt();
+
+                dto = builder.promptCreateStock(prompt, dto.product());
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createStockInfoText(dto)
+                        .addPrompt();
+                builder.createConfirmationPrompt("Continue editing?")
+                        .addPrompt();
+
+                if (builder.promptConfirmation(prompt))
+                    continue;
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createConfirmationPrompt("Save?")
+                        .addPrompt();
+
+                if (!builder.promptConfirmation(prompt))
+                    return null;
+
+                return dto.create();
+            }
+        } catch (IOException e) {
+            var writer = this.getWriter();
+
+            writer.println("Failed to read the inputs.");
+            writer.flush();
+
+            return null;
+        }
     }
 
     public void editMedicine(Medicine medicine) {
+        var prompt = this.getPrompt();
 
+        try {
+            var dto = new CreateMedicineDTO(
+                    medicine.getName(),
+                    medicine.getTypes()
+            );
+            while (true) {
+                var builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder.createText()
+                        .addLine("Editing Medicine #" + medicine.getId() + " - " + medicine.getName())
+                        .addPrompt();
+                builder.createMedicineNamePrompt()
+                        .defaultValue(dto.name())
+                        .addPrompt();
+                builder.createMedicineTypePrompt(MedicineTypeFilter.isIn(dto.types()))
+                        .addPrompt();
+
+                dto = builder.promptCreateMedicine(prompt);
+
+                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder.createMedicineInfoText(dto)
+                        .addPrompt();
+                builder.createConfirmationPrompt("Continue editing?")
+                        .addPrompt();
+
+                if (builder.promptConfirmation(prompt))
+                    continue;
+
+                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder.createConfirmationPrompt("Save?")
+                        .addPrompt();
+
+                if (!builder.promptConfirmation(prompt))
+                    return;
+
+                dto.update(medicine);
+            }
+        } catch (IOException e) {
+            var writer = this.getWriter();
+
+            writer.println("Failed to read the inputs.");
+            writer.flush();
+        }
     }
 
     public void editProduct(Product product) {
-
+        return;
     }
 
     public void editStock(Stock stock) {
+        var prompt = this.getPrompt();
 
+        try {
+            var dto = new CreateStockDTO(
+                    stock.getProduct(),
+                    stock.getStockInQuantity(),
+                    stock.getStockInDate()
+            );
+            while (true) {
+                var builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createStockInfoText(dto)
+                        .addPrompt();
+                builder.createConfirmationPrompt("Update the product information? ([" + dto.product().getBrand() + "] " + dto.product().getName() + ")")
+                        .addPrompt();
+
+                if (builder.promptConfirmation(prompt)) {
+                    var product = this.selectProduct();
+                    if (product != null)
+                        dto = new CreateStockDTO(
+                                product,
+                                dto.stockInQuantity(),
+                                dto.stockInDate()
+                        );
+                }
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createText()
+                        .addLine("Editing Stock #" + stock.getId())
+                        .addPrompt();
+                builder.createChosenProductText(dto.product())
+                        .addPrompt();
+                builder.createStockInPrompt()
+                        .defaultValue(String.valueOf(dto.stockInQuantity()))
+                        .addPrompt();
+                builder.createStockedAtPrompt()
+                        .defaultValue(dto.stockInDate().format(StockPromptBuilder.DATETIME_FORMAT))
+                        .addPrompt();
+
+                dto = builder.promptCreateStock(prompt, dto.product());
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createStockInfoText(dto)
+                        .addPrompt();
+                builder.createConfirmationPrompt("Continue editing?")
+                        .addPrompt();
+
+                if (builder.promptConfirmation(prompt))
+                    continue;
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createConfirmationPrompt("Save?")
+                        .addPrompt();
+
+                if (!builder.promptConfirmation(prompt))
+                    return;
+
+                dto.update(stock);
+            }
+        } catch (IOException e) {
+            var writer = this.getWriter();
+
+            writer.println("Failed to read the inputs.");
+            writer.flush();
+        }
     }
 
     public void deleteMedicine(Medicine medicine) {
+        var prompt = this.getPrompt();
 
+        var builder = (UIPromptBuilder) prompt.getPromptBuilder();
+        builder.createConfirmationPrompt("Are you sure to delete the medicine " + medicine.getName() + "?")
+                .addPrompt();
+
+        var writer = this.getWriter();
+        var reader = this.getLineReader();
+        try {
+            if (!builder.promptConfirmation(prompt))
+                return;
+        } catch (IOException e) {
+            writer.println("Failed to retrieve input.");
+            writer.flush();
+            reader.readLine();
+
+            return;
+        }
+
+        MedicineController.deleteMedicineEntry(medicine);
+
+        writer.println("Deleted medicine " + medicine.getName() + ".");
+        writer.flush();
+        reader.readLine();
     }
 
     public void deleteProduct(Product product) {
+        var prompt = this.getPrompt();
 
+        var builder = (UIPromptBuilder) prompt.getPromptBuilder();
+        builder.createConfirmationPrompt("Are you sure to delete Product #" + product.getId() + " - [" + product.getBrand() + "] " + product.getName() + "?")
+                .addPrompt();
+
+        var writer = this.getWriter();
+        var reader = this.getLineReader();
+        try {
+            if (!builder.promptConfirmation(prompt))
+                return;
+        } catch (IOException e) {
+            writer.println("Failed to retrieve input.");
+            writer.flush();
+            reader.readLine();
+
+            return;
+        }
+
+        MedicineController.deleteProductEntry(product);
+
+        writer.println("Deleted product " + product.getName() + ".");
+        writer.flush();
+        reader.readLine();
     }
 
     public static void main(String[] args) throws IOException {
@@ -302,27 +562,20 @@ public class MedicineUI extends UI {
             if (resp != KeyEvent.NOOP)
                 return resp;
 
-            var prompt = getPrompt();
-            var builder = prompt.getPromptBuilder();
+            var writer = getWriter();
+            var reader = getLineReader();
 
             //noinspection SwitchStatementWithTooFewBranches
             switch (ch) {
                 case 'n':
                     var medicine = createMedicine();
-
-                    builder.createConfirmPromp()
-                            .name("confirm")
-                            .message("")
-                            .addPrompt();
-
-                    var result = prompt.prompt(builder.build());
-
-                    var confirmResult = (ConfirmResult) result.get("confirm");
-
-                    if (confirmResult.getConfirmed() != ConfirmChoice.ConfirmationValue.YES)
+                    if (medicine == null)
                         break;
 
                     MedicineController.addMedicineEntry(medicine);
+
+                    writer.println("Added Medicine #" + medicine.getId() + " - " + medicine.getName());
+                    reader.readLine();
                     break;
             }
             return KeyEvent.NOOP;
@@ -604,27 +857,20 @@ public class MedicineUI extends UI {
             if (resp != KeyEvent.NOOP)
                 return resp;
 
-            var prompt = getPrompt();
-            var builder = prompt.getPromptBuilder();
+            var reader = getLineReader();
+            var writer = getWriter();
 
             //noinspection SwitchStatementWithTooFewBranches
             switch (ch) {
                 case 'n':
                     var product = createProduct();
-
-                    builder.createConfirmPromp()
-                            .name("confirm")
-                            .message("")
-                            .addPrompt();
-
-                    var result = prompt.prompt(builder.build());
-
-                    var confirmResult = (ConfirmResult) result.get("confirm");
-
-                    if (confirmResult.getConfirmed() != ConfirmChoice.ConfirmationValue.YES)
+                    if (product == null)
                         break;
 
                     MedicineController.addProductEntry(product);
+
+                    writer.println("Added Product #" + product.getId() + " - [" + product.getBrand() + "] " + product.getName());
+                    reader.readLine();
                     break;
             }
             return KeyEvent.NOOP;
@@ -724,6 +970,127 @@ public class MedicineUI extends UI {
 
             this.addSorter(name, comparator);
             this.updateData();
+        }
+    }
+
+
+    private static class MedicinePromptBuilder extends UIPromptBuilder {
+        public final static String NAME = "name";
+        public final static String TYPES = "types";
+
+        public TextBuilder createMedicineInfoText(CreateMedicineDTO medicine) {
+            return this.createText()
+                    .addLine("Medicine Record")
+                    .addLine("=".repeat(30))
+                    .addLine("Medicine Name: " + medicine.name())
+                    .addLine("Types: " + StringUtils.join(", ", medicine.types().map(mt -> mt.type)))
+                    .addLine("=".repeat(30));
+        }
+
+        public TextBuilder createMedicineInfoText(Medicine medicine) {
+            return this.createText()
+                    .addLine("Medicine Record #" + medicine.getId())
+                    .addLine("=".repeat(30))
+                    .addLine("Medicine Name: " + medicine.getName())
+                    .addLine("Types: " + StringUtils.join(", ", medicine.getTypes().map(mt -> mt.type)))
+                    .addLine("=".repeat(30));
+        }
+
+        public InputValueBuilder createMedicineNamePrompt() {
+            return this.createInputPrompt()
+                    .name(NAME)
+                    .message("Medicine Name: ");
+        }
+
+        public CheckboxPromptBuilder createMedicineTypePrompt(Filter<MedicineType> check) {
+            var medicineTypeCheckbox = this.createCheckboxPrompt()
+                    .name(TYPES)
+                    .message("What is the type of medicine?");
+            for (var type : MedicineType.values())
+                medicineTypeCheckbox = medicineTypeCheckbox.newItem(type.name())
+                        .text(type.type)
+                        .checked(check.filter(type))
+                        .add();
+            return medicineTypeCheckbox;
+        }
+
+        public CheckboxPromptBuilder createMedicineTypePrompt() {
+            return this.createMedicineTypePrompt(_ -> false);
+        }
+
+        public CreateMedicineDTO promptCreateMedicine(ConsolePrompt prompt) throws IOException {
+            var result = prompt.prompt(this.build());
+
+            var name = result.get(NAME).getResult();
+            var types = new DoubleLinkedList<MedicineType>();
+
+            for (var typeInput : ((CheckboxResult) result.get(TYPES)).getSelectedIds())
+                types.add(MedicineType.valueOf(typeInput));
+
+            return new CreateMedicineDTO(name, types);
+        }
+    }
+
+    public static class ProductPromptBuilder extends UIPromptBuilder {
+
+    }
+
+    public static class StockPromptBuilder extends UIPromptBuilder {
+        public static final String QUANTITY = "quantity";
+        public static final String STOCKED_AT = "stocked_at";
+        public static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofLocalizedPattern("yyyy-MM-dd HH:mm:ss");
+
+        public TextBuilder createStockInfoText(CreateStockDTO stock) {
+            return this.createText()
+                    .addLine("Stock Info")
+                    .addLine("=".repeat(30))
+                    .addLine("Product: [" + stock.product().getBrand() + "] " + stock.product().getName())
+                    .addLine("In quantity: " + stock.stockInQuantity())
+                    .addLine("Stocked at: " + stock.stockInDate())
+                    .addLine("=".repeat(30));
+        }
+
+        public TextBuilder createChosenProductText(Product product) {
+            return this.createText()
+                    .addLine("Choose the stock product: [" + product.getBrand() + "] " + product.getName());
+        }
+
+        public InputValueBuilder createStockInPrompt() {
+            return this.createInputPrompt()
+                    .name(QUANTITY)
+                    .message("In quantity: ");
+        }
+
+        public InputValueBuilder createStockedAtPrompt() {
+            return this.createInputPrompt()
+                    .name(STOCKED_AT)
+                    .message("Stocked at (YYYY-MM-DD hh:mm:ss) : ");
+        }
+
+        public CreateStockDTO promptCreateStock(ConsolePrompt prompt, Product product) throws IOException, NumberFormatException, DateTimeParseException {
+            var result = prompt.prompt(this.build());
+
+            var stockInQuantity = Integer.parseInt(result.get(QUANTITY).getResult());
+            var stockedAt = LocalDateTime.parse(result.get(STOCKED_AT).getResult(), DATETIME_FORMAT);
+
+            return new CreateStockDTO(product, stockInQuantity, stockedAt);
+        }
+    }
+
+    public static class UIPromptBuilder extends PromptBuilder {
+        public static final String CONFIRM = "confirm";
+
+        public ConfirmPromptBuilder createConfirmationPrompt(String message) {
+            return this.createConfirmPromp()
+                    .name(CONFIRM)
+                    .message(message);
+        }
+
+        public boolean promptConfirmation(ConsolePrompt prompt) throws IOException {
+            var result = prompt.prompt(this.build());
+
+            var confirmation = ((ConfirmResult) result.get(CONFIRM)).getConfirmed();
+            return confirmation == ConfirmChoice.ConfirmationValue.YES;
         }
     }
 }
