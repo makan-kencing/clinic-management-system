@@ -2,6 +2,7 @@ package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicalController;
+import edu.dsa.clinic.dto.DiagnosisCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
@@ -16,6 +17,7 @@ import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -962,6 +964,14 @@ public class MedicalUI extends UI {
                 this.scanner.nextLine();
             }
         }
+    }
+
+    public void showDiagnosisOccurrence() {
+        var counts = MedicalController.countDiagnosesOccurrence();
+        counts.sort(Comparator.comparing(DiagnosisCounter::count).reversed());
+
+        for (var count : counts)
+            System.out.println(count.diagnosis() + ": " + count.count());
     }
 
     public static class ConsultationTable extends InteractiveTable<Consultation> {

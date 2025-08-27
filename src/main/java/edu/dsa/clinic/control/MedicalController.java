@@ -3,6 +3,7 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.DiagnosisCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
@@ -141,5 +142,24 @@ public class MedicalController {
            }
        }
         return row;
+    }
+
+    public static ListInterface<DiagnosisCounter> countDiagnosesOccurrence() {
+        var counters = new DoubleLinkedList<DiagnosisCounter>();
+
+        for (var consultation : Database.consultationsList) {
+            for (var diagnosis : consultation.getDiagnoses()) {
+                var diagnosedCondition = diagnosis.getDiagnosis();
+
+                var counter = counters.findFirst(dc -> dc.diagnosis().equals(diagnosedCondition));
+                if (counter == null) {
+                    counter = new DiagnosisCounter(diagnosedCondition);
+                    counters.add(counter);
+                }
+
+                counter.increment();
+            }
+        }
+        return counters;
     }
 }
