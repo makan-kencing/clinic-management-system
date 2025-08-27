@@ -470,7 +470,6 @@ public class Initializer {
         );
 
         // Consultations data
-        // 第1条咨询记录
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(1))
@@ -566,7 +565,16 @@ public class Initializer {
                                         .addPrescription(new Prescription()
                                                 .setProduct(Database.productList.findFirst(m -> m.getId() == 6)) // Ondansetron
                                                 .setQuantity(10)
-                                                .setNotes("Take 1 tablet every 12 hours"))))
+                                                .setNotes("Take 1 tablet every 12 hours")
+                                        )
+                                        .addPrescription(new Prescription()
+                                                .setProduct(Database.productList.findFirst(m -> m.getId() == 7))
+                                                .setQuantity(10)
+                                                .setNotes("Take 1 tablet every 12 hours")
+                                        )
+                                )
+                        )
+
         );
 
         Database.consultationsList.add(
@@ -600,8 +608,6 @@ public class Initializer {
                                                 .setQuantity(30)
                                                 .setNotes("Take 1 tablet daily for 30 days"))))
         );
-
-// **上面是生成的4条模拟咨询记录数据**
 
 
         // Consultation queues data

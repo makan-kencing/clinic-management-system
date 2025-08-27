@@ -14,6 +14,7 @@ import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.lambda.Filter;
+import jdk.jfr.Category;
 import org.jetbrains.annotations.Nullable;
 
 public class MedicalController {
@@ -177,4 +178,8 @@ public class MedicalController {
         }
         return counters;
     }
+
+
+
+
 }
