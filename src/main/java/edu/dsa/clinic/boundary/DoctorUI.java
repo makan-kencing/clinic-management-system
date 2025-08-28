@@ -37,7 +37,7 @@ public class DoctorUI extends UI {
         do {
             System.out.println("\nDoctor Menu");
             System.out.println("1. Create new Doctor");
-            System.out.println("2. View Doctor List");
+            System.out.println("2. View Available Doctor List");
             System.out.println("3. Delete Doctor Record");
             System.out.println("4. Modify Doctor Information");
             System.out.println("5. Doctor Shifts Menu");
@@ -324,7 +324,8 @@ public class DoctorUI extends UI {
                 break;
         }
     }
-    
+
+    //Used for Appointment
     public @Nullable Doctor selectAvailableDoctor(LocalDate date, Range<LocalTime> timeRange) {
 
         Doctor selectedDoctor = null;
@@ -332,9 +333,59 @@ public class DoctorUI extends UI {
         var doctors = DoctorController.getDoctors();
 
         var table = new DoctorTable(doctors);
-        table.addDefaultFilter("Available at " + date + "from"+ timeRange.from() + " to " + timeRange.to(), DoctorFilter.isAvailable(date, timeRange));
+        int opt;
+        do {
+            table.addDefaultFilter("Available at " + date + "from"+ timeRange.from() + " to " + timeRange.to(), DoctorFilter.isAvailable(date, timeRange));
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Doctor ID " +
+                    "\n(2) Filter Doctor List " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextInt();
+            this.scanner.nextLine();
+            System.out.println();
 
-        // TODO: do ur menu loop thingy here
+            if (opt != 4) {
+                switch (opt) {
+                    case 1: {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Doctor ID (0 to exit): ");
+                            int id = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (id == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                break;
+                            }
+                            selectedDoctor = DoctorController.selectDoctorByID(id);
+                            if (selectedDoctor == null) {
+                                System.out.println("Doctor with ID (" + id + ") not found. Please re-enter Doctor ID...");
+                            } else {
+                                System.out.println("Doctor (" + selectedDoctor.getName() + ") with ID (" + selectedDoctor.getId() + ") selected!");
+                            }
+                        } while (selectedDoctor == null);
+                        break;
+                    }
+                    case 2: {
+                        filterDoctor(table);
+                        break;
+                    }
+                    case 3: {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                break;
+            }
+        } while (opt > 1 && opt < 4);
         return selectedDoctor;
     }
 
