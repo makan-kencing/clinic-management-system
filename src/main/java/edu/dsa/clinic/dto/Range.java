@@ -53,8 +53,8 @@ public record Range<T extends Comparable<T>>(
      * @return If this {@link Range} contains the given {@link Range}
      */
     public boolean contains(Range<T> other) {
-        return (Ordered.isLessThan(this.from, other.from) || this.from.equals(other.from))
-                && (Ordered.isGreaterThan(this.to, other.to) || this.to.equals(other.to));
+        return Ordered.isLessOrEqualTo(this.from, other.from)
+                && Ordered.isGreaterOrEqualTo(this.to, other.to);
     }
 
     /**
