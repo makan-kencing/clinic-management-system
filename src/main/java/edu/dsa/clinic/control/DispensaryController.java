@@ -7,6 +7,7 @@ import edu.dsa.clinic.dto.DispensaryQueue;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.Dispensing;
 import edu.dsa.clinic.entity.Product;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Logics for managing the prescriptions and dispensary queue.
@@ -56,7 +57,19 @@ public class DispensaryController {
         return dispensings;
     }
 
-    public static DispensaryQueue handleNextDispense() {
-        return Database.dispensaryQueueList.popFirst();
+    public static ListInterface<DispensaryQueue> getDispensaryQueue() {
+        return Database.dispensaryQueueList.clone();
+    }
+
+    public static @Nullable DispensaryQueue handleNextDispense() {
+        try {
+            return Database.dispensaryQueueList.popFirst();
+        } catch (IndexOutOfBoundsException _) {
+            return null;
+        }
+    }
+
+    public static void addBackDispense(DispensaryQueue queued) {
+        Database.dispensaryQueueList.add(queued);
     }
 }

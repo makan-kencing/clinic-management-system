@@ -3,10 +3,12 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.Initializer;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.dto.CreateMedicineDTO;
 import edu.dsa.clinic.dto.CreateProductDTO;
 import edu.dsa.clinic.dto.CreateStockDTO;
+import edu.dsa.clinic.dto.DispensaryQueue;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineAdministrationType;
 import edu.dsa.clinic.entity.MedicineType;
@@ -256,7 +258,42 @@ public class MedicineUI extends UI {
     }
 
     public void manageDispensaryMenu() throws IOException {
-        // TODO
+        var prompt = this.getPrompt();
+
+        var current = DispensaryController.handleNextDispense();
+
+        while (true) {
+            if (current != null) {
+                var upcoming = DispensaryController.getDispensaryQueue();
+
+                var builder = new DispensaryQueuePromptBuilder();
+                builder.createDispensaryText(current)
+                        .addPrompt();
+                builder.createText()
+                        .addLine("");
+                builder.createUpcomingDispensaries(upcoming)
+                        .addPrompt();
+                builder.createOptionPrompt()
+                        .addPrompt();
+
+                switch (builder.promptOption(prompt)) {
+                    case COMPLETED:
+                        current = DispensaryController.handleNextDispense();
+                        break;
+                    case EXIT:
+                        DispensaryController.addBackDispense(current);
+                        return;
+                }
+            } else {
+                var reader = this.getLineReader();
+
+                reader.readLine("""
+                        
+                        No dispensing queued at the moment.
+                        Press to continue""");
+                break;
+            }
+        }
     }
 
     public void manageReportsMenu() throws IOException {
@@ -1775,6 +1812,74 @@ public class MedicineUI extends UI {
             var stockedAt = LocalDateTime.parse(result.get(STOCKED_AT).getResult(), DATETIME_FORMAT);
 
             return new CreateStockDTO(product, stockInQuantity, stockedAt);
+        }
+    }
+
+    public static class DispensaryQueuePromptBuilder extends UIPromptBuilder {
+        public static final String OPTION = "option";
+
+        public enum Option {
+            COMPLETED,
+            EXIT
+        }
+
+        public TextBuilder createDispensaryText(DispensaryQueue queued) {
+            var consultation = queued.consultation();
+
+            var text = this.createText()
+                    .addLine("=".repeat(30))
+                    .addLine("Dispensing Now")
+                    .addLine("For: Consultation #" + consultation.getId())
+                    .addLine("Prescriptions needed:")
+                    .addLine("-".repeat(30));
+
+            int count = 0;
+            for (var diagnosis : consultation.getDiagnoses())
+                for (var treatment : diagnosis.getTreatments())
+                    for (var prescription : treatment.getPrescriptions()) {
+                        text = text
+                                .addLine("Product: [" + prescription.getProduct().getBrand() + "] " + prescription.getProduct().getName())
+                                .addLine("   Quantity - " + prescription.getQuantity())
+                                .addLine("   Notes    - " + prescription.getNotes());
+                        count++;
+                    }
+            text.addLine(count + " prescriptions required");
+            text.addLine("=".repeat(30));
+
+            return text;
+        }
+
+        public TextBuilder createUpcomingDispensaries(ListInterface<DispensaryQueue> upcoming) {
+            var text = this.createText()
+                    .addLine("Upcoming Queued (" + upcoming.size() + ")")
+                    .addLine("=".repeat(30));
+            for (var queued : upcoming) {
+                var consultation = queued.consultation();
+
+                for (var diagnosis : consultation.getDiagnoses())
+                    for (var treatment : diagnosis.getTreatments())
+                        for (var prescription : treatment.getPrescriptions())
+                            text = text
+                                    .addLine("Product: [" + prescription.getProduct().getBrand() + "] " + prescription.getProduct().getName()
+                                            + " (" + prescription.getQuantity() + ") ")
+                                    .addLine("-".repeat(30));
+            }
+
+            return text;
+        }
+
+        public ListPromptBuilder createOptionPrompt() {
+            return this.createListPrompt()
+                    .name(OPTION)
+                    .message("")
+                    .newItem(Option.COMPLETED.name()).text("Complete current dispensing").add()
+                    .newItem(Option.EXIT.name()).text("Exit").add();
+        }
+
+        public Option promptOption(ConsolePrompt prompt) throws IOException {
+            var result = prompt.prompt(this.build());
+
+            return Option.valueOf(result.get(OPTION).getResult());
         }
     }
 
