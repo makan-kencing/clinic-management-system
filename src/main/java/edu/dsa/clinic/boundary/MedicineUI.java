@@ -275,6 +275,7 @@ public class MedicineUI extends UI {
             table.setDefaultFilters(defaultFilters);
         if (defaultSorters != null && defaultSorters.size() > 0)
             table.setDefaultSorters(defaultSorters);
+        table.updateData();
 
         try {
             return table.select();
@@ -299,6 +300,7 @@ public class MedicineUI extends UI {
             table.setDefaultFilters(defaultFilters);
         if (defaultSorters != null && defaultSorters.size() > 0)
             table.setDefaultSorters(defaultSorters);
+        table.updateData();
 
         try {
             return table.select();
@@ -330,6 +332,7 @@ public class MedicineUI extends UI {
             table.setDefaultFilters(defaultFilters);
         if (defaultSorters != null && defaultSorters.size() > 0)
             table.setDefaultSorters(defaultSorters);
+        table.updateData();
 
         try {
             return table.select();
