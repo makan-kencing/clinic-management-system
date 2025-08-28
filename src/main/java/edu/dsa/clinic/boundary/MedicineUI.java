@@ -425,7 +425,7 @@ public class MedicineUI extends UI {
                     null,
                     BigDecimal.valueOf(0),
                     BigDecimal.valueOf(0),
-                    0
+                    Integer.MAX_VALUE
             );
             while (true) {
                 var builder = new ProductPromptBuilder();
@@ -484,7 +484,7 @@ public class MedicineUI extends UI {
                         .defaultValue(dto.price().toString())
                         .addPrompt();
                 builder.createOrderThresholdPrompt()
-                        .defaultValue(String.valueOf(dto.autoOrderThreshold()))
+                        .defaultValue(dto.autoOrderThreshold() == Integer.MAX_VALUE ? "No set" : String.valueOf(dto.autoOrderThreshold()))
                         .addPrompt();
 
                 try {
@@ -1544,7 +1544,9 @@ public class MedicineUI extends UI {
                     .addLine("Administration Type: " + product.getAdministrationType().type)
                     .addLine("Unit Cost: " + product.getCost())
                     .addLine("Unit Price: " + product.getPrice())
-                    .addLine("Order threshold at: " + product.getAutoOrderThreshold())
+                    .addLine("Order threshold at: " + (product.getAutoOrderThreshold() == Integer.MAX_VALUE
+                            ? "No set"
+                            : product.getAutoOrderThreshold()))
                     .addLine("=".repeat(30));
         }
 
@@ -1597,7 +1599,9 @@ public class MedicineUI extends UI {
             var administrationType = MedicineAdministrationType.valueOf(result.get(ADMINISTRATION_TYPE).getResult());
             var cost = new BigDecimal(result.get(UNIT_COST).getResult());
             var price = new BigDecimal(result.get(UNIT_PRICE).getResult());
-            var autoOrderThreshold = Integer.parseInt(result.get(AUTO_ORDER_THRESHOLD).getResult());
+            var autoOrderThreshold = result.get(AUTO_ORDER_THRESHOLD).getResult().equals("No set")
+                    ? Integer.MAX_VALUE
+                    : Integer.parseInt(result.get(AUTO_ORDER_THRESHOLD).getResult());
 
             return new CreateProductDTO(
                     name,
