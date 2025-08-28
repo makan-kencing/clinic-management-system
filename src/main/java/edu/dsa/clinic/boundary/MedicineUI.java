@@ -1492,7 +1492,7 @@ public class MedicineUI extends UI {
                     new Column("Product Type", 30),
                     new Column("Product Name", 30),
                     new Column("In quantity", 15),
-                    new Column("Stocked at", 15),
+                    new Column("Stocked at", 20),
                     new Column("Quantity left", 15)
             }, stocks, terminal);
         }
