@@ -6,6 +6,7 @@ import edu.dsa.clinic.entity.Patient;
 
 public class PatientCounter extends Counter<Patient> {
     private final ListInterface<ProductCounter> productCounters = new DoubleLinkedList<>();
+    private final ListInterface<ConsultationTypeCounter> consultationTypeCounters = new DoubleLinkedList<>();
 
     public PatientCounter(Patient key) {
         super(key); // key = Patient
@@ -29,5 +30,9 @@ public class PatientCounter extends Counter<Patient> {
 
     public ListInterface<ProductCounter> productCounters() {
         return this.productCounters;
+    }
+
+    public ListInterface<ConsultationTypeCounter> consultationCounters() {
+        return this.consultationTypeCounters;
     }
 }

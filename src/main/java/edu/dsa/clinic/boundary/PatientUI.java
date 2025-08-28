@@ -629,11 +629,25 @@ public class PatientUI extends UI {
             System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
             System.out.println();
 
-            InteractiveTable<PatientCounter> table = new InteractiveTable<>(new Column[] {
+            int maxConsultationLength = "Consultations Attended".length();
+            int maxMedicineLength = "Total Medicines Prescribed".length();
+
+            for (var pc : counters) {
+                String consultations = StringUtils.join(", ", patientController.getTypeList(pc));
+                maxConsultationLength = Math.max(maxConsultationLength, consultations.length());
+
+                String meds = StringUtils.join(", ", patientController.getMedicineList(pc));
+                maxMedicineLength = Math.max(maxMedicineLength, meds.length());
+            }
+
+            maxConsultationLength += 2;
+            maxMedicineLength += 2;
+
+            InteractiveTable<PatientCounter> table = new InteractiveTable<>(new Column[]{
                     new Column("Patient ID", Alignment.CENTER, 15),
                     new Column("Patient Name", Alignment.CENTER, 40),
-                    new Column("Consultations Attended", Alignment.CENTER, 25),
-                    new Column("Total Medicines Prescribed", Alignment.CENTER, 100)
+                    new Column("Consultations Attended", Alignment.CENTER, maxConsultationLength),
+                    new Column("Total Medicines Prescribed", Alignment.CENTER, maxMedicineLength)
             }, counters) {
                 @Override
                 protected Cell[] getRow(PatientCounter pc) {
@@ -641,14 +655,15 @@ public class PatientUI extends UI {
 
                     String patientId = String.valueOf(patient.getId());
                     String patientName = patient.getName();
-                    String consultationCount = String.valueOf(pc.getCount());
-                    ListInterface<String> medicines = patientController.getMedicineList(pc);
+
+                    String consultationCount = StringUtils.join(", ", patientController.getTypeList(pc));
+                    String medicines = StringUtils.join(", ", patientController.getMedicineList(pc));
 
                     return new Cell[]{
                             new Cell(patientId, Alignment.CENTER),
                             new Cell(patientName),
-                            new Cell(consultationCount, Alignment.CENTER),
-                            new Cell(StringUtils.join(", ", medicines))
+                            new Cell(consultationCount),
+                            new Cell(medicines)
                     };
                 }
             };
