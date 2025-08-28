@@ -1597,7 +1597,9 @@ public class MedicineUI extends UI {
                     .addLine("Administration Type: " + product.administrationType().type)
                     .addLine("Unit Cost: " + product.cost())
                     .addLine("Unit Price: " + product.price())
-                    .addLine("Order threshold at: " + product.autoOrderThreshold())
+                    .addLine("Order threshold at: " + (product.autoOrderThreshold() == Integer.MAX_VALUE
+                            ? "No set"
+                            : product.autoOrderThreshold()))
                     .addLine("=".repeat(30));
         }
 
