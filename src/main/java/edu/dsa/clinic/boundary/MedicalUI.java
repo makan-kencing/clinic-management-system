@@ -1,6 +1,7 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.control.MedicineController;
@@ -27,6 +28,7 @@ import java.util.Scanner;
 
 
 public class MedicalUI extends UI {
+    private final AppointmentController appointmentController = new AppointmentController();
     private final MedicalController medicalController;
     private final MedicineUI medicineUI;
     private final PatientUI patientUI;
@@ -751,6 +753,7 @@ public class MedicalUI extends UI {
         }
 
         if (medicalController.saveConsultationRecord(consultation)) {
+            appointmentController.cancelAppointment(appointment);
             DispensaryController.queueConsultation(consultation);
             System.out.println("Consultation record added.");
         }
