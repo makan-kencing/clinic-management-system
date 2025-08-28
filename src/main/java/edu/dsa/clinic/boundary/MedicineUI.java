@@ -768,6 +768,7 @@ public class MedicineUI extends UI {
                     return;
 
                 dto.update(medicine);
+                return;
             }
         } catch (IOException e) {
             var writer = this.getWriter();
@@ -861,6 +862,7 @@ public class MedicineUI extends UI {
                     return;
 
                 dto.update(product);
+                return;
             }
         } catch (IOException e) {
             var writer = this.getWriter();
@@ -940,6 +942,7 @@ public class MedicineUI extends UI {
                     return;
 
                 dto.update(stock);
+                return;
             }
         } catch (IOException e) {
             var writer = this.getWriter();
