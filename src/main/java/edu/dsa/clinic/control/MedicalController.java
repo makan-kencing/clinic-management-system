@@ -161,7 +161,7 @@ public class MedicalController {
 
         for (var consultation : Database.consultationsList) {
             for (var diagnosis : consultation.getDiagnoses()) {
-                var diagnosedCondition = diagnosis.getDiagnosis();
+                var diagnosedCondition = diagnosis.getDiagnosis();  // String
 
                 var counter = counters.findFirst(dc -> dc.key().equals(diagnosedCondition));
                 if (counter == null) {
@@ -189,6 +189,18 @@ public class MedicalController {
         return counters;
     }
 
+   public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
+    int total = 0;
+    for (int i = 0; i < diagnosisCounters.size(); i++) {
+        DiagnosisCounter dc = diagnosisCounters.get(i);
+        ListInterface<ProductCounter> productCounters = dc.productCounters();
+
+        for (int j = 0; j < productCounters.size(); j++) {
+            total += productCounters.get(j).count();  // 累加每个药品的使用次数
+        }
+    }
+    return total;
+}
 
 
 
