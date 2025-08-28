@@ -1,11 +1,9 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.dto.AppointmentTypeCounter;
 import edu.dsa.clinic.dto.ConsultationQueue;
-import edu.dsa.clinic.dto.Counter;
 import edu.dsa.clinic.dto.DoctorCounter;
 import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.Range;
