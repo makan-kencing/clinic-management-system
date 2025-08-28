@@ -3,7 +3,7 @@ package edu.dsa.clinic.entity;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.adt.SortedDoubleLinkedList;
-import edu.dsa.clinic.dto.Inventory;
+import org.jetbrains.annotations.Range;
 
 import java.math.BigDecimal;
 
@@ -19,7 +19,8 @@ public class Product extends IdentifiableEntity {
     private MedicineAdministrationType administrationType;
     private BigDecimal cost;
     private BigDecimal price;
-    private Inventory inventory = new Inventory();
+    @Range(from = 0, to = Integer.MAX_VALUE)
+    private int autoOrderThreshold = Integer.MAX_VALUE;
     private ListInterface<Product> substitutes = new DoubleLinkedList<>();
     private ListInterface<Product> substitutesFor = new DoubleLinkedList<>();
     private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
@@ -80,12 +81,12 @@ public class Product extends IdentifiableEntity {
         return this;
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public int getAutoOrderThreshold() {
+        return autoOrderThreshold;
     }
 
-    public Product setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public Product setAutoOrderThreshold(int autoOrderThreshold) {
+        this.autoOrderThreshold = autoOrderThreshold;
         return this;
     }
 
@@ -146,7 +147,6 @@ public class Product extends IdentifiableEntity {
                 ", brand='" + brand + '\'' +
                 ", cost=" + cost +
                 ", price=" + price +
-                ", inventory=" + inventory +
                 ", substitutes=" + substitutes +
                 ", substitutesFor=" + substitutesFor +
                 ", stocks=" + stocks +

@@ -6,7 +6,6 @@ import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.dto.CreateMedicineDTO;
 import edu.dsa.clinic.dto.CreateStockDTO;
-import edu.dsa.clinic.dto.Inventory;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Product;
@@ -48,7 +47,7 @@ import java.util.StringJoiner;
 
 /**
  * This UI is managing everything medicinal related. (e.g. {@link Medicine}, {@link Product},
- * {@link Stock}, {@link Inventory})
+ * {@link Stock})
  *
  * @author makan-kencing
  */
