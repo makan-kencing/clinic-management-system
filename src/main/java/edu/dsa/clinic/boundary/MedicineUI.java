@@ -25,6 +25,7 @@ import edu.dsa.clinic.utils.SelectTable;
 import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
+import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
 import org.jline.consoleui.elements.ConfirmChoice;
 import org.jline.consoleui.prompt.CheckboxResult;
@@ -255,8 +256,42 @@ public class MedicineUI extends UI {
         // TODO
     }
 
-    public @Nullable Medicine selectMedicine() {
+    public @Nullable Medicine selectMedicine(
+            String title,
+            ListInterface<InteractiveTable.NamedFilter<Medicine>> defaultFilters,
+            ListInterface<InteractiveTable.NamedSorter<Medicine>> defaultSorters
+    ) {
         var table = new SelectMedicineTable(MedicineController::getAllMedicines, this.terminal);
+        if (title != null)
+            table.setTitle(title);
+        if (defaultFilters != null && defaultFilters.size() > 0)
+            table.setDefaultFilters(defaultFilters);
+        if (defaultSorters != null && defaultSorters.size() > 0)
+            table.setDefaultSorters(defaultSorters);
+
+        try {
+            return table.select();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public @Nullable Medicine selectMedicine() {
+        return this.selectMedicine("Selecting Medicine", null, null);
+    }
+
+    public @Nullable Product selectProduct(
+            String title,
+            ListInterface<InteractiveTable.NamedFilter<Product>> defaultFilters,
+            ListInterface<InteractiveTable.NamedSorter<Product>> defaultSorters
+    ) {
+        var table = new SelectProductTable(MedicineController::getAllProducts, this.terminal);
+        if (title != null)
+            table.setTitle(title);
+        if (defaultFilters != null && defaultFilters.size() > 0)
+            table.setDefaultFilters(defaultFilters);
+        if (defaultSorters != null && defaultSorters.size() > 0)
+            table.setDefaultSorters(defaultSorters);
 
         try {
             return table.select();
@@ -266,18 +301,28 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Product selectProduct() {
-        var table = new SelectProductTable(MedicineController::getAllProducts, this.terminal);
-
-        try {
-            return table.select();
-        } catch (IOException e) {
-            return null;
-        }
+        return this.selectProduct("Selecting Product", null, null);
     }
 
     public @Nullable Product selectProductInStock() {
-        var table = new SelectProductTable(MedicineController::getAllProducts, this.terminal);
-        table.addDefaultFilter("In stock", ProductFilter.hasStock());
+        var productFilters = new DoubleLinkedList<InteractiveTable.NamedFilter<Product>>();
+        productFilters.add(new InteractiveTable.NamedFilter<>("In Stock", ProductFilter.hasStock()));
+
+        return this.selectProduct("Selecting Product In Stock", productFilters, null);
+    }
+
+    public @Nullable Stock selectStock(
+            String title,
+            ListInterface<InteractiveTable.NamedFilter<Stock>> defaultFilters,
+            ListInterface<InteractiveTable.NamedSorter<Stock>> defaultSorters
+    ) {
+        var table = new SelectStockTable(MedicineController::getAllStocks, this.terminal);
+        if (title != null)
+            table.setTitle(title);
+        if (defaultFilters != null && defaultFilters.size() > 0)
+            table.setDefaultFilters(defaultFilters);
+        if (defaultSorters != null && defaultSorters.size() > 0)
+            table.setDefaultSorters(defaultSorters);
 
         try {
             return table.select();
@@ -287,24 +332,14 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Stock selectStock() {
-        var table = new SelectStockTable(MedicineController::getAllStocks, this.terminal);
-
-        try {
-            return table.select();
-        } catch (IOException e) {
-            return null;
-        }
+        return this.selectStock("Selecting Stock", null, null);
     }
 
     public @Nullable Stock selectProductStock(Product product) {
-        var table = new SelectStockTable(() -> MedicineController.getProductStocks(product), this.terminal);
-        table.addDefaultFilter("Product is " + product.getName(), StockFilter.byProduct(product));
+        var stockFilters = new DoubleLinkedList<InteractiveTable.NamedFilter<Stock>>();
+        stockFilters.add(new InteractiveTable.NamedFilter<>("Product is " + product.getName(), StockFilter.byProduct(product)));
 
-        try {
-            return table.select();
-        } catch (IOException e) {
-            return null;
-        }
+        return this.selectStock("Selecting Stock", stockFilters, null);
     }
 
     // alias for `selectProduct()`
