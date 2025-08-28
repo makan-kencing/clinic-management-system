@@ -52,7 +52,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.StringJoiner;
 
 /**
@@ -64,10 +63,6 @@ import java.util.StringJoiner;
 public class MedicineUI extends UI {
     public MedicineUI(Terminal terminal) {
         super(terminal);
-    }
-
-    public MedicineUI(Scanner scanner) {
-        super(scanner);
     }
 
     @Override
@@ -298,7 +293,20 @@ public class MedicineUI extends UI {
     }
 
     public void manageReportsMenu() throws IOException {
-        // TODO
+        var prompt = this.getPrompt();
+        var builder = new ManageReportMenuPromptBuilder();
+        builder.createOptionPrompt()
+                .addPrompt();
+
+        while (true) {
+            switch (builder.promptOption(prompt)) {
+                case MEDICINE_USAGE_BY_DIAGNOSIS_AND_TREATMENT:
+
+                    break;
+                case EXIT:
+                    return;
+            }
+        }
     }
 
     public @Nullable Medicine selectMedicine(
@@ -1874,6 +1882,30 @@ public class MedicineUI extends UI {
                     .name(OPTION)
                     .message("")
                     .newItem(Option.COMPLETED.name()).text("Complete current dispensing").add()
+                    .newItem(Option.EXIT.name()).text("Exit").add();
+        }
+
+        public Option promptOption(ConsolePrompt prompt) throws IOException {
+            var result = prompt.prompt(this.build());
+
+            return Option.valueOf(result.get(OPTION).getResult());
+        }
+    }
+
+    public static class ManageReportMenuPromptBuilder extends UIPromptBuilder {
+        public static final String OPTION = "option";
+
+        public enum Option {
+            MEDICINE_USAGE_BY_DIAGNOSIS_AND_TREATMENT,
+
+            EXIT
+        }
+
+        public ListPromptBuilder createOptionPrompt() {
+            return this.createListPrompt()
+                    .name(OPTION)
+                    .message("")
+                    .newItem().text("").add()
                     .newItem(Option.EXIT.name()).text("Exit").add();
         }
 

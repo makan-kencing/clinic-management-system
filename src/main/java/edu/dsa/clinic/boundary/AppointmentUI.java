@@ -16,24 +16,25 @@ import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
+import org.jline.terminal.Terminal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.time.format.DateTimeParseException;
 
 public class AppointmentUI extends UI {
     private final AppointmentController appointmentController = new AppointmentController();
     private final PatientUI patientUI = new PatientUI(this.scanner);
     private final DoctorUI doctorUI = new DoctorUI(this.scanner);
-    private final MedicalUI medicalUI = new MedicalUI(this.scanner);
-    
+    private final MedicalUI medicalUI = new MedicalUI(this.terminal, this.scanner);
+
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public AppointmentUI(Scanner scanner) {
-        super(scanner);
+    public AppointmentUI(Terminal terminal,  Scanner scanner) {
+        super(terminal, scanner);
     }
 
     @Override

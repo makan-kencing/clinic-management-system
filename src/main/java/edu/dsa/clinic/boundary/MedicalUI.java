@@ -35,31 +35,17 @@ import java.util.Scanner;
 
 public class MedicalUI extends UI {
     private final AppointmentController appointmentController = new AppointmentController();
-    private final MedicalController medicalController;
-    private final MedicineUI medicineUI;
-    private final PatientUI patientUI;
-    private final DoctorUI doctorUI;
-    private final AppointmentUI appointmentUI;
+    private final MedicalController medicalController = new MedicalController();
+    private final MedicineUI medicineUI = new MedicineUI(this.terminal);
+    private final PatientUI patientUI = new PatientUI(this.scanner);
+    private final DoctorUI doctorUI = new DoctorUI(this.scanner);
+    private final AppointmentUI appointmentUI = new AppointmentUI(this.terminal, this.scanner);
     private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
                     .withZone(ZoneId.systemDefault());
 
     public MedicalUI(Terminal terminal, Scanner scanner) {
         super(terminal, scanner);
-        this.medicalController = new MedicalController();
-        this.medicineUI = new MedicineUI(this.terminal);
-        this.patientUI = new PatientUI(scanner);
-        this.doctorUI = new DoctorUI(scanner);
-        this.appointmentUI = new AppointmentUI(scanner);
-    }
-
-    public MedicalUI(Scanner scanner) {
-        super(scanner);
-        this.medicalController = new MedicalController();
-        this.medicineUI = new MedicineUI(scanner);
-        this.patientUI = new PatientUI(scanner);
-        this.doctorUI = new DoctorUI(scanner);
-        this.appointmentUI = new AppointmentUI(scanner);
     }
 
     @Override
