@@ -1690,7 +1690,7 @@ public class MedicineUI extends UI {
     public static class StockPromptBuilder extends UIPromptBuilder {
         public static final String QUANTITY = "quantity";
         public static final String STOCKED_AT = "stocked_at";
-        public static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofLocalizedPattern("yyyy-MM-dd HH:mm:ss");
+        public static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         public TextBuilder createStockInfoText(Stock stock) {
             return this.createText()
