@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Range;
 import java.util.StringJoiner;
 
 public abstract class Table<T> {
+    private String title = "";
     private final Column[] columns;
     private ListInterface<T> data;
 
@@ -28,6 +29,15 @@ public abstract class Table<T> {
 
     public @Range(from = 1, to = Integer.MAX_VALUE) int getPageSize() {
         return pageSize;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Table<T> setTitle(String title) {
+        this.title = title;
+        return this;
     }
 
     public void setPageSize(@Range(from = 1, to = Integer.MAX_VALUE) int pageSize) {
@@ -139,6 +149,7 @@ public abstract class Table<T> {
     }
 
     public void display() {
+        System.out.println(this.title);
         System.out.println(this.renderBorder());
         System.out.println(this.renderHeader());
         System.out.println(this.renderBorder());
