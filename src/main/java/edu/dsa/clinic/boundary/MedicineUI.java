@@ -479,7 +479,7 @@ public class MedicineUI extends UI {
                             .addPrompt();
 
                     if (builder.promptConfirmation(prompt)) {
-                        var medicine = this.selectMedicine();
+                        var medicine = this.selectMedicine("Changing Medicine of the Product", null, null);
                         if (medicine != null)
                             dto = new CreateProductDTO(
                                     dto.name(),
@@ -492,7 +492,7 @@ public class MedicineUI extends UI {
                             );
                     }
                 } else {
-                    var medicine = this.selectMedicine();
+                    var medicine = this.selectMedicine("Select Medicine type of the new Product", null, null);
                     if (medicine != null)
                         dto = new CreateProductDTO(
                                 dto.name(),
@@ -584,7 +584,7 @@ public class MedicineUI extends UI {
                             .addPrompt();
 
                     if (builder.promptConfirmation(prompt)) {
-                        var product = this.selectProduct();
+                        var product = this.selectProduct("Changing Stock's Product", null, null);
                         if (product != null)
                             dto = new CreateStockDTO(
                                     product,
@@ -593,7 +593,7 @@ public class MedicineUI extends UI {
                             );
                     }
                 } else {
-                    var product = this.selectProduct();
+                    var product = this.selectProduct("Select new Stock's Product", null, null);
                     if (product != null)
                         dto = new CreateStockDTO(
                                 product,
@@ -770,7 +770,7 @@ public class MedicineUI extends UI {
                         .addPrompt();
 
                 if (builder.promptConfirmation(prompt)) {
-                    var medicine = this.selectMedicine();
+                    var medicine = this.selectMedicine("Select Medicine type of the Product", null, null);
                     if (medicine != null)
                         dto = new CreateProductDTO(
                                 dto.name(),
@@ -857,7 +857,7 @@ public class MedicineUI extends UI {
                         .addPrompt();
 
                 if (builder.promptConfirmation(prompt)) {
-                    var product = this.selectProduct();
+                    var product = this.selectProduct("Select Stock's Product", null, null);
                     if (product != null)
                         dto = new CreateStockDTO(
                                 product,
