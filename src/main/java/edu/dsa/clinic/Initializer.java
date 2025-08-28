@@ -32,46 +32,106 @@ public class Initializer {
 
     public static void initialize() {
         // Patients data
-        Database.patientsList.add(
-                ((Patient) new Patient()
-                        .setId(1))
-                        .setName("hi")
-                        .setGender(Gender.MALE)
-                        .setIdentification("01234")
-                        .setContactNumber("+123456789")
-        );
-        Database.patientsList.add(
-                ((Patient) new Patient()
-                        .setId(2))
-                        .setName("hello")
-                        .setGender(Gender.IDK)
-                        .setIdentification("31324")
-                        .setContactNumber("+123456789")
-        );
-        Database.patientsList.add(
-                ((Patient) new Patient()
-                        .setId(3))
-                        .setName("john doe")
-                        .setGender(Gender.IDK)
-                        .setIdentification("54821")
-                        .setContactNumber("+123456789")
-        );
-        Database.patientsList.add(
-                ((Patient) new Patient()
-                        .setId(4))
-                        .setName("Patient Zero")
-                        .setGender(Gender.FEMALE)
-                        .setIdentification("94756")
-                        .setContactNumber("+123456789")
-        );
-        Database.patientsList.add(
-                ((Patient) new Patient()
-                        .setId(5))
-                        .setName("PAX-19")
-                        .setGender(Gender.MALE)
-                        .setIdentification("09865")
-                        .setContactNumber("+123456789")
-        );
+        Database.patientsList.add(((Patient) new Patient().setId(1)).setName("Ahmad Faiz").setGender(Gender.MALE).setIdentification("900101-14-1234").setContactNumber("+60123450001"));
+        Database.patientsList.add(((Patient) new Patient().setId(2)).setName("Nurul Aisyah").setGender(Gender.FEMALE).setIdentification("880305-08-5678").setContactNumber("+60123450002"));
+        Database.patientsList.add(((Patient) new Patient().setId(3)).setName("Muhammad Hafiz").setGender(Gender.MALE).setIdentification("950712-10-4321").setContactNumber("+60123450003"));
+        Database.patientsList.add(((Patient) new Patient().setId(4)).setName("Siti Mariam").setGender(Gender.FEMALE).setIdentification("920918-12-8765").setContactNumber("+60123450004"));
+        Database.patientsList.add(((Patient) new Patient().setId(5)).setName("Ahmad Zulkifli").setGender(Gender.MALE).setIdentification("970424-05-1122").setContactNumber("+60123450005"));
+        Database.patientsList.add(((Patient) new Patient().setId(6)).setName("Farah Hani").setGender(Gender.FEMALE).setIdentification("890623-09-3344").setContactNumber("+60123450006"));
+        Database.patientsList.add(((Patient) new Patient().setId(7)).setName("Daniel Lim").setGender(Gender.MALE).setIdentification("930802-11-5566").setContactNumber("+60123450007"));
+        Database.patientsList.add(((Patient) new Patient().setId(8)).setName("Chong Wei").setGender(Gender.MALE).setIdentification("910707-03-7788").setContactNumber("+60123450008"));
+        Database.patientsList.add(((Patient) new Patient().setId(9)).setName("Aina Sofea").setGender(Gender.FEMALE).setIdentification("960115-06-9900").setContactNumber("+60123450009"));
+        Database.patientsList.add(((Patient) new Patient().setId(10)).setName("Hafizah Rahman").setGender(Gender.FEMALE).setIdentification("940321-01-2233").setContactNumber("+60123450010"));
+        Database.patientsList.add(((Patient) new Patient().setId(11)).setName("Syafiq Amir").setGender(Gender.MALE).setIdentification("901231-07-3344").setContactNumber("+60123450011"));
+        Database.patientsList.add(((Patient) new Patient().setId(12)).setName("Noraini Hassan").setGender(Gender.FEMALE).setIdentification("881215-02-4455").setContactNumber("+60123450012"));
+        Database.patientsList.add(((Patient) new Patient().setId(13)).setName("Irfan Azman").setGender(Gender.MALE).setIdentification("950606-09-5566").setContactNumber("+60123450013"));
+        Database.patientsList.add(((Patient) new Patient().setId(14)).setName("Fatin Nadira").setGender(Gender.FEMALE).setIdentification("921101-05-6677").setContactNumber("+60123450014"));
+        Database.patientsList.add(((Patient) new Patient().setId(15)).setName("Adib Syahmi").setGender(Gender.MALE).setIdentification("970530-03-7788").setContactNumber("+60123450015"));
+        Database.patientsList.add(((Patient) new Patient().setId(16)).setName("Sabrina Khairun").setGender(Gender.FEMALE).setIdentification("890809-11-8899").setContactNumber("+60123450016"));
+        Database.patientsList.add(((Patient) new Patient().setId(17)).setName("Wei Ling").setGender(Gender.FEMALE).setIdentification("930202-06-9900").setContactNumber("+60123450017"));
+        Database.patientsList.add(((Patient) new Patient().setId(18)).setName("Jonathan Tan").setGender(Gender.MALE).setIdentification("910415-04-1122").setContactNumber("+60123450018"));
+        Database.patientsList.add(((Patient) new Patient().setId(19)).setName("Nur Farah").setGender(Gender.FEMALE).setIdentification("960730-08-2233").setContactNumber("+60123450019"));
+        Database.patientsList.add(((Patient) new Patient().setId(20)).setName("Ahmad Irfan").setGender(Gender.MALE).setIdentification("940909-12-3344").setContactNumber("+60123450020"));
+        Database.patientsList.add(((Patient) new Patient().setId(21)).setName("Siti Zulaikha").setGender(Gender.FEMALE).setIdentification("900424-05-4455").setContactNumber("+60123450021"));
+        Database.patientsList.add(((Patient) new Patient().setId(22)).setName("Daniel Ong").setGender(Gender.MALE).setIdentification("880610-09-5566").setContactNumber("+60123450022"));
+        Database.patientsList.add(((Patient) new Patient().setId(23)).setName("Aina Najwa").setGender(Gender.FEMALE).setIdentification("950101-11-6677").setContactNumber("+60123450023"));
+        Database.patientsList.add(((Patient) new Patient().setId(24)).setName("Hafiz Adnan").setGender(Gender.MALE).setIdentification("921212-03-7788").setContactNumber("+60123450024"));
+        Database.patientsList.add(((Patient) new Patient().setId(25)).setName("Farah Iman").setGender(Gender.FEMALE).setIdentification("970303-07-8899").setContactNumber("+60123450025"));
+        Database.patientsList.add(((Patient) new Patient().setId(26)).setName("Lim Wei Jie").setGender(Gender.MALE).setIdentification("890808-02-9900").setContactNumber("+60123450026"));
+        Database.patientsList.add(((Patient) new Patient().setId(27)).setName("Chong Mei Ling").setGender(Gender.FEMALE).setIdentification("930515-06-1122").setContactNumber("+60123450027"));
+        Database.patientsList.add(((Patient) new Patient().setId(28)).setName("Ahmad Danish").setGender(Gender.MALE).setIdentification("910707-10-2233").setContactNumber("+60123450028"));
+        Database.patientsList.add(((Patient) new Patient().setId(29)).setName("Siti Hajar").setGender(Gender.FEMALE).setIdentification("960909-04-3344").setContactNumber("+60123450029"));
+        Database.patientsList.add(((Patient) new Patient().setId(30)).setName("Muhammad Rizal").setGender(Gender.MALE).setIdentification("940101-08-4455").setContactNumber("+60123450030"));
+        Database.patientsList.add(((Patient) new Patient().setId(31)).setName("Nurul Izzah").setGender(Gender.FEMALE).setIdentification("900515-12-5566").setContactNumber("+60123450031"));
+        Database.patientsList.add(((Patient) new Patient().setId(32)).setName("Adib Hakim").setGender(Gender.MALE).setIdentification("880303-03-6677").setContactNumber("+60123450032"));
+        Database.patientsList.add(((Patient) new Patient().setId(33)).setName("Sabrina Syafiqah").setGender(Gender.FEMALE).setIdentification("950909-07-7788").setContactNumber("+60123450033"));
+        Database.patientsList.add(((Patient) new Patient().setId(34)).setName("Wei Han").setGender(Gender.MALE).setIdentification("921212-01-8899").setContactNumber("+60123450034"));
+        Database.patientsList.add(((Patient) new Patient().setId(35)).setName("Jonathan Lee").setGender(Gender.MALE).setIdentification("970101-05-9900").setContactNumber("+60123450035"));
+        Database.patientsList.add(((Patient) new Patient().setId(36)).setName("Nurul Huda").setGender(Gender.FEMALE).setIdentification("890909-09-1122").setContactNumber("+60123450036"));
+        Database.patientsList.add(((Patient) new Patient().setId(37)).setName("Ahmad Nabil").setGender(Gender.MALE).setIdentification("930303-04-2233").setContactNumber("+60123450037"));
+        Database.patientsList.add(((Patient) new Patient().setId(38)).setName("Siti Sarah").setGender(Gender.FEMALE).setIdentification("910808-11-3344").setContactNumber("+60123450038"));
+        Database.patientsList.add(((Patient) new Patient().setId(39)).setName("Hafiz Firdaus").setGender(Gender.MALE).setIdentification("960101-06-4455").setContactNumber("+60123450039"));
+        Database.patientsList.add(((Patient) new Patient().setId(40)).setName("Farah Aina").setGender(Gender.FEMALE).setIdentification("940404-08-5566").setContactNumber("+60123450040"));
+        Database.patientsList.add(((Patient) new Patient().setId(41)).setName("Ahmad Saif").setGender(Gender.MALE).setIdentification("900305-01-1122").setContactNumber("+60123450041"));
+        Database.patientsList.add(((Patient) new Patient().setId(42)).setName("Siti Aishah").setGender(Gender.FEMALE).setIdentification("880712-02-2233").setContactNumber("+60123450042"));
+        Database.patientsList.add(((Patient) new Patient().setId(43)).setName("Muhammad Danish").setGender(Gender.MALE).setIdentification("950901-03-3344").setContactNumber("+60123450043"));
+        Database.patientsList.add(((Patient) new Patient().setId(44)).setName("Nur Farzana").setGender(Gender.FEMALE).setIdentification("921001-04-4455").setContactNumber("+60123450044"));
+        Database.patientsList.add(((Patient) new Patient().setId(45)).setName("Adib Zulkarnain").setGender(Gender.MALE).setIdentification("970212-05-5566").setContactNumber("+60123450045"));
+        Database.patientsList.add(((Patient) new Patient().setId(46)).setName("Fatin Amani").setGender(Gender.FEMALE).setIdentification("890109-06-6677").setContactNumber("+60123450046"));
+        Database.patientsList.add(((Patient) new Patient().setId(47)).setName("Lim Shi Wen").setGender(Gender.MALE).setIdentification("930601-07-7788").setContactNumber("+60123450047"));
+        Database.patientsList.add(((Patient) new Patient().setId(48)).setName("Chong Mei Fang").setGender(Gender.FEMALE).setIdentification("910803-08-8899").setContactNumber("+60123450048"));
+        Database.patientsList.add(((Patient) new Patient().setId(49)).setName("Ahmad Hakim").setGender(Gender.MALE).setIdentification("960506-09-9900").setContactNumber("+60123450049"));
+        Database.patientsList.add(((Patient) new Patient().setId(50)).setName("Siti Nurul").setGender(Gender.FEMALE).setIdentification("940202-10-1122").setContactNumber("+60123450050"));
+        Database.patientsList.add(((Patient) new Patient().setId(51)).setName("Muhammad Haziq").setGender(Gender.MALE).setIdentification("900707-11-2233").setContactNumber("+60123450051"));
+        Database.patientsList.add(((Patient) new Patient().setId(52)).setName("Nurul Hidayah").setGender(Gender.FEMALE).setIdentification("880808-12-3344").setContactNumber("+60123450052"));
+        Database.patientsList.add(((Patient) new Patient().setId(53)).setName("Ahmad Firdaus").setGender(Gender.MALE).setIdentification("950505-01-4455").setContactNumber("+60123450053"));
+        Database.patientsList.add(((Patient) new Patient().setId(54)).setName("Siti Khadijah").setGender(Gender.FEMALE).setIdentification("921212-02-5566").setContactNumber("+60123450054"));
+        Database.patientsList.add(((Patient) new Patient().setId(55)).setName("Adib Farhan").setGender(Gender.MALE).setIdentification("970303-03-6677").setContactNumber("+60123450055"));
+        Database.patientsList.add(((Patient) new Patient().setId(56)).setName("Fatin Najwa").setGender(Gender.FEMALE).setIdentification("890909-04-7788").setContactNumber("+60123450056"));
+        Database.patientsList.add(((Patient) new Patient().setId(57)).setName("Wei Jie").setGender(Gender.MALE).setIdentification("930101-05-8899").setContactNumber("+60123450057"));
+        Database.patientsList.add(((Patient) new Patient().setId(58)).setName("Jonathan Chia").setGender(Gender.MALE).setIdentification("910202-06-9900").setContactNumber("+60123450058"));
+        Database.patientsList.add(((Patient) new Patient().setId(59)).setName("Nurul Syahirah").setGender(Gender.FEMALE).setIdentification("960606-07-1122").setContactNumber("+60123450059"));
+        Database.patientsList.add(((Patient) new Patient().setId(60)).setName("Ahmad Faizal").setGender(Gender.MALE).setIdentification("940707-08-2233").setContactNumber("+60123450060"));
+        Database.patientsList.add(((Patient) new Patient().setId(61)).setName("Siti Hawa").setGender(Gender.FEMALE).setIdentification("900808-09-3344").setContactNumber("+60123450061"));
+        Database.patientsList.add(((Patient) new Patient().setId(62)).setName("Muhammad Aiman").setGender(Gender.MALE).setIdentification("880909-10-4455").setContactNumber("+60123450062"));
+        Database.patientsList.add(((Patient) new Patient().setId(63)).setName("Nurul Iman").setGender(Gender.FEMALE).setIdentification("950101-11-5566").setContactNumber("+60123450063"));
+        Database.patientsList.add(((Patient) new Patient().setId(64)).setName("Adib Syafiq").setGender(Gender.MALE).setIdentification("921212-12-6677").setContactNumber("+60123450064"));
+        Database.patientsList.add(((Patient) new Patient().setId(65)).setName("Fatin Husna").setGender(Gender.FEMALE).setIdentification("970303-01-7788").setContactNumber("+60123450065"));
+        Database.patientsList.add(((Patient) new Patient().setId(66)).setName("Lim Wei Han").setGender(Gender.MALE).setIdentification("890909-02-8899").setContactNumber("+60123450066"));
+        Database.patientsList.add(((Patient) new Patient().setId(67)).setName("Chong Mei Hui").setGender(Gender.FEMALE).setIdentification("930101-03-9900").setContactNumber("+60123450067"));
+        Database.patientsList.add(((Patient) new Patient().setId(68)).setName("Ahmad Hafiz").setGender(Gender.MALE).setIdentification("910202-04-1122").setContactNumber("+60123450068"));
+        Database.patientsList.add(((Patient) new Patient().setId(69)).setName("Siti Aina").setGender(Gender.FEMALE).setIdentification("960606-05-2233").setContactNumber("+60123450069"));
+        Database.patientsList.add(((Patient) new Patient().setId(70)).setName("Muhammad Farid").setGender(Gender.MALE).setIdentification("940707-06-3344").setContactNumber("+60123450070"));
+        Database.patientsList.add(((Patient) new Patient().setId(71)).setName("Nurul Shafiqah").setGender(Gender.FEMALE).setIdentification("900808-07-4455").setContactNumber("+60123450071"));
+        Database.patientsList.add(((Patient) new Patient().setId(72)).setName("Ahmad Zain").setGender(Gender.MALE).setIdentification("880909-08-5566").setContactNumber("+60123450072"));
+        Database.patientsList.add(((Patient) new Patient().setId(73)).setName("Siti Mariam").setGender(Gender.FEMALE).setIdentification("950101-09-6677").setContactNumber("+60123450073"));
+        Database.patientsList.add(((Patient) new Patient().setId(74)).setName("Adib Hakim").setGender(Gender.MALE).setIdentification("921212-10-7788").setContactNumber("+60123450074"));
+        Database.patientsList.add(((Patient) new Patient().setId(75)).setName("Fatin Aisyah").setGender(Gender.FEMALE).setIdentification("970303-11-8899").setContactNumber("+60123450075"));
+        Database.patientsList.add(((Patient) new Patient().setId(76)).setName("Lim Shi Han").setGender(Gender.MALE).setIdentification("890909-12-9900").setContactNumber("+60123450076"));
+        Database.patientsList.add(((Patient) new Patient().setId(77)).setName("Chong Mei Yan").setGender(Gender.FEMALE).setIdentification("930101-01-1122").setContactNumber("+60123450077"));
+        Database.patientsList.add(((Patient) new Patient().setId(78)).setName("Ahmad Haziq").setGender(Gender.MALE).setIdentification("910202-02-2233").setContactNumber("+60123450078"));
+        Database.patientsList.add(((Patient) new Patient().setId(79)).setName("Siti Hajar").setGender(Gender.FEMALE).setIdentification("960606-03-3344").setContactNumber("+60123450079"));
+        Database.patientsList.add(((Patient) new Patient().setId(80)).setName("Muhammad Danish").setGender(Gender.MALE).setIdentification("940707-04-4455").setContactNumber("+60123450080"));
+        Database.patientsList.add(((Patient) new Patient().setId(81)).setName("Nurul Izzah").setGender(Gender.FEMALE).setIdentification("900808-05-5566").setContactNumber("+60123450081"));
+        Database.patientsList.add(((Patient) new Patient().setId(82)).setName("Ahmad Faizal").setGender(Gender.MALE).setIdentification("880909-06-6677").setContactNumber("+60123450082"));
+        Database.patientsList.add(((Patient) new Patient().setId(83)).setName("Siti Nadira").setGender(Gender.FEMALE).setIdentification("950101-07-7788").setContactNumber("+60123450083"));
+        Database.patientsList.add(((Patient) new Patient().setId(84)).setName("Adib Syahmi").setGender(Gender.MALE).setIdentification("921212-08-8899").setContactNumber("+60123450084"));
+        Database.patientsList.add(((Patient) new Patient().setId(85)).setName("Fatin Husna").setGender(Gender.FEMALE).setIdentification("970303-09-9900").setContactNumber("+60123450085"));
+        Database.patientsList.add(((Patient) new Patient().setId(86)).setName("Lim Wei Han").setGender(Gender.MALE).setIdentification("890909-10-1122").setContactNumber("+60123450086"));
+        Database.patientsList.add(((Patient) new Patient().setId(87)).setName("Chong Mei Hui").setGender(Gender.FEMALE).setIdentification("930101-11-2233").setContactNumber("+60123450087"));
+        Database.patientsList.add(((Patient) new Patient().setId(88)).setName("Ahmad Hafiz").setGender(Gender.MALE).setIdentification("910202-12-3344").setContactNumber("+60123450088"));
+        Database.patientsList.add(((Patient) new Patient().setId(89)).setName("Siti Aina").setGender(Gender.FEMALE).setIdentification("960606-01-4455").setContactNumber("+60123450089"));
+        Database.patientsList.add(((Patient) new Patient().setId(90)).setName("Muhammad Farid").setGender(Gender.MALE).setIdentification("940707-02-5566").setContactNumber("+60123450090"));
+        Database.patientsList.add(((Patient) new Patient().setId(91)).setName("Nurul Shafiqah").setGender(Gender.FEMALE).setIdentification("900808-03-6677").setContactNumber("+60123450091"));
+        Database.patientsList.add(((Patient) new Patient().setId(92)).setName("Ahmad Zain").setGender(Gender.MALE).setIdentification("880909-04-7788").setContactNumber("+60123450092"));
+        Database.patientsList.add(((Patient) new Patient().setId(93)).setName("Siti Mariam").setGender(Gender.FEMALE).setIdentification("950101-05-8899").setContactNumber("+60123450093"));
+        Database.patientsList.add(((Patient) new Patient().setId(94)).setName("Adib Hakim").setGender(Gender.MALE).setIdentification("921212-06-9900").setContactNumber("+60123450094"));
+        Database.patientsList.add(((Patient) new Patient().setId(95)).setName("Fatin Aisyah").setGender(Gender.FEMALE).setIdentification("970303-07-1122").setContactNumber("+60123450095"));
+        Database.patientsList.add(((Patient) new Patient().setId(96)).setName("Lim Shi Han").setGender(Gender.MALE).setIdentification("890909-08-2233").setContactNumber("+60123450096"));
+        Database.patientsList.add(((Patient) new Patient().setId(97)).setName("Chong Mei Yan").setGender(Gender.FEMALE).setIdentification("930101-09-3344").setContactNumber("+60123450097"));
+        Database.patientsList.add(((Patient) new Patient().setId(98)).setName("Ahmad Haziq").setGender(Gender.MALE).setIdentification("910202-10-4455").setContactNumber("+60123450098"));
+        Database.patientsList.add(((Patient) new Patient().setId(99)).setName("Siti Hajar").setGender(Gender.FEMALE).setIdentification("960606-11-5566").setContactNumber("+60123450099"));
+        Database.patientsList.add(((Patient) new Patient().setId(100)).setName("Muhammad Danish").setGender(Gender.MALE).setIdentification("940707-12-6677").setContactNumber("+60123450100"));
 
         // Doctors data
         Database.doctorList.add(
