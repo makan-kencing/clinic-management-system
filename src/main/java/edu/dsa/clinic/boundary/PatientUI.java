@@ -62,17 +62,17 @@ public class PatientUI extends UI {
                     System.out.println();
                 }
                 case "4" -> {
-                    int subOpt;
+                    String subOpt;
                     do {
                         subOpt = queueMenu();
                         switch (subOpt) {
-                            case 1 -> listConsultationQueue();
-                            case 2 -> addConsultationQueue();
-                            case 3 -> removeConsultationQueue();
-                            case 0 -> System.out.println("Exiting Queue Menu...");
+                            case "1" -> listConsultationQueue();
+                            case "2" -> addConsultationQueue();
+                            case "3" -> removeConsultationQueue();
+                            case "0" -> System.out.println("Exiting Queue Menu...");
                             default -> System.out.println("Invalid selection! Try again.");
                         }
-                    } while (subOpt != 0);
+                    } while (!subOpt.equals("0"));
                     System.out.println();
                 }
                 case "5" -> {
@@ -411,17 +411,31 @@ public class PatientUI extends UI {
     public void addPatient() {
         Patient addPatient = new Patient();
 
-        System.out.print("Enter Patient Name : ");
-        addPatient.setName(this.scanner.nextLine().trim());
+        System.out.println();
+
+        // name
+        System.out.print("Enter Patient Name: ");
+        String name = scanner.nextLine();
+        if (name.isEmpty()) return;
+        while (name.trim().isEmpty()) {
+            System.out.println("Name cannot be empty or spaces only!");
+            System.out.print("Enter Patient Name: ");
+            name = scanner.nextLine();
+            if (name.isEmpty()) return;
+        }
+        addPatient.setName(name.trim());
+
         System.out.println("-".repeat(33));
         System.out.println("| (M) for Male | (F) for Female |");
         System.out.println("-".repeat(33));
 
+        // gender
         String input;
         do {
             System.out.print("Enter Patient Gender: ");
-            input = scanner.nextLine().trim().toUpperCase();
-
+            input = scanner.nextLine();
+            if (input.isEmpty()) return;
+            input = input.trim().toUpperCase();
             if (!input.equals("M") && !input.equals("F")) {
                 System.out.println("Invalid input! Please enter M or F.");
             }
@@ -429,13 +443,15 @@ public class PatientUI extends UI {
         Gender gender = input.equals("M") ? Gender.MALE : Gender.FEMALE;
         addPatient.setGender(gender);
 
+        // identification
         String ic;
         do {
             System.out.print("Enter Patient Identification (YYMMDD-XX-XXXX): ");
-            ic = scanner.nextLine().trim();
-
+            ic = scanner.nextLine();
+            if (ic.isEmpty()) return;
+            ic = ic.trim();
             if (patientController.validateUnique(ic, "identification") != null) {
-                System.out.println("This identification is in-use! Please enter  Example: 010203-14-5678");
+                System.out.println("This identification is in-use! Example: 010203-14-5678");
             }
             if (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$")) {
                 System.out.println("Invalid IC format! Example: 010203-14-5678");
@@ -443,10 +459,13 @@ public class PatientUI extends UI {
         } while (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$") || patientController.validateUnique(ic, "identification") != null);
         addPatient.setIdentification(ic);
 
+        // contact
         String phone;
         do {
             System.out.print("Enter Patient Contact Number (+60XXXXXXXXX): ");
-            phone = scanner.nextLine().trim();
+            phone = scanner.nextLine();
+            if (phone.isEmpty()) return;
+            phone = phone.trim();
             if (!phone.matches("^\\+60\\d{8,11}$")) {
                 System.out.println("Invalid phone number! Example: +60123456789");
             }
@@ -480,8 +499,16 @@ public class PatientUI extends UI {
 
             switch (opt) {
                 case "1" -> {
-                    System.out.print("Enter New Patient Name : ");
-                    editPatient.setName(this.scanner.nextLine().trim());
+                    System.out.print("Enter New Patient Name: ");
+                    String name = scanner.nextLine();
+                    if (name.isEmpty()) return;
+                    while (name.trim().isEmpty()) {
+                        System.out.println("Name cannot be empty or spaces only!");
+                        System.out.print("Enter New Patient Name: ");
+                        name = scanner.nextLine();
+                        if (name.isEmpty()) return;
+                    }
+                    editPatient.setName(name.trim());
                 }
                 case "2" -> {
                     System.out.println("| (M) for Male | (F) for Female |");
@@ -490,8 +517,9 @@ public class PatientUI extends UI {
                     String input;
                     do {
                         System.out.print("Enter New Patient Gender: ");
-                        input = scanner.nextLine().trim().toUpperCase();
-
+                        input = scanner.nextLine();
+                        if (input.isEmpty()) return;
+                        input = input.trim().toUpperCase();
                         if (!input.equals("M") && !input.equals("F")) {
                             System.out.println("Invalid input! Please enter M or F.");
                         }
@@ -503,10 +531,11 @@ public class PatientUI extends UI {
                     String ic;
                     do {
                         System.out.print("Enter Patient Identification (YYMMDD-XX-XXXX): ");
-                        ic = scanner.nextLine().trim();
-
+                        ic = scanner.nextLine();
+                        if (ic.isEmpty()) return;
+                        ic = ic.trim();
                         if (patientController.validateUnique(ic, "identification") != null) {
-                            System.out.println("This identification is in-use! Please enter  Example: 010203-14-5678");
+                            System.out.println("This identification is in-use! Example: 010203-14-5678");
                         }
                         if (!ic.matches("^\\d{6}-\\d{2}-\\d{4}$")) {
                             System.out.println("Invalid IC format! Example: 010203-14-5678");
@@ -518,7 +547,9 @@ public class PatientUI extends UI {
                     String phone;
                     do {
                         System.out.print("Enter Patient Contact Number (+60XXXXXXXXX): ");
-                        phone = scanner.nextLine().trim();
+                        phone = scanner.nextLine();
+                        if (phone.isEmpty()) return;
+                        phone = phone.trim();
                         if (!phone.matches("^\\+60\\d{8,11}$")) {
                             System.out.println("Invalid phone number! Example: +60123456789");
                         }
@@ -534,6 +565,7 @@ public class PatientUI extends UI {
                     continue;
                 }
             }
+
             System.out.println();
             var updated = patientController.editPatientRecord(editPatient);
             if (updated == null) {
@@ -542,6 +574,7 @@ public class PatientUI extends UI {
                 System.out.println("Patient (" + updated.getName() + ") with ID (" + updated.getId() + ") Modified Successfully!\n");
             }
             return;
+
         } while (true);
     }
 
@@ -1220,8 +1253,8 @@ public class PatientUI extends UI {
         }
     }
 
-    public int queueMenu() {
-        int opt;
+    public String queueMenu() {
+        String opt;
         do {
             System.out.println();
             System.out.println("-".repeat(30));
@@ -1231,19 +1264,18 @@ public class PatientUI extends UI {
             System.out.println("(0) Exit");
             System.out.println("-".repeat(30));
             System.out.print("Selection : ");
-            opt = scanner.nextInt();
-            scanner.nextLine();
+            opt = scanner.nextLine().trim();
 
-            if (opt < 0 || opt > 3) {
+            if (!opt.matches("[0-3]")) {
                 System.out.println("Invalid input! Try again.");
             }
-        } while (opt < 0 || opt > 3);
+        } while (!opt.matches("[0-3]"));
         System.out.println();
         return opt;
     }
 
     public int maintenanceMenu() {
-        int opt;
+        String input;
         do {
             System.out.println();
             System.out.println("-".repeat(30));
@@ -1253,14 +1285,14 @@ public class PatientUI extends UI {
             System.out.println("(0) Exit");
             System.out.println("-".repeat(30));
             System.out.print("Selection : ");
-            opt = scanner.nextInt();
-            scanner.nextLine();
+            input = scanner.nextLine().trim();
 
-            if (opt < 0 || opt > 3) {
+            if (!input.matches("[0-3]")) {
                 System.out.println("Invalid input! Try again.");
             }
-        } while (opt < 0 || opt > 3);
-        return opt;
+        } while (!input.matches("[0-3]"));
+
+        return Integer.parseInt(input);
     }
 
     public boolean orderByMenu() {
