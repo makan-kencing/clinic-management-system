@@ -1,5 +1,6 @@
 package edu.dsa.clinic.boundary;
 
+import edu.dsa.clinic.Initializer;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.control.DispensaryController;
@@ -19,11 +20,16 @@ import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
-
 
 
 
@@ -34,7 +40,18 @@ public class MedicalUI extends UI {
     private final PatientUI patientUI;
     private final DoctorUI doctorUI;
     private final AppointmentUI appointmentUI;
+    private static final DateTimeFormatter DATE_FORMAT =
+            DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
+                    .withZone(ZoneId.systemDefault());
 
+    public MedicalUI(Terminal terminal, Scanner scanner) {
+        super(terminal, scanner);
+        this.medicalController = new MedicalController();
+        this.medicineUI = new MedicineUI(this.terminal);
+        this.patientUI = new PatientUI(scanner);
+        this.doctorUI = new DoctorUI(scanner);
+        this.appointmentUI = new AppointmentUI(scanner);
+    }
 
     public MedicalUI(Scanner scanner) {
         super(scanner);
@@ -72,10 +89,7 @@ public class MedicalUI extends UI {
                         createConsultationMenu();
                         break;
                     case 2:
-                        consultation = this.selectConsultation();
-                        if (consultation != null)
-                            this.startMedicalSession(consultation);
-
+                        medicalManagementMenu();
                         break;
                     case 3:
                         consultation = this.selectConsultation();
@@ -101,28 +115,27 @@ public class MedicalUI extends UI {
         var consultations = this.medicalController.getConsultationList();
         var table = new ConsultationTable(consultations);
 
-        int opt;
+        String opt;
         while (true) {
             table.display();
 
             System.out.println();
             System.out.println("-".repeat(30));
             System.out.println("""
-                    (1) Select Patient ID
-                    (2) Filter Patient Record
+                    (1) Select Consultation ID
+                    (2) Filter Consultation Record
                     (3) Reset Filters
                     (4) Exit""");
+            System.out.println("Use P/N arrow keys to change pages");
             System.out.println("-".repeat(30));
             System.out.print("Selection : ");
 
             try {
-                opt = this.scanner.nextInt();
+                opt = this.scanner.nextLine();
                 this.scanner.nextLine();
 
-                System.out.println();
-
                 switch (opt) {
-                    case 1:
+                    case "1":
                         System.out.print("\nEnter Consultation ID (0 to exit): ");
 
                         int selectedId = this.scanner.nextInt();
@@ -144,14 +157,27 @@ public class MedicalUI extends UI {
                             return consultation;
                         }
                         break;
-                    case 2:
+                    case "2":
                         this.filterConsultationRecord(table);
                         break;
-                    case 3:
+                    case "3":
                         table.resetFilters();
                         break;
-                    case 4:
+                    case "4":
                         return null;
+                    default:
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Try again.");
@@ -163,24 +189,82 @@ public class MedicalUI extends UI {
 
     public @Nullable Diagnosis selectDiagnosis(Consultation consultation) {
         var table = new DiagnosisTable(consultation.getDiagnoses());
-        int id;
+        String opt;
+        Diagnosis selectedDiagnosis =null;
 
-        viewConsultationDetails(consultation);
         table.display();
-        while (true) {
-            try {
-                System.out.print("Select the diagnosis:");
-                id = this.scanner.nextInt();
 
-                var diagnosis = medicalController.selectDiagnosis(consultation, id);
-                if (diagnosis == null)
-                    System.out.println("The diagnosis specified is not found.");
-                return diagnosis;
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Try again.");
-                this.scanner.nextLine();
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Diagnosis ID " +
+                    "\n(2) Filter Diagnosis Record " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("Use P/N arrow keys to change pages");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextLine();
+
+            System.out.println();
+
+            if (!opt.equals("4")) {
+                switch (opt) {
+                    case "1": {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Diagnosis ID (0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (selectedId == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                table.display();
+                                break;
+                            }
+
+                            selectedDiagnosis=medicalController.selectDiagnosis(consultation,selectedId);
+                            if (selectedDiagnosis == null) {
+                                System.out.println("Diagnosis ID (" + selectedId + ") not found. Please re-enter Diagnosis ID...");
+                            } else {
+                                System.out.println("Diagnosis (" + selectedDiagnosis.getDiagnosis() + ") with ID (" + selectedDiagnosis.getId() + ") selected!");
+                                return selectedDiagnosis;
+                            }
+                        } while (selectedDiagnosis == null);
+                        break;
+                    }
+                    case "2": {
+                        filterDiagnosisRecord(table);
+                        break;
+                    }
+                    case "3": {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                    default: {
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                break;
             }
-        }
+        } while (true);
+
+        return selectedDiagnosis;
 
 
     }
@@ -188,36 +272,160 @@ public class MedicalUI extends UI {
     public @Nullable Treatment selectTreatment(Diagnosis diagnosis) {
         var table = new TreatmentTable(diagnosis.getTreatments());
 
+        Treatment selectTreatment=null;
         table.display();
+        String opt;
 
-        while (true) {
-            try {
-                System.out.print("Select the treatment(0 to exit): ");
-                int id = this.scanner.nextInt();
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Treatment ID " +
+                    "\n(2) Filter Treatment Record " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("Use P/N arrow keys to change pages");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextLine();
 
-                var treatment = medicalController.selectTreatment(diagnosis, id);
-                if (treatment == null)
-                    System.out.println("The treatment specified is not found.");
-                return treatment;
+            System.out.println();
 
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Try again.");
-                this.scanner.nextLine();
+            if (!opt.equals("4")) {
+                switch (opt) {
+                    case "1": {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Treatment ID (0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (selectedId == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                table.display();
+                                break;
+                            }
+
+                           selectTreatment=medicalController.selectTreatment(diagnosis,selectedId);
+                            if ( selectTreatment == null) {
+                                System.out.println("Treatment ID (" + selectedId + ") not found. Please re-enter Treatment ID...");
+                            } else {
+                                System.out.println("Treatment (" + selectTreatment.getDiagnosis() + ") with ID (" + selectTreatment.getId() + ") selected!");
+                                return selectTreatment;
+                            }
+                        } while (selectTreatment == null);
+                        break;
+                    }
+                    case "2": {
+                       filterTreatmentRecord(table);
+                        break;
+                    }
+                    case "3": {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                    default: {
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                break;
             }
-        }
+        } while (true);
+
+        return selectTreatment;
     }
 
     public @Nullable Prescription selectPrescription(Treatment treatment) {
         var table = new PrescriptionTable(treatment.getPrescriptions());
         table.display();
+        Prescription selectedPrescription=null;
+        String opt;
 
-        System.out.print("Select the part wanted edit:");
-        int id = this.scanner.nextInt();
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("(1) Select Prescription ID " +
+                    "\n(2) Filter Prescription Record " +
+                    "\n(3) Reset Filters " +
+                    "\n(4) Exit");
+            System.out.println("Use P/N arrow keys to change pages");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextLine();
 
-        var prescription = this.medicalController.selectPrescription(treatment, id);
-        if (prescription == null)
-            System.out.println("The prescription specified is not found.");
-        return prescription;
+            System.out.println();
+
+            if (!opt.equals("4")) {
+                switch (opt) {
+                    case "1": {
+                        do {
+                            table.display();
+                            System.out.print("\nEnter Treatment ID (0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println();
+
+                            if (selectedId == 0) {
+                                System.out.println("-".repeat(30));
+                                System.out.println();
+                                table.display();
+                                break;
+                            }
+
+                            selectedPrescription=medicalController.selectPrescription(treatment,selectedId);
+                            if ( selectedPrescription == null) {
+                                System.out.println("Prescription ID (" + selectedId + ") not found. Please re-enter Prescription ID...");
+                            } else {
+                                System.out.println("Prescription (" + selectedPrescription.getProduct().getName() + ") with ID (" + selectedPrescription.getId() + ") selected!");
+                                return selectedPrescription;
+                            }
+                        } while (selectedPrescription == null);
+                        break;
+                    }
+                    case "2": {
+                       filterPrescriptionRecord(table);
+                        break;
+                    }
+                    case "3": {
+                        table.resetFilters();
+                        table.display();
+                        break;
+                    }
+                    default: {
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
+                    }
+                }
+            } else {
+                System.out.println();
+                break;
+            }
+        } while (true);
+
+        return selectedPrescription;
     }
 
     public void selectMedicalDetail(){
@@ -393,17 +601,23 @@ public class MedicalUI extends UI {
 
                 switch (choice) {
                     case 1:
-                        var medicine = this.medicineUI.searchProduct();
-                        if (medicine == null)
+                        var product= this.medicineUI.selectProductInStock();
+                        if (product == null)
                             break;
 
-                        prescription.setProduct(medicine);
+                        prescription.setProduct(product);
                         return;
                     case 2:
-                        System.out.print("Enter new Quantity :");
-                        int newQuantity = this.scanner.nextInt();
 
-                        prescription.setQuantity(newQuantity);
+                        System.out.print("Enter new Quantity :");
+                        int availableStocks= MedicineController.getAvailableStocks(prescription.getProduct());
+                        int newQuantity = this.scanner.nextInt();
+                        if (newQuantity < availableStocks){
+                            prescription.setQuantity(newQuantity);
+                        }
+                        else {
+                            System.out.println(prescription.getProduct().getName()+ "Quantity remain" + availableStocks +". Goods insufficient.Please reduce quantity or notify pharmacy");
+                        }
                         return;
                     case 3:
                         System.out.print("Enter new Notes :");
@@ -422,6 +636,7 @@ public class MedicalUI extends UI {
         }
     }
 
+    // delete
     public void deleteConsultation(Consultation consultation) {
         System.out.print("Are you sure you want to delete this consultation?(Y)");
 
@@ -544,6 +759,7 @@ public class MedicalUI extends UI {
         }
     }
 
+    //filter
     public void filterConsultationRecord(InteractiveTable<Consultation> table) {
         System.out.println("=".repeat(30));
         System.out.println("""
@@ -602,6 +818,7 @@ public class MedicalUI extends UI {
                         };
                     } catch (IllegalStateException e) {
                         // TODO: handle invalid value
+                        System.out.println("Invalid input");
                     }
                 }
 
@@ -612,10 +829,10 @@ public class MedicalUI extends UI {
                 return;
         }
 
-        filter(table, name, value);
+        filterConsultation(table, name, value);
     }
 
-    public void filter(InteractiveTable<Consultation> table, String column, String value) {
+    public void filterConsultation(InteractiveTable<Consultation> table, String column, String value) {
         switch (column) {
             case "patient name": {
                 table.addFilter(
@@ -643,6 +860,125 @@ public class MedicalUI extends UI {
                 break;
         }
     }
+
+    public void filterDiagnosisRecord(InteractiveTable<Diagnosis> table) {
+        System.out.println("=".repeat(30));
+        System.out.println("""
+                Diagnosis filtered
+                (1) Diagnosis Name
+                (0) exit""");
+        System.out.println("=".repeat(30));
+        System.out.print("Filter by: ");
+
+        var opt = this.scanner.nextInt();
+        this.scanner.nextLine();
+
+        String name;
+        String value;
+        if (opt == 1) {
+            name = "Diagnosis Name";
+
+            System.out.print("Filter by Diagnosis Name: ");
+            value = scanner.nextLine();
+
+            System.out.println();
+        }else {
+            System.out.println();
+            return;
+        }
+
+       filterDiagnosis(table, name, value);
+    }
+
+    public void filterDiagnosis(InteractiveTable<Diagnosis> table, String column, String value) {
+      if(Objects.equals(column, "Diagnosis Name"))  {
+            table.addFilter(
+                    "Filter by" + column + " \"" + value + "\"",
+                    MedicalController.getDiagnosisFilter(value)
+            );
+            table.display();
+        }
+    }
+
+    public void filterTreatmentRecord(InteractiveTable<Treatment> table) {
+        System.out.println("=".repeat(30));
+        System.out.println("""
+                Diagnosis filtered
+                (1) Symptom
+                (0) exit""");
+        System.out.println("=".repeat(30));
+        System.out.print("Filter by: ");
+
+        var opt = this.scanner.nextInt();
+        this.scanner.nextLine();
+
+        String name;
+        String value;
+        if (opt == 1) {
+            name = "Symptom";
+
+            System.out.print("Filter by Diagnosis Name: ");
+            value = scanner.nextLine();
+
+            System.out.println();
+        }else {
+            System.out.println();
+            return;
+        }
+
+        filterTreatment(table, name, value);
+    }
+
+    public void filterTreatment(InteractiveTable<Treatment> table, String column, String value) {
+        if(Objects.equals(column, "Symptom"))  {
+            table.addFilter(
+                    "Filter by" + column + " \"" + value + "\"",
+                   MedicalController.getTreatmentFilter(value)
+            );
+            table.display();
+        }
+    }
+
+    public void filterPrescriptionRecord(InteractiveTable<Prescription> table) {
+        System.out.println("=".repeat(30));
+        System.out.println("""
+                Diagnosis filtered
+                (1) Medicine
+                (0) exit""");
+        System.out.println("=".repeat(30));
+        System.out.print("Filter by: ");
+
+        var opt = this.scanner.nextInt();
+        this.scanner.nextLine();
+
+        String name;
+        String value;
+        if (opt == 1) {
+            name = "Medicine";
+
+            System.out.print("Filter by Medicine: ");
+            value = scanner.nextLine();
+
+            System.out.println();
+        }else {
+            System.out.println();
+            return;
+        }
+
+        filterPrescription(table, name, value);
+
+    }
+
+    public void filterPrescription(InteractiveTable<Prescription> table, String column, String value) {
+        if(Objects.equals(column, "Medicine"))  {
+            table.addFilter(
+                    "Filter by" + column + " \"" + value + "\"",
+                    MedicalController.getPrescriptionFilter(value)
+            );
+            table.display();
+        }
+    }
+
 
     //create consultation
     public void createConsultationInfo() {
@@ -797,6 +1133,7 @@ public class MedicalUI extends UI {
         }
     }
 
+
     //create medical
     public void writeUpDiagnosis(Consultation consultation) {
         var diagnosis = new Diagnosis();
@@ -929,18 +1266,47 @@ public class MedicalUI extends UI {
         treatment.getPrescriptions().add(prescription);
     }
 
+    public void medicalManagementMenu(){
+        while (true) {
+            System.out.println(""" 
+                    1. Manage Medical Record
+                    2. Generate Medical Summary Report
+                    3. Back""");
+            System.out.print("Enter your choice :");
+            Consultation consultation;
+            int choice;
+            try {
+                choice = this.scanner.nextInt();
+                this.scanner.nextLine();
+
+                switch (choice) {
+                    case 1:
+                        consultation = this.selectConsultation();
+                        if (consultation != null)
+                            this.startMedicalSession(consultation);
+                        break;
+                    case 2:
+                        diagnosisReport();
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }catch (InputMismatchException e){
+                System.out.println("Invalid choice, please re-enter.");
+                break;
+            }
+        }
+    }
+
     public void startMedicalSession(Consultation consultation) {
         while (true) {
 
-
-            System.out.println("Please Select an Option");
             System.out.println(""" 
                     1. Add Medical record
                     2. Edit Medical record
                     3. Delete Medical Record
                     4. List Medical Records
-                    5. View Medical Report
-                    6. Back""");
+                    5. Back""");
             System.out.print("Enter your choice :");
             try {
                 int choice = this.scanner.nextInt();
@@ -967,9 +1333,6 @@ public class MedicalUI extends UI {
                         selectMedicalDetail();
                         break;
                     case 5:
-                        diagnosisReport();
-                        break;
-                    case 6:
                         return;
                 }
             } catch (InputMismatchException e) {
@@ -1032,8 +1395,8 @@ public class MedicalUI extends UI {
             super(new Column[]{
                     new Column("Id", Alignment.CENTER, 4),
                     new Column("Diagnosis", Alignment.CENTER, 40),
-                    new Column("Diagnoses", Alignment.CENTER, 40),
-                    new Column("Notes", Alignment.CENTER, 40),
+                    new Column("Diagnoses", Alignment.CENTER, 150),
+                    new Column("Notes", Alignment.CENTER, 60),
                     new Column("Treatment", Alignment.CENTER, 10)
             }, diagnoses);
         }
@@ -1160,19 +1523,14 @@ public class MedicalUI extends UI {
     }
 
     public static  class ViewDiagnosisReport extends InteractiveTable<DiagnosisCounter>{
-        private String lastDiagnosis=null;
-        private String lastProductName = null;
-        private String lastProductNum = null;
         public ViewDiagnosisReport(ListInterface<DiagnosisCounter> diagnosisCounters) {
             super(new Column[]{
                     new Column("Diagnosis",Alignment.CENTER,40),
-                    new Column("Doctor ",Alignment.CENTER,10),
-                    new Column("Medicine Product Using",Alignment.CENTER,50),
-                    new Column("Product Using Num",Alignment.CENTER,20)
+                    new Column("Occurrence",Alignment.CENTER,15),
+                    new Column("Medicine Product Using",Alignment.CENTER,110),
+                    new Column("Product Using Num",Alignment.CENTER,50)
             },diagnosisCounters);
         }
-
-
         @Override
         protected Cell[] getRow(DiagnosisCounter d) {
             ListInterface<ProductCounter> p =d.productCounters();
@@ -1188,8 +1546,6 @@ public class MedicalUI extends UI {
             if (!productNames.isEmpty()) productNames.setLength(productNames.length() - 2);
             if (!productCounts.isEmpty()) productCounts.setLength(productCounts.length() - 2);
 
-
-
             return new Cell[]{
                     new Cell(d.key()),
                     new Cell(d.count()),
@@ -1201,13 +1557,63 @@ public class MedicalUI extends UI {
     }
 
     //diagnosis report
-    public void diagnosisReport(){
-        System.out.println("=".repeat(30));
-        System.out.println("Diagnosis Summary Report");
-        System.out.println("=".repeat(30));
-        var counts = MedicalController.countDiagnosesOccurrence();
-        var table = new ViewDiagnosisReport(counts);
-        table.display();
+    public void diagnosisReport() {
+        while(true) {
+            System.out.println("=".repeat(230));
+            System.out.printf("%140s\n", "TUNKU ABDUL RAMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY");
+            System.out.printf("%120s\n", "MEDICAL CHECKING SUBSYSTEM");
+            System.out.println();
+            System.out.printf("%124s\n", "DOCTOR OCCURRENCE AND MEDICATION UTILIZATION REPORT");
+            System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
+            System.out.printf("%125s\n", "-".repeat(35));
+
+            var counts = MedicalController.countDiagnosesOccurrence();
+            var table = new ViewDiagnosisReport(counts);
+            table.display();
+            int total= MedicalController.getTotalProductUsage(counts);
+            System.out.println("Total Diagnosis Type :" + counts.size());
+            System.out.println("Total Medicine Product Usage :" + total);
+            System.out.print("Use P/N arrow keys to change pages :");
+            String opt ;
+            try {
+                opt = this.scanner.nextLine().toLowerCase();
+
+                switch (opt) {
+                    case "p":
+                        table.previousPage();
+                        table.display();
+                        break;
+                    case "n":
+                        table.nextPage();
+                        table.display();
+                        break;
+                    default:
+                        System.out.println("Invalid option");
+                        break;
+                }
+            }catch (InputMismatchException e){
+                    System.out.println("Input Mismatch");
+                    break;
+            }
+            System.out.println("*".repeat(230));
+            System.out.printf("%120s\n", "END OF THE REPORT");
+            System.out.println("=".repeat(230));
+            this.scanner.nextLine();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        Initializer.initialize();
+
+        try (var terminal = TerminalBuilder.builder()
+                .system(true)
+                .build()
+        ) {
+            var scanner = new Scanner(System.in);
+
+            var medicalUI = new MedicalUI(terminal, scanner);
+            medicalUI.startConsultationMenu();
+        }
     }
 
 }
