@@ -69,7 +69,7 @@ public class ClinicManagementSystem {
                     break;
                 case "3":
                     var appointmentUI = new AppointmentUI(scanner);
-                    appointmentUI.manageAppointmentAndConsultationMenu();
+                    appointmentUI.startMenu();
                     pause(scanner);
                     break;
                 case "4":
