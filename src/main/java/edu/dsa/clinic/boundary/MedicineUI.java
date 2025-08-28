@@ -450,6 +450,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
 
             return null;
@@ -559,6 +560,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
 
             return null;
@@ -640,6 +642,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
 
             return null;
@@ -695,6 +698,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
 
             return null;
@@ -744,6 +748,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
         }
     }
@@ -836,6 +841,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
         }
     }
@@ -903,6 +909,7 @@ public class MedicineUI extends UI {
             var writer = this.getWriter();
 
             writer.println("Failed to read the inputs.");
+            writer.println("Press to continue");
             writer.flush();
         }
     }
@@ -921,6 +928,7 @@ public class MedicineUI extends UI {
                 return;
         } catch (IOException e) {
             writer.println("Failed to retrieve input.");
+            writer.println("Press to continue");
             writer.flush();
             reader.readLine();
 
@@ -929,7 +937,9 @@ public class MedicineUI extends UI {
 
         MedicineController.deleteMedicineEntry(medicine);
 
+        writer.println();
         writer.println("Deleted medicine " + medicine.getName() + ".");
+        writer.println("Press to continue");
         writer.flush();
         reader.readLine();
     }
@@ -948,6 +958,7 @@ public class MedicineUI extends UI {
                 return;
         } catch (IOException e) {
             writer.println("Failed to retrieve input.");
+            writer.println("Press to continue");
             writer.flush();
             reader.readLine();
 
@@ -956,7 +967,9 @@ public class MedicineUI extends UI {
 
         MedicineController.deleteProductEntry(product);
 
+        writer.println();
         writer.println("Deleted product " + product.getName() + ".");
+        writer.println("Press to continue");
         writer.flush();
         reader.readLine();
     }
@@ -1024,7 +1037,11 @@ public class MedicineUI extends UI {
 
                     MedicineController.addMedicineEntry(medicine);
 
+                    writer.println();
                     writer.println("Added Medicine #" + medicine.getId() + " - " + medicine.getName());
+                    writer.println("Press to continue");
+                    writer.flush();
+
                     reader.readLine();
                     break;
             }
@@ -1324,7 +1341,11 @@ public class MedicineUI extends UI {
 
                     MedicineController.addProductEntry(product);
 
+                    writer.println();
                     writer.println("Added Product #" + product.getId() + " - [" + product.getBrand() + "] " + product.getName());
+                    writer.println("Press to continue");
+                    writer.flush();
+
                     reader.readLine();
                     break;
             }
@@ -1477,9 +1498,13 @@ public class MedicineUI extends UI {
 
                     MedicineController.addStockEntry(stock);
 
+                    writer.println();
                     writer.println("Added Stock #" + stock.getId()
                             + " of " + stock.getStockInQuantity() + " quantity"
                             + " for [" + stock.getProduct().getBrand() + "] " + stock.getProduct().getName());
+                    writer.println("Press to continue");
+                    writer.flush();
+
                     reader.readLine();
                     break;
             }
