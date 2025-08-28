@@ -69,13 +69,28 @@ public class MedicineUI extends UI {
     }
 
     public void startMenu() throws IOException {
-        var reader = this.getLineReader();
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
+
+        builder.createText()
+                .addLine("Medicine Menu")
+                .addLine("=============")
+                .addPrompt()
+                .createListPrompt()
+                .name("option")
+                .message("Choose a menu")
+                .newItem("product").text("Manage Product").add()
+                .newItem("medicine").text("Manage Medicine").add()
+                .newItem("stock").text("Manage Stock").add()
+                .newItem("dispensary").text("Show Dispensary Queue").add()
+                .newItem("reports").text("Show Reports").add()
+                .newItem("back").text("Back").add()
+                .addPrompt();
 
         while (true) {
-            // TODO
-            var opt = reader.readLine("What menu?");
+            var result = prompt.prompt(builder.build());
 
-            switch (opt) {
+            switch (result.get("option").getResult()) {
                 case "product":
                     this.manageProductMenu();
                     break;
@@ -100,23 +115,21 @@ public class MedicineUI extends UI {
     public void manageProductMenu() throws IOException {
         var prompt = this.getPrompt();
         var builder = prompt.getPromptBuilder();
+        builder.createListPrompt()
+                .name("option")
+                .message("What do you want to do with it?")
+                .newItem("view").text("View details").add()
+                .newItem("delete").text("Delete record").add()
+                .newItem("edit").text("Edit record").add()
+                .newItem("add_stock").text("Add stock").add()
+                .newItem("manage_stock").text("Manage stocks").add()
+                .newItem("cancel").text("Back").add()
+                .addPrompt();
 
         while (true) {
             var product = this.selectProduct();
             if (product == null)
                 return;
-
-            // handle selected product
-            builder.createListPrompt()
-                    .name("option")
-                    .message("What do you want to do with it?")
-                    .newItem("view").text("View details").add()
-                    .newItem("delete").text("Delete record").add()
-                    .newItem("edit").text("Edit record").add()
-                    .newItem("add_stock").text("Add stock").add()
-                    .newItem("manage_stock").text("Manage stocks").add()
-                    .newItem("cancel").text("Back").add()
-                    .addPrompt();
 
             var result = prompt.prompt(builder.build());
             switch (result.get("option")
@@ -148,21 +161,19 @@ public class MedicineUI extends UI {
     public void manageMedicineMenu() throws IOException {
         var prompt = this.getPrompt();
         var builder = prompt.getPromptBuilder();
+        builder.createListPrompt()
+                .name("option")
+                .message("What do you want to do with it?")
+                .newItem("view").text("View details").add()
+                .newItem("delete").text("Delete record").add()
+                .newItem("edit").text("Edit record").add()
+                .newItem("cancel").text("Back").add()
+                .addPrompt();
 
         while (true) {
             var medicine = this.selectMedicine();
             if (medicine == null)
                 return;
-
-            // handle selected product
-            builder.createListPrompt()
-                    .name("option")
-                    .message("What do you want to do with it?")
-                    .newItem("view").text("View details").add()
-                    .newItem("delete").text("Delete record").add()
-                    .newItem("edit").text("Edit record").add()
-                    .newItem("cancel").text("Back").add()
-                    .addPrompt();
 
             var result = prompt.prompt(builder.build());
             switch (result.get("option")
@@ -185,20 +196,18 @@ public class MedicineUI extends UI {
     public void manageStockMenu() throws IOException {
         var prompt = this.getPrompt();
         var builder = prompt.getPromptBuilder();
+        builder.createListPrompt()
+                .name("option")
+                .message("What do you want to do with it?")
+                .newItem("view").text("View details").add()
+                .newItem("edit").text("Edit record").add()
+                .newItem("cancel").text("Back").add()
+                .addPrompt();
 
         while (true) {
             var stock = this.selectStock();
             if (stock == null)
                 return;
-
-            // handle selected product
-            builder.createListPrompt()
-                    .name("option")
-                    .message("What do you want to do with it?")
-                    .newItem("view").text("View details").add()
-                    .newItem("edit").text("Edit record").add()
-                    .newItem("cancel").text("Back").add()
-                    .addPrompt();
 
             var result = prompt.prompt(builder.build());
             switch (result.get("option")
@@ -218,20 +227,18 @@ public class MedicineUI extends UI {
     public void manageProductStockMenu(Product product) throws IOException {
         var prompt = this.getPrompt();
         var builder = prompt.getPromptBuilder();
+        builder.createListPrompt()
+                .name("option")
+                .message("What do you want to do with it?")
+                .newItem("view").text("View details").add()
+                .newItem("edit").text("Edit record").add()
+                .newItem("cancel").text("Back").add()
+                .addPrompt();
 
         while (true) {
             var stock = this.selectProductStock(product);
             if (stock == null)
                 return;
-
-            // handle selected product
-            builder.createListPrompt()
-                    .name("option")
-                    .message("What do you want to do with it?")
-                    .newItem("view").text("View details").add()
-                    .newItem("edit").text("Edit record").add()
-                    .newItem("cancel").text("Back").add()
-                    .addPrompt();
 
             var result = prompt.prompt(builder.build());
             switch (result.get("option")
