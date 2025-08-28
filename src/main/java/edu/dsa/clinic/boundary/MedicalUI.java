@@ -1,6 +1,7 @@
 package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.dto.DiagnosisCounter;
@@ -19,7 +20,6 @@ import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -710,8 +710,10 @@ public class MedicalUI extends UI {
                 break;
         }
 
-        if (medicalController.saveConsultationRecord(consultation))
+        if (medicalController.saveConsultationRecord(consultation)) {
+            DispensaryController.queueConsultation(consultation);
             System.out.println("Consultation record added.");
+        }
         else
             System.out.println("Consultation record failed to be added. Please try again.");
     }
@@ -748,8 +750,10 @@ public class MedicalUI extends UI {
             }
         }
 
-        if (medicalController.saveConsultationRecord(consultation))
+        if (medicalController.saveConsultationRecord(consultation)) {
+            DispensaryController.queueConsultation(consultation);
             System.out.println("Consultation record added.");
+        }
         else
             System.out.println("Consultation record failed to be added. Please try again.");
 
