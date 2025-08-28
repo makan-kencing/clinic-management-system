@@ -16,7 +16,7 @@ public class Diagnosis extends IdentifiableEntity {
     private String diagnosis;
     private String description;
     private @Nullable String notes;
-    private final ListInterface<Treatment> treatments = new DoubleLinkedList<>();
+    private ListInterface<Treatment> treatments = new DoubleLinkedList<>();
 
     public Consultation getConsultation() {
         return consultation;
@@ -56,6 +56,11 @@ public class Diagnosis extends IdentifiableEntity {
 
     public ListInterface<Treatment> getTreatments() {
         return treatments;
+    }
+
+    public Diagnosis setTreatments(ListInterface<Treatment> treatments) {
+        this.treatments = treatments;
+        return this;
     }
 
     public Diagnosis addTreatment(Treatment treatment) {

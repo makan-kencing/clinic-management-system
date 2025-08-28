@@ -8,6 +8,7 @@ import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.filter.MedicineFilter;
 import edu.dsa.clinic.filter.ProductFilter;
+import edu.dsa.clinic.filter.StockFilter;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,10 @@ public class MedicineController {
 
     public static void addProductEntry(Product product) {
         Database.productList.add(product);
+    }
+
+    public static void addStockEntry(Stock stock) {
+        Database.stockList.add(stock);
     }
 
     public static Medicine deleteMedicineEntry(int id) {
@@ -58,11 +63,19 @@ public class MedicineController {
     }
 
     public static ListInterface<Medicine> getAllMedicines() {
-        return Database.medicineList;
+        return Database.medicineList.clone();
     }
 
     public static ListInterface<Product> getAllProducts() {
-        return Database.productList;
+        return Database.productList.clone();
+    }
+
+    public static ListInterface<Stock> getAllStocks() {
+        return Database.stockList.clone();
+    }
+
+    public static ListInterface<Stock> getProductStocks(Product product) {
+        return Database.stockList.filtered(StockFilter.byProduct(product));
     }
 
     public static int getAvailableStocks(Product product) {

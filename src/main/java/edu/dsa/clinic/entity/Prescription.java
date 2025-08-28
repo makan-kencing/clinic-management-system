@@ -18,7 +18,7 @@ public class Prescription extends IdentifiableEntity {
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int quantity;
     private @Nullable String notes;
-    private final ListInterface<Dispensing> dispensing = new DoubleLinkedList<>();
+    private ListInterface<Dispensing> dispensing = new DoubleLinkedList<>();
 
     public Treatment getTreatment() {
         return treatment;
@@ -58,6 +58,11 @@ public class Prescription extends IdentifiableEntity {
 
     public ListInterface<Dispensing> getDispensing() {
         return dispensing;
+    }
+
+    public Prescription setDispensing(ListInterface<Dispensing> dispensing) {
+        this.dispensing = dispensing;
+        return this;
     }
 
     public Prescription addDispensing(Dispensing dispensing) {

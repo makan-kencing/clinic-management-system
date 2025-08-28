@@ -19,10 +19,10 @@ public class Product extends IdentifiableEntity {
     private MedicineAdministrationType administrationType;
     private BigDecimal cost;
     private BigDecimal price;
-    private final Inventory inventory = new Inventory();
-    private final ListInterface<Product> substitutes = new DoubleLinkedList<>();
-    private final ListInterface<Product> substitutesFor = new DoubleLinkedList<>();
-    private final ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
+    private Inventory inventory = new Inventory();
+    private ListInterface<Product> substitutes = new DoubleLinkedList<>();
+    private ListInterface<Product> substitutesFor = new DoubleLinkedList<>();
+    private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
             s1.getStockInDate().compareTo(s2.getStockInDate())
     );
 
@@ -84,8 +84,18 @@ public class Product extends IdentifiableEntity {
         return inventory;
     }
 
+    public Product setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        return this;
+    }
+
     public ListInterface<Product> getSubstitutes() {
         return substitutes;
+    }
+
+    public Product setSubstitutes(ListInterface<Product> substitutes) {
+        this.substitutes = substitutes;
+        return this;
     }
 
     public Product addSubstitute(Product product) {
@@ -99,6 +109,11 @@ public class Product extends IdentifiableEntity {
         return substitutesFor;
     }
 
+    public Product setSubstitutesFor(ListInterface<Product> substitutesFor) {
+        this.substitutesFor = substitutesFor;
+        return this;
+    }
+
     public Product addSubstituteFor(Product product) {
         product.substitutes.add(this);
 
@@ -108,6 +123,11 @@ public class Product extends IdentifiableEntity {
 
     public ListInterface<Stock> getStocks() {
         return stocks;
+    }
+
+    public Product setStocks(ListInterface<Stock> stocks) {
+        this.stocks = stocks;
+        return this;
     }
 
     public Product addStock(Stock stock) {
