@@ -672,12 +672,12 @@ public class Initializer {
 
         // Consultation queues data
         Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.SPECIALIST));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.EMERGENCY));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(3), ConsultationType.FOLLOW_UP));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.GENERAL));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.SPECIALIST));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.FOLLOW_UP));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.SPECIALIST));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(3), ConsultationType.EMERGENCY));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.FOLLOW_UP));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(5), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(6), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(7), ConsultationType.SPECIALIST));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(8), ConsultationType.FOLLOW_UP));
     }
 }
