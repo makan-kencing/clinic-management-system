@@ -1036,6 +1036,7 @@ public class MedicineUI extends UI {
                         break;
 
                     MedicineController.addMedicineEntry(medicine);
+                    this.updateData();
 
                     writer.println();
                     writer.println("Added Medicine #" + medicine.getId() + " - " + medicine.getName());
@@ -1340,6 +1341,7 @@ public class MedicineUI extends UI {
                         break;
 
                     MedicineController.addProductEntry(product);
+                    this.updateData();
 
                     writer.println();
                     writer.println("Added Product #" + product.getId() + " - [" + product.getBrand() + "] " + product.getName());
@@ -1497,6 +1499,7 @@ public class MedicineUI extends UI {
                         break;
 
                     MedicineController.addStockEntry(stock);
+                    this.updateData();
 
                     writer.println();
                     writer.println("Added Stock #" + stock.getId()
