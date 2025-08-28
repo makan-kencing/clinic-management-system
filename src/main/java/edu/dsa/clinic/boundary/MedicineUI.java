@@ -316,7 +316,7 @@ public class MedicineUI extends UI {
     public void viewMedicineDetails(Medicine medicine) {
         var prompt = this.getPrompt();
 
-        var builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+        var builder = new MedicinePromptBuilder();
 
         builder.createMedicineInfoText(medicine)
                 .addPrompt();
@@ -330,7 +330,7 @@ public class MedicineUI extends UI {
     public void viewProductDetails(Product product) {
         var prompt = this.getPrompt();
 
-        var builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+        var builder = new ProductPromptBuilder();
 
         builder.createProductInfoText(product)
                 .addPrompt();
@@ -344,7 +344,7 @@ public class MedicineUI extends UI {
     public void viewStockDetails(Stock stock) {
         var prompt = this.getPrompt();
 
-        var builder = (StockPromptBuilder) prompt.getPromptBuilder();
+        var builder = new StockPromptBuilder();
 
         builder.createStockInfoText(stock)
                 .addPrompt();
@@ -364,7 +364,7 @@ public class MedicineUI extends UI {
                     new DoubleLinkedList<>()
             );
             while (true) {
-                var builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                var builder = new MedicinePromptBuilder();
                 builder.createText()
                         .addLine("Creating new Medicine")
                         .addPrompt();
@@ -376,7 +376,7 @@ public class MedicineUI extends UI {
 
                 dto = builder.promptCreateMedicine(prompt);
 
-                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder = new MedicinePromptBuilder();
                 builder.createMedicineInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -385,7 +385,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder = new MedicinePromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -418,7 +418,7 @@ public class MedicineUI extends UI {
                     0
             );
             while (true) {
-                var builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+                var builder = new ProductPromptBuilder();
 
                 if (dto.medicine() != null) {
                     builder.createProductInfoText(dto)
@@ -485,7 +485,7 @@ public class MedicineUI extends UI {
                     reader.readLine("The numbers entered were invalid");
                 }
 
-                builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+                builder = new ProductPromptBuilder();
                 builder.createProductInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -494,7 +494,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+                builder = new ProductPromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -523,7 +523,7 @@ public class MedicineUI extends UI {
                     LocalDateTime.now()
             );
             while (true) {
-                var builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                var builder = new StockPromptBuilder();
 
                 if (dto.product() != null) {
                     builder.createStockInfoText(dto)
@@ -551,7 +551,7 @@ public class MedicineUI extends UI {
                 }
                 assert(dto.product() != null);
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createText()
                         .addLine("Creating new Stock")
                         .addPrompt();
@@ -566,7 +566,7 @@ public class MedicineUI extends UI {
 
                 dto = builder.promptCreateStock(prompt, dto.product());
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -575,7 +575,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -604,9 +604,9 @@ public class MedicineUI extends UI {
                     LocalDateTime.now()
             );
             while (true) {
-                var builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                var builder = new StockPromptBuilder();
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createText()
                         .addLine("Creating new Stock")
                         .addPrompt();
@@ -621,7 +621,7 @@ public class MedicineUI extends UI {
 
                 dto = builder.promptCreateStock(prompt, dto.product());
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -630,7 +630,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -658,7 +658,7 @@ public class MedicineUI extends UI {
                     medicine.getTypes()
             );
             while (true) {
-                var builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                var builder = new MedicinePromptBuilder();
                 builder.createText()
                         .addLine("Editing Medicine #" + medicine.getId() + " - " + medicine.getName())
                         .addPrompt();
@@ -670,7 +670,7 @@ public class MedicineUI extends UI {
 
                 dto = builder.promptCreateMedicine(prompt);
 
-                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder = new MedicinePromptBuilder();
                 builder.createMedicineInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -679,7 +679,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (MedicinePromptBuilder) prompt.getPromptBuilder();
+                builder = new MedicinePromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -710,7 +710,7 @@ public class MedicineUI extends UI {
                     product.getAutoOrderThreshold()
             );
             while (true) {
-                var builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+                var builder = new ProductPromptBuilder();
 
                 builder.createProductInfoText(dto)
                         .addPrompt();
@@ -762,7 +762,7 @@ public class MedicineUI extends UI {
                     reader.readLine("The numbers entered were invalid");
                 }
 
-                builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+                builder = new ProductPromptBuilder();
                 builder.createProductInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -771,7 +771,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (ProductPromptBuilder) prompt.getPromptBuilder();
+                builder = new ProductPromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -798,7 +798,7 @@ public class MedicineUI extends UI {
                     stock.getStockInDate()
             );
             while (true) {
-                var builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                var builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Update the product information? ([" + dto.product().getBrand() + "] " + dto.product().getName() + ")")
@@ -814,7 +814,7 @@ public class MedicineUI extends UI {
                         );
                 }
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createText()
                         .addLine("Editing Stock #" + stock.getId())
                         .addPrompt();
@@ -829,7 +829,7 @@ public class MedicineUI extends UI {
 
                 dto = builder.promptCreateStock(prompt, dto.product());
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
                         .addPrompt();
                 builder.createConfirmationPrompt("Continue editing?")
@@ -838,7 +838,7 @@ public class MedicineUI extends UI {
                 if (builder.promptConfirmation(prompt))
                     continue;
 
-                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder = new StockPromptBuilder();
                 builder.createConfirmationPrompt("Save?")
                         .addPrompt();
 
@@ -858,7 +858,7 @@ public class MedicineUI extends UI {
     public void deleteMedicine(Medicine medicine) {
         var prompt = this.getPrompt();
 
-        var builder = (UIPromptBuilder) prompt.getPromptBuilder();
+        var builder = new UIPromptBuilder();
         builder.createConfirmationPrompt("Are you sure to delete the medicine " + medicine.getName() + "?")
                 .addPrompt();
 
@@ -885,7 +885,7 @@ public class MedicineUI extends UI {
     public void deleteProduct(Product product) {
         var prompt = this.getPrompt();
 
-        var builder = (UIPromptBuilder) prompt.getPromptBuilder();
+        var builder = new UIPromptBuilder();
         builder.createConfirmationPrompt("Are you sure to delete Product #" + product.getId() + " - [" + product.getBrand() + "] " + product.getName() + "?")
                 .addPrompt();
 
