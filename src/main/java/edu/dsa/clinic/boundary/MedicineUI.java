@@ -71,7 +71,8 @@ public class MedicineUI extends UI {
         var reader = this.getLineReader();
 
         while (true) {
-            var opt = reader.readLine();
+            // TODO
+            var opt = reader.readLine("What menu?");
 
             switch (opt) {
                 case "product":
@@ -319,6 +320,9 @@ public class MedicineUI extends UI {
         var builder = new MedicinePromptBuilder();
 
         builder.createMedicineInfoText(medicine)
+                .addPrompt()
+                .createInputPrompt()
+                .message("")
                 .addPrompt();
 
         try {
@@ -333,6 +337,9 @@ public class MedicineUI extends UI {
         var builder = new ProductPromptBuilder();
 
         builder.createProductInfoText(product)
+                .addPrompt()
+                .createInputPrompt()
+                .message("")
                 .addPrompt();
 
         try {
@@ -347,6 +354,9 @@ public class MedicineUI extends UI {
         var builder = new StockPromptBuilder();
 
         builder.createStockInfoText(stock)
+                .addPrompt()
+                .createInputPrompt()
+                .message("")
                 .addPrompt();
 
         try {
