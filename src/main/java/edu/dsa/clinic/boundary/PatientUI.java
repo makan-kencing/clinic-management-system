@@ -1358,9 +1358,14 @@ public class PatientUI extends UI {
 
             int scaled = maxValue == 0 ? 0 : (int) Math.round((value / (double) maxValue) * barWidth);
 
-            System.out.printf("%-20s | %s (%d)%n",
+            final String GREEN = "\u001B[34m";
+            final String RESET = "\u001B[0m";
+
+            System.out.printf("%-20s | %s%s%s (%d)%n",
                     pc.key().getName(),
+                    GREEN,
                     "█".repeat(Math.max(1, scaled)),
+                    RESET,
                     value
             );
         }

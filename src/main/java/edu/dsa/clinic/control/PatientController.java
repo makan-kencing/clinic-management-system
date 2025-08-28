@@ -129,10 +129,7 @@ public class PatientController {
         return sorted;
     }
 
-    private ListInterface<PatientCounter> getTopPatients(
-            int topN,
-            Comparator<PatientCounter> comparator
-    ) {
+    private ListInterface<PatientCounter> getTopPatients(int topN, Comparator<PatientCounter> comparator) {
         var counters = getPatientSummary();
         var sorted = counters.sorted(comparator);
 
