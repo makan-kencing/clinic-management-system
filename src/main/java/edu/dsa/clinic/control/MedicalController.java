@@ -196,11 +196,13 @@ public class MedicalController {
         ListInterface<ProductCounter> productCounters = dc.productCounters();
 
         for (int j = 0; j < productCounters.size(); j++) {
-            total += productCounters.get(j).count();  // 累加每个药品的使用次数
+            total += productCounters.get(j).count();
         }
     }
     return total;
 }
+
+
 
 
 
