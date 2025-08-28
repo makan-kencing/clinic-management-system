@@ -33,7 +33,7 @@ public class PatientUI extends UI {
         super(scanner);
     }
 
-    public void patientMenu() {
+    public void startMenu() {
         String opt;
         do {
             System.out.println("=".repeat(29));
