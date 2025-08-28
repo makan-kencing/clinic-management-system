@@ -13,6 +13,7 @@ import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.lambda.Filter;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,8 +34,11 @@ public class DoctorController {
         return Database.doctorList.removeFirst(DoctorFilter.byId(id));
     }
 
-    public static Doctor selectDoctorByID(int id) {
+    public static @Nullable Doctor selectDoctorByID(int id) {
         return Database.doctorList.findFirst(DoctorFilter.byId(id));
+    }
+    public static @Nullable Doctor selectDoctorByName(String name) {
+        return Database.doctorList.findFirst(DoctorFilter.byName(name));
     }
 
     public static int getDoctorCount() {
