@@ -1,5 +1,6 @@
 package edu.dsa.clinic.boundary;
 
+import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.dto.Range;
@@ -40,6 +41,7 @@ public class DoctorUI extends UI {
             System.out.println("3. Delete Doctor Record");
             System.out.println("4. Modify Doctor Information");
             System.out.println("5. Doctor Shifts Menu");
+            System.out.println("6. Generate Summary Report Menu");
             System.out.println("0. Exit To Main Menu");
             System.out.print("Enter choice: ");
 
@@ -83,6 +85,9 @@ public class DoctorUI extends UI {
                 case 5:
                     // doctorShiftMenu
                     shiftsMenu();
+                    break;
+                case 6:
+
                     break;
                 case 0:
                     return;
@@ -134,12 +139,24 @@ public class DoctorUI extends UI {
 
     public void createDoctor() {
         Doctor doctor = new Doctor();
-
-        System.out.print("Enter Doctor Name: ");
-        doctor.setName(this.scanner.nextLine().trim());
         do{
-            System.out.println("Name cannot be empty. Please enter a valid name.");
-        }while(this.scanner.nextLine().trim().isEmpty());
+            System.out.print("Enter Doctor Name: ");
+            var name = this.scanner.nextLine().trim();
+
+            if (name.isEmpty()) {
+                System.out.println("Name cannot be empty. Please enter a valid name.");
+                continue;
+            }
+
+            if (DoctorController.selectDoctorByName(name) != null) {
+                System.out.println("Name taken");
+                continue;
+            }
+
+            doctor.setName(name);
+            break;
+        }while(true);
+
 
         doctor.setGender(selectAGender());
 
@@ -189,7 +206,7 @@ public class DoctorUI extends UI {
         System.out.println("Doctor created successfully: ");
     }
 
-
+    //delete Doctor
     public void deleteDoctor(Doctor doctor) {
         System.out.print("Are you sure to delete this entry? (Y/N) ");
 
@@ -238,14 +255,24 @@ public class DoctorUI extends UI {
                 System.out.println("Current name: " + doctor.getName());
                 System.out.print("Enter new name: ");
                 String newName = scanner.nextLine();
+                do{
+                    System.out.print("Enter Doctor Name: ");
+                    var name = this.scanner.nextLine().trim();
 
-                if (!newName.trim().isEmpty()) {
+                    if (name.isEmpty()) {
+                        System.out.println("Name cannot be empty. No changes made.");
+                        continue;
+                    }
+
+                    if (DoctorController.selectDoctorByName(name) != null) {
+                        System.out.println("Name taken");
+                        continue;
+                    }
+
                     doctor.setName(newName);
-                    System.out.println("Name updated successfully!");
-                } else {
-                    System.out.println("Name cannot be empty. No changes made.");
-                }
-                 doctor.setName(newName);
+                    break;
+                }while(true);
+
                 break;
             }
             case 2: {
@@ -297,7 +324,6 @@ public class DoctorUI extends UI {
                 break;
         }
     }
-
 
     //Select Doctor
     public @Nullable Doctor selectDoctor() {
@@ -362,6 +388,7 @@ public class DoctorUI extends UI {
         } while (opt > 1 && opt < 4);
         return selectedDoctor;
     }
+
     //filter doctor menu
     public void filterDoctor(InteractiveTable<Doctor> table) {
         System.out.println("-".repeat(30));
@@ -427,8 +454,10 @@ public class DoctorUI extends UI {
                 var specialization = availableSpecialization[index - 1];
 
                 System.out.println();
-                filter(table, "Specialization", specialization.name());
+                filter(table, "specialization", specialization.name());
                 break;
+
+
             }
             case 5:
                 System.out.println("Choose the day to filter (YYYY-MM-DD): ");
@@ -450,6 +479,7 @@ public class DoctorUI extends UI {
                 break;
         }
     }
+
     //filter doctor function
     public void filter(InteractiveTable<Doctor> table, String column, String value) {
         switch (column) {

@@ -22,6 +22,10 @@ public interface DoctorFilter {
                 .contains(name.toLowerCase());
     }
 
+    static Filter<Doctor> byName(String name) {
+        return d -> d.getName().equals(name);
+    }
+
     static Filter<Doctor> byGender(Gender gender) {
         return d -> d.getGender() == gender;
     }
