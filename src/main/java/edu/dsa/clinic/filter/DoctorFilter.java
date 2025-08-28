@@ -47,10 +47,10 @@ public interface DoctorFilter {
             for (var shift : shiftsOfTheDay) {
                 var workingHours = shift.getTimeRange();
                 if (!workingHours.contains(timeRange))
-                    return false;
+                    return true;
             }
 
-            return true;
+            return false;
         };
     }
 
