@@ -87,8 +87,7 @@ public class MedicineController {
     public static int getAvailableStocks(Medicine medicine) {
         var sum = 0;
         for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine)))
-            for (var stock : product.getStocks())
-                sum += stock.getQuantityLeft();
+            sum += getAvailableStocks(product);
         return sum;
     }
 
@@ -105,10 +104,14 @@ public class MedicineController {
 
     public static @Nullable LocalDateTime getLatestStocked(Medicine medicine) {
         var latest = LocalDateTime.MIN;
-        for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine)))
-            for (var stock : product.getStocks())
-                if (stock.getStockInDate().isAfter(latest))
-                    latest = stock.getStockInDate();
+        for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine))) {
+            var productLatest = getLatestStocked(product);
+            if (productLatest == null)
+                continue;
+
+            if (productLatest.isAfter(latest))
+                latest = productLatest;
+        }
 
         if (latest.equals(LocalDateTime.MIN))
             return null;

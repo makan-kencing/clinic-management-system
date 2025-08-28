@@ -2,7 +2,6 @@ package edu.dsa.clinic.entity;
 
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import org.jetbrains.annotations.Range;
 
 import java.math.BigDecimal;
@@ -23,9 +22,6 @@ public class Product extends IdentifiableEntity {
     private int autoOrderThreshold = Integer.MAX_VALUE;
     private ListInterface<Product> substitutes = new DoubleLinkedList<>();
     private ListInterface<Product> substitutesFor = new DoubleLinkedList<>();
-    private ListInterface<Stock> stocks = new SortedDoubleLinkedList<>((s1, s2) ->
-            s1.getStockInDate().compareTo(s2.getStockInDate())
-    );
 
     public String getName() {
         return name;
@@ -122,22 +118,6 @@ public class Product extends IdentifiableEntity {
         return this;
     }
 
-    public ListInterface<Stock> getStocks() {
-        return stocks;
-    }
-
-    public Product setStocks(ListInterface<Stock> stocks) {
-        this.stocks = stocks;
-        return this;
-    }
-
-    public Product addStock(Stock stock) {
-        stock.setProduct(this);
-
-        this.stocks.add(stock);
-        return this;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
@@ -149,7 +129,6 @@ public class Product extends IdentifiableEntity {
                 ", price=" + price +
                 ", substitutes=" + substitutes +
                 ", substitutesFor=" + substitutesFor +
-                ", stocks=" + stocks +
                 '}';
     }
 }

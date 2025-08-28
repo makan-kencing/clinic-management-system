@@ -20,6 +20,7 @@ import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.entity.Treatment;
+import edu.dsa.clinic.filter.ProductFilter;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -362,14 +363,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0.01529"))
                         .setPrice(new BigDecimal("1"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(32)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(15))
-                        .addStock(new Stock()
-                                .setStockInQuantity(32)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(32))
         );
         Database.productList.add(
                 ((Product) new Product()
@@ -380,14 +373,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0.01529"))
                         .setPrice(new BigDecimal("1"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(60)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(14))
-                        .addStock(new Stock()
-                                .setStockInQuantity(40)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(40))
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-7021
                 ((Product) new Product()
@@ -398,18 +383,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(100)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(3))
-                        .addStock(new Stock()
-                                .setStockInQuantity(100)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(100))
-                        .addStock(new Stock()
-                                .setStockInQuantity(62)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(62))
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-0620
                 ((Product) new Product()
@@ -420,18 +393,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(100)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(3))
-                        .addStock(new Stock()
-                                .setStockInQuantity(100)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(100))
-                        .addStock(new Stock()
-                                .setStockInQuantity(62)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(62))
         );
         Database.productList.add(  // https://ndclist.com/ndc/0135-0609
                 ((Product) new Product()
@@ -442,18 +403,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(100)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(3))
-                        .addStock(new Stock()
-                                .setStockInQuantity(100)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(100))
-                        .addStock(new Stock()
-                                .setStockInQuantity(62)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                                .setQuantityLeft(62))
         );
         Database.productList.add(
                 ((Product) new Product()
@@ -464,10 +413,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(30)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(27))
         );
         Database.productList.add(
                 ((Product) new Product()
@@ -478,10 +423,6 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(30)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(13))
         );
         Database.productList.add(
                 ((Product) new Product()
@@ -492,15 +433,129 @@ public class Initializer {
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
-                        .addStock(new Stock()
-                                .setStockInQuantity(30)
-                                .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                                .setQuantityLeft(13))
         );
     }
 
     private static void initializeStocks() {
-
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(32)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(15)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(32)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(32)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(60)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(14)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(40)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(40)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(100)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(3)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(100)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(100)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(62)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(62)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(100)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(3)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(100)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(100)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(62)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(62)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(100)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(3)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(100)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(100)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(27)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(62)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
+                        .setQuantityLeft(62)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(27)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(13)
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
+                        .setQuantityLeft(13)
+        );
     }
 
     private static void initializeAppointments() {
