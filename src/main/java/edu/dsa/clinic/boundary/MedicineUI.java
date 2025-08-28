@@ -1517,7 +1517,7 @@ public class MedicineUI extends UI {
                     new Cell(o.getProduct().getName()),
                     new Cell(o.getStockInQuantity()),
                     new Cell(o.getStockInDate().format(StockPromptBuilder.DATETIME_FORMAT)),
-                    new Cell(o.getQuantityLeft())
+                    new Cell(MedicineController.getStockQuantityLeft(o))
             };
         }
 

@@ -442,119 +442,102 @@ public class Initializer {
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
                         .setStockInQuantity(32)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(15)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
                         .setStockInQuantity(32)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(32)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
                         .setStockInQuantity(60)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(14)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
                         .setStockInQuantity(40)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(40)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
                         .setStockInQuantity(100)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(3)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
                         .setStockInQuantity(100)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(100)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
                         .setStockInQuantity(62)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(62)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
                         .setStockInQuantity(100)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(3)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
                         .setStockInQuantity(100)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(100)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
                         .setStockInQuantity(62)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(62)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
                         .setStockInQuantity(100)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(3)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
                         .setStockInQuantity(100)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(100)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
                         .setStockInQuantity(30)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(27)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
                         .setStockInQuantity(62)
                         .setStockInDate(LocalDateTime.of(2025, 8, 23, 12, 34))
-                        .setQuantityLeft(62)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
                         .setStockInQuantity(30)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(27)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
                         .setStockInQuantity(30)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(13)
         );
         Database.stockList.add(
                 new Stock()
                         .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
                         .setStockInQuantity(30)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
-                        .setQuantityLeft(13)
         );
     }
 

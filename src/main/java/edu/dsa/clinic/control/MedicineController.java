@@ -77,10 +77,17 @@ public class MedicineController {
         return Database.stockList.filtered(StockFilter.byProduct(product));
     }
 
+    public static int getStockQuantityLeft(Stock stock) {
+        var quantity = stock.getStockInQuantity();
+        for (var dispensing : stock.getDispensings())
+            quantity -= dispensing.getQuantity();
+        return quantity;
+    }
+
     public static int getAvailableStocks(Product product) {
         var sum = 0;
         for (var stock : getProductStocks(product))
-            sum += stock.getQuantityLeft();
+            sum += getStockQuantityLeft(stock);
         return sum;
     }
 

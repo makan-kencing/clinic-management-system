@@ -1,5 +1,7 @@
 package edu.dsa.clinic.entity;
 
+import edu.dsa.clinic.adt.DoubleLinkedList;
+import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Range;
 
 import java.time.LocalDateTime;
@@ -14,8 +16,7 @@ public class Stock extends IdentifiableEntity {
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int stockInQuantity;
     private LocalDateTime stockInDate;
-    @Range(from = 0, to = Integer.MAX_VALUE)
-    private int quantityLeft;
+    private ListInterface<Dispensing> dispensings = new DoubleLinkedList<>();
 
     public Product getProduct() {
         return product;
@@ -44,12 +45,19 @@ public class Stock extends IdentifiableEntity {
         return this;
     }
 
-    public @Range(from = 0, to = Integer.MAX_VALUE) int getQuantityLeft() {
-        return quantityLeft;
+    public ListInterface<Dispensing> getDispensings() {
+        return dispensings;
     }
 
-    public Stock setQuantityLeft(@Range(from = 0, to = Integer.MAX_VALUE) int quantityLeft) {
-        this.quantityLeft = quantityLeft;
+    public Stock setDispensings(ListInterface<Dispensing> dispensings) {
+        this.dispensings = dispensings;
+        return this;
+    }
+
+    public Stock addDispensing(Dispensing dispensing) {
+        dispensing.setStock(this);
+        this.dispensings.add(dispensing);
+
         return this;
     }
 
@@ -60,7 +68,6 @@ public class Stock extends IdentifiableEntity {
                 ", medicine=" + product +
                 ", stockInQuantity=" + stockInQuantity +
                 ", stockInDate=" + stockInDate +
-                ", quantityLeft=" + quantityLeft +
                 '}';
     }
 }

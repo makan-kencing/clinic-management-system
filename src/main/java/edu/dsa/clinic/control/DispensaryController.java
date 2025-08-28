@@ -45,13 +45,13 @@ public class DispensaryController {
         var dispensings = new DoubleLinkedList<Dispensing>();
 
         for (var stock : MedicineController.getProductStocks(product)) {
-            var dispensedQuantity = Math.min(quantity, stock.getQuantityLeft());
+            var dispensedQuantity = Math.min(quantity, MedicineController.getStockQuantityLeft(stock));
 
-            dispensings.add(new Dispensing()
+            var dispensing = new Dispensing()
                     .setStock(stock)
-                    .setQuantity(dispensedQuantity));
-
-            stock.setQuantityLeft(stock.getQuantityLeft() - dispensedQuantity);
+                    .setQuantity(dispensedQuantity);
+            stock.addDispensing(dispensing);
+            dispensings.add(dispensing);
         }
         return dispensings;
     }

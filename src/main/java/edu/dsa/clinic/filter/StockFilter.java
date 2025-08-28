@@ -1,5 +1,6 @@
 package edu.dsa.clinic.filter;
 
+import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.lambda.Filter;
@@ -16,10 +17,10 @@ public interface StockFilter {
             @Range(from = 1, to = Integer.MAX_VALUE) int to,
             boolean inclusive
     ) {
-        return s -> Ordered.isBetween(s.getQuantityLeft(), from, to);
+        return s -> Ordered.isBetween(MedicineController.getStockQuantityLeft(s), from, to);
     }
 
     static Filter<Stock> hasStock() {
-        return s -> s.getQuantityLeft() > 0;
+        return s -> MedicineController.getStockQuantityLeft(s) > 0;
     }
 }
