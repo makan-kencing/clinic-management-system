@@ -119,14 +119,9 @@ public class PatientController {
             }
         }
 
-        SortedDoubleLinkedList<PatientCounter> sorted =
-                new SortedDoubleLinkedList<>((a, b) -> Integer.compare(b.getCount(), a.getCount()));
+        patientCounters.sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
 
-        for (int i = 0; i < patientCounters.size(); i++) {
-            sorted.add(patientCounters.get(i));
-        }
-
-        return sorted;
+        return patientCounters;
     }
 
     private ListInterface<PatientCounter> getTopPatients(int topN, Comparator<PatientCounter> comparator) {
