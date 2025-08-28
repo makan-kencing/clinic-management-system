@@ -618,7 +618,18 @@ public class MedicineUI extends UI {
                         .defaultValue(dto.stockInDate().format(StockPromptBuilder.DATETIME_FORMAT))
                         .addPrompt();
 
-                dto = builder.promptCreateStock(prompt, dto.product());
+                try {
+                    dto = builder.promptCreateStock(prompt, dto.product());
+                } catch(NumberFormatException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("!!! The number entered is invalid.");
+                } catch (DateTimeParseException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("!!! The time entered is invalid");
+                    continue;
+                }
 
                 builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
@@ -674,7 +685,18 @@ public class MedicineUI extends UI {
                         .defaultValue(dto.stockInDate().format(StockPromptBuilder.DATETIME_FORMAT))
                         .addPrompt();
 
-                dto = builder.promptCreateStock(prompt, dto.product());
+                try {
+                    dto = builder.promptCreateStock(prompt, dto.product());
+                } catch(NumberFormatException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("!!! The number entered is invalid.");
+                } catch (DateTimeParseException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("!!! The time entered is invalid");
+                    continue;
+                }
 
                 builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
@@ -885,7 +907,18 @@ public class MedicineUI extends UI {
                         .defaultValue(dto.stockInDate().format(StockPromptBuilder.DATETIME_FORMAT))
                         .addPrompt();
 
-                dto = builder.promptCreateStock(prompt, dto.product());
+                try {
+                    dto = builder.promptCreateStock(prompt, dto.product());
+                } catch(NumberFormatException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("!!! The number entered is invalid.");
+                } catch (DateTimeParseException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("!!! The time entered is invalid");
+                    continue;
+                }
 
                 builder = new StockPromptBuilder();
                 builder.createStockInfoText(dto)
