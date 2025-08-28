@@ -15,8 +15,10 @@ import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.filter.MedicineFilter;
 import edu.dsa.clinic.filter.MedicineTypeFilter;
 import edu.dsa.clinic.filter.ProductFilter;
+import edu.dsa.clinic.filter.StockFilter;
 import edu.dsa.clinic.lambda.Filter;
 import edu.dsa.clinic.lambda.Mapper;
+import edu.dsa.clinic.lambda.Supplier;
 import edu.dsa.clinic.sorter.MedicineSorter;
 import edu.dsa.clinic.sorter.ProductSorter;
 import edu.dsa.clinic.utils.SelectTable;
@@ -66,7 +68,31 @@ public class MedicineUI extends UI {
     }
 
     public void startMenu() throws IOException {
-        this.manageProductMenu();
+        var reader = this.getLineReader();
+
+        while (true) {
+            var opt = reader.readLine();
+
+            switch (opt) {
+                case "product":
+                    this.manageProductMenu();
+                    break;
+                case "medicine":
+                    this.manageMedicineMenu();
+                    break;
+                case "stock":
+                    this.manageStockMenu();
+                    break;
+                case "dispensary":
+                    this.manageDispensaryMenu();
+                    break;
+                case "reports":
+                    this.manageReportsMenu();
+                    break;
+                case "back":
+                    return;
+            }
+        }
     }
 
     public void manageProductMenu() throws IOException {
@@ -103,7 +129,10 @@ public class MedicineUI extends UI {
                     this.editProduct(product);
                     break;
                 case "add_stock":
-                    this.addStockMenu(product);
+                    var stock = this.createStock(product);
+                    if (stock != null)
+                        MedicineController.addStockEntry(stock);
+
                     break;
                 case "manage_stock":
                     this.manageProductStockMenu(product);
@@ -114,22 +143,119 @@ public class MedicineUI extends UI {
         }
     }
 
-    public void manageStockMenu() {
+    public void manageMedicineMenu() throws IOException {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
 
+        while (true) {
+            var medicine = this.selectMedicine();
+            if (medicine == null)
+                return;
+
+            // handle selected product
+            builder.createListPrompt()
+                    .name("option")
+                    .message("What do you want to do with it?")
+                    .newItem("view").text("View details").add()
+                    .newItem("delete").text("Delete record").add()
+                    .newItem("edit").text("Edit record").add()
+                    .newItem("cancel").text("Back").add()
+                    .addPrompt();
+
+            var result = prompt.prompt(builder.build());
+            switch (result.get("option")
+                    .getResult()) {
+                case "view":
+                    this.viewMedicineDetails(medicine);
+                    break;
+                case "delete":
+                    this.deleteMedicine(medicine);
+                    break;
+                case "edit":
+                    this.editMedicine(medicine);
+                    break;
+                case "cancel":
+                    return;
+            }
+        }
     }
 
-    public void addStockMenu(Product product) {
+    public void manageStockMenu() throws IOException {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
 
+        while (true) {
+            var stock = this.selectStock();
+            if (stock == null)
+                return;
+
+            // handle selected product
+            builder.createListPrompt()
+                    .name("option")
+                    .message("What do you want to do with it?")
+                    .newItem("view").text("View details").add()
+                    .newItem("edit").text("Edit record").add()
+                    .newItem("cancel").text("Back").add()
+                    .addPrompt();
+
+            var result = prompt.prompt(builder.build());
+            switch (result.get("option")
+                    .getResult()) {
+                case "view":
+                    this.viewStockDetails(stock);
+                    break;
+                case "edit":
+                    this.editStock(stock);
+                    break;
+                case "cancel":
+                    return;
+            }
+        }
     }
 
-    public void manageProductStockMenu(Product product) {
+    public void manageProductStockMenu(Product product) throws IOException {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
 
+        while (true) {
+            var stock = this.selectProductStock(product);
+            if (stock == null)
+                return;
+
+            // handle selected product
+            builder.createListPrompt()
+                    .name("option")
+                    .message("What do you want to do with it?")
+                    .newItem("view").text("View details").add()
+                    .newItem("edit").text("Edit record").add()
+                    .newItem("cancel").text("Back").add()
+                    .addPrompt();
+
+            var result = prompt.prompt(builder.build());
+            switch (result.get("option")
+                    .getResult()) {
+                case "view":
+                    this.viewStockDetails(stock);
+                    break;
+                case "edit":
+                    this.editStock(stock);
+                    break;
+                case "cancel":
+                    return;
+            }
+        }
     }
 
+    public void manageDispensaryMenu() throws IOException {
+        // TODO
+    }
+
+    public void manageReportsMenu() throws IOException {
+        // TODO
+    }
 
     public @Nullable Medicine selectMedicine() {
-        var medicines = MedicineController.getAllMedicines();
-        var table = new SelectMedicineTable(medicines, this.terminal);
+        var table = new SelectMedicineTable(MedicineController::getAllMedicines, this.terminal);
 
         try {
             return table.select();
@@ -139,8 +265,7 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Product selectProduct() {
-        var products = MedicineController.getAllProducts();
-        var table = new SelectProductTable(products, this.terminal);
+        var table = new SelectProductTable(MedicineController::getAllProducts, this.terminal);
 
         try {
             return table.select();
@@ -150,9 +275,29 @@ public class MedicineUI extends UI {
     }
 
     public @Nullable Product selectProductInStock() {
-        var products = MedicineController.getAllProducts();
-        var table = new SelectProductTable(products, this.terminal);
+        var table = new SelectProductTable(MedicineController::getAllProducts, this.terminal);
         table.addDefaultFilter("In stock", ProductFilter.hasStock());
+
+        try {
+            return table.select();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public @Nullable Stock selectStock() {
+        var table = new SelectStockTable(MedicineController::getAllStocks, this.terminal);
+
+        try {
+            return table.select();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public @Nullable Stock selectProductStock(Product product) {
+        var table = new SelectStockTable(() -> MedicineController.getProductStocks(product), this.terminal);
+        table.addDefaultFilter("Product is " + product.getName(), StockFilter.byProduct(product));
 
         try {
             return table.select();
@@ -207,17 +352,6 @@ public class MedicineUI extends UI {
         try {
             prompt.prompt(builder.build());
         } catch (IOException _) {
-        }
-    }
-
-    public @Nullable Stock selectStock() {
-        var stocks = MedicineController.getAllStocks();
-        var table = new SelectStockTable(stocks, this.terminal);
-
-        try {
-            return table.select();
-        } catch (IOException e) {
-            return null;
         }
     }
 
@@ -343,7 +477,13 @@ public class MedicineUI extends UI {
                         .defaultValue(String.valueOf(dto.autoOrderThreshold()))
                         .addPrompt();
 
-                dto = builder.promptCreateProduct(prompt, dto.medicine());
+                try {
+                    dto = builder.promptCreateProduct(prompt, dto.medicine());
+                } catch (NumberFormatException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("The numbers entered were invalid");
+                }
 
                 builder = (ProductPromptBuilder) prompt.getPromptBuilder();
                 builder.createProductInfoText(dto)
@@ -410,6 +550,61 @@ public class MedicineUI extends UI {
                         );
                 }
                 assert(dto.product() != null);
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createText()
+                        .addLine("Creating new Stock")
+                        .addPrompt();
+                builder.createChosenProductText(dto.product())
+                        .addPrompt();
+                builder.createStockInPrompt()
+                        .defaultValue(String.valueOf(dto.stockInQuantity()))
+                        .addPrompt();
+                builder.createStockedAtPrompt()
+                        .defaultValue(dto.stockInDate().format(StockPromptBuilder.DATETIME_FORMAT))
+                        .addPrompt();
+
+                dto = builder.promptCreateStock(prompt, dto.product());
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createStockInfoText(dto)
+                        .addPrompt();
+                builder.createConfirmationPrompt("Continue editing?")
+                        .addPrompt();
+
+                if (builder.promptConfirmation(prompt))
+                    continue;
+
+                builder = (StockPromptBuilder) prompt.getPromptBuilder();
+                builder.createConfirmationPrompt("Save?")
+                        .addPrompt();
+
+                if (!builder.promptConfirmation(prompt))
+                    return null;
+
+                return dto.create();
+            }
+        } catch (IOException e) {
+            var writer = this.getWriter();
+
+            writer.println("Failed to read the inputs.");
+            writer.flush();
+
+            return null;
+        }
+    }
+
+    public @Nullable Stock createStock(Product product) {
+        var prompt = this.getPrompt();
+
+        try {
+            var dto = new CreateStockDTO(
+                    product,
+                    1,
+                    LocalDateTime.now()
+            );
+            while (true) {
+                var builder = (StockPromptBuilder) prompt.getPromptBuilder();
 
                 builder = (StockPromptBuilder) prompt.getPromptBuilder();
                 builder.createText()
@@ -559,7 +754,13 @@ public class MedicineUI extends UI {
                         .defaultValue(String.valueOf(dto.autoOrderThreshold()))
                         .addPrompt();
 
-                dto = builder.promptCreateProduct(prompt, dto.medicine());
+                try {
+                    dto = builder.promptCreateProduct(prompt, dto.medicine());
+                } catch (NumberFormatException _) {
+                    var reader = this.getLineReader();
+
+                    reader.readLine("The numbers entered were invalid");
+                }
 
                 builder = (ProductPromptBuilder) prompt.getPromptBuilder();
                 builder.createProductInfoText(dto)
@@ -717,7 +918,7 @@ public class MedicineUI extends UI {
         ) {
             terminal.puts(InfoCmp.Capability.clear_screen);
             var ui = new MedicineUI(terminal);
-            ui.manageProductMenu();
+            ui.startMenu();
             // Entrypoint to the main UI.
         }
     }
@@ -731,6 +932,11 @@ public class MedicineUI extends UI {
                     new Column("In stock", 10),
                     new Column("Last stocked", 20)
             }, medicines, terminal);
+        }
+
+        public SelectMedicineTable(Supplier<ListInterface<Medicine>> supplier, Terminal terminal) {
+            this(supplier.get(), terminal);
+            this.supplier = supplier;
         }
 
         @Override
@@ -1029,6 +1235,11 @@ public class MedicineUI extends UI {
             }, products, terminal);
         }
 
+        public SelectProductTable(Supplier<ListInterface<Product>> supplier, Terminal terminal) {
+            this(supplier.get(), terminal);
+            this.supplier = supplier;
+        }
+
         @Override
         protected Cell[] getRow(Product o) {
             return new Cell[]{
@@ -1178,6 +1389,11 @@ public class MedicineUI extends UI {
             }, stocks, terminal);
         }
 
+        public SelectStockTable(Supplier<ListInterface<Stock>> supplier, Terminal terminal) {
+            this(supplier.get(), terminal);
+            this.supplier = supplier;
+        }
+
         @Override
         protected Cell[] getRow(Stock o) {
             return new Cell[] {
@@ -1319,8 +1535,6 @@ public class MedicineUI extends UI {
                     .addLine("Unit Cost: " + product.getCost())
                     .addLine("Unit Price: " + product.getPrice())
                     .addLine("Order threshold at: " + product.getAutoOrderThreshold())
-                    .addLine("Substitutes: " + StringUtils.join(", ", product.getSubstitutes().map(Product::getName)))
-                    .addLine("Substitutes For: " + StringUtils.join(", ", product.getSubstitutesFor().map(Product::getName)))
                     .addLine("=".repeat(30));
         }
 
@@ -1365,7 +1579,7 @@ public class MedicineUI extends UI {
                     .message("Order Threshold: ");
         }
 
-        public CreateProductDTO promptCreateProduct(ConsolePrompt prompt, Medicine medicine) throws IOException, IllegalArgumentException, NumberFormatException {
+        public CreateProductDTO promptCreateProduct(ConsolePrompt prompt, Medicine medicine) throws IOException, NumberFormatException {
             var result = prompt.prompt(this.build());
 
             var name = result.get(NAME).getResult();
