@@ -324,6 +324,20 @@ public class DoctorUI extends UI {
                 break;
         }
     }
+    
+    public @Nullable Doctor selectAvailableDoctor(LocalDate date, Range<LocalTime> timeRange) {
+
+        Doctor selectedDoctor = null;
+
+        var doctors = DoctorController.getDoctors();
+
+        var table = new DoctorTable(doctors);
+        table.addDefaultFilter("Available at " + date + "from"+ timeRange.from() + " to " + timeRange.to(), DoctorFilter.isAvailable(date, timeRange));
+
+        // TODO: do ur menu loop thingy here
+        return selectedDoctor;
+    }
+
 
     //Select Doctor
     public @Nullable Doctor selectDoctor() {
@@ -332,10 +346,11 @@ public class DoctorUI extends UI {
         var doctors = DoctorController.getDoctors();
 
         var table = new DoctorTable(doctors);
-        table.display();
+
 
         int opt;
         do {
+            table.display();
             System.out.println("-".repeat(30));
             System.out.println("(1) Select Doctor ID " +
                     "\n(2) Filter Doctor List " +
@@ -488,7 +503,6 @@ public class DoctorUI extends UI {
                         "Search " + column + " \"" + value + "\"",
                         DoctorFilter.byNameLike(value)
                 );
-                table.display();
                 break;
             case "specialization":
                 var specialization = Specialization.valueOf(value);
@@ -497,20 +511,17 @@ public class DoctorUI extends UI {
                         "Search " + column + " \"" + value + "\"",
                         DoctorFilter.bySpecialization(specialization)
                 );
-                table.display();
                 break;
             case "contact":
                 table.addFilter(
                         "Search " + column + " \"" + value + "\"",
                         DoctorFilter.byContactNumberLike(value)
                 );
-                table.display();
                 break;
             case "gender":
                 var gender = Gender.valueOf(value);
 
                 table.addFilter(gender.name() + " only", DoctorFilter.byGender(gender));
-                table.display();
                 break;
             default:
                 break;
