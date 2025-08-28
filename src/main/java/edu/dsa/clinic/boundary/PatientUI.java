@@ -171,17 +171,30 @@ public class PatientUI extends UI {
         System.out.println("| (4) Follow-up  |");
         System.out.println("-".repeat(18));
 
-        int input;
-        do {
+        int input = -1;
+        while (true) {
             System.out.print("Select Consultation Type: ");
-            input = scanner.nextInt();
-            scanner.nextLine();
+            String line = scanner.nextLine();
 
-            if (input < 1 || input > ConsultationType.values().length) {
+            if (line.isBlank()) {
+                System.out.println("\nNo consultation type selected. Returning...\n");
+                return; // exit method
+            }
+
+            line = line.trim();
+            if (line.matches("\\d+")) {
+                input = Integer.parseInt(line);
+            } else {
+                input = -1;
+            }
+
+            if (input >= 1 && input <= ConsultationType.values().length) {
+                break;
+            } else {
                 System.out.println("Invalid type selected!");
                 System.out.println();
             }
-        } while (input < 1 || input > ConsultationType.values().length);
+        }
 
         System.out.println();
         ConsultationType selectedType = ConsultationType.values()[input - 1];
@@ -227,6 +240,7 @@ public class PatientUI extends UI {
 
     public void listPatient() {
         var table = initializePatientTable();
+        System.out.println("-".repeat(30));
         table.display();
 
         String opt;
@@ -1142,7 +1156,7 @@ public class PatientUI extends UI {
             case 3: {
                 System.out.println();
                 System.out.println("-".repeat(30));
-                System.out.println("Filter gender by: ");
+                System.out.println("Filter consultation type by: ");
                 System.out.println("(1) general");
                 System.out.println("(2) specialist");
                 System.out.println("(3) emergency");
