@@ -33,6 +33,7 @@ public class PatientUI extends UI {
         super(scanner);
     }
 
+    @Override
     public void startMenu() {
         String opt;
         do {

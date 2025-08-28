@@ -70,6 +70,7 @@ public class MedicineUI extends UI {
         super(scanner);
     }
 
+    @Override
     public void startMenu() throws IOException {
         var prompt = this.getPrompt();
         var builder = prompt.getPromptBuilder();

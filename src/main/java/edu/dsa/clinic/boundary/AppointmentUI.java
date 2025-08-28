@@ -36,6 +36,7 @@ public class AppointmentUI extends UI {
         super(scanner);
     }
 
+    @Override
     public void startMenu(){
         String option;
         do{
@@ -48,7 +49,7 @@ public class AppointmentUI extends UI {
 
             switch(option) {
                 case "1" -> appointmentMenu();
-                case "2" -> medicalUI.startConsultationMenu();
+                case "2" -> medicalUI.startMenu();
                 case "0" -> System.out.println("Returning...");
             }
 

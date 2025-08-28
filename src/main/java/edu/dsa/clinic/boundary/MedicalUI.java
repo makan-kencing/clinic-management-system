@@ -62,7 +62,8 @@ public class MedicalUI extends UI {
         this.appointmentUI = new AppointmentUI(scanner);
     }
 
-    public void startConsultationMenu() {
+    @Override
+    public void startMenu() {
         while (true) {
             int choice;
 
@@ -1612,7 +1613,7 @@ public class MedicalUI extends UI {
             var scanner = new Scanner(System.in);
 
             var medicalUI = new MedicalUI(terminal, scanner);
-            medicalUI.startConsultationMenu();
+            medicalUI.startMenu();
         }
     }
 
