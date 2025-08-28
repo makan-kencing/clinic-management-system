@@ -140,7 +140,7 @@ public class MedicineUI extends UI {
                     this.manageProductStockMenu(product);
                     break;
                 case "cancel":
-                    return;
+                    break;
             }
         }
     }
@@ -177,7 +177,7 @@ public class MedicineUI extends UI {
                     this.editMedicine(medicine);
                     break;
                 case "cancel":
-                    return;
+                    break;
             }
         }
     }
@@ -210,7 +210,7 @@ public class MedicineUI extends UI {
                     this.editStock(stock);
                     break;
                 case "cancel":
-                    return;
+                    break;
             }
         }
     }
@@ -243,7 +243,7 @@ public class MedicineUI extends UI {
                     this.editStock(stock);
                     break;
                 case "cancel":
-                    return;
+                    break;
             }
         }
     }
