@@ -13,6 +13,11 @@ public abstract class UI {
     protected final Scanner scanner;
     protected final Terminal terminal;
 
+    public UI(Terminal terminal, Scanner scanner) {
+        this.scanner = scanner;
+        this.terminal = terminal;
+    }
+
     public UI(Terminal terminal) {
         this.scanner = new Scanner(System.in);
         this.terminal = terminal;
