@@ -31,7 +31,25 @@ public class Initializer {
     }
 
     public static void initialize() {
-        // Patients data
+        initializePatients();
+        initializeDoctors();
+        initializeMedicines();
+        initializeProducts();
+        initializeStocks();
+        initializeAppointments();
+        initializeConsultations();
+
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.SPECIALIST));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(3), ConsultationType.EMERGENCY));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.FOLLOW_UP));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(5), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(6), ConsultationType.GENERAL));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(7), ConsultationType.SPECIALIST));
+        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(8), ConsultationType.FOLLOW_UP));
+    }
+
+    private static void initializePatients() {
         Database.patientsList.add(((Patient) new Patient().setId(1)).setName("Ahmad Faiz").setGender(Gender.MALE).setIdentification("900101-14-1234").setContactNumber("+60123450001"));
         Database.patientsList.add(((Patient) new Patient().setId(2)).setName("Nurul Aisyah").setGender(Gender.FEMALE).setIdentification("880305-08-5678").setContactNumber("+60123450002"));
         Database.patientsList.add(((Patient) new Patient().setId(3)).setName("Muhammad Hafiz").setGender(Gender.MALE).setIdentification("950712-10-4321").setContactNumber("+60123450003"));
@@ -132,8 +150,9 @@ public class Initializer {
         Database.patientsList.add(((Patient) new Patient().setId(98)).setName("Ahmad Haziq").setGender(Gender.MALE).setIdentification("910202-10-4455").setContactNumber("+60123450098"));
         Database.patientsList.add(((Patient) new Patient().setId(99)).setName("Siti Hajar").setGender(Gender.FEMALE).setIdentification("960606-11-5566").setContactNumber("+60123450099"));
         Database.patientsList.add(((Patient) new Patient().setId(100)).setName("Muhammad Danish").setGender(Gender.MALE).setIdentification("940707-12-6677").setContactNumber("+60123450100"));
+    }
 
-        // Doctors data
+    private static void initializeDoctors() {
         Database.doctorList.add(
                 ((Doctor) new Doctor()
                         .setId(1))
@@ -223,8 +242,9 @@ public class Initializer {
                                                 .setTimeRange(new Range<>(LocalTime.of(10, 0), LocalTime.of(16, 0)))
                                                 .setType(ShiftType.WORK)))
         );
+    }
 
-        // Medicines data
+    private static void initializeMedicines() {
         Database.medicineList.add(
                 ((Medicine) new Medicine()
                         .setId(1))
@@ -329,8 +349,9 @@ public class Initializer {
                         .setName("Insulin")
                         .addType(MedicineType.ANTIDIABETICS)
         );
+    }
 
-        // Products data
+    private static void initializeProducts() {
         // https://ndclist.com/ndc/0536-1054/package/0536-1054-29/price
         Database.productList.add(
                 ((Product) new Product()
@@ -476,8 +497,13 @@ public class Initializer {
                                 .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
                                 .setQuantityLeft(13))
         );
+    }
 
-        // Appointments data
+    private static void initializeStocks() {
+
+    }
+
+    private static void initializeAppointments() {
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
                         .setId(1))
@@ -528,8 +554,9 @@ public class Initializer {
                         .setExpectedEndAt(LocalDateTime.of(2025, 8, 28, 12, 00))
                         .setAppointmentType(ConsultationType.EMERGENCY)
         );
+    }
 
-        // Consultations data
+    private static void initializeConsultations() {
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(1))
@@ -751,7 +778,6 @@ public class Initializer {
                                                 .setNotes("Do not operate machinery after taking"))
                                 ))
         );
-
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(2))
@@ -1057,7 +1083,6 @@ public class Initializer {
                                                 .setNotes("Take as needed for pain"))
                                 ))
         );
-
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(3))
@@ -1241,7 +1266,6 @@ public class Initializer {
                                                 .setNotes("Do not operate machinery after taking"))
                                 ))
         );
-
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(5))
@@ -1971,7 +1995,6 @@ public class Initializer {
                                                 .setNotes("Apply twice daily"))
                                 ))
         );
-
         Database.consultationsList.add(
                 ((Consultation) new Consultation()
                         .setId(10))
@@ -2255,19 +2278,5 @@ public class Initializer {
                                                 .setNotes("Apply twice daily"))
                                 ))
         );
-
-
-
-
-
-        // Consultation queues data
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.SPECIALIST));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(3), ConsultationType.EMERGENCY));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(4), ConsultationType.FOLLOW_UP));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(5), ConsultationType.GENERAL));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(6), ConsultationType.GENERAL));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(7), ConsultationType.SPECIALIST));
-        Database.queueList.add(new ConsultationQueue(Database.patientsList.get(8), ConsultationType.FOLLOW_UP));
     }
 }
