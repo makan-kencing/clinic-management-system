@@ -96,20 +96,10 @@ public interface ProductFilter {
         return p -> MedicineController.getAvailableStocks(p) > 0;
     }
 
-    static Filter<Product> hasAvailableStock() {
-        return p -> {
-            var inventory = p .getInventory();
-            return byStockCount(
-                    inventory.getMinQuantity(),
-                    inventory.getMaxQuantity()
-            ).filter(p);
-        };
-    }
-
     static Filter<Product> requireStockOrder() {
         return p -> byStockCount(
                 0,
-                p.getInventory().getAutoOrderThreshold()
+                p.getAutoOrderThreshold()
         ).filter(p);
     }
 }

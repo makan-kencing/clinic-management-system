@@ -1,6 +1,7 @@
 package edu.dsa.clinic.utils;
 
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.lambda.Supplier;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
 import org.jetbrains.annotations.Nullable;
@@ -22,11 +23,17 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
     public final ConsolePrompt prompt;
     @Range(from = 1, to = Integer.MAX_VALUE)
     public int selectedIndex = 0;
+    public Supplier<ListInterface<T>> supplier = null;
 
     public SelectTable(Column[] columns, ListInterface<T> data, Terminal terminal) {
         super(columns, data);
         this.terminal = terminal;
         this.prompt = new ConsolePrompt(this.terminal);
+    }
+
+    public SelectTable(Column[] columns, Supplier<ListInterface<T>> supplier, Terminal terminal) {
+        this(columns, supplier.get(), terminal);
+        this.supplier = supplier;
     }
 
     public @Nullable T select() throws IOException {
@@ -70,6 +77,15 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
         return this.selectedIndex;
     }
 
+    public @Nullable Supplier<ListInterface<T>> getSupplier() {
+        return supplier;
+    }
+
+    public SelectTable<T> setSupplier(Supplier<ListInterface<T>> supplier) {
+        this.supplier = supplier;
+        return this;
+    }
+
     protected KeyEvent handleKey(int ch) throws IOException {
         switch (ch) {
             case '<':
@@ -108,6 +124,13 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
         this.selectedIndex = index;
         this.selectedIndex = Math.max(this.selectedIndex, (this.getPage() - 1) * this.getPageSize());
         this.selectedIndex = Math.min(this.selectedIndex, Math.min((this.getPage() * this.getPageSize() - 1), this.getData().size() - 1));
+    }
+
+    @Override
+    public void updateData() {
+        if (this.supplier != null)
+            this.unfilteredData = this.supplier.get();
+        super.updateData();
     }
 
     @Override

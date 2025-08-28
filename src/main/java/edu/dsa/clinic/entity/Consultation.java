@@ -4,7 +4,6 @@ import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +17,7 @@ public class Consultation extends IdentifiableEntity {
     private ConsultationType type;
     private LocalDateTime consultedAt;
     private @Nullable String notes;
-    private final ListInterface<Diagnosis> diagnoses = new DoubleLinkedList<>();
+    private ListInterface<Diagnosis> diagnoses = new DoubleLinkedList<>();
 
     public Patient getPatient() {
         return patient;
@@ -67,6 +66,11 @@ public class Consultation extends IdentifiableEntity {
 
     public ListInterface<Diagnosis> getDiagnoses() {
         return diagnoses;
+    }
+
+    public Consultation setDiagnoses(ListInterface<Diagnosis> diagnoses) {
+        this.diagnoses = diagnoses;
+        return this;
     }
 
     public Consultation addDiagnosis(Diagnosis diagnosis) {

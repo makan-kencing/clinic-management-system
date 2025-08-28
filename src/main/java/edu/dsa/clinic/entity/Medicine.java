@@ -8,7 +8,7 @@ import edu.dsa.clinic.adt.ListInterface;
  */
 public class Medicine extends IdentifiableEntity {
     private String name;
-    private final ListInterface<MedicineType> types = new DoubleLinkedList<>();
+    private ListInterface<MedicineType> types = new DoubleLinkedList<>();
 
     public String getName() {
         return name;
@@ -21,6 +21,11 @@ public class Medicine extends IdentifiableEntity {
 
     public ListInterface<MedicineType> getTypes() {
         return types;
+    }
+
+    public Medicine setTypes(ListInterface<MedicineType> types) {
+        this.types = types;
+        return this;
     }
 
     public Medicine addType(MedicineType type) {

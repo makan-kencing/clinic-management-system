@@ -19,7 +19,7 @@ abstract public class InteractiveTable<T> extends Table<T> {
     protected ListInterface<NamedSorter<T>> defaultSorters = new DoubleLinkedList<>();
     protected ListInterface<NamedFilter<T>> filters;
     protected ListInterface<NamedSorter<T>> sorters;
-    protected final ListInterface<T> unfilteredData;
+    protected ListInterface<T> unfilteredData;
 
     public InteractiveTable(
             Column[] columns,
