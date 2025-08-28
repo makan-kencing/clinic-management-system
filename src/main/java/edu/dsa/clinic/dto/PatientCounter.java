@@ -11,11 +11,11 @@ public class PatientCounter extends Counter<Patient> {
         super(key); // key = Patient
     }
 
-    public void incrementConsultationCount() {
+    public void increment() {
         super.increment();
     }
 
-    public int getConsultationCount() {
+    public int getCount() {
         return super.count();
     }
 

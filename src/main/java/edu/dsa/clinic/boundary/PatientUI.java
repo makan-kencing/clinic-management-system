@@ -641,7 +641,7 @@ public class PatientUI extends UI {
 
                     String patientId = String.valueOf(patient.getId());
                     String patientName = patient.getName();
-                    String consultationCount = String.valueOf(pc.getConsultationCount());
+                    String consultationCount = String.valueOf(pc.getCount());
                     ListInterface<String> medicines = patientController.getMedicineList(pc);
 
                     return new Cell[]{
@@ -1375,7 +1375,7 @@ public class PatientUI extends UI {
         for (var pc : list) {
             int val = 0;
             if (title.equalsIgnoreCase("Consultations")) {
-                val = pc.getConsultationCount();
+                val = pc.getCount();
             } else if (title.equalsIgnoreCase("Prescriptions")) {
                 for (var prod : pc.productCounters()) val += prod.count();
             }
@@ -1397,7 +1397,7 @@ public class PatientUI extends UI {
 
             int value = 0;
             if (title.equalsIgnoreCase("Consultations")) {
-                value = pc.getConsultationCount();
+                value = pc.getCount();
             } else if (title.equalsIgnoreCase("Prescriptions")) {
                 for (var prod : pc.productCounters()) value += prod.count();
             }
