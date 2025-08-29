@@ -2,6 +2,8 @@ package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.DoctorController;
+import edu.dsa.clinic.dto.DoctorCounter;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.dto.Shift;
@@ -11,6 +13,7 @@ import edu.dsa.clinic.entity.Gender;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.utils.Ordered;
+import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
@@ -19,13 +22,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+
 public class DoctorUI extends UI {
+
+    private static final DateTimeFormatter DATE_FORMAT =
+            DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
+                    .withZone(ZoneId.systemDefault());
+
     public DoctorUI(Scanner scanner) {
         super(scanner);
     }
@@ -34,26 +46,31 @@ public class DoctorUI extends UI {
     public void startMenu() {
         int choice;
         do {
-            System.out.println("\nDoctor Menu");
+            System.out.println("-".repeat(30));
+            System.out.println("Doctor Menu");
+            System.out.println("-".repeat(30));
             System.out.println("1. Create new Doctor");
             System.out.println("2. View Available Doctor List");
             System.out.println("3. Delete Doctor Record");
             System.out.println("4. Modify Doctor Information");
             System.out.println("5. Doctor Shifts Menu");
-            System.out.println("6. Generate Summary Report Menu");
+            System.out.println("6. Generate Doctor Summary Report");
+            System.out.println("-".repeat(30));
             System.out.println("0. Exit To Main Menu");
             System.out.print("Enter choice: ");
 
             while (true) {
                 try {
                     choice = Integer.parseInt(scanner.nextLine());
-                    if (choice < 0 || choice > 5) {
+                    if (choice < 0 || choice > 6) {
                         System.out.println("Invalid choice. Please enter a number between 0 and 5.");
+                        System.out.print("Enter choice: ");
                     } else {
                         break;
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input. Please enter a valid number.");
+                    System.out.print("Enter choice: ");
                 }
             }
             System.out.println();
@@ -86,7 +103,7 @@ public class DoctorUI extends UI {
                     shiftsMenu();
                     break;
                 case 6:
-
+                    generateSummaryReport();
                     break;
                 case 0:
                     return;
@@ -105,6 +122,7 @@ public class DoctorUI extends UI {
             System.out.print("-".repeat(30));
             System.out.println("\n(1) male");
             System.out.println("(2) female");
+            System.out.println("-".repeat(30));
             System.out.print("Enter gender number: ");
             gender = scanner.nextInt();
             this.scanner.nextLine();
@@ -159,14 +177,23 @@ public class DoctorUI extends UI {
 
         doctor.setGender(selectAGender());
 
-        System.out.print("\nEnter Contact Number: ");
-        var number =this.scanner.nextLine();
-        if (!number.trim().isEmpty()) {
-            doctor.setContactNumber(number);
-            System.out.println("New contact number updated successfully!");
-        } else  {
-            System.out.println("New contact number cannot be empty. Try again.");
-        }
+        String number;
+        do {
+            System.out.print("\nEnter Contact Number: ");
+            number = scanner.nextLine().trim();
+
+            if (number.isEmpty()) {
+                System.out.println("Contact number cannot be empty. Try again.");
+            } else if (!number.matches("\\d{10,15}")) {
+                System.out.println("Contact number must be 10-15 digits. Try again.");
+            } else {
+                doctor.setContactNumber(number);
+                System.out.println("New contact number updated successfully!");
+                break;
+            }
+
+        } while (true);
+
 
 
         int option;
@@ -226,6 +253,7 @@ public class DoctorUI extends UI {
     public void modifyDoctor(Doctor doctor) {
         System.out.println("-".repeat(30));
         System.out.println("Doctor Modify Menu:");
+        System.out.println("-".repeat(30));
         System.out.println("(1) name");
         System.out.println("(2) gender");
         System.out.println("(3) contact number");
@@ -294,7 +322,9 @@ public class DoctorUI extends UI {
                 System.out.println("Current Doctor Specialization: " + doctor.getSpecialization());
                 int option;
                 do {
+                    System.out.println("-".repeat(30));
                     System.out.print("Enter new specialization you wish to choose: ");
+                    System.out.println("-".repeat(30));
                     System.out.println("1. Neurosurgery");
                     System.out.println("2. Pediatrics");
                     System.out.println("3. Ophthalmology");
@@ -458,6 +488,7 @@ public class DoctorUI extends UI {
     public void filterDoctor(InteractiveTable<Doctor> table) {
         System.out.println("-".repeat(30));
         System.out.println("Filters:");
+        System.out.println("-".repeat(30));
         System.out.println("(1) name");
         System.out.println("(2) gender");
         System.out.println("(3) contact number");
@@ -584,11 +615,14 @@ public class DoctorUI extends UI {
         Scanner sc = new Scanner(System.in);
         int choice;
         do {
-            System.out.println("\nDoctor Shifts Menu");
+            System.out.println("-".repeat(30));
+            System.out.println("Doctor Shifts Menu");
+            System.out.println("-".repeat(30));
             System.out.println("1. Assign Doctor Shift");
             System.out.println("2. Add Doctor Break Time");
             System.out.println("3. View Doctor Schedule");
             System.out.println("4. View Doctor Availability Schedule ");
+            System.out.println("-".repeat(30));
             System.out.println("0. Exit To Doctor Menu");
             System.out.print("Enter choice: ");
 
@@ -638,55 +672,127 @@ public class DoctorUI extends UI {
         viewDoctorSchedule(doctor);
 
         DayOfWeek dayOfWeek = null;
-
         while (dayOfWeek == null) {
-            System.out.print("Enter the day number: ");
-            var index = scanner.nextInt();
-            this.scanner.nextLine();
+            int index = -1;
+            while (index == -1) {
+                System.out.print("Enter the day number: ");
+                try {
+                    index = scanner.nextInt();
+                    scanner.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number (1-7).");
+                    scanner.nextLine();
+                }
+            }
             try {
                 dayOfWeek = DayOfWeek.of(index);
             } catch (DateTimeException e) {
-                // request reprompt for invalid dayOfWeek
-                System.out.println("Please enter a valid day number");
+                System.out.println("Please enter a valid day number (1 = Monday, ... 7 = Sunday).");
+                dayOfWeek = null;
             }
         }
 
         if (doctor.getSchedule() == null) {
             doctor.setSchedule(new Schedule());
         }
+
         var dayShifts = doctor.getSchedule().getShifts(dayOfWeek);
 
-        var shift = createShiftFromInput();
-        if (shift == null) {
-            System.out.println("Shift not assigned due to invalid input");
-            return;
+        boolean added = false;
+        while (!added) {
+            System.out.print("Do you want to add an additional shift to an existing one? (y/n): ");
+            String choice = scanner.nextLine().trim();
+
+            Shift shift = null;
+            if (choice.equalsIgnoreCase("y")) {
+                shift = createAdditionalShiftFromInput();
+                if (shift != null) {
+                    added = DoctorController.additionalShift(dayShifts, shift);
+                    if (!added) {
+                        System.out.println("Shift must extend existing shift by at least 30 minutes.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please try again.");
+                }
+            } else if (choice.equalsIgnoreCase("n")) {
+                boolean validShift = false;
+                while (!validShift) {
+                    shift = createShiftFromInput();
+                    if (shift != null) {
+                        validShift = DoctorController.addShift(dayShifts, shift);
+                        if (!validShift) {
+                            System.out.println("Shift not added due to overlap. Please try again.");
+                        }
+                    } else {
+                        System.out.println("Invalid input. Please enter 'y' or 'n'.");
+                    }
+                }
+                added = true; // Once a valid shift is added, exit the outer loop
+            }
         }
 
-        DoctorController.addShift(dayShifts, shift);
-
-        System.out.println("Assigned" + " to Dr." + doctor.getName() + " on " + dayOfWeek);
+        System.out.println("Assigned to Dr. " + doctor.getName() + " on " + dayOfWeek);
     }
+
+
 
     //Get User start & end time
     public @Nullable Shift createShiftFromInput() {
+        while (true) {
+            try {
+                System.out.print("Enter start time (hh:mm): ");
+                String startInput = scanner.nextLine().trim();
+                LocalTime start = LocalTime.parse(startInput);
+
+                System.out.print("Enter end time (hh:mm): ");
+                String endInput = scanner.nextLine().trim();
+                LocalTime end = LocalTime.parse(endInput);
+
+                if (end.isBefore(start)) {
+                    System.out.println("End time must be after start time. Please try again.");
+                    continue;
+                }
+                if (Duration.between(start, end).toHours() < 2) {
+                    System.out.println("Shift must be at least 2 hours long. Please try again.");
+                    continue;
+                }
+                return new Shift()
+                        .setType(ShiftType.WORK)
+                        .setTimeRange(new Range<>(start, end));
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid time format. Please use hh:mm (e.g. 07:00).");
+            }
+        }
+    }
+
+
+
+    public @Nullable Shift createAdditionalShiftFromInput() {
+        LocalTime start;
+        LocalTime end;
         try {
-            System.out.print("Enter start time (hh:mm): ");
-            LocalTime start = LocalTime.parse(this.scanner.nextLine().trim());
+            do{System.out.print("Enter start time (hh:mm): ");
+            start = LocalTime.parse(this.scanner.nextLine().trim());
 
             System.out.print("Enter end time (hh:mm): ");
-            LocalTime end = LocalTime.parse(this.scanner.nextLine().trim());
+            end = LocalTime.parse(this.scanner.nextLine().trim());
 
-            if(end.isBefore(start)){
+            if (end.isBefore(start)) {
                 System.out.println("End time must be after start time. Please try again.");
             }
+            }while(end.isBefore(start));
+
             return new Shift()
                     .setType(ShiftType.WORK)
                     .setTimeRange(new Range<>(start, end));
+
         } catch (DateTimeParseException e) {
             System.out.println("Invalid time format. Please use hh:mm (e.g. 07:00).");
         }
+
         return null;
     }
+
 
     //view Specific Doctor Schedule
     public void viewDoctorSchedule(Doctor doctor) {
@@ -770,6 +876,118 @@ public class DoctorUI extends UI {
         this.viewDoctorAvailabilitySchedule(date, doctor);
     }
 
+    //SummaryReport
+    public void generateSummaryReport() {
+        int width = 200;
+        int topN = 10;
+
+        while (true) {
+            ListInterface<DoctorCounter> counters = DoctorController.getDoctorSummary();
+            System.out.println();
+
+            // header
+            System.out.println("=".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
+            System.out.println(StringUtils.pad("DOCTOR MANAGEMENT MODULE", ' ', width));
+            System.out.println(StringUtils.pad("SUMMARY OF DOCTOR REPORT", ' ', width));
+            System.out.println("=".repeat(width));
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY - HIGHLY CONFIDENTIAL DOCUMENT", ' ', width));
+            System.out.println("*".repeat(width));
+            System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
+            System.out.println();
+
+            int maxConsultationLength = "Consultations Attended".length();
+            int maxPatientLength = "Total Patients Treated".length();
+
+            for (var dc : counters) {
+                String consultations = StringUtils.join(", ", DoctorController.getTypeList(dc));
+                maxConsultationLength = Math.max(maxConsultationLength, consultations.length());
+
+                String patients = StringUtils.join(", ", DoctorController.getPatientList(dc));
+                maxPatientLength = Math.max(maxPatientLength, patients.length());
+            }
+
+            maxConsultationLength += 2;
+            maxPatientLength += 2;
+
+            InteractiveTable<DoctorCounter> table = new InteractiveTable<>(new Column[]{
+                    new Column("Doctor Name", Alignment.CENTER, 30),
+                    new Column("Specialization", Alignment.CENTER, 25),
+                    new Column("Consultations Attended", Alignment.CENTER, maxConsultationLength),
+                    new Column("Total Patients Treated", Alignment.CENTER, maxPatientLength)
+            }, counters) {
+                @Override
+                protected Cell[] getRow(DoctorCounter dc) {
+                    var doctor = dc.key();
+
+                    String specialization = doctor.getSpecialization() != null
+                            ? doctor.getSpecialization().name()
+                            : "-";
+                    String doctorName = doctor.getName();
+                    String consultationCount = StringUtils.join(", ", DoctorController.getTypeList(dc));
+                    String patients = String.valueOf(dc.getPatientCounters().size());
+
+                    return new Cell[]{
+                            new Cell(doctorName),
+                            new Cell(specialization, Alignment.CENTER),
+                            new Cell(consultationCount),
+                            new Cell(patients)
+                    };
+                }
+            };
+            table.setPageSize(topN);
+            table.display();
+            System.out.println();
+
+            ListInterface<Integer> stats = DoctorController.getTotalStats(topN);
+            System.out.printf("Total Number of Doctors (Top %d): %d%n", topN, stats.get(0));
+            System.out.printf("Total Number of Consultations (Top %d): %d%n", topN, stats.get(1));
+            System.out.printf("Total Number of Patients Treated (Top %d): %d%n", topN, stats.get(2));
+            System.out.println();
+
+            System.out.println("GRAPHICAL REPRESENTATION OF SUMMARY MODULE");
+            System.out.println("------------------------------------------");
+            var topConsultations = DoctorController.getTopDoctorCountersByConsultations(topN);
+            var topPatients = DoctorController.getTopDoctorCountersByPatients(topN);
+
+            printBarChart("Consultations", topConsultations, topN);
+            printBarChart("Patients Treated", topPatients, topN);
+            System.out.println();
+
+            System.out.println("Global Highlights:");
+            System.out.println("Doctor(s) with fewest consultations: " + StringUtils.join(", ", DoctorController.getExtremeDoctors(false)));
+            System.out.println("Doctor(s) with most consultations: " + StringUtils.join(", ", DoctorController.getExtremeDoctors(true)));
+            System.out.println();
+
+            // footer
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("END OF THE REPORT", ' ', width));
+            System.out.println("*".repeat(width));
+            System.out.println();
+
+            System.out.printf("(0) Exit Report | Enter new Top filter (current %d): ", topN);
+            String input = scanner.nextLine().trim();
+
+            if (input.equals("0")) {
+                System.out.println();
+                break;
+            }
+
+            try {
+                int newN = Integer.parseInt(input);
+                if (newN > 0) {
+                    topN = newN;
+                } else {
+                    System.out.println("TopN must be greater than 0. Keeping current value.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, keeping current TopN.");
+            }
+        }
+    }
+
+
 
     public static class DoctorTable extends InteractiveTable<Doctor> {
         public DoctorTable(ListInterface<Doctor> doctors) {
@@ -793,6 +1011,55 @@ public class DoctorUI extends UI {
             };
         }
     }
+
+    private void printBarChart(String title, ListInterface<DoctorCounter> list, int topN) {
+        int maxValue = 0;
+        for (var dc : list) {
+            int val = 0;
+            if (title.equalsIgnoreCase("Consultations")) {
+                val = dc.getCount();
+            } else if (title.equalsIgnoreCase("Patients Treated")) {
+                val = dc.getPatientCounters().size();
+            }
+            if (val > maxValue) maxValue = val;
+        }
+
+        int barWidth = 70; // maximum bar length
+
+        String headerText = "Top " + topN + " Doctors by " + title;
+        int borderLength = headerText.length() + 2;
+
+        System.out.println("+" + "-".repeat(borderLength) + "+");
+        System.out.println("| " + headerText + " |");
+        System.out.println("+" + "-".repeat(borderLength) + "+");
+
+        int shown = 0;
+        for (var dc : list) {
+            if (shown++ >= topN) break;
+
+            int value = 0;
+            if (title.equalsIgnoreCase("Consultations")) {
+                value = dc.getCount();
+            } else if (title.equalsIgnoreCase("Patients Treated")) {
+                value = dc.getPatientCounters().size();
+            }
+
+            int scaled = maxValue == 0 ? 0 : (int) Math.round((value / (double) maxValue) * barWidth);
+
+            final String BLUE = "\u001B[34m";
+            final String RESET = "\u001B[0m";
+
+            System.out.printf("%-25s | %s%s%s (%d)%n",
+                    dc.key().getName(),
+                    BLUE,
+                    "█".repeat(Math.max(1, scaled)),
+                    RESET,
+                    value
+            );
+        }
+        System.out.println();
+    }
+
 
 }
 
