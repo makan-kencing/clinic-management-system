@@ -404,16 +404,18 @@ public class MedicineUI extends UI {
             System.out.println("+-------------------------------------+");
             System.out.printf("| Top %d Products by Prescribed Amount |%n", topN);
             System.out.println("+-------------------------------------+");
-            var max = topUsages.getFirst().quantity();
-            for (var usage : topUsages) {
-                int scaled = max == 0 ? 0 : (int) Math.round((usage.quantity() / (double) max) * barWidth);
-                System.out.printf("%-30s | %s%s%s (%d)%n",
-                        StringUtils.trimEarly(usage.key().getName(), 30, "..."),
-                        BLUE,
-                        "█".repeat(Math.max(1, scaled)),
-                        RESET,
-                        usage.quantity()
-                );
+            if (usages.size() > 0) {
+                var max = topUsages.getFirst().quantity();
+                for (var usage : topUsages) {
+                    int scaled = max == 0 ? 0 : (int) Math.round((usage.quantity() / (double) max) * barWidth);
+                    System.out.printf("%-30s | %s%s%s (%d)%n",
+                            StringUtils.trimEarly(usage.key().getName(), 30, "..."),
+                            BLUE,
+                            "█".repeat(Math.max(1, scaled)),
+                            RESET,
+                            usage.quantity()
+                    );
+                }
             }
 
             System.out.println();
@@ -1523,6 +1525,7 @@ public class MedicineUI extends UI {
                     .message("Filter by?")
                     .newItem("type").text("Medicine Type").add()
                     .newItem("stock").text("Stock Count").add()
+                    .newItem("last_stocked").text("Last Stocked").add()
                     .newItem("cancel").text("Cancel").add()
                     .addPrompt();
 
@@ -1539,6 +1542,9 @@ public class MedicineUI extends UI {
                     if (this.setStockFilter())
                         this.updateData();
                     break;
+                case "last_stocked":
+                    if (this.setLastStockedFilter())
+                        this.updateData();
                 default:
                     break;
             }
@@ -1617,6 +1623,53 @@ public class MedicineUI extends UI {
 
             this.clearFilter(s -> s.startsWith("Stock "));
             this.addFilter(filterName, MedicineFilter.byStockCount(from, to));
+            return true;
+        }
+
+        protected boolean setLastStockedFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("min")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (YYYY-MM-DD HH:SS)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            LocalDateTime from, to;
+            try {
+                from = fromResult.getResult().equals("min")
+                        ? LocalDateTime.MIN
+                        : LocalDateTime.parse(fromResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+                to = toResult.getResult().equals("max")
+                        ? LocalDateTime.MAX
+                        : LocalDateTime.parse(toResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+            } catch (DateTimeParseException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid date format.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from == LocalDateTime.MIN)
+                filterName = "Stocked before " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+            else if (to == LocalDateTime.MAX)
+                filterName = "Stocked after " + from.format(StockPromptBuilder.DATETIME_FORMAT);
+            else
+                filterName = "Stocked between " + from.format(StockPromptBuilder.DATETIME_FORMAT) + " and " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+
+            this.clearFilter(s -> s.startsWith("Stocked "));
+            this.addFilter(filterName, MedicineFilter.byLatestStocked(from, to));
             return true;
         }
 
@@ -1827,7 +1880,170 @@ public class MedicineUI extends UI {
         }
 
         protected void promptAddFilter() throws IOException {
-            // TODO
+            var builder = this.prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("filter")
+                    .message("Filter by?")
+                    .newItem("medicine").text("Medicine Name").add()
+                    .newItem("brand").text("Brand").add()
+                    .newItem("stock").text("Stock Count").add()
+                    .newItem("last_stocked").text("Last Stocked").add()
+                    .newItem("cancel").text("Cancel").add()
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var filterResult = (ListResult) result.get("filter");
+
+            switch (filterResult.getResult()) {
+                case "medicine":
+                    if (this.setMedicineNameFilter())
+                        this.updateData();
+                    break;
+                case "brand":
+                    if (this.setBrandFilter())
+                        this.updateData();
+                    break;
+                case "stock":
+                    if (this.setStockFilter())
+                        this.updateData();
+                    break;
+                case "last_stocked":
+                    if (this.setLastStockedFilter())
+                        this.updateData();
+                default:
+                    break;
+            }
+        }
+
+        protected boolean setMedicineNameFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("query")
+                    .message("Medicine name")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var query = result.get("query").getResult();
+
+            this.clearFilter(s -> s.startsWith("By Medicine name "));
+            if (query == null || query.isEmpty())
+                return false;
+
+            this.addFilter("By Medicine name of \"" + query + "\"", ProductFilter.byMedicineNameLike(query));
+            return true;
+        }
+
+        protected boolean setBrandFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("query")
+                    .message("Brand name")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var query = result.get("query").getResult();
+
+            this.clearFilter(s -> s.startsWith("By Brand name of "));
+            if (query == null || query.isEmpty())
+                return false;
+
+            this.addFilter("By Brand name of \"" + query + "\"", ProductFilter.byBrandLike(query));
+            return true;
+        }
+
+        protected boolean setStockFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("0")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (default no limit)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            int from, to;
+            try {
+                from = Integer.parseInt(fromResult.getResult());
+                to = toResult.getResult().equals("max")
+                        ? Integer.MAX_VALUE
+                        : Integer.parseInt(toResult.getResult());
+            } catch (NumberFormatException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid quantity amount.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from <= 0)
+                filterName = "Stock <=" + to;
+            else if (to == Integer.MAX_VALUE)
+                filterName = "Stock >= " + from;
+            else
+                filterName = "Stock between " + from + " and " + to;
+
+            this.clearFilter(s -> s.startsWith("Stock "));
+            this.addFilter(filterName, ProductFilter.byStockCount(from, to));
+            return true;
+        }
+
+        protected boolean setLastStockedFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("min")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (YYYY-MM-DD HH:SS)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            LocalDateTime from, to;
+            try {
+                from = fromResult.getResult().equals("min")
+                        ? LocalDateTime.MIN
+                        : LocalDateTime.parse(fromResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+                to = toResult.getResult().equals("max")
+                        ? LocalDateTime.MAX
+                        : LocalDateTime.parse(toResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+            } catch (DateTimeParseException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid date format.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from == LocalDateTime.MIN)
+                filterName = "Stocked before " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+            else if (to == LocalDateTime.MAX)
+                filterName = "Stocked after " + from.format(StockPromptBuilder.DATETIME_FORMAT);
+            else
+                filterName = "Stocked between " + from.format(StockPromptBuilder.DATETIME_FORMAT) + " and " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+
+            this.clearFilter(s -> s.startsWith("Stocked "));
+            this.addFilter(filterName, ProductFilter.byLatestStocked(from, to));
+            return true;
         }
 
         protected void promptAddSorter() throws IOException {

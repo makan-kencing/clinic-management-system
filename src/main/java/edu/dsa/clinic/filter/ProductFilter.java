@@ -11,6 +11,7 @@ import edu.dsa.clinic.utils.Ordered;
 import org.jetbrains.annotations.Range;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public interface ProductFilter {
     static Filter<Product> byId(int id) {
@@ -35,6 +36,10 @@ public interface ProductFilter {
 
     static Filter<Product> byMedicineId(int id) {
         return p -> MedicineFilter.byId(id).filter(p.getMedicine());
+    }
+
+    static Filter<Product> byMedicineNameLike(String name) {
+        return p -> MedicineFilter.byNameLike(name).filter(p.getMedicine());
     }
 
     static Filter<Product> hasMedicineTypes(ListInterface<MedicineType> types) {
@@ -100,6 +105,10 @@ public interface ProductFilter {
 
     static Filter<Product> hasStock() {
         return p -> MedicineController.getAvailableStocks(p) > 0;
+    }
+
+    static Filter<Product> byLatestStocked(LocalDateTime from, LocalDateTime to) {
+        return p -> MedicineFilter.byLatestStocked(from, to).filter(p.getMedicine());
     }
 
     static Filter<Product> requireStockOrder() {
