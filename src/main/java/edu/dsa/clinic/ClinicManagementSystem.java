@@ -99,14 +99,8 @@ public class ClinicManagementSystem {
                 terminal.flush();
 
                 ui.startMenu();
-                pause(scanner);
             }
         }
-    }
-
-    private static void pause(Scanner scanner) {
-        System.out.print("Press Enter to continue...");
-        scanner.nextLine();
     }
 
     public static void main2(String[] args) throws IOException {
