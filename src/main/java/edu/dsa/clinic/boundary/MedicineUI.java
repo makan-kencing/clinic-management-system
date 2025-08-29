@@ -325,7 +325,9 @@ public class MedicineUI extends UI {
                 builder.createDispensaryText(current)
                         .addPrompt();
                 builder.createText()
-                        .addLine("");
+                        .addLine("")
+                        .addLine("")
+                        .addPrompt();
                 builder.createUpcomingDispensaries(upcoming)
                         .addPrompt();
                 builder.createOptionPrompt()
