@@ -53,7 +53,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -1342,7 +1341,7 @@ public class MedicineUI extends UI {
         public SelectMedicineTable(ListInterface<Medicine> medicines, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
-                    new Column("Name", 30),
+                    new Column("Name", 40),
                     new Column("Types", 40),
                     new Column("In stock", 10),
                     new Column("Last stocked", 20)
@@ -1356,14 +1355,10 @@ public class MedicineUI extends UI {
 
         @Override
         protected Cell[] getRow(Medicine o) {
-            var types = new StringJoiner(", ");
-            for (var type : o.getTypes())
-                types.add(type.type);
-
             return new Cell[]{
                     new Cell(o.getId()),
-                    new Cell(o.getName()),
-                    new Cell(types),
+                    new Cell(StringUtils.trimEarly(o.getName(), 40, "...")),
+                    new Cell(StringUtils.trimEarly(StringUtils.join(", ", o.getTypes().map(mt -> mt.type)), 40, "...")),
                     new Cell(MedicineController.getAvailableStocks(o)),
                     new Cell(Objects.requireNonNullElse(MedicineController.getLatestStocked(o), ""))
             };
@@ -1650,9 +1645,9 @@ public class MedicineUI extends UI {
         public SelectProductTable(ListInterface<Product> products, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
-                    new Column("Name", 30),
-                    new Column("Type", 30),
-                    new Column("Brand", 15),
+                    new Column("Name", 40),
+                    new Column("Type", 40),
+                    new Column("Brand", 30),
                     new Column("Unit Cost", 10),
                     new Column("Unit Price", 10),
                     new Column("In stock", 10),
@@ -1669,9 +1664,9 @@ public class MedicineUI extends UI {
         protected Cell[] getRow(Product o) {
             return new Cell[]{
                     new Cell(o.getId()),
-                    new Cell(o.getName()),
-                    new Cell(o.getMedicine().getName()),
-                    new Cell(o.getBrand()),
+                    new Cell(StringUtils.trimEarly(o.getName(), 40, "...")),
+                    new Cell(StringUtils.trimEarly(o.getMedicine().getName(), 40, "...")),
+                    new Cell(StringUtils.trimEarly(o.getBrand(), 30, "...")),
                     new Cell(o.getCost()),
                     new Cell(o.getPrice()),
                     new Cell(MedicineController.getAvailableStocks(o)),
@@ -1881,9 +1876,9 @@ public class MedicineUI extends UI {
         public SelectStockTable(ListInterface<Stock> stocks, Terminal terminal) {
             super(new Column[]{
                     new Column("Id", 4),
-                    new Column("Product Brand", 15),
-                    new Column("Product Type", 30),
-                    new Column("Product Name", 30),
+                    new Column("Product Brand", 30),
+                    new Column("Product Type", 40),
+                    new Column("Product Name", 40),
                     new Column("In quantity", 15),
                     new Column("Stocked at", 20),
                     new Column("Quantity left", 15)
@@ -1899,9 +1894,9 @@ public class MedicineUI extends UI {
         protected Cell[] getRow(Stock o) {
             return new Cell[] {
                     new Cell(o.getId()),
-                    new Cell(o.getProduct().getBrand()),
-                    new Cell(o.getProduct().getMedicine().getName()),
-                    new Cell(o.getProduct().getName()),
+                    new Cell(StringUtils.trimEarly(o.getProduct().getBrand(), 30, "...")),
+                    new Cell(StringUtils.trimEarly(o.getProduct().getMedicine().getName(), 40, "...")),
+                    new Cell(StringUtils.trimEarly(o.getProduct().getName(), 40, "...")),
                     new Cell(o.getStockInQuantity()),
                     new Cell(o.getStockInDate().format(StockPromptBuilder.DATETIME_FORMAT)),
                     new Cell(MedicineController.getStockQuantityLeft(o))
