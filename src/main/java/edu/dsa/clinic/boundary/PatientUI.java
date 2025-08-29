@@ -33,7 +33,8 @@ public class PatientUI extends UI {
         super(scanner);
     }
 
-    public void patientMenu() {
+    @Override
+    public void startMenu() {
         String opt;
         do {
             System.out.println("=".repeat(29));
@@ -171,17 +172,30 @@ public class PatientUI extends UI {
         System.out.println("| (4) Follow-up  |");
         System.out.println("-".repeat(18));
 
-        int input;
-        do {
+        int input = -1;
+        while (true) {
             System.out.print("Select Consultation Type: ");
-            input = scanner.nextInt();
-            scanner.nextLine();
+            String line = scanner.nextLine();
 
-            if (input < 1 || input > ConsultationType.values().length) {
+            if (line.isBlank()) {
+                System.out.println("\nNo consultation type selected. Returning...\n");
+                return; // exit method
+            }
+
+            line = line.trim();
+            if (line.matches("\\d+")) {
+                input = Integer.parseInt(line);
+            } else {
+                input = -1;
+            }
+
+            if (input >= 1 && input <= ConsultationType.values().length) {
+                break;
+            } else {
                 System.out.println("Invalid type selected!");
                 System.out.println();
             }
-        } while (input < 1 || input > ConsultationType.values().length);
+        }
 
         System.out.println();
         ConsultationType selectedType = ConsultationType.values()[input - 1];
@@ -227,6 +241,7 @@ public class PatientUI extends UI {
 
     public void listPatient() {
         var table = initializePatientTable();
+        System.out.println("-".repeat(30));
         table.display();
 
         String opt;
@@ -615,11 +630,25 @@ public class PatientUI extends UI {
             System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
             System.out.println();
 
-            InteractiveTable<PatientCounter> table = new InteractiveTable<>(new Column[] {
+            int maxConsultationLength = "Consultations Attended".length();
+            int maxMedicineLength = "Total Medicines Prescribed".length();
+
+            for (var pc : counters) {
+                String consultations = StringUtils.join(", ", patientController.getTypeList(pc));
+                maxConsultationLength = Math.max(maxConsultationLength, consultations.length());
+
+                String meds = StringUtils.join(", ", patientController.getMedicineList(pc));
+                maxMedicineLength = Math.max(maxMedicineLength, meds.length());
+            }
+
+            maxConsultationLength += 2;
+            maxMedicineLength += 2;
+
+            InteractiveTable<PatientCounter> table = new InteractiveTable<>(new Column[]{
                     new Column("Patient ID", Alignment.CENTER, 15),
                     new Column("Patient Name", Alignment.CENTER, 40),
-                    new Column("Consultations Attended", Alignment.CENTER, 25),
-                    new Column("Total Medicines Prescribed", Alignment.CENTER, 100)
+                    new Column("Consultations Attended", Alignment.CENTER, maxConsultationLength),
+                    new Column("Total Medicines Prescribed", Alignment.CENTER, maxMedicineLength)
             }, counters) {
                 @Override
                 protected Cell[] getRow(PatientCounter pc) {
@@ -627,14 +656,15 @@ public class PatientUI extends UI {
 
                     String patientId = String.valueOf(patient.getId());
                     String patientName = patient.getName();
-                    String consultationCount = String.valueOf(pc.getConsultationCount());
-                    ListInterface<String> medicines = patientController.getMedicineList(pc);
+
+                    String consultationCount = StringUtils.join(", ", patientController.getTypeList(pc));
+                    String medicines = StringUtils.join(", ", patientController.getMedicineList(pc));
 
                     return new Cell[]{
                             new Cell(patientId, Alignment.CENTER),
                             new Cell(patientName),
-                            new Cell(consultationCount, Alignment.CENTER),
-                            new Cell(StringUtils.join(", ", medicines))
+                            new Cell(consultationCount),
+                            new Cell(medicines)
                     };
                 }
             };
@@ -1142,7 +1172,7 @@ public class PatientUI extends UI {
             case 3: {
                 System.out.println();
                 System.out.println("-".repeat(30));
-                System.out.println("Filter gender by: ");
+                System.out.println("Filter consultation type by: ");
                 System.out.println("(1) general");
                 System.out.println("(2) specialist");
                 System.out.println("(3) emergency");
@@ -1361,7 +1391,7 @@ public class PatientUI extends UI {
         for (var pc : list) {
             int val = 0;
             if (title.equalsIgnoreCase("Consultations")) {
-                val = pc.getConsultationCount();
+                val = pc.getCount();
             } else if (title.equalsIgnoreCase("Prescriptions")) {
                 for (var prod : pc.productCounters()) val += prod.count();
             }
@@ -1383,7 +1413,7 @@ public class PatientUI extends UI {
 
             int value = 0;
             if (title.equalsIgnoreCase("Consultations")) {
-                value = pc.getConsultationCount();
+                value = pc.getCount();
             } else if (title.equalsIgnoreCase("Prescriptions")) {
                 for (var prod : pc.productCounters()) value += prod.count();
             }

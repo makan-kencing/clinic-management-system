@@ -12,8 +12,8 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.ConsultationTypeCounter;
 import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.PatientDetail;
 import edu.dsa.clinic.dto.ProductCounter;
@@ -98,7 +98,19 @@ public class PatientController {
                 patientCounters.add(existing);
             }
 
-            existing.incrementConsultationCount();
+            existing.increment();
+
+            var type = consult.getType();
+            var typeCounters = existing.consultationCounters();
+
+            var typeCounter = typeCounters.findFirst(
+                    tc -> tc.key().equals(type)
+            );
+            if (typeCounter == null) {
+                typeCounter = new ConsultationTypeCounter(type);
+                typeCounters.add(typeCounter);
+            }
+            typeCounter.increment();
 
             for (var diag : consult.getDiagnoses()) {
                 for (var treat : diag.getTreatments()) {
@@ -119,14 +131,9 @@ public class PatientController {
             }
         }
 
-        SortedDoubleLinkedList<PatientCounter> sorted =
-                new SortedDoubleLinkedList<>((a, b) -> Integer.compare(b.getConsultationCount(), a.getConsultationCount()));
+        patientCounters.sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
 
-        for (int i = 0; i < patientCounters.size(); i++) {
-            sorted.add(patientCounters.get(i));
-        }
-
-        return sorted;
+        return patientCounters;
     }
 
     private ListInterface<PatientCounter> getTopPatients(int topN, Comparator<PatientCounter> comparator) {
@@ -143,7 +150,7 @@ public class PatientController {
     public ListInterface<PatientCounter> getTopPatientsByConsultations(int topN) {
         return getTopPatients(
                 topN,
-                (a, b) -> Integer.compare(b.getConsultationCount(), a.getConsultationCount())
+                (a, b) -> Integer.compare(b.getCount(), a.getCount())
         );
     }
 
@@ -160,14 +167,11 @@ public class PatientController {
     }
 
     public ListInterface<String> getMedicineList(PatientCounter pc) {
-        ListInterface<String> medicineList = new DoubleLinkedList<>();
+        return pc.productCounters().map(p -> p.key().getName() + "(" + p.count() + ")");
+    }
 
-        for (int j = 0; j < pc.productCounters().size(); j++) {
-            var productCounter = pc.productCounters().get(j);
-            medicineList.add(productCounter.key().getName() + "(" + productCounter.count() + ")");
-        }
-
-        return medicineList;
+    public ListInterface<String> getTypeList(PatientCounter pc) {
+        return pc.consultationCounters().map(c -> c.key().name() + "(" + c.count() + ")");
     }
 
     public ListInterface<String> getExtremePatients(boolean findMax) {
@@ -178,7 +182,7 @@ public class PatientController {
 
         int extreme = findMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         for (int i = 0; i < counters.size(); i++) {
-            int count = counters.get(i).getConsultationCount();
+            int count = counters.get(i).getCount();
             if (findMax && count > extreme) {
                 extreme = count;
             } else if (!findMax && count < extreme) {
@@ -188,8 +192,8 @@ public class PatientController {
 
         for (int i = 0; i < counters.size(); i++) {
             PatientCounter pc = counters.get(i);
-            if (pc.getConsultationCount() == extreme) {
-                result.add(pc.key().getName() + " (" + pc.getConsultationCount() + ")");
+            if (pc.getCount() == extreme) {
+                result.add(pc.key().getName() + " (" + pc.getCount() + ")");
             }
         }
 
@@ -199,7 +203,7 @@ public class PatientController {
     public ListInterface<Integer> getTotalStats(int topN) {
         ListInterface<PatientCounter> counters = getPatientSummary();
 
-        counters.sort((a, b) -> Integer.compare(b.getConsultationCount(), a.getConsultationCount()));
+        counters.sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
 
         ListInterface<PatientCounter> topCounters = new DoubleLinkedList<>();
         for (int i = 0; i < Math.min(topN, counters.size()); i++) {
@@ -211,7 +215,7 @@ public class PatientController {
 
         for (int i = 0; i < topCounters.size(); i++) {
             PatientCounter pc = topCounters.get(i);
-            totalConsultations += pc.getConsultationCount();
+            totalConsultations += pc.getCount();
 
             for (int j = 0; j < pc.productCounters().size(); j++) {
                 totalPrescriptions += pc.productCounters().get(j).count();

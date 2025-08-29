@@ -1,14 +1,17 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.AppointmentController;
+import edu.dsa.clinic.dto.AppointmentTypeCounter;
 import edu.dsa.clinic.dto.ConsultationQueue;
+import edu.dsa.clinic.dto.DoctorCounter;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Patient;
+import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
@@ -17,39 +20,50 @@ import edu.dsa.clinic.utils.table.InteractiveTable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.time.format.DateTimeParseException;
 
 public class AppointmentUI extends UI {
-    private AppointmentController appointmentController = new AppointmentController();
-    private PatientUI patientUI = new PatientUI(this.scanner);
-    private DoctorUI doctorUI = new DoctorUI(this.scanner);
-    private MedicineUI medicineUI = new MedicineUI(this.scanner);
-    
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final AppointmentController appointmentController = new AppointmentController();
+    private final PatientUI patientUI = new PatientUI(this.scanner);
+    private final DoctorUI doctorUI = new DoctorUI(this.scanner);
+    private MedicalUI medicalUI;
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public AppointmentUI(Scanner scanner) {
         super(scanner);
     }
 
-    public void manageAppointmentAndConsultationMenu(){
+    public AppointmentUI setMedicalUI(MedicalUI medicalUI) {
+        this.medicalUI = medicalUI;
+        return this;
+    }
+
+    @Override
+    public void startMenu(){
         String option;
         do{
             System.out.println("Select an Option");
             System.out.println("1. Manage Appointment");
-            System.out.println("2. Manage Consultation");
+            if (this.medicalUI != null) System.out.println("2. Manage Consultation");
             System.out.println("0. Exit");
             System.out.print("Enter Option: ");
             option = this.scanner.nextLine();
 
             switch(option) {
-                case "1" -> appointmentMenu();
-//                case "2" -> medicineUI.startMenu();
-                case "0" -> System.out.println("Returning...");
+                case "1":
+                    appointmentMenu();
+                    break;
+                case "2":
+                    if (this.medicalUI != null) medicalUI.startMenu();
+                    break;
+                case "0":
+                    System.out.println("Returning...");
+                    return;
             }
-
-        }while(!option.equals("0"));
+        }while (true);
     }
 
     public void appointmentMenu() {
@@ -72,9 +86,9 @@ public class AppointmentUI extends UI {
                 case "1" -> createFutureAppointmentMenu();
                 case "2" -> createWalkInAppointmentMenu();
                 case "3" -> viewAppointmentMenu();
-//                case "4"  -> editAppointmentMenu();
+                case "4"  -> editAppointmentMenu();
                 case "5"  -> cancelAppointmentMenu();
-//                case "6" -> generateAppointmentReport();
+                case "6" -> generateAppointmentSummaryReport();
                 case "0"  -> System.out.println("Returning to main menu...");
                 default -> System.out.println("Invalid Choice");
             }
@@ -87,6 +101,7 @@ public class AppointmentUI extends UI {
         Appointment appointment = new Appointment();
         Patient selectedPatient = null;
         Doctor selectedDoctor = null;
+        ConsultationType appointmentType = null;
         LocalDateTime appointmentStartTime = null, appointmentEndTime = null;
 
         do {
@@ -94,18 +109,22 @@ public class AppointmentUI extends UI {
 
             if(selectedPatient == null){
                 System.out.println("1. Select A Patient");
-            }else System.out.println("1. Select A Patient (patient selected)");
+            }else System.out.println("1. Select A Patient (Selected: " + selectedPatient.getName() + ")");
 
             if(selectedDoctor == null){
                 System.out.println("2. Select A Doctor");
-            }else System.out.println("3. Select A Doctor (Doctor selected)");
+            }else System.out.println("2. Select A Doctor (Selected: " + selectedDoctor.getName() + ")");
 
             if(appointmentStartTime == null){
                 System.out.println("3. Enter Appointment Time");
-            }else System.out.println("3. Enter Appointment Time (Time selected)");
+            }else System.out.println("3. Enter Appointment Time (Selected: \"" + appointmentStartTime.format(DATE_FORMAT) + " to " + appointmentEndTime.format(DATE_FORMAT) + "\")");
 
-            System.out.println("4. View Doctor Schedule");
-            System.out.println("5. Confirm Appointment");
+            if(appointmentType == null){
+                System.out.println("4. Enter Appointment Type");
+            }else System.out.println("4. Enter Appointment Type (Selected: " + appointmentType + ")");
+
+            System.out.println("5. View Doctor Available Schedule");
+            System.out.println("6. Confirm Appointment");
             System.out.println("0. Return");
             System.out.print("Option: ");
             option = this.scanner.nextLine();
@@ -122,6 +141,7 @@ public class AppointmentUI extends UI {
                             System.out.println("Returning...");
                             break;
                         }
+
                         appointmentEndTime = generateAppointmentEndTime(appointmentStartTime);
 
                         if (appointmentController.isAvailable(
@@ -129,32 +149,23 @@ public class AppointmentUI extends UI {
                                 appointmentStartTime.toLocalDate(),
                                 new Range<>(appointmentStartTime.toLocalTime(), appointmentEndTime.toLocalTime())
                         )) {
-                            System.out.println("Doctor Not Available");
+                            System.out.println("Doctor Is Available");
+
+                        } else {
+                            System.out.println("Doctor Is Not Available");
                             appointmentStartTime = null;
                         }
                     }
                 }
-                case "4" -> {
+                case "4" -> appointmentType =  selectAppointmentType();
+                case "5" -> {
                     if (selectedDoctor != null) {
-                        System.out.println("Choose An Option");
-                        System.out.println("1. This Week Appointment");
-                        System.out.println("2. Next Week Appointment");
-                        option = this.scanner.nextLine();
-
-                        LocalDate date = LocalDate.now();
-
-                        if (option.equals("1")) {
-                            doctorUI.viewDoctorAvailabilitySchedule(date, selectedDoctor);
-                        } else {
-                            //TODO Some reason it won't show the next week schedule
-                            date = date.plusWeeks(1);
-                            doctorUI.viewDoctorAvailabilitySchedule(date, selectedDoctor);
-                        }
+                        doctorUI.viewDoctorAvailabilitySchedule(LocalDate.now(), selectedDoctor);
                     }else{
                         System.out.println("Please Select A Doctor Before checking his/hers Schedule");
                     }
                 }
-                case "5" -> {
+                case "6" -> {
                     if (selectedPatient == null) {
                         System.out.println("Invalid: No patient selected.");
                         return;
@@ -170,16 +181,23 @@ public class AppointmentUI extends UI {
                         return;
                     }
 
+                    if(appointmentType == null){
+                        System.out.println("Invalid: No appointment type selected.");
+                        return;
+                    }
+
                     if (updateAppointmentConfirmation("add")) {
                         appointment.setPatient(selectedPatient);
                         appointment.setDoctor(selectedDoctor);
                         appointment.setExpectedStartAt(appointmentStartTime);
                         appointment.setExpectedEndAt(appointmentEndTime);
-                        appointment.setAppointmentType(selectAppointmentType());
+                        appointment.setAppointmentType(appointmentType);
                         appointment.setCreatedAt(LocalDateTime.now());
                         this.appointmentController.saveAppointment(appointment);
+                        return;
                     } else {
                         System.out.println("Operation cancelled");
+                        return;
                     }
 
                 }
@@ -227,7 +245,10 @@ public class AppointmentUI extends UI {
                             appointmentStartTime.toLocalDate(),
                             new Range<>(appointmentStartTime.toLocalTime(), appointmentEndTime.toLocalTime())
                     )) {
-                        System.out.println("Doctor Not Available");
+                        System.out.println("Doctor Is Available");
+
+                    } else {
+                        System.out.println("Doctor Is Not Available");
                         selectedDoctor = null;
                     }
                 }
@@ -260,7 +281,7 @@ public class AppointmentUI extends UI {
 
         do{
             table.display();
-            System.out.println("Choose an Option :");
+            System.out.println("View Appointment Menu");
             System.out.println("1. Filter Appointments");
             System.out.println("2. Sort Appointments");
             System.out.println("0. Exit");
@@ -269,7 +290,7 @@ public class AppointmentUI extends UI {
             option = this.scanner.nextLine();
 
             switch (option.toUpperCase()) {
-                case "1" -> filterAppointment(table, formatter);
+                case "1" -> filterAppointment(table, DATE_FORMAT);
                 case "2" -> sortAppointment(table);
                 case "N", "P" -> pageControls(table, option);
                 case "0" -> System.out.println("Exiting...");
@@ -279,36 +300,243 @@ public class AppointmentUI extends UI {
         }while(!option.equals("0"));
     }
 
-    public void cancelAppointmentMenu(){
-        var appointments = this.appointmentController.getAppointments();
+    public void editAppointmentMenu(){
 
-        var table = initializeAppointmentTable();
-
+        Appointment selectedAppointment = null;
         String option;
+
         do{
-            table.display();
-            System.out.println("Select an option:");
-            System.out.println("1. Cancel An Appointment");
-            System.out.println("2. Filter Appointment");
-            System.out.println("3. Sort Appointment");
+            System.out.println("\nEdit Appointment Menu:");
+
+            if(selectedAppointment == null){
+                System.out.println("1. Select An Appointment To Edit");
+            }else System.out.println("1. Select An Appointment To Edit (Selected ID: " + selectedAppointment.getId() + ")");
+
+            System.out.println("2. Edit Selected Appointment");
             System.out.println("0. Return");
             System.out.println("Enter \"N\" OR \"P\" to change pages");
             System.out.print("Enter Option: ");
             option = this.scanner.nextLine();
 
             switch (option) {
-                case "1" -> cancelAppointment(appointments);
-                case "2" -> filterAppointment(table, formatter);
-                case "3" -> sortAppointment(table);
-                case "N", "P" -> pageControls(table, option);
+                case "1" -> selectedAppointment = selectAppointment();
+                case "2" -> {
+                    if(selectedAppointment != null){
+                        editAppointmentDetails(selectedAppointment);
+                        return;
+                    }else{
+                        System.out.println("Invalid: Please select an appointment first");
+                    }
+                }
                 case "0" ->System.out.println("Returning...");
                 default -> System.out.println("Please enter a valid option");
             }
 
-        }while (!option.equals("0") && !option.equals("1"));
+        }while (!option.equals("0"));
     }
 
-    //TODO: get doctor time
+    public void cancelAppointmentMenu(){
+        Appointment selectedAppointment = null;
+        String option;
+
+        do{
+            System.out.println("\nCancel Appointment Menu:");
+
+            if(selectedAppointment == null){
+                System.out.println("1. Select An Appointment To Cancel");
+            }else System.out.println("1. Select An Appointment To Cancel (appointment selected)");
+
+            System.out.println("2. Cancel Selected Appointment");
+            System.out.println("0. Return");
+            System.out.println("Enter \"N\" OR \"P\" to change pages");
+            System.out.print("Enter Option: ");
+            option = this.scanner.nextLine();
+
+            switch (option) {
+                case "1" -> selectedAppointment = selectAppointment();
+                case "2" -> {
+                    if(selectedAppointment != null){
+                        if(updateAppointmentConfirmation("cancel")){
+                            appointmentController.cancelAppointment(selectedAppointment);
+
+                        }else System.out.println("Operation Cancelled");
+
+                        return;
+                    }else{
+                        System.out.println("Invalid: Please select an appointment first");
+                    }
+                }
+                case "0" ->System.out.println("Returning...");
+                default -> System.out.println("Please enter a valid option");
+            }
+
+        }while (!option.equals("0"));
+    }
+
+    public void generateAppointmentSummaryReport() {
+        int width = 200;
+
+        // Header
+        System.out.println("=".repeat(width));
+        System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
+        System.out.println(StringUtils.pad("APPOINTMENT MANAGEMENT MODULE", ' ', width));
+        System.out.println(StringUtils.pad("SUMMARY OF APPOINTMENT REPORT", ' ', width));
+        System.out.println("=".repeat(width));
+        System.out.printf("Generated at: %s%n", DATE_FORMAT.format(LocalDateTime.now()));
+        System.out.println();
+
+        // Get counters
+        ListInterface<AppointmentTypeCounter> summaries = appointmentController.getAppointmentSummary();
+
+        // Build table
+        InteractiveTable<AppointmentTypeCounter> table = new InteractiveTable<>(new Column[]{
+                new Column("Appointment Type", Alignment.CENTER, 20),
+                new Column("Doctors", Alignment.LEFT, 80),
+                new Column("Patients", Alignment.LEFT, 100)
+        }, summaries) {
+            @Override
+            protected Cell[] getRow(AppointmentTypeCounter atc) {
+                // --- Doctors ---
+                StringBuilder doctorsBuilder = new StringBuilder();
+                for (int i = 0; i < atc.getDoctorCounters().size(); i++) {
+                    DoctorCounter dc = atc.getDoctorCounters().get(i);
+                    doctorsBuilder.append(dc.key().getName())
+                            .append("(").append(dc.getCount()).append(")");
+                    if (i < atc.getDoctorCounters().size() - 1) {
+                        doctorsBuilder.append(", ");
+                    }
+                }
+                String doctors = doctorsBuilder.toString();
+
+                // --- Patients ---
+                StringBuilder patientsBuilder = new StringBuilder();
+                for (int i = 0; i < atc.getPatientCounters().size(); i++) {
+                    PatientCounter pc = atc.getPatientCounters().get(i);
+                    patientsBuilder.append(pc.key().getName())
+                            .append("(").append(pc.getCount()).append(")");
+                    if (i < atc.getPatientCounters().size() - 1) {
+                        patientsBuilder.append(", ");
+                    }
+                }
+                String patients = patientsBuilder.toString();
+
+                // Return row
+                return new Cell[]{
+                        new Cell(atc.getType().name(), Alignment.CENTER),
+                        new Cell(doctors, Alignment.LEFT),
+                        new Cell(patients, Alignment.LEFT)
+                };
+            }
+        };
+
+        table.setPageSize(summaries.size());
+        table.display();
+
+        System.out.println();
+
+        // Appointment totals by type (Bar Chart)
+        printAppointmentTotalsBarChart(summaries);
+
+        // Stats
+        int totalAppointments = appointmentController.getAppointments().size();
+        System.out.printf("Total Appointments: %d%n", totalAppointments);
+
+        // Footer
+        System.out.println("*".repeat(width));
+        System.out.println(StringUtils.pad("END OF APPOINTMENT REPORT", ' ', width));
+        System.out.println("*".repeat(width));
+        System.out.println();
+    }
+
+    public void editAppointmentDetails(Appointment appointment){
+        String option;
+        Doctor newDoctor = null;
+        LocalDateTime newAppointmentStartTime = null, newAppointmentEndTime = null;
+
+        //Temporary remove the selected appointment
+        appointmentController.cancelAppointment(appointment);
+
+        do{
+            System.out.println("Select An Option:");
+
+            if(newDoctor == null){
+                System.out.println("1. Edit Doctor");
+            }else{
+                System.out.println("1. Edit Doctor (New: " + newDoctor.getName() + ")");
+            }
+
+            if(newAppointmentStartTime == null && newAppointmentEndTime == null){
+                System.out.println("2. Edit Appointment Time");
+            }else{
+                System.out.println("2. Edit Appointment Time (New: \"" + newAppointmentStartTime.format(DATE_FORMAT) + " to " + newAppointmentEndTime.format(DATE_FORMAT) + "\")");
+            }
+
+            System.out.println("3. View Doctor Available Schedule");
+            System.out.println("4. Confirm Changes");
+            System.out.println("0. Return");
+            System.out.print("Enter Option: ");
+            option = this.scanner.nextLine();
+
+            switch (option){
+                case "1" -> newDoctor = doctorUI.selectDoctor();
+                case "2" -> {
+                    if(newDoctor != null) {
+                        newAppointmentStartTime = inputAppointmentStartTime();
+                        if (newAppointmentStartTime == null) {
+                            System.out.println("Returning...");
+                            break;
+                        }
+                        newAppointmentEndTime = generateAppointmentEndTime(newAppointmentStartTime);
+
+                        if (appointmentController.isAvailable(
+                                newDoctor,
+                                newAppointmentStartTime.toLocalDate(),
+                                new Range<>(newAppointmentStartTime.toLocalTime(), newAppointmentEndTime.toLocalTime())
+                        )) {
+                            System.out.println("Doctor Is Available");
+
+                        } else {
+                            System.out.println("Doctor Is Not Available");
+                            newAppointmentStartTime = null;
+                            newAppointmentEndTime = null;
+                        }
+                    }
+                }
+                case "3" -> {
+                    if(newDoctor != null){
+                        doctorUI.viewDoctorAvailabilitySchedule(LocalDate.now(), newDoctor);
+                    }else{
+                        System.out.println("Please Select A Doctor First");
+                    }
+
+
+                }
+                case "4" -> {
+                    if(updateAppointmentConfirmation("edit")){
+                        if (newAppointmentStartTime != null && newAppointmentEndTime != null) {
+                            appointment.setExpectedStartAt(newAppointmentStartTime);
+                            appointment.setExpectedEndAt(newAppointmentEndTime);
+                        }
+
+                        if (newDoctor != null) {
+                            appointment.setDoctor(newDoctor);
+                        }
+
+                    }else System.out.println("Operation Cancelled");
+
+                    //save all changes
+                    appointmentController.saveAppointment(appointment);
+                }
+                case "0" -> {
+                    System.out.println("Returning...");
+
+                    //re-adding back the selected appointment
+                    appointmentController.saveAppointment(appointment);
+                }
+            }
+        }while(!option.equals("0") && !option.equals("4"));
+    }
+
     public LocalDateTime inputAppointmentStartTime() {
         String inputTime;
         LocalDateTime startTime = null;
@@ -327,7 +555,6 @@ public class AppointmentUI extends UI {
         return startTime;
     }
 
-    //TODO: get doctor time
     public LocalDateTime generateAppointmentEndTime(LocalDateTime startTime) {
         return startTime.plusMinutes(30);
     }
@@ -349,30 +576,26 @@ public class AppointmentUI extends UI {
     public LocalDateTime validateInputSearchDateTime(String inputTime) {
         LocalDateTime timeConvert;
         try {
-            timeConvert = LocalDateTime.parse(inputTime, formatter);
+            timeConvert = LocalDateTime.parse(inputTime, DATE_FORMAT);
             return timeConvert;
         } catch (DateTimeParseException e) {
             System.out.println("Invalid format! Please use yyyy-MM-dd HH:mm");
-            timeConvert = null;
-            return timeConvert;
+            return null;
         }
     }
 
     public LocalDateTime validateInputDateTime(String inputTime) {
         LocalDateTime timeConvert;
         try {
-            timeConvert = LocalDateTime.parse(inputTime, formatter);
-            if (timeConvert.isAfter(LocalDateTime.now())) {
-                return timeConvert;
-            } else {
-                System.out.println("Time should be after now");
-                timeConvert = null;
-                return timeConvert;
-            }
+            timeConvert = LocalDateTime.parse(inputTime, DATE_FORMAT);
+//            if (!timeConvert.isAfter(LocalDateTime.now())) {
+//                System.out.println("Time should be after now");
+//                timeConvert = null;
+//            }
+            return timeConvert;
         } catch (DateTimeParseException e) {
             System.out.println("Invalid format! Please use yyyy-MM-dd HH:mm");
-            timeConvert = null;
-            return timeConvert;
+            return null;
         }
     }
 
@@ -385,16 +608,16 @@ public class AppointmentUI extends UI {
                 new Column("End At", Alignment.CENTER, 25),
                 new Column("Created At", Alignment.CENTER, 25),
                 new Column("Appointment Type", Alignment.CENTER, 25),
-        }, Database.appointmentList.clone()) {
+        }, appointmentController.getAppointments()) {
             @Override
             protected Cell[] getRow(Appointment o) {
                 return new Cell[]{
                         new Cell(o.getId(), Alignment.LEFT),
                         new Cell(o.getPatient().getName()),
                         new Cell(o.getDoctor().getName()),
-                        new Cell(o.getExpectedStartAt().format(formatter)),
-                        new Cell(o.getExpectedEndAt().format(formatter)),
-                        new Cell(o.getCreatedAt().format(formatter)),
+                        new Cell(o.getExpectedStartAt().format(DATE_FORMAT)),
+                        new Cell(o.getExpectedEndAt().format(DATE_FORMAT)),
+                        new Cell(o.getCreatedAt().format(DATE_FORMAT)),
                         new Cell(o.getAppointmentType().name(), Alignment.CENTER)
                 };
             }
@@ -414,8 +637,8 @@ public class AppointmentUI extends UI {
             System.out.println("1. Select An Appointment");
             System.out.println("2. Filter Appointments");
             System.out.println("3. Sort Appointments");
-            System.out.println("Enter \"N\" Or \"P\" to change pages");
             System.out.println("0. Exit");
+            System.out.println("Enter \"N\" Or \"P\" to change pages");
             System.out.print("Enter Option: ");
             option = this.scanner.nextLine();
 
@@ -440,12 +663,12 @@ public class AppointmentUI extends UI {
                         if (selectedAppointment == null) {
                             System.out.println("Appointment with ID (" + selectedId + ") not found. Please re-enter Appointment ID...");
                         } else {
-                            System.out.println("Appointment with ID (" + selectedAppointment.getId() + ")  selected");
+                            System.out.println("Appointment with ID (" + selectedAppointment.getId() + ") selected");
                             return selectedAppointment;
                         }
                     } while (selectedAppointment == null);
                 }
-                case "2" -> filterAppointment(table, formatter);
+                case "2" -> filterAppointment(table, DATE_FORMAT);
                 case "3" -> sortAppointment(table);
                 case "N", "P" -> pageControls(table, option);
                 case "0" -> System.out.println("Exiting...");
@@ -483,29 +706,6 @@ public class AppointmentUI extends UI {
 
         } while (!option.matches("[1-4]"));
         return type;
-    }
-
-    public void cancelAppointment(ListInterface<Appointment> appointmentList) {
-
-        System.out.println("Select an appointment to cancel (enter by id) : ");
-        String selectedAppointmentId = this.scanner.nextLine();
-        int appointmentIndex = -1;
-
-        for(int i = 0 ; i < appointmentList.size() ; i++){
-            if(String.valueOf(appointmentList.get(i).getId()).equals(selectedAppointmentId)){
-                appointmentIndex = i;
-            }
-        }
-
-        if(appointmentIndex != -1){
-            if(updateAppointmentConfirmation("cancel")){
-                this.appointmentController.cancelAppointment(appointmentIndex);
-            } else{
-                System.out.println("Operation Cancelled");
-            }
-        }else{
-            System.out.println("Appointment not found or is invalid.");
-        }
     }
 
     public void pageControls(InteractiveTable<Appointment> table, String opt) {
@@ -834,6 +1034,36 @@ public class AppointmentUI extends UI {
             default:
                 break;
         }
+    }
+
+    private void printAppointmentTotalsBarChart(ListInterface<AppointmentTypeCounter> summaries) {
+        System.out.println("============================================================");
+        System.out.println("   Total Appointments by Type (Bar Chart)   ");
+        System.out.println("============================================================");
+
+        int max = 0;
+        for (int i = 0; i < summaries.size(); i++) {
+            AppointmentTypeCounter atc = summaries.get(i);
+            if (atc.getAppointmentCount() > max) {
+                max = atc.getAppointmentCount();
+            }
+        }
+
+        // print rows
+        for (int i = 0; i < summaries.size(); i++) {
+            AppointmentTypeCounter atc = summaries.get(i);
+            int count = atc.getAppointmentCount();
+
+            // simple scaling (avoid divide by zero)
+            int barLength = (max == 0) ? 0 : (count * 40 / max);
+
+            System.out.printf("%-12s | %s (%d)%n",
+                    atc.getType().name(),
+                    "█".repeat(barLength),
+                    count);
+        }
+
+        System.out.println("------------------------------------------------------------");
     }
 
 

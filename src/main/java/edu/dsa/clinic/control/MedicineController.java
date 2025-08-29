@@ -77,24 +77,30 @@ public class MedicineController {
         return Database.stockList.filtered(StockFilter.byProduct(product));
     }
 
+    public static int getStockQuantityLeft(Stock stock) {
+        var quantity = stock.getStockInQuantity();
+        for (var dispensing : stock.getDispensings())
+            quantity -= dispensing.getQuantity();
+        return quantity;
+    }
+
     public static int getAvailableStocks(Product product) {
         var sum = 0;
-        for (var stock : product.getStocks())
-            sum += stock.getQuantityLeft();
+        for (var stock : getProductStocks(product))
+            sum += getStockQuantityLeft(stock);
         return sum;
     }
 
     public static int getAvailableStocks(Medicine medicine) {
         var sum = 0;
         for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine)))
-            for (var stock : product.getStocks())
-                sum += stock.getQuantityLeft();
+            sum += getAvailableStocks(product);
         return sum;
     }
 
     public static @Nullable LocalDateTime getLatestStocked(Product product) {
         var latest = LocalDateTime.MIN;
-        for (var stock : product.getStocks())
+        for (var stock : getProductStocks(product))
             if (stock.getStockInDate().isAfter(latest))
                 latest = stock.getStockInDate();
 
@@ -105,10 +111,14 @@ public class MedicineController {
 
     public static @Nullable LocalDateTime getLatestStocked(Medicine medicine) {
         var latest = LocalDateTime.MIN;
-        for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine)))
-            for (var stock : product.getStocks())
-                if (stock.getStockInDate().isAfter(latest))
-                    latest = stock.getStockInDate();
+        for (var product : Database.productList.filtered(ProductFilter.byMedicine(medicine))) {
+            var productLatest = getLatestStocked(product);
+            if (productLatest == null)
+                continue;
+
+            if (productLatest.isAfter(latest))
+                latest = productLatest;
+        }
 
         if (latest.equals(LocalDateTime.MIN))
             return null;

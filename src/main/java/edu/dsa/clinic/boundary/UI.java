@@ -6,6 +6,7 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.utils.NonBlockingReader;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -45,4 +46,6 @@ public abstract class UI {
     public NonBlockingReader getReader() {
         return this.terminal.reader();
     }
+
+    abstract public void startMenu() throws IOException;
 }

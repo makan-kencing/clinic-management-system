@@ -1,6 +1,5 @@
 package edu.dsa.clinic.boundary;
 
-import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.dto.Range;
@@ -21,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -32,6 +30,7 @@ public class DoctorUI extends UI {
         super(scanner);
     }
 
+    @Override
     public void startMenu() {
         int choice;
         do {

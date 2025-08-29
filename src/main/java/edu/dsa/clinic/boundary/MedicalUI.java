@@ -2,6 +2,7 @@ package edu.dsa.clinic.boundary;
 
 import edu.dsa.clinic.Initializer;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.control.MedicineController;
@@ -33,34 +34,27 @@ import java.util.Scanner;
 
 
 public class MedicalUI extends UI {
-    private final MedicalController medicalController;
-    private final MedicineUI medicineUI;
-    private final PatientUI patientUI;
-    private final DoctorUI doctorUI;
-    private final AppointmentUI appointmentUI;
+    private final AppointmentController appointmentController = new AppointmentController();
+    private final MedicalController medicalController = new MedicalController();
+    private final MedicineUI medicineUI = new MedicineUI(this.terminal);
+    private final PatientUI patientUI = new PatientUI(this.scanner);
+    private final DoctorUI doctorUI = new DoctorUI(this.scanner);
+    private AppointmentUI appointmentUI;
     private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
                     .withZone(ZoneId.systemDefault());
 
     public MedicalUI(Terminal terminal, Scanner scanner) {
         super(terminal, scanner);
-        this.medicalController = new MedicalController();
-        this.medicineUI = new MedicineUI(this.terminal);
-        this.patientUI = new PatientUI(scanner);
-        this.doctorUI = new DoctorUI(scanner);
-        this.appointmentUI = new AppointmentUI(scanner);
     }
 
-    public MedicalUI(Scanner scanner) {
-        super(scanner);
-        this.medicalController = new MedicalController();
-        this.medicineUI = new MedicineUI(scanner);
-        this.patientUI = new PatientUI(scanner);
-        this.doctorUI = new DoctorUI(scanner);
-        this.appointmentUI = new AppointmentUI(scanner);
+    public MedicalUI setAppointmentUI(AppointmentUI appointmentUI) {
+        this.appointmentUI = appointmentUI;
+        return this;
     }
 
-    public void startConsultationMenu() {
+    @Override
+    public void startMenu() {
         while (true) {
             int choice;
 
@@ -1055,6 +1049,8 @@ public class MedicalUI extends UI {
     }
 
     public void createConsultationInfoByAppointment() {
+        assert(this.appointmentUI != null);
+
         var consultation = new Consultation();
 
 
@@ -1087,6 +1083,7 @@ public class MedicalUI extends UI {
         }
 
         if (medicalController.saveConsultationRecord(consultation)) {
+            appointmentController.cancelAppointment(appointment);
             DispensaryController.queueConsultation(consultation);
             System.out.println("Consultation record added.");
         }
@@ -1102,22 +1099,21 @@ public class MedicalUI extends UI {
                     Create Consultation Menu
                     Please Select an Option""");
             System.out.println("=".repeat(30));
-            System.out.println("""
-                    1. Create Consultation Record by Appointment
-                    2. Create Consultation Record by Manually
-                    3. Back""");
+            System.out.println("1. Create Consultation Record by Manually");
+            if (this.appointmentUI != null) System.out.println("2. Create Consultation Record by Appointment");
+            System.out.println("3. Back");
             System.out.println("=".repeat(30));
-            Consultation consultation;
+
             try {
                 System.out.print("Enter your choice :");
                 int choice = this.scanner.nextInt();
                 this.scanner.nextLine();
                 switch (choice) {
                     case 1:
-                        createConsultationInfoByAppointment();
+                        createConsultationInfo();
                         break;
                     case 2:
-                        createConsultationInfo();
+                        if (this.appointmentUI != null) createConsultationInfoByAppointment();
                         break;
                     case 3:
                         return;
@@ -1609,7 +1605,7 @@ public class MedicalUI extends UI {
             var scanner = new Scanner(System.in);
 
             var medicalUI = new MedicalUI(terminal, scanner);
-            medicalUI.startConsultationMenu();
+            medicalUI.startMenu();
         }
     }
 

@@ -1,11 +1,17 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.AppointmentTypeCounter;
+import edu.dsa.clinic.dto.DoctorCounter;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.ShiftType;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.entity.Appointment;
+import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Doctor;
+import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.filter.AppointmentFilter;
 
 import java.time.DayOfWeek;
@@ -16,15 +22,7 @@ import java.time.temporal.TemporalAccessor;
 public class AppointmentController {
 
     public void saveAppointment(Appointment appointment) {
-
-//        if(hasOverLappingAppointments(appointment, appointment.getDoctor())){
-//            findClosestAvailableTime();
-//        }else if(schedule is occupied but doctor is free the next time){
-//
-//        }else{
-            Database.appointmentList.add(appointment);
-//        }
-
+        Database.appointmentList.add(appointment);
     }
 
     public Object performSelect(int selectedId, String field) {
@@ -74,27 +72,16 @@ public class AppointmentController {
     }
 
     public boolean isAvailable(Doctor doctor, LocalDate date, Range<LocalTime> timeRange) {
-        return !isWorkingDuring(doctor, date, timeRange)
-                || !isUnoccupiedDuring(doctor, date, timeRange);
+        return isWorkingDuring(doctor, date, timeRange)
+                && isUnoccupiedDuring(doctor, date, timeRange);
     }
-
-
 
     public ListInterface<Appointment> getAppointments() {
         return Database.appointmentList.clone();
     }
 
-
-    public void cancelAppointment(int index){
-        Database.appointmentList.remove(index);
-    }
-
-    public void findClosestAvailableTime(){
-
-    }
-
-    public boolean hasOverLappingAppointments(Appointment appointment, Doctor doctor){
-        return true;
+    public void cancelAppointment(Appointment appointment) {
+        Database.appointmentList.removeFirst(p -> p.getId() == appointment.getId());
     }
 
     public static ListInterface<Appointment> getDoctorAppointmentsForTheWeek(TemporalAccessor hasWeek, Doctor doctor) {
@@ -103,4 +90,44 @@ public class AppointmentController {
                         .and(AppointmentFilter.byDoctor(doctor))
         );
     }
+
+    public ListInterface<AppointmentTypeCounter> getAppointmentSummary() {
+        ListInterface<AppointmentTypeCounter> typeCounters = new DoubleLinkedList<>();
+        for (ConsultationType type : ConsultationType.values()) {
+            typeCounters.add(new AppointmentTypeCounter(type));
+        }
+
+        for (Appointment appt : Database.appointmentList) {
+            ConsultationType type = appt.getAppointmentType();
+            Patient patient = appt.getPatient();
+            Doctor doctor = appt.getDoctor();
+
+            AppointmentTypeCounter atc = typeCounters.findFirst(tc -> tc.getType() == type);
+
+            atc.incrementAppointmentCount();
+
+            DoctorCounter existingDoctor = atc.getDoctorCounters().findFirst(dc -> dc.key().equals(doctor));
+            if (existingDoctor == null) {
+                existingDoctor = new DoctorCounter(doctor);
+                atc.getDoctorCounters().add(existingDoctor);
+            }
+            existingDoctor.increment();
+
+            PatientCounter existingPatient = atc.getPatientCounters().findFirst(pc -> pc.key().equals(patient));
+            if (existingPatient == null) {
+                existingPatient = new PatientCounter(patient);
+                atc.getPatientCounters().add(existingPatient);
+            }
+            existingPatient.increment();
+        }
+
+        for (AppointmentTypeCounter atc : typeCounters) {
+            atc.getDoctorCounters().sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
+            atc.getPatientCounters().sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
+        }
+
+        return typeCounters;
+    }
+
+
 }
