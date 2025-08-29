@@ -300,13 +300,31 @@ public class MedicineUI extends UI {
 
         while (true) {
             switch (builder.promptOption(prompt)) {
-                case MEDICINE_USAGE_BY_DIAGNOSIS_AND_TREATMENT:
-
+                case MEDICINE_USAGE:
+                    this.viewMedicineUsageReport();
+                    break;
+                case LOW_STOCK:
+                    this.viewLowStockReport();
+                    break;
+                case SUMMARY:
+                    this.viewSummaryReport();
                     break;
                 case EXIT:
                     return;
             }
         }
+    }
+
+    public void viewMedicineUsageReport() {
+        // TODO
+    }
+
+    public void viewLowStockReport() {
+        // TODO
+    }
+
+    public void viewSummaryReport() {
+        // TODO
     }
 
     public @Nullable Medicine selectMedicine(
@@ -1453,17 +1471,82 @@ public class MedicineUI extends UI {
 
         @Override
         protected void promptSearch() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("query")
+                    .message("Search by")
+                    .addPrompt();
 
+            var result = this.prompt.prompt(builder.build());
+
+            var queryResult = (InputResult) result.get("query");
+
+            var query = queryResult.toString();
+
+            this.clearFilter(s -> s.startsWith("Searching"));
+            if (query.isEmpty() || query.equals("null"))
+                return;
+
+            this.addFilter("Searching `" + query + "`", ProductFilter.byNameLike(query));
+            this.updateData();
         }
 
         @Override
         protected void promptFilterOption() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("choice")
+                    .message("Filter")
+                    .newItem("add").text("Add").add()
+                    .newItem("clear").text("Clear all").add()
+                    .newItem("back").text("Back").add()
+                    .addPrompt();
 
+            var result = this.prompt.prompt(builder.build());
+
+            var choiceResult = (ListResult) result.get("choice");
+
+            switch (choiceResult.getResult()) {
+                case "add":
+                    this.promptAddFilter();
+                    break;
+                case "clear":
+                    this.resetFilters();
+                    this.updateData();
+                    break;
+                default:
+                    break;
+            }
         }
 
         @Override
         protected void promptSorterOption() throws IOException {
+            var builder = prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("choice")
+                    .message("Order by")
+                    .newItem("add").text("Add").add()
+                    .newItem("clear").text("Clear all").add()
+                    .newItem("back").text("Back").add()
+                    .addPrompt();
 
+            var result = prompt.prompt(builder.build());
+
+            var choiceResult = (ListResult) result.get("choice");
+
+            switch (choiceResult.getResult()) {
+                case "add":
+                    this.promptAddSorter();
+                    break;
+                case "clear":
+                    this.resetSorters();
+                    this.updateData();
+                    break;
+            }
+        }
+
+        protected void promptAddFilter() throws IOException {
+            // TODO
         }
 
         protected void promptAddSorter() throws IOException {
@@ -1613,20 +1696,92 @@ public class MedicineUI extends UI {
 
         @Override
         protected void promptSearch() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("query")
+                    .message("Search by")
+                    .addPrompt();
 
+            var result = this.prompt.prompt(builder.build());
+
+            var queryResult = (InputResult) result.get("query");
+
+            var query = queryResult.toString();
+
+            this.clearFilter(s -> s.startsWith("Searching"));
+            if (query.isEmpty() || query.equals("null"))
+                return;
+
+            this.addFilter(
+                    "Searching `" + query + "`",
+                    StockFilter.byProductNameLike(query)
+                            .or(StockFilter.byProductBrandLike(query))
+            );
+            this.updateData();
         }
 
         @Override
         protected void promptFilterOption() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("choice")
+                    .message("Filter")
+                    .newItem("add").text("Add").add()
+                    .newItem("clear").text("Clear all").add()
+                    .newItem("back").text("Back").add()
+                    .addPrompt();
 
+            var result = this.prompt.prompt(builder.build());
+
+            var choiceResult = (ListResult) result.get("choice");
+
+            switch (choiceResult.getResult()) {
+                case "add":
+                    this.promptAddFilter();
+                    break;
+                case "clear":
+                    this.resetFilters();
+                    this.updateData();
+                    break;
+                default:
+                    break;
+            }
         }
 
         @Override
         protected void promptSorterOption() throws IOException {
+            var builder = prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("choice")
+                    .message("Order by")
+                    .newItem("add").text("Add").add()
+                    .newItem("clear").text("Clear all").add()
+                    .newItem("back").text("Back").add()
+                    .addPrompt();
 
+            var result = prompt.prompt(builder.build());
+
+            var choiceResult = (ListResult) result.get("choice");
+
+            switch (choiceResult.getResult()) {
+                case "add":
+                    this.promptAddSorter();
+                    break;
+                case "clear":
+                    this.resetSorters();
+                    this.updateData();
+                    break;
+            }
+        }
+
+        protected void promptAddFilter() throws IOException {
+            // TODO
+        }
+
+        protected void promptAddSorter() throws IOException {
+            // TODO
         }
     }
-
 
     private static class MedicinePromptBuilder extends UIPromptBuilder {
         public final static String NAME = "name";
@@ -1908,16 +2063,19 @@ public class MedicineUI extends UI {
         public static final String OPTION = "option";
 
         public enum Option {
-            MEDICINE_USAGE_BY_DIAGNOSIS_AND_TREATMENT,
-
+            MEDICINE_USAGE,
+            LOW_STOCK,
+            SUMMARY,
             EXIT
         }
 
         public ListPromptBuilder createOptionPrompt() {
             return this.createListPrompt()
                     .name(OPTION)
-                    .message("")
-                    .newItem().text("").add()
+                    .message("Choose a report")
+                    .newItem(Option.MEDICINE_USAGE.name()).text("Medicine Usage").add()
+                    .newItem(Option.LOW_STOCK.name()).text("Low Stock").add()
+                    .newItem(Option.SUMMARY.name()).text("Summary").add()
                     .newItem(Option.EXIT.name()).text("Exit").add();
         }
 
