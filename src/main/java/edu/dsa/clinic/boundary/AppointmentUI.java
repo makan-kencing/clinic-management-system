@@ -194,6 +194,7 @@ public class AppointmentUI extends UI {
                         appointment.setAppointmentType(appointmentType);
                         appointment.setCreatedAt(LocalDateTime.now());
                         this.appointmentController.saveAppointment(appointment);
+                        System.out.println("Operation Successful");
                         return;
                     } else {
                         System.out.println("Operation cancelled");
@@ -358,6 +359,7 @@ public class AppointmentUI extends UI {
                     if(selectedAppointment != null){
                         if(updateAppointmentConfirmation("cancel")){
                             appointmentController.cancelAppointment(selectedAppointment);
+                            System.out.println("Operation Successful");
 
                         }else System.out.println("Operation Cancelled");
 
@@ -535,6 +537,8 @@ public class AppointmentUI extends UI {
                         if (newDoctor != null) {
                             appointment.setDoctor(newDoctor);
                         }
+
+                        System.out.println("Operation Successful");
 
                     }else System.out.println("Operation Cancelled");
 
