@@ -225,6 +225,14 @@ public class MedicalController {
         return productInfo.toString();
     }
 
+    public ListInterface<String> getDoctorList(ConsultationTypeCounter ctc) {
+        return ctc.getDoctorCounters().map(p -> p.key().getName() + "(" + p.count() + ")");
+    }
+
+    public ListInterface<String> getPatientList(ConsultationTypeCounter ctc) {
+        return ctc.getPatientCounters().map(c -> c.key().getName() + "(" + c.count() + ")");
+    }
+
     public ListInterface<ConsultationTypeCounter> getConsultationSummary() {
         ListInterface<ConsultationTypeCounter> typeCounters = new DoubleLinkedList<>();
         for (ConsultationType type : ConsultationType.values()) {

@@ -91,6 +91,14 @@ public class AppointmentController {
         );
     }
 
+    public ListInterface<String> getDoctorList(AppointmentTypeCounter atc) {
+        return atc.getDoctorCounters().map(p -> p.key().getName() + "(" + p.count() + ")");
+    }
+
+    public ListInterface<String> getPatientList(AppointmentTypeCounter atc) {
+        return atc.getPatientCounters().map(c -> c.key().getName() + "(" + c.count() + ")");
+    }
+
     public ListInterface<AppointmentTypeCounter> getAppointmentSummary() {
         ListInterface<AppointmentTypeCounter> typeCounters = new DoubleLinkedList<>();
         for (ConsultationType type : ConsultationType.values()) {
