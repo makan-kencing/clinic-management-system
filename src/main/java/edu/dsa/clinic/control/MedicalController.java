@@ -3,14 +3,12 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.dto.AppointmentTypeCounter;
 import edu.dsa.clinic.dto.ConsultationTypeCounter;
 import edu.dsa.clinic.dto.DiagnosisCounter;
 import edu.dsa.clinic.dto.DoctorCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
 import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.ProductCounter;
-import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
@@ -39,15 +37,61 @@ public class MedicalController {
     }
 
     public static Filter<Diagnosis> getDiagnosisFilter(String diagnosisName) {
-        return d->d.getDiagnosis().toLowerCase().contains(diagnosisName.trim().toLowerCase());
+        return d -> d.getDiagnosis().toLowerCase().contains(diagnosisName.trim().toLowerCase());
     }
 
     public static Filter<Treatment> getTreatmentFilter(String treatmentName) {
-        return t->t.getSymptom().toLowerCase().contains(treatmentName.trim().toLowerCase());
+        return t -> t.getSymptom().toLowerCase().contains(treatmentName.trim().toLowerCase());
     }
 
     public static Filter<Prescription> getPrescriptionFilter(String prescriptionName) {
-        return p->p.getProduct().getName().toLowerCase().contains(prescriptionName.toLowerCase());
+        return p -> p.getProduct().getName().toLowerCase().contains(prescriptionName.toLowerCase());
+    }
+
+    public static ListInterface<DiagnosisCounter> countDiagnosesOccurrence() {
+        var counters = new DoubleLinkedList<DiagnosisCounter>();
+
+        for (var consultation : Database.consultationsList) {
+            for (var diagnosis : consultation.getDiagnoses()) {
+                var diagnosedCondition = diagnosis.getDiagnosis();  // String
+
+                var counter = counters.findFirst(dc -> dc.key().equalsIgnoreCase(diagnosedCondition));
+                if (counter == null) {
+                    counter = new DiagnosisCounter(diagnosedCondition);
+                    counters.add(counter);
+                }
+
+                counter.increment();
+
+                for (var treatment : diagnosis.getTreatments())
+                    for (var prescription : treatment.getPrescriptions()) {
+                        var product = prescription.getProduct();
+                        var productCounters = counter.productCounters();
+
+                        var productCounter = productCounters.findFirst(pc -> pc.key().equals(product));
+                        if (productCounter == null) {
+                            productCounter = new ProductCounter(product);
+                            productCounters.add(productCounter);
+                        }
+
+                        productCounter.increment();
+                    }
+            }
+        }
+        return counters;
+    }
+
+    public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
+        int total = 0;
+        for (int i = 0; i < diagnosisCounters.size(); i++) {
+            DiagnosisCounter dc = diagnosisCounters.get(i);
+            ListInterface<ProductCounter> productCounters = dc.productCounters();
+
+            for (int j = 0; j < productCounters.size(); j++) {
+                total += productCounters.get(j).count();
+            }
+        }
+        return total;
     }
 
     public boolean saveConsultationRecord(Consultation consultation) {
@@ -133,96 +177,30 @@ public class MedicalController {
     }
 
     public ListInterface<MedicalDetail> getMedicalDetails(Patient patient) {
-       ListInterface<MedicalDetail> row =new DoubleLinkedList<>();
-       for (Consultation consultation :patientController.getPatientConsultations(patient)) {
-           if (consultation.getDiagnoses()==null){
-               row.add(new MedicalDetail(consultation,null,null,null));
-           }else {
+        ListInterface<MedicalDetail> row = new DoubleLinkedList<>();
+        for (Consultation consultation : patientController.getPatientConsultations(patient)) {
+            if (consultation.getDiagnoses() == null) {
+                row.add(new MedicalDetail(consultation, null, null, null));
+            } else {
                 for (Diagnosis diagnosis : consultation.getDiagnoses()) {
-                    if (diagnosis.getTreatments()==null){
-                        row.add(new MedicalDetail(consultation,diagnosis,null,null));
-                    }
-                    else {
+                    if (diagnosis.getTreatments() == null) {
+                        row.add(new MedicalDetail(consultation, diagnosis, null, null));
+                    } else {
                         for (Treatment treatment : diagnosis.getTreatments()) {
-                            if (treatment.getPrescriptions()==null){
-                                row.add(new MedicalDetail(consultation,diagnosis,treatment,null));
-                            }
-                            else {
-                               for (Prescription prescription : treatment.getPrescriptions()) {
-                                   row.add(new MedicalDetail(consultation,diagnosis,treatment,prescription));
-                               }
+                            if (treatment.getPrescriptions() == null) {
+                                row.add(new MedicalDetail(consultation, diagnosis, treatment, null));
+                            } else {
+                                for (Prescription prescription : treatment.getPrescriptions()) {
+                                    row.add(new MedicalDetail(consultation, diagnosis, treatment, prescription));
+                                }
 
                             }
                         }
                     }
                 }
-           }
-       }
-        return row;
-    }
-
-    public static ListInterface<DiagnosisCounter> countDiagnosesOccurrence() {
-        var counters = new DoubleLinkedList<DiagnosisCounter>();
-
-        for (var consultation : Database.consultationsList) {
-            for (var diagnosis : consultation.getDiagnoses()) {
-                var diagnosedCondition = diagnosis.getDiagnosis();  // String
-
-                var counter = counters.findFirst(dc -> dc.key().equals(diagnosedCondition));
-                if (counter == null) {
-                    counter = new DiagnosisCounter(diagnosedCondition);
-                    counters.add(counter);
-                }
-
-                counter.increment();
-
-                for (var treatment : diagnosis.getTreatments())
-                    for (var prescription : treatment.getPrescriptions()) {
-                        var product = prescription.getProduct();
-                        var productCounters = counter.productCounters();
-
-                        var productCounter = productCounters.findFirst(pc -> pc.key().equals(product));
-                        if (productCounter == null) {
-                            productCounter = new ProductCounter(product);
-                            productCounters.add(productCounter);
-                        }
-
-                        productCounter.increment();
-                    }
             }
         }
-        return counters;
-    }
-
-   public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
-    int total = 0;
-    for (int i = 0; i < diagnosisCounters.size(); i++) {
-        DiagnosisCounter dc = diagnosisCounters.get(i);
-        ListInterface<ProductCounter> productCounters = dc.productCounters();
-
-        for (int j = 0; j < productCounters.size(); j++) {
-            total += productCounters.get(j).count();
-        }
-    }
-    return total;
-}
-
-    public static String getProductUsageString(ListInterface<ProductCounter> productCounters) {
-        StringBuilder productInfo = new StringBuilder();
-
-        for (int i = 0; i < productCounters.size(); i++) {
-            ProductCounter pc = productCounters.get(i);
-            productInfo.append(pc.key().getName())
-                    .append(" (")
-                    .append(pc.count())
-                    .append("), ");
-        }
-
-        if (productInfo.length() > 0) {
-            productInfo.setLength(productInfo.length() - 2);
-        }
-
-        return productInfo.toString();
+        return row;
     }
 
     public ListInterface<String> getDoctorList(ConsultationTypeCounter ctc) {
@@ -233,7 +211,7 @@ public class MedicalController {
         return ctc.getPatientCounters().map(c -> c.key().getName() + "(" + c.count() + ")");
     }
 
-    public ListInterface<String>getProductList(DiagnosisCounter dc) {
+    public ListInterface<String> getProductList(DiagnosisCounter dc) {
         return dc.productCounters().map(p -> p.key().getName() + "(" + p.count() + ")");
     }
 
