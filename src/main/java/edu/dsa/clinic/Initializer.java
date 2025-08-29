@@ -175,7 +175,7 @@ public class Initializer {
                 ((Doctor) new Doctor()
                         .setId(2))
                         .setName("Daren")
-                        .setGender(Gender.IDK)
+                        .setGender(Gender.MALE)
                         .setContactNumber("+123456789")
                         .setSpecialization(Specialization.Ophthalmology)
                         .setSchedule(new Schedule()
