@@ -817,6 +817,7 @@ public class MedicineUI extends UI {
                     var reader = this.getLineReader();
 
                     reader.readLine("The numbers entered were invalid");
+                    continue;
                 }
 
                 builder = new ProductPromptBuilder();
@@ -893,6 +894,7 @@ public class MedicineUI extends UI {
                     var reader = this.getLineReader();
 
                     reader.readLine("The numbers entered were invalid");
+                    continue;
                 }
 
                 builder = new ProductPromptBuilder();
@@ -1197,6 +1199,7 @@ public class MedicineUI extends UI {
                     var reader = this.getLineReader();
 
                     reader.readLine("The numbers entered were invalid");
+                    continue;
                 }
 
                 builder = new ProductPromptBuilder();
