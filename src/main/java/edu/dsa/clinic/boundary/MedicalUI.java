@@ -1644,6 +1644,9 @@ public class MedicalUI extends UI {
     }
 
     public void generateConsultationSummaryReport() {
+        // Get counters
+        ListInterface<ConsultationTypeCounter> summaries = medicalController.getConsultationSummary();
+
         int width = 200;
 
         // Header
@@ -1655,14 +1658,25 @@ public class MedicalUI extends UI {
         System.out.printf("Generated at: %s%n", DATE_FORMAT.format(LocalDateTime.now()));
         System.out.println();
 
-        // Get counters
-        ListInterface<ConsultationTypeCounter> summaries = medicalController.getConsultationSummary();
+        int maxDoctorLength = "Doctors".length();
+        int maxPatientLength = "Patient".length();
+
+        for (var ctc : summaries) {
+            String doctors = StringUtils.join(", ", medicalController.getDoctorList(ctc));
+            maxDoctorLength = Math.max(maxDoctorLength, doctors.length());
+
+            String patients = StringUtils.join(", ", medicalController.getPatientList(ctc));
+            maxPatientLength = Math.max(maxPatientLength, patients.length());
+        }
+
+        maxDoctorLength += 2;
+        maxPatientLength += 2;
 
         // Build table
         InteractiveTable<ConsultationTypeCounter> table = new InteractiveTable<>(new Column[]{
                 new Column("Consultation Type", Alignment.CENTER, 20),
-                new Column("Doctors", Alignment.LEFT, 80),
-                new Column("Patients", Alignment.LEFT, 100)
+                new Column("Doctors", Alignment.LEFT, maxDoctorLength),
+                new Column("Patients", Alignment.LEFT, maxPatientLength)
         }, summaries) {
             @Override
             protected Cell[] getRow(ConsultationTypeCounter ctc) {
