@@ -7,28 +7,21 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
-import edu.dsa.clinic.adt.SortedDoubleLinkedList;
 import edu.dsa.clinic.dto.DoctorCounter;
-import edu.dsa.clinic.dto.DoctorPerformance;
 import edu.dsa.clinic.dto.PatientCounter;
-import edu.dsa.clinic.dto.ProductCounter;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.dto.Shift;
 import edu.dsa.clinic.dto.ShiftType;
-import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Doctor;
-import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.lambda.Filter;
 import org.jetbrains.annotations.Nullable;
-import edu.dsa.clinic.entity.Consultation;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 
 public class DoctorController {
 
