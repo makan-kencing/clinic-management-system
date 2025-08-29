@@ -406,25 +406,11 @@ public class AppointmentUI extends UI {
         System.out.printf("Generated at: %s%n", DATE_FORMAT.format(LocalDateTime.now()));
         System.out.println();
 
-        int maxDoctorLength = "Doctors".length();
-        int maxPatientLength = "Patient".length();
-
-        for (var atc : summaries) {
-            String doctors = StringUtils.join(", ", appointmentController.getDoctorList(atc));
-            maxDoctorLength = Math.max(maxDoctorLength, doctors.length());
-
-            String patients = StringUtils.join(", ", appointmentController.getPatientList(atc));
-            maxPatientLength = Math.max(maxPatientLength, patients.length());
-        }
-
-        maxDoctorLength += 2;
-        maxPatientLength += 2;
-
         // Build table
         InteractiveTable<AppointmentTypeCounter> table = new InteractiveTable<>(new Column[]{
                 new Column("Appointment Type", Alignment.CENTER, 20),
-                new Column("Doctors", Alignment.CENTER, maxDoctorLength),
-                new Column("Patients", Alignment.CENTER, maxPatientLength)
+                new Column("Doctors", Alignment.CENTER, 70),
+                new Column("Patients", Alignment.CENTER, 70)
         }, summaries) {
             @Override
             protected Cell[] getRow(AppointmentTypeCounter atc) {
@@ -455,8 +441,8 @@ public class AppointmentUI extends UI {
                 // Return row
                 return new Cell[]{
                         new Cell(atc.getType().name(), Alignment.CENTER),
-                        new Cell(doctors, Alignment.LEFT),
-                        new Cell(patients, Alignment.LEFT)
+                        new Cell(StringUtils.trimEarly(doctors, 70, "..."), Alignment.LEFT),
+                        new Cell(StringUtils.trimEarly(patients, 70, "..."), Alignment.LEFT)
                 };
             }
         };

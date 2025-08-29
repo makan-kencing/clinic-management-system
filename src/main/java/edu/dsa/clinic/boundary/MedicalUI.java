@@ -1681,25 +1681,11 @@ public class MedicalUI extends UI {
         System.out.printf("Generated at: %s%n", DATE_FORMAT.format(LocalDateTime.now()));
         System.out.println();
 
-        int maxDoctorLength = "Doctors".length();
-        int maxPatientLength = "Patient".length();
-
-        for (var ctc : summaries) {
-            String doctors = StringUtils.join(", ", medicalController.getDoctorList(ctc));
-            maxDoctorLength = Math.max(maxDoctorLength, doctors.length());
-
-            String patients = StringUtils.join(", ", medicalController.getPatientList(ctc));
-            maxPatientLength = Math.max(maxPatientLength, patients.length());
-        }
-
-        maxDoctorLength += 2;
-        maxPatientLength += 2;
-
         // Build table
         InteractiveTable<ConsultationTypeCounter> table = new InteractiveTable<>(new Column[]{
                 new Column("Consultation Type", Alignment.CENTER, 20),
-                new Column("Doctors", Alignment.LEFT, maxDoctorLength),
-                new Column("Patients", Alignment.LEFT, maxPatientLength)
+                new Column("Doctors", Alignment.LEFT, 70),
+                new Column("Patients", Alignment.LEFT, 70)
         }, summaries) {
             @Override
             protected Cell[] getRow(ConsultationTypeCounter ctc) {
@@ -1727,11 +1713,12 @@ public class MedicalUI extends UI {
                 }
                 String patients = patientsBuilder.toString();
 
+
                 // Return row
                 return new Cell[]{
                         new Cell(ctc.getType().name(), Alignment.CENTER),
-                        new Cell(doctors, Alignment.LEFT),
-                        new Cell(patients, Alignment.LEFT)
+                        new Cell(StringUtils.trimEarly(doctors, 70, "..."), Alignment.LEFT),
+                        new Cell(StringUtils.trimEarly(patients, 70, "..."), Alignment.LEFT)
                 };
             }
         };
