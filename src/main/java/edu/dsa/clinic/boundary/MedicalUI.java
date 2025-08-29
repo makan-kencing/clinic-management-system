@@ -1759,9 +1759,14 @@ public class MedicalUI extends UI {
             // simple scaling (avoid divide by zero)
             int barLength = (max == 0) ? 0 : (count * 40 / max);
 
-            System.out.printf("%-12s | %s (%d)%n",
+            final String BLUE = "\u001B[34m";
+            final String RESET = "\u001B[0m";
+
+            System.out.printf("%-12s | %s%s%s (%d)%n",
                     ctc.getType().name(),
+                    BLUE,
                     "█".repeat(barLength),
+                    RESET,
                     count);
         }
 
