@@ -447,7 +447,7 @@ public class PatientUI extends UI {
         System.out.println("+" + "-".repeat(30) + "+");
         System.out.println("| Patient Detail Summary Table |");
         System.out.println("+" + "-".repeat(30) + "+");
-        table.setPageSize(100);
+        table.setPageSize(40);
         table.display();
         System.out.println();
 
