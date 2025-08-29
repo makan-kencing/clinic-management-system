@@ -194,6 +194,7 @@ public class AppointmentUI extends UI {
                         appointment.setAppointmentType(appointmentType);
                         appointment.setCreatedAt(LocalDateTime.now());
                         this.appointmentController.saveAppointment(appointment);
+                        System.out.println("Operation Successful");
                         return;
                     } else {
                         System.out.println("Operation cancelled");
@@ -220,6 +221,7 @@ public class AppointmentUI extends UI {
         String option;
         Patient appointedPatient = queue.patient();
         Doctor selectedDoctor = null;
+        ConsultationType appointmentType = null;
         LocalDateTime appointmentStartTime = null, appointmentEndTime = null;
 
         do {
@@ -228,15 +230,24 @@ public class AppointmentUI extends UI {
 
             if(selectedDoctor == null){
                 System.out.println("1. Select A Doctor");
-            }else System.out.println("1. Select A Doctor (Doctor selected)");
+            }else System.out.println("1. Select A Doctor (Selected: "+ selectedDoctor.getName() +")");
 
-            System.out.println("2. Confirm Appointment");
+            if(appointmentType == null){
+                System.out.println("2. Select Appointment Type");
+            }else System.out.println("2. Select Appointment Type (Selected: "+ appointmentType +")");
+
+            System.out.println("3. Confirm Appointment");
             System.out.print("Option: ");
             option = this.scanner.nextLine();
 
             switch (option) {
                 case "1" -> {
                     selectedDoctor = doctorUI.selectDoctor();
+
+                    if(selectedDoctor == null){
+                        break;
+                    }
+
                     appointmentStartTime = LocalDateTime.now();
                     appointmentEndTime = generateAppointmentEndTime(appointmentStartTime);
 
@@ -252,25 +263,32 @@ public class AppointmentUI extends UI {
                         selectedDoctor = null;
                     }
                 }
-                case "2" -> {
+                case "2" -> appointmentType = selectAppointmentType();
+                case "3" -> {
                     if (selectedDoctor == null) {
                         System.out.println("Invalid: No doctor selected.");
-                        return;
+                        break;
+                    }
+
+                    if (appointmentType == null) {
+                        System.out.println("Invalid: No Appointment Type selected.");
+                        break;
                     }
 
                     appointment.setPatient(appointedPatient);
                     appointment.setDoctor(selectedDoctor);
                     appointment.setExpectedStartAt(appointmentStartTime);
                     appointment.setExpectedEndAt(appointmentEndTime);
-                    appointment.setAppointmentType(selectAppointmentType());
+                    appointment.setAppointmentType(appointmentType);
                     appointment.setCreatedAt(LocalDateTime.now());
                     this.appointmentController.saveAppointment(appointment);
+                    System.out.println("Operation Successful");
 
                 }
                 default -> System.out.println("Invalid Choice");
             }
 
-        }while(!option.equals("2"));
+        }while(!option.equals("3"));
 
     }
 
@@ -314,7 +332,6 @@ public class AppointmentUI extends UI {
 
             System.out.println("2. Edit Selected Appointment");
             System.out.println("0. Return");
-            System.out.println("Enter \"N\" OR \"P\" to change pages");
             System.out.print("Enter Option: ");
             option = this.scanner.nextLine();
 
@@ -344,7 +361,7 @@ public class AppointmentUI extends UI {
 
             if(selectedAppointment == null){
                 System.out.println("1. Select An Appointment To Cancel");
-            }else System.out.println("1. Select An Appointment To Cancel (appointment selected)");
+            }else System.out.println("1. Select An Appointment To Cancel (Selected ID: "+ selectedAppointment.getId() +")");
 
             System.out.println("2. Cancel Selected Appointment");
             System.out.println("0. Return");
@@ -358,6 +375,7 @@ public class AppointmentUI extends UI {
                     if(selectedAppointment != null){
                         if(updateAppointmentConfirmation("cancel")){
                             appointmentController.cancelAppointment(selectedAppointment);
+                            System.out.println("Operation Successful");
 
                         }else System.out.println("Operation Cancelled");
 
@@ -535,6 +553,8 @@ public class AppointmentUI extends UI {
                         if (newDoctor != null) {
                             appointment.setDoctor(newDoctor);
                         }
+
+                        System.out.println("Operation Successful");
 
                     }else System.out.println("Operation Cancelled");
 
@@ -755,7 +775,7 @@ public class AppointmentUI extends UI {
             System.out.println("Sorting by:");
             System.out.println("1. Sort By Id");
             System.out.println("2. Sort By Patient Name");
-            System.out.println("3. Sort By Doctor");
+            System.out.println("3. Sort By Doctor Name");
             System.out.println("4. Sort By Start Time");
             System.out.println("5. Sort By End Time");
             System.out.println("6. Sort By Created Time");
@@ -787,7 +807,7 @@ public class AppointmentUI extends UI {
             }
         } while (!option.matches("[0-2]"));
 
-        return option.equalsIgnoreCase("A");
+        return option.equalsIgnoreCase("1");
     }
 
     public String getFilterByOption() {
@@ -1071,9 +1091,14 @@ public class AppointmentUI extends UI {
             // simple scaling (avoid divide by zero)
             int barLength = (max == 0) ? 0 : (count * 40 / max);
 
-            System.out.printf("%-12s | %s (%d)%n",
+            final String BLUE = "\u001B[34m";
+            final String RESET = "\u001B[0m";
+
+            System.out.printf("%-12s | %s%s%s (%d)%n",
                     atc.getType().name(),
+                    BLUE,
                     "█".repeat(barLength),
+                    RESET,
                     count);
         }
 

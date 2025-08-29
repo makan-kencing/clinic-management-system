@@ -17,8 +17,8 @@ abstract public class InteractiveTable<T> extends Table<T> {
 
     protected ListInterface<NamedFilter<T>> defaultFilters = new DoubleLinkedList<>();
     protected ListInterface<NamedSorter<T>> defaultSorters = new DoubleLinkedList<>();
-    protected ListInterface<NamedFilter<T>> filters = this.defaultFilters;
-    protected ListInterface<NamedSorter<T>> sorters = this.defaultSorters;
+    protected ListInterface<NamedFilter<T>> filters = this.defaultFilters.clone();
+    protected ListInterface<NamedSorter<T>> sorters = this.defaultSorters.clone();
     protected ListInterface<T> unfilteredData;
 
     public InteractiveTable(

@@ -46,14 +46,23 @@ public class DispensaryController {
         var dispensings = new DoubleLinkedList<Dispensing>();
 
         for (var stock : MedicineController.getProductStocks(product)) {
+            if (quantity <= 0)
+                break;
+
             var dispensedQuantity = Math.min(quantity, MedicineController.getStockQuantityLeft(stock));
+            if (dispensedQuantity <= 0)
+                continue;
 
             var dispensing = new Dispensing()
                     .setStock(stock)
                     .setQuantity(dispensedQuantity);
             stock.addDispensing(dispensing);
             dispensings.add(dispensing);
+            quantity -= dispensedQuantity;
         }
+        if (quantity > 0)
+            throw new IllegalStateException();
+
         return dispensings;
     }
 

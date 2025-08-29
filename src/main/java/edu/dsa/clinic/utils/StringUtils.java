@@ -100,4 +100,12 @@ public final class StringUtils {
             joiner.add(item);
         return joiner.toString();
     }
+
+    public static String trimEarly(String s, int length, CharSequence end) {
+        length -= end.length();
+
+        if (s.length() > length)
+            s = s.substring(0, length - 1) + end;
+        return s;
+    }
 }
