@@ -317,10 +317,14 @@ public class MedicineUI extends UI {
         var table = new SelectMedicineTable(MedicineController::getAllMedicines, this.terminal);
         if (title != null)
             table.setTitle(title);
-        if (defaultFilters != null && defaultFilters.size() > 0)
+        if (defaultFilters != null && defaultFilters.size() > 0) {
             table.setDefaultFilters(defaultFilters);
-        if (defaultSorters != null && defaultSorters.size() > 0)
+            table.resetFilters();
+        }
+        if (defaultSorters != null && defaultSorters.size() > 0) {
             table.setDefaultSorters(defaultSorters);
+            table.resetSorters();
+        }
         table.updateData();
 
         try {
@@ -342,10 +346,14 @@ public class MedicineUI extends UI {
         var table = new SelectProductTable(MedicineController::getAllProducts, this.terminal);
         if (title != null)
             table.setTitle(title);
-        if (defaultFilters != null && defaultFilters.size() > 0)
+        if (defaultFilters != null && defaultFilters.size() > 0) {
             table.setDefaultFilters(defaultFilters);
-        if (defaultSorters != null && defaultSorters.size() > 0)
+            table.resetFilters();
+        }
+        if (defaultSorters != null && defaultSorters.size() > 0) {
             table.setDefaultSorters(defaultSorters);
+            table.resetSorters();
+        }
         table.updateData();
 
         try {
@@ -374,10 +382,14 @@ public class MedicineUI extends UI {
         var table = new SelectStockTable(MedicineController::getAllStocks, this.terminal);
         if (title != null)
             table.setTitle(title);
-        if (defaultFilters != null && defaultFilters.size() > 0)
+        if (defaultFilters != null && defaultFilters.size() > 0) {
             table.setDefaultFilters(defaultFilters);
-        if (defaultSorters != null && defaultSorters.size() > 0)
+            table.resetFilters();
+        }
+        if (defaultSorters != null && defaultSorters.size() > 0) {
             table.setDefaultSorters(defaultSorters);
+            table.resetSorters();
+        }
         table.updateData();
 
         try {
