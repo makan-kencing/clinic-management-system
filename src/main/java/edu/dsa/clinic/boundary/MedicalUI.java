@@ -7,8 +7,11 @@ import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.dto.AppointmentTypeCounter;
+import edu.dsa.clinic.dto.ConsultationTypeCounter;
 import edu.dsa.clinic.dto.DiagnosisCounter;
+import edu.dsa.clinic.dto.DoctorCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.ProductCounter;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
@@ -69,7 +72,8 @@ public class MedicalUI extends UI {
                     2. View Consultation Medical Record
                     3. Delete Consultation Record
                     4. List Out Consultation Record
-                    5. Back""");
+                    5. Generate Consultation Report
+                    6. Back""");
             System.out.println("=".repeat(30));
             System.out.print("Enter your choice :");
             Consultation consultation;
@@ -94,6 +98,9 @@ public class MedicalUI extends UI {
                          patientUI.listPatientDetail();
                          break;
                     case 5:
+                        generateConsultationSummaryReport();
+                        break;
+                    case 6:
                         return;
                     default:
                         System.out.println("Invalid option. Please try again.");
@@ -1635,6 +1642,113 @@ public class MedicalUI extends UI {
 
         System.out.println("-".repeat(70));
     }
+
+    public void generateConsultationSummaryReport() {
+        int width = 200;
+
+        // Header
+        System.out.println("=".repeat(width));
+        System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
+        System.out.println(StringUtils.pad("CONSULTATION MANAGEMENT MODULE", ' ', width));
+        System.out.println(StringUtils.pad("SUMMARY OF CONSULTATION REPORT", ' ', width));
+        System.out.println("=".repeat(width));
+        System.out.printf("Generated at: %s%n", DATE_FORMAT.format(LocalDateTime.now()));
+        System.out.println();
+
+        // Get counters
+        ListInterface<ConsultationTypeCounter> summaries = medicalController.getConsultationSummary();
+
+        // Build table
+        InteractiveTable<ConsultationTypeCounter> table = new InteractiveTable<>(new Column[]{
+                new Column("Consultation Type", Alignment.CENTER, 20),
+                new Column("Doctors", Alignment.LEFT, 80),
+                new Column("Patients", Alignment.LEFT, 100)
+        }, summaries) {
+            @Override
+            protected Cell[] getRow(ConsultationTypeCounter ctc) {
+                // --- Doctors ---
+                StringBuilder doctorsBuilder = new StringBuilder();
+                for (int i = 0; i < ctc.getDoctorCounters().size(); i++) {
+                    DoctorCounter dc = ctc.getDoctorCounters().get(i);
+                    doctorsBuilder.append(dc.key().getName())
+                            .append("(").append(dc.getCount()).append(")");
+                    if (i < ctc.getDoctorCounters().size() - 1) {
+                        doctorsBuilder.append(", ");
+                    }
+                }
+                String doctors = doctorsBuilder.toString();
+
+                // --- Patients ---
+                StringBuilder patientsBuilder = new StringBuilder();
+                for (int i = 0; i < ctc.getPatientCounters().size(); i++) {
+                    PatientCounter pc = ctc.getPatientCounters().get(i);
+                    patientsBuilder.append(pc.key().getName())
+                            .append("(").append(pc.getCount()).append(")");
+                    if (i < ctc.getPatientCounters().size() - 1) {
+                        patientsBuilder.append(", ");
+                    }
+                }
+                String patients = patientsBuilder.toString();
+
+                // Return row
+                return new Cell[]{
+                        new Cell(ctc.getType().name(), Alignment.CENTER),
+                        new Cell(doctors, Alignment.LEFT),
+                        new Cell(patients, Alignment.LEFT)
+                };
+            }
+        };
+
+        table.setPageSize(summaries.size());
+        table.display();
+
+        System.out.println();
+
+        // Appointment totals by type (Bar Chart)
+        printAppointmentTotalsBarChart(summaries);
+
+        // Stats
+        int totalConsultation = medicalController.getConsultationList().size();
+        System.out.printf("Total Consultaion: %d%n", totalConsultation);
+
+        // Footer
+        System.out.println("*".repeat(width));
+        System.out.println(StringUtils.pad("END OF CONSULTATION REPORT", ' ', width));
+        System.out.println("*".repeat(width));
+        System.out.println();
+    }
+
+    private void printAppointmentTotalsBarChart(ListInterface<ConsultationTypeCounter> summaries) {
+        System.out.println("============================================================");
+        System.out.println("   Total Consultation by Type (Bar Chart)   ");
+        System.out.println("============================================================");
+
+        int max = 0;
+        for (int i = 0; i < summaries.size(); i++) {
+            ConsultationTypeCounter ctc = summaries.get(i);
+            if (ctc.getConsultationCount() > max) {
+                max = ctc.getConsultationCount();
+            }
+        }
+
+        // print rows
+        for (int i = 0; i < summaries.size(); i++) {
+            ConsultationTypeCounter ctc = summaries.get(i);
+            int count = ctc.getConsultationCount();
+
+            // simple scaling (avoid divide by zero)
+            int barLength = (max == 0) ? 0 : (count * 40 / max);
+
+            System.out.printf("%-12s | %s (%d)%n",
+                    ctc.getType().name(),
+                    "█".repeat(barLength),
+                    count);
+        }
+
+        System.out.println("------------------------------------------------------------");
+    }
+
+
     public static void main(String[] args) throws IOException {
         Initializer.initialize();
 
