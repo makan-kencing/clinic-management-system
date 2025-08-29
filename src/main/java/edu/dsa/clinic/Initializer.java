@@ -1,5 +1,6 @@
 package edu.dsa.clinic;
 
+import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.dto.ConsultationQueue;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
@@ -45,6 +46,7 @@ public class Initializer {
         initializeConsultation4();
         initializeConsultation5();
         initializeConsultation6();
+        initializeDispenses();
 
         Database.queueList.add(new ConsultationQueue(Database.patientsList.get(1), ConsultationType.GENERAL));
         Database.queueList.add(new ConsultationQueue(Database.patientsList.get(2), ConsultationType.SPECIALIST));
@@ -2371,6 +2373,3784 @@ public class Initializer {
                         .setStockInQuantity(30)
                         .setStockInDate(LocalDateTime.of(2025, 8, 15, 10, 13))
         );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 1, 1, 51, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 1, 4, 6, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(23)))
+                        .setStockInQuantity(725)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 2, 23, 38, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(110)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 31, 23, 41, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(620)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 27, 23, 51, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 30, 11, 33, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(225)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 27, 22, 8, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(53)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 3, 15, 22, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 30, 7, 33, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 3, 10, 48, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 30, 5, 8, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 30, 17, 7, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(465)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 31, 6, 59, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 31, 13, 24, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(210)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 31, 20, 10, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(140)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 31, 12, 27, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 28, 5, 43, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 2, 23, 56, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(43)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 30, 8, 5, 15))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 30, 17, 14, 25))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(905)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 1, 17, 31, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(145)
+                        .setStockInDate(LocalDateTime.of(2024, 8, 31, 3, 7, 39))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(645)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 26, 16, 16, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 26, 22, 11, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(51)))
+                        .setStockInQuantity(180)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 27, 21, 25, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(830)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 30, 23, 15, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 26, 23, 36, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(18)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 30, 20, 26, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(43)))
+                        .setStockInQuantity(530)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 25, 0, 1, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(40)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 26, 13, 42, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(445)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 30, 6, 23, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 25, 20, 6, 12))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2024, 9, 25, 1, 23, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(285)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 22, 19, 15, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(575)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 6, 16, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(60)))
+                        .setStockInQuantity(135)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 12, 22, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(505)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 2, 8, 48, 15))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(685)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 18, 5, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 18, 48, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 2, 7, 42, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 16, 35, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 1, 16, 53, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(225)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 1, 14, 26, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(500)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 12, 18, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(150)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 29, 17, 37, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(375)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 2, 16, 26, 17))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(23)))
+                        .setStockInQuantity(425)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 20, 12, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(255)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 31, 3, 20, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 12, 13, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(215)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 14, 17, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 18, 21, 13))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(380)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 12, 16, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 1, 6, 46, 16))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 5, 9, 12))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(160)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 10, 9, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 28, 21, 59, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(665)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 12, 27, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(425)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 29, 2, 21, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 2, 21, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 15, 2, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(415)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 31, 0, 32, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 10, 9, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(380)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 21, 1, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(25)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 31, 5, 20, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 1, 4, 4, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(485)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 1, 23, 17, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(235)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 27, 9, 6, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(43)))
+                        .setStockInQuantity(730)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 7, 22, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 30, 0, 24, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(115)
+                        .setStockInDate(LocalDateTime.of(2024, 10, 29, 23, 36, 38))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(575)
+                        .setStockInDate(LocalDateTime.of(2024, 11, 1, 9, 27, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(285)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 10, 15, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(46)))
+                        .setStockInQuantity(315)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 8, 2, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 19, 44, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(685)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 3, 40, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(245)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 14, 51, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(955)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 17, 6, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 7, 23, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(355)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 23, 19, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2024, 12, 31, 20, 29, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 12, 30, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 7, 2, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(330)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 13, 42, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(565)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 16, 35, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 14, 5, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(485)
+                        .setStockInDate(LocalDateTime.of(2024, 12, 31, 13, 29, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 23, 26, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(110)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 6, 6, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 10, 24, 17))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(215)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 23, 50, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(680)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 15, 20, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(145)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 17, 41, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 10, 2, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 22, 13, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 7, 6, 56, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(115)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 10, 59, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(620)
+                        .setStockInDate(LocalDateTime.of(2024, 12, 31, 20, 20, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(52)))
+                        .setStockInQuantity(320)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 6, 34, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(160)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 7, 1, 14, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 16, 32, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 1, 4, 56, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(470)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 7, 58, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(51)))
+                        .setStockInQuantity(395)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 4, 39, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(46)))
+                        .setStockInQuantity(655)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 6, 21, 0, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(320)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 1, 50, 38))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(785)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 8, 23, 19, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(345)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 23, 12, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 18, 16, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 6, 7, 18, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(90)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 9, 30, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 9, 1, 12, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(375)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 14, 52, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(295)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 6, 19, 14, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 16, 14, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 6, 4, 28, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(15)))
+                        .setStockInQuantity(470)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 5, 18, 17, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(145)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 4, 3, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(325)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 11, 15, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(705)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 19, 30, 45))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(110)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 4, 56, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 21, 12, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 11, 22, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 0, 47, 13))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(53)))
+                        .setStockInQuantity(90)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 6, 9, 49, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(225)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 21, 5, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(43)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 5, 56, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(19)))
+                        .setStockInQuantity(280)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 4, 2, 6, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 7, 12, 40, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(25)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 8, 0, 55, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(375)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 7, 18, 32, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 2, 4, 26, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(470)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 3, 3, 7, 16))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 16, 10, 1, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 12, 18, 21, 39))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(545)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 18, 9, 42, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(470)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 15, 7, 52, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(765)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 18, 14, 33, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(51)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 14, 1, 46, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(50)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 12, 21, 3, 17))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 16, 17, 6, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(745)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 19, 12, 22, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 15, 7, 48, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(560)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 15, 8, 6, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(52)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 14, 1, 7, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 18, 19, 42, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(645)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 12, 16, 34, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 19, 7, 54, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(225)
+                        .setStockInDate(LocalDateTime.of(2025, 1, 17, 17, 22, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(805)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 12, 18, 58, 15))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(37)))
+                        .setStockInQuantity(430)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 16, 11, 33, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 15, 1, 30, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(355)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 11, 11, 57, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(425)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 13, 21, 28, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(170)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 16, 2, 20, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(560)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 13, 17, 3, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 11, 17, 57, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(180)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 13, 10, 18, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(260)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 15, 10, 40, 15))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(43)))
+                        .setStockInQuantity(500)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 13, 21, 17, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(345)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 12, 9, 12, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 14, 1, 59, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(180)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 11, 21, 18, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 16, 9, 41, 38))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(665)
+                        .setStockInDate(LocalDateTime.of(2025, 3, 15, 6, 41, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(37)))
+                        .setStockInQuantity(425)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 8, 26, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(955)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 8, 58, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 18, 30, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(515)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 18, 41, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 10, 59, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(280)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 20, 53, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 11, 46, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 12, 8, 12))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(46)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 16, 1, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(90)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 8, 22, 51, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(545)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 17, 15, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(51)))
+                        .setStockInQuantity(70)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 11, 2, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 8, 21, 36, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(335)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 9, 0, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(955)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 10, 25, 39))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(18)))
+                        .setStockInQuantity(20)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 13, 6, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(825)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 1, 11, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 9, 37, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 7, 29, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 21, 13, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 17, 8, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(855)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 8, 20, 59, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 1, 46, 15))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 19, 36, 39))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(135)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 22, 34, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 11, 31, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 17, 22, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 7, 9, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(23)))
+                        .setStockInQuantity(285)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 10, 45, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 0, 43, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(335)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 22, 12, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(485)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 9, 49, 17))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(705)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 22, 26, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(200)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 8, 3, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(180)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 0, 29, 13))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 15, 29, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(110)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 8, 32, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(15)))
+                        .setStockInQuantity(20)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 19, 23, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 20, 8, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 1, 30, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(1030)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 13, 10, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 17, 22, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 8, 14, 37, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(335)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 20, 32, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 21, 33, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 11, 9, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 0, 2, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(245)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 8, 22, 6, 26))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(260)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 10, 49, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(18)))
+                        .setStockInQuantity(485)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 5, 23, 23, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(525)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 21, 26, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(825)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 16, 55, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(145)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 20, 42, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 21, 18, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(430)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 12, 22, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(680)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 11, 15, 50, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(20)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 4, 52, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 1, 3, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(930)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 1, 21, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(395)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 7, 7, 43, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 9, 17, 16, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(630)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 10, 16, 33, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(25)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 17, 36, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(200)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 5, 4, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 6, 20, 23, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 8, 13, 4, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 5, 11, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(19)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 12, 23, 43, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 13, 15, 37, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 23, 31, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(380)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 15, 25, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(1030)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 4, 54, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(830)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 0, 43, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 5, 11, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(630)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 12, 18, 34, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 12, 19, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(180)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 5, 10, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(15)))
+                        .setStockInQuantity(50)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 3, 43, 13))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 19, 15, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(60)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 18, 51, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(545)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 22, 44, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 6, 32, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 5, 1, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 12, 23, 43, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(120)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 3, 20, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 21, 19, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 13, 21, 34, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 13, 19, 49, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 14, 21, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 15, 2, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 13, 57, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(52)))
+                        .setStockInQuantity(215)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 16, 48, 57))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(53)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 13, 5, 46, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 12, 16, 18, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(50)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 1, 53, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 13, 11, 24, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(235)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 22, 25, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(620)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 10, 51, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 8, 49, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 9, 43, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 6, 27, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(52)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 8, 22, 41))
+        );
+
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(135)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 16, 1, 28, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 16, 23, 15, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 8, 47, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 1, 7, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 5, 5, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 14, 19, 6, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 1, 36, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(215)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 13, 21, 30, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 16, 18, 7, 16))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(50)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 14, 53, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(545)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 13, 40, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 15, 7, 48, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(20)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 16, 19, 24, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(765)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 6, 31, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 10, 14, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(4)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 3, 25, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 15, 34, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 1, 38, 16))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 23, 9, 16, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(430)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 9, 6, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(515)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 6, 42, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 19, 46, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 19, 40, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(18)))
+                        .setStockInQuantity(345)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 8, 18, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(955)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 21, 14, 35, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 5, 40, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(200)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 15, 14, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 18, 3, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 7, 51, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 7, 12, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(55)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 11, 7, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(785)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 16, 28, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(805)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 11, 53, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(500)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 13, 50, 43))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 20, 2, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(23)))
+                        .setStockInQuantity(830)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 19, 54, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 23, 17, 24, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(375)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 21, 21, 56, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(210)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 17, 0, 38))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 14, 15, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(680)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 23, 3, 29, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(705)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 6, 37, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(55)))
+                        .setStockInQuantity(355)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 19, 40, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(15)))
+                        .setStockInQuantity(200)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 7, 18, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(130)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 21, 8, 22, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(52)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 18, 40, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 16, 56, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 23, 3, 57, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 17, 12, 25, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(60)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 10, 22, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 18, 1, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 20, 57, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(255)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 16, 58, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 15, 34, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(780)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 20, 11, 3, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(1030)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 16, 18, 26))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(245)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 23, 6, 15, 13))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(630)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 4, 5, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(290)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 3, 33, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(705)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 21, 0, 59, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(215)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 18, 14, 26, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 19, 4, 6, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(255)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 22, 4, 2, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 21, 3, 51, 39))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(685)
+                        .setStockInDate(LocalDateTime.of(2025, 4, 21, 21, 37, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 21, 16, 31, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(980)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 25, 5, 6, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 26, 10, 9, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(375)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 22, 6, 31, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(325)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 28, 7, 22, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 27, 4, 42, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(23)))
+                        .setStockInQuantity(260)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 27, 19, 30, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(170)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 24, 12, 6, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 27, 2, 26, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(755)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 25, 16, 19, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(905)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 25, 1, 2, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(46)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 25, 7, 42, 53))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 28, 5, 34, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(190)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 23, 22, 3, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(285)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 24, 23, 41, 25))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(42)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 28, 7, 32, 12))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 23, 10, 50, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(145)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 28, 5, 2, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(500)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 26, 0, 12, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(485)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 25, 15, 28, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 22, 5, 12, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(135)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 24, 10, 23, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(655)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 26, 16, 37, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 28, 10, 58, 26))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 23, 20, 56, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 26, 10, 37, 17))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 5, 24, 0, 25, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(110)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 3, 37, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(23)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 12, 38, 38))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(395)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 17, 22, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 3, 25, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(110)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 7, 7, 0, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(805)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 1, 30, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(330)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 16, 15, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 1, 45, 28))
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 12, 6, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(20)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 16, 53, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 15, 53, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 7, 23, 33, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 2, 13, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(19)))
+                        .setStockInQuantity(120)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 3, 20, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(60)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 12, 44, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 23, 45, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 12, 54, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 6, 13, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 11, 31, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(525)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 4, 22, 37, 12))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(140)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 16, 8, 57))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(325)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 14, 8, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 23, 20, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(135)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 10, 55, 57))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(235)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 9, 7, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 17, 58, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 2, 48, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(590)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 11, 3, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(55)))
+                        .setStockInQuantity(560)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 10, 49, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(680)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 20, 12, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(65)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 20, 39, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(480)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 11, 53, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 0, 28, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 5, 20, 8, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 17, 56, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(225)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 5, 12, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(265)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 3, 28, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(35)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 18, 5, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 18, 26, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(60)))
+                        .setStockInQuantity(135)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 18, 50, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 15, 13, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 7, 12, 49, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(580)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 23, 48, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(410)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 9, 42, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 10, 8, 57))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(37)))
+                        .setStockInQuantity(590)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 7, 2, 24, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 17, 3, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 22, 50, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(37)))
+                        .setStockInQuantity(955)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 4, 21, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(395)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 10, 33, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(575)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 17, 53, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(18)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 7, 21, 0, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(665)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 5, 53, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(30)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 7, 23, 46, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(180)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 0, 11, 32))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 14, 57, 23))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 2, 16, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 3, 18, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 11, 24, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(53)))
+                        .setStockInQuantity(955)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 16, 32, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(7)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 11, 26, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 23, 27, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(1030)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 5, 36, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 1, 39, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 14, 57, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 5, 5, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(645)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 9, 21, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(58)))
+                        .setStockInQuantity(485)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 14, 42, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 20, 20, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(59)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 10, 28, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(245)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 13, 22, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(34)))
+                        .setStockInQuantity(50)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 11, 10, 16, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 10, 41, 52))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 9, 10, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(60)))
+                        .setStockInQuantity(655)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 9, 10, 42, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(195)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 8, 21, 54, 28))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 12, 5, 57, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 10, 9, 47, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(33)))
+                        .setStockInQuantity(745)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 6, 21, 21, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(290)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 30, 17, 26, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 27, 15, 9, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 3, 21, 14, 8))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(805)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 2, 3, 47, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(51)))
+                        .setStockInQuantity(350)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 30, 7, 30, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(35)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 21, 51, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(12)))
+                        .setStockInQuantity(575)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 3, 23, 35, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(275)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 2, 17, 42, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 16, 19, 37))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(48)))
+                        .setStockInQuantity(380)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 30, 18, 53, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 1, 5, 8, 40))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(565)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 30, 23, 15, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(140)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 19, 58, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(225)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 30, 17, 52, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(85)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 20, 41, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 28, 21, 22, 13))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(3)))
+                        .setStockInQuantity(725)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 1, 16, 30, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(8)))
+                        .setStockInQuantity(505)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 1, 7, 55, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 27, 13, 58, 29))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(515)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 0, 9, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 14, 10, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(25)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 11, 16, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(53)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 2, 22, 0, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(56)))
+                        .setStockInQuantity(75)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 4, 4, 26, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 1, 7, 20, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(655)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 3, 9, 47, 38))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(345)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 28, 10, 35, 36))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(930)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 2, 4, 48, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 15, 24, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(20)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 1, 23, 9, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(380)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 2, 21, 37, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(215)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 3, 19, 10, 33))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(575)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 13, 31, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(36)))
+                        .setStockInQuantity(185)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 28, 15, 34, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(11)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 29, 18, 28, 35))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 28, 23, 55, 59))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(125)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 28, 9, 1, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 6, 30, 19, 56, 4))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(26)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 13, 7, 24, 0))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 12, 2, 14, 58))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(55)))
+                        .setStockInQuantity(530)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 11, 23, 41, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 16, 11, 26, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(210)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 13, 4, 53, 42))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(28)))
+                        .setStockInQuantity(545)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 10, 4, 34, 11))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(31)))
+                        .setStockInQuantity(290)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 10, 2, 0, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(6)))
+                        .setStockInQuantity(385)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 12, 8, 15, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(325)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 12, 22, 14, 2))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(245)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 12, 10, 27, 12))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(785)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 16, 5, 14, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(22)))
+                        .setStockInQuantity(80)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 14, 0, 25, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(15)))
+                        .setStockInQuantity(380)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 14, 21, 9, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(39)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 11, 7, 21, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(95)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 11, 17, 32, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(905)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 14, 13, 5, 17))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(905)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 16, 2, 1, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(575)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 12, 4, 58, 7))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 11, 3, 19, 5))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(53)))
+                        .setStockInQuantity(665)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 10, 1, 12, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(18)))
+                        .setStockInQuantity(525)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 11, 7, 17, 54))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(205)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 14, 23, 23, 20))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 14, 7, 58, 56))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(44)))
+                        .setStockInQuantity(405)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 11, 7, 13, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(29)))
+                        .setStockInQuantity(115)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 13, 12, 45, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(555)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 10, 0, 26, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(19)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 13, 6, 30, 24))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(1)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 21, 16, 6, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(55)))
+                        .setStockInQuantity(565)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 21, 21, 50, 1))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(530)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 23, 13, 5, 18))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 21, 17, 39, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(325)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 17, 10, 1, 9))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 21, 8, 32, 47))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 27, 15, 14, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(140)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 26, 22, 22, 30))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 29, 12, 2, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 28, 16, 24, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(13)))
+                        .setStockInQuantity(55)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 2, 1, 14, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(54)))
+                        .setStockInQuantity(255)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 30, 8, 33, 34))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(45)))
+                        .setStockInQuantity(245)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 29, 14, 44, 53))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(425)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 26, 22, 50, 27))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(25)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 27, 14, 13, 6))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(50)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 31, 19, 20, 51))
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(19)))
+                        .setStockInQuantity(585)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 2, 3, 20, 50))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(24)))
+                        .setStockInQuantity(305)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 29, 15, 46, 31))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(38)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 27, 6, 29, 45))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(41)))
+                        .setStockInQuantity(605)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 1, 7, 45, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(40)))
+                        .setStockInQuantity(230)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 30, 17, 48, 22))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(2)))
+                        .setStockInQuantity(45)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 30, 22, 16, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(9)))
+                        .setStockInQuantity(115)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 28, 8, 13, 49))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(49)))
+                        .setStockInQuantity(755)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 2, 12, 34, 55))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(16)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 30, 6, 7, 41))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(57)))
+                        .setStockInQuantity(730)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 28, 4, 2, 3))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(14)))
+                        .setStockInQuantity(480)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 27, 7, 20, 19))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(51)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 2, 3, 17, 44))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(165)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 2, 1, 52, 56))
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(32)))
+                        .setStockInQuantity(525)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 27, 3, 27, 21))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(21)))
+                        .setStockInQuantity(445)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 31, 14, 0, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(47)))
+                        .setStockInQuantity(805)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 1, 13, 29, 4))
+        );
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(10)))
+                        .setStockInQuantity(365)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 1, 13, 57, 10))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(27)))
+                        .setStockInQuantity(175)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 27, 23, 17, 14))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(20)))
+                        .setStockInQuantity(455)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 31, 3, 40, 46))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(17)))
+                        .setStockInQuantity(60)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 31, 2, 3, 51))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(5)))
+                        .setStockInQuantity(105)
+                        .setStockInDate(LocalDateTime.of(2025, 7, 30, 4, 6, 48))
+        );
+
+        Database.stockList.add(
+                new Stock()
+                        .setProduct(Database.productList.findFirst(ProductFilter.byId(30)))
+                        .setStockInQuantity(155)
+                        .setStockInDate(LocalDateTime.of(2025, 8, 1, 4, 7, 21))
+        );
+
     }
 
     private static void initializeAppointments() {
@@ -21929,7 +25709,11 @@ public class Initializer {
                                                 .setNotes("Do not operate machinery after taking"))
                                 ))
         );
-
     }
 
+    private static void initializeDispenses() {
+        for (var consultation : Database.consultationsList)
+            DispensaryController.queueConsultation(consultation);
+        Database.dispensaryQueueList.clear();
+    }
 }
