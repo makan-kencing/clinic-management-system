@@ -20,7 +20,7 @@ public abstract class Table<T> {
     }
 
     @Range(from = 1, to = Integer.MAX_VALUE)
-    private int pageSize = 10;
+    private int pageSize = 20;
     @Range(from = 1, to = Integer.MAX_VALUE)
     private int page = 1;
 
