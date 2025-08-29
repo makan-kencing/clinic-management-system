@@ -912,6 +912,7 @@ public class DoctorUI extends UI {
             maxPatientLength += 2;
 
             InteractiveTable<DoctorCounter> table = new InteractiveTable<>(new Column[]{
+                    new Column("Doctor ID", Alignment.CENTER, 20),
                     new Column("Doctor Name", Alignment.CENTER, 30),
                     new Column("Specialization", Alignment.CENTER, 25),
                     new Column("Consultations Attended", Alignment.CENTER, maxConsultationLength),
@@ -924,11 +925,13 @@ public class DoctorUI extends UI {
                     String specialization = doctor.getSpecialization() != null
                             ? doctor.getSpecialization().name()
                             : "-";
+                    int doctorId = doctor.getId();
                     String doctorName = doctor.getName();
                     String consultationCount = StringUtils.join(", ", DoctorController.getTypeList(dc));
                     String patients = String.valueOf(dc.getPatientCounters().size());
 
                     return new Cell[]{
+                            new Cell(doctorId, Alignment.CENTER),
                             new Cell(doctorName),
                             new Cell(specialization, Alignment.CENTER),
                             new Cell(consultationCount),
