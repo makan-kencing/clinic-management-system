@@ -1566,7 +1566,7 @@ public class MedicalUI extends UI {
             int total= MedicalController.getTotalProductUsage(counts);
             System.out.println("Total Diagnosis Type :" + counts.size());
             System.out.println("Total Medicine Product Usage :" + total);
-            System.out.print("Use P/N arrow keys to change pages :");
+            System.out.print("Use P/N arrow keys to change pages (0) to exit:");
             String opt ;
             try {
                 opt = this.scanner.nextLine().toLowerCase();
@@ -1580,6 +1580,8 @@ public class MedicalUI extends UI {
                         table.nextPage();
                         table.display();
                         break;
+                    case "0" :
+                          break;
                     default:
                         System.out.println("Invalid option");
                         break;
