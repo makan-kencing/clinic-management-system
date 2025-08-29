@@ -371,12 +371,12 @@ public class MedicineUI extends UI {
             var usages = MedicineController.getProductTreatedUsage();
             var i = new AtomicInteger(0);
             int finalTopN = topN;
-            usages.filter(e -> i.getAndIncrement() < finalTopN);
-//        var symptomTable = new ProductTreatmentUsageTable();
-//        symptomTable.setTitle("Top Product Used for Treating Symptoms");
-//        symptomTable.setPageSize(9999);
+            usages.filter(_ -> i.getAndIncrement() < finalTopN);
+            var table = new ProductReportTable(MedicineController.flatten(usages));
+            table.setTitle("Top Product Used for Treating Symptoms");
+            table.setPageSize(9999);
 
-//        symptomTable.display();
+            table.display();
             System.out.println();
 
             System.out.printf("Total Number of Product (Top %d): %d%n", topN, usages.size());
@@ -413,17 +413,18 @@ public class MedicineUI extends UI {
         }
     }
 
-    public static class ProductTreatmentUsageTable extends InteractiveTable<ProductTreatedUsage> {
+    public static class ProductReportTable extends InteractiveTable<ProductTreatedUsage> {
         private int top = 0;
         private Product lastProduct = null;
 
-        public ProductTreatmentUsageTable(ListInterface<ProductTreatedUsage> data) {
+        public ProductReportTable(ListInterface<ProductTreatedUsage> data) {
             super(new Column[]{
                     new Column("No.", 4),
                     new Column("Product Name", 25),
                     new Column("Medicine", 25),
                     new Column("Total Used", 10),
                     new Column("Consultation Count", 25),
+                    new Column("Doctors", 50),
                     new Column("Symptom", 20),
                     new Column("Prescribed Count", 20),
                     new Column("Prescribed Amount", 20)
@@ -453,6 +454,12 @@ public class MedicineUI extends UI {
                         new Cell(sameProduct ? "" : o.product().getMedicine().getName()),
                         new Cell(sameProduct ? "" : o.totalUsage()),
                         new Cell(sameProduct ? "" : o.appearedCount()),
+                        new Cell(sameProduct ? "" : StringUtils.join(", ", o.doctors().map(
+                                d -> String.format("%s (%d) [%d]",
+                                        d.doctor().getName(),
+                                        d.doctorCount(),
+                                        d.doctorUsage())
+                        ))),
                         new Cell(o.treatedSymptom()),
                         new Cell(o.nUniqueTreatments()),
                         new Cell(o.treatmentUsage())

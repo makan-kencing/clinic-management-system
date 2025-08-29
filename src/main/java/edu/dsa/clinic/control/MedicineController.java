@@ -4,6 +4,7 @@ import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.dto.Counter;
+import edu.dsa.clinic.dto.ProductTreatedUsage;
 import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Product;
@@ -197,5 +198,26 @@ public class MedicineController {
             for (var symptomCounter : productCounter.symptoms)
                 sum += symptomCounter.quantity;
         return sum;
+    }
+
+    public static ListInterface<ProductTreatedUsage> flatten(ListInterface<ProductCounter> counters) {
+        var results = new DoubleLinkedList<ProductTreatedUsage>();
+        for (var productCounter : counters)
+            for (var symptomCounters : productCounter.symptoms)
+                results.add(new ProductTreatedUsage(
+                        productCounter.key(),
+                        productCounter.count(),
+                        productCounter.quantity,
+                        productCounter.doctors.map(dc -> new ProductTreatedUsage.ProductDoctorUsage(
+                                dc.key(),
+                                dc.count(),
+                                dc.quantity
+                        )),
+                        symptomCounters.key(),
+                        symptomCounters.count(),
+                        symptomCounters.quantity
+                ));
+
+        return results;
     }
 }

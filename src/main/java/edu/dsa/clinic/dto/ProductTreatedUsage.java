@@ -8,7 +8,7 @@ public record ProductTreatedUsage(
         Product product,
         Integer appearedCount,
         Integer totalUsage,
-        ListInterface<Doctor> doctors,
+        ListInterface<ProductDoctorUsage> doctors,
         String treatedSymptom,
         Integer nUniqueTreatments,
         Integer treatmentUsage
