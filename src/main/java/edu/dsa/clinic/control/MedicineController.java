@@ -1,7 +1,10 @@
 package edu.dsa.clinic.control;
 
 import edu.dsa.clinic.Database;
+import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.Counter;
+import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
@@ -123,5 +126,76 @@ public class MedicineController {
         if (latest.equals(LocalDateTime.MIN))
             return null;
         return latest;
+    }
+
+    public static class SymptomCounter extends Counter<String> {
+        int quantity = 0;
+
+        public SymptomCounter(String key) {
+            super(key);
+        }
+    }
+    public static class DoctorCounter extends Counter<Doctor> {
+        int quantity = 0;
+
+        public DoctorCounter(Doctor key) {
+            super(key);
+        }
+    }
+
+    public static class ProductCounter extends Counter<Product> {
+        int quantity = 0;
+        ListInterface<SymptomCounter> symptoms = new DoubleLinkedList<>();
+        ListInterface<DoctorCounter> doctors = new DoubleLinkedList<>();
+
+        public ProductCounter(Product key) {
+            super(key);
+        }
+    }
+
+    public static ListInterface<ProductCounter> getProductTreatedUsage() {
+        var usages = new DoubleLinkedList<ProductCounter>();
+
+        for (var consultation : Database.consultationsList) {
+            var doctor = consultation.getDoctor();
+            for (var diagnosis : consultation.getDiagnoses())
+                for (var treatment : diagnosis.getTreatments()) {
+                    var symptom = treatment.getSymptom();
+                    for (var prescription : treatment.getPrescriptions()) {
+                        var product = prescription.getProduct();
+                        var quantity = prescription.getQuantity();
+
+                        var counter = Counter.getOrCreate(usages, product, () -> new ProductCounter(product));
+                        counter.increment();
+                        counter.quantity += quantity;
+
+                        var symptomCounter = Counter.getOrCreate(counter.symptoms, symptom, () -> new SymptomCounter(symptom));
+                        symptomCounter.increment();
+                        symptomCounter.quantity += quantity;
+
+                        var doctorCounter = Counter.getOrCreate(counter.doctors, doctor, () -> new DoctorCounter(doctor));
+                        doctorCounter.increment();
+                        doctorCounter.quantity += quantity;
+                    }
+                }
+        }
+
+        return usages;
+    }
+
+    public static int countDoctors(ListInterface<ProductCounter> counters) {
+        int sum = 0;
+        for (var productCounter : counters)
+            for (var doctorCounter : productCounter.doctors)
+                sum += doctorCounter.quantity;
+        return sum;
+    }
+
+    public static int countSymptoms(ListInterface<ProductCounter> counters) {
+        int sum = 0;
+        for (var productCounter : counters)
+            for (var symptomCounter : productCounter.symptoms)
+                sum += symptomCounter.quantity;
+        return sum;
     }
 }

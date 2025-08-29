@@ -9,6 +9,7 @@ import edu.dsa.clinic.dto.CreateMedicineDTO;
 import edu.dsa.clinic.dto.CreateProductDTO;
 import edu.dsa.clinic.dto.CreateStockDTO;
 import edu.dsa.clinic.dto.DispensaryQueue;
+import edu.dsa.clinic.dto.ProductTreatedUsage;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineAdministrationType;
 import edu.dsa.clinic.entity.MedicineType;
@@ -53,6 +54,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This UI is managing everything medicinal related. (e.g. {@link Medicine}, {@link Product},
@@ -102,15 +104,13 @@ public class MedicineUI extends UI {
                     this.manageDispensaryMenu();
                     break;
                 case "reports":
-                    this.manageReportsMenu();
+                    this.viewSummaryReport();
                     break;
                 case "back":
                     return;
             }
         }
     }
-
-
 
     public void manageMedicineMenu() throws IOException {
         var prompt = this.getPrompt();
@@ -351,39 +351,122 @@ public class MedicineUI extends UI {
         }
     }
 
-    public void manageReportsMenu() throws IOException {
-        var prompt = this.getPrompt();
-        var builder = new ManageReportMenuPromptBuilder();
-        builder.createOptionPrompt()
-                .addPrompt();
+    public void viewSummaryReport() {
+        var width = this.terminal.getWidth();
+        var topN = 10;
+        var reader = this.getLineReader();
 
         while (true) {
-            switch (builder.promptOption(prompt)) {
-                case MEDICINE_USAGE:
-                    this.viewMedicineUsageReport();
-                    break;
-                case LOW_STOCK:
-                    this.viewLowStockReport();
-                    break;
-                case SUMMARY:
-                    this.viewSummaryReport();
-                    break;
-                case EXIT:
-                    return;
+            System.out.println("=".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
+            System.out.println(StringUtils.pad("PATIENT MANAGEMENT MODULE", ' ', width));
+            System.out.println(StringUtils.pad("SUMMARY OF PATIENT REPORT", ' ', width));
+            System.out.println("=".repeat(width));
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY - HIGHLY CONFIDENTIAL DOCUMENT", ' ', width));
+            System.out.println("*".repeat(width));
+            System.out.printf("Generated at: %s%n", PatientUI.DATE_FORMAT.format(java.time.LocalDateTime.now()));
+            System.out.println();
+
+            var usages = MedicineController.getProductTreatedUsage();
+            var i = new AtomicInteger(0);
+            int finalTopN = topN;
+            usages.filter(e -> i.getAndIncrement() < finalTopN);
+//        var symptomTable = new ProductTreatmentUsageTable();
+//        symptomTable.setTitle("Top Product Used for Treating Symptoms");
+//        symptomTable.setPageSize(9999);
+
+//        symptomTable.display();
+            System.out.println();
+
+            System.out.printf("Total Number of Product (Top %d): %d%n", topN, usages.size());
+            System.out.printf("Total Number of Doctors (Top %d): %d%n", topN, MedicineController.countDoctors(usages));
+            System.out.printf("Total Number of Symptoms (Top %d): %d%n", topN, MedicineController.countSymptoms(usages));
+            System.out.println();
+
+            System.out.println("GRAPHICAL REPRESENTATION OF SUMMARY MODULE");
+            System.out.println("------------------------------------------");
+
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("END OF THE REPORT", ' ', width));
+            System.out.println("*".repeat(width));
+            System.out.println();
+
+            System.out.printf("(0) Exit Report | Enter new Top filter (current %d): ", topN);
+
+            var input = reader.readLine();
+            if (input.equals("0")) {
+                System.out.println();
+                return;
+            }
+
+            try {
+                var newN = Integer.parseInt(input);
+                if (newN <= 0) {
+                    System.out.println("TopN must be greater than 0. Keeping current value.");
+                    continue;
+                }
+                topN = newN;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, keeping current TopN.");
             }
         }
     }
 
-    public void viewMedicineUsageReport() {
-        // TODO
-    }
+    public static class ProductTreatmentUsageTable extends InteractiveTable<ProductTreatedUsage> {
+        private int top = 0;
+        private Product lastProduct = null;
 
-    public void viewLowStockReport() {
-        // TODO
-    }
+        public ProductTreatmentUsageTable(ListInterface<ProductTreatedUsage> data) {
+            super(new Column[]{
+                    new Column("No.", 4),
+                    new Column("Product Name", 25),
+                    new Column("Medicine", 25),
+                    new Column("Total Used", 10),
+                    new Column("Consultation Count", 25),
+                    new Column("Symptom", 20),
+                    new Column("Prescribed Count", 20),
+                    new Column("Prescribed Amount", 20)
+            }, data);
 
-    public void viewSummaryReport() {
-        // TODO
+            this.addDefaultSorter("Top Treated Symptoms",
+                    Comparator.comparing(ProductTreatedUsage::totalUsage).reversed()
+                            .thenComparing(ptu -> ptu.product().getId())
+                            .thenComparing(Comparator.comparing(ProductTreatedUsage::treatmentUsage).reversed())
+            );
+        }
+
+        @Override
+        protected Cell[] getRow(ProductTreatedUsage o) {
+            var sameProduct = o.product().equals(this.lastProduct);
+
+            if (!sameProduct) {
+                if (lastProduct != null)
+                    System.out.println(this.renderBorder());
+                this.top++;
+            }
+
+            try {
+                return new Cell[]{
+                        new Cell(sameProduct ? "" : this.top),
+                        new Cell(sameProduct ? "" : o.product().getName()),
+                        new Cell(sameProduct ? "" : o.product().getMedicine().getName()),
+                        new Cell(sameProduct ? "" : o.totalUsage()),
+                        new Cell(sameProduct ? "" : o.appearedCount()),
+                        new Cell(o.treatedSymptom()),
+                        new Cell(o.nUniqueTreatments()),
+                        new Cell(o.treatmentUsage())
+                };
+            } finally {
+                this.lastProduct = o.product();
+            }
+        }
+
+        @Override
+        public void display() {
+            this.top = 0;
+            super.display();
+        }
     }
 
     public @Nullable Medicine selectMedicine(
@@ -2207,33 +2290,6 @@ public class MedicineUI extends UI {
                     .name(OPTION)
                     .message("")
                     .newItem(Option.COMPLETED.name()).text("Complete current dispensing").add()
-                    .newItem(Option.EXIT.name()).text("Exit").add();
-        }
-
-        public Option promptOption(ConsolePrompt prompt) throws IOException {
-            var result = prompt.prompt(this.build());
-
-            return Option.valueOf(result.get(OPTION).getResult());
-        }
-    }
-
-    public static class ManageReportMenuPromptBuilder extends UIPromptBuilder {
-        public static final String OPTION = "option";
-
-        public enum Option {
-            MEDICINE_USAGE,
-            LOW_STOCK,
-            SUMMARY,
-            EXIT
-        }
-
-        public ListPromptBuilder createOptionPrompt() {
-            return this.createListPrompt()
-                    .name(OPTION)
-                    .message("Choose a report")
-                    .newItem(Option.MEDICINE_USAGE.name()).text("Medicine Usage").add()
-                    .newItem(Option.LOW_STOCK.name()).text("Low Stock").add()
-                    .newItem(Option.SUMMARY.name()).text("Summary").add()
                     .newItem(Option.EXIT.name()).text("Exit").add();
         }
 
