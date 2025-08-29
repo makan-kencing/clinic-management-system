@@ -770,53 +770,333 @@ public class Initializer {
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
                         .setId(1))
-                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 1))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 53))
                         .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 1))
-                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 11, 30))
-                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 22, 8, 30))
-                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 22, 9, 30))
+                        .setCreatedAt(LocalDateTime.of(2025, 7, 28, 10, 15))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 4, 8, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 4, 8, 30))
                         .setAppointmentType(ConsultationType.GENERAL)
         );
+
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
                         .setId(2))
-                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 2))
-                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 2))
-                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
-                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 24, 9, 00))
-                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 24, 10, 00))
-                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 7))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 11))
+                        .setCreatedAt(LocalDateTime.of(2025, 7, 29, 14, 45))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 5, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 5, 7, 30))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
         );
+
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
                         .setId(3))
-                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 3))
-                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 3))
-                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
-                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 25, 9, 00))
-                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 25, 10, 00))
-                        .setAppointmentType(ConsultationType.SPECIALIST)
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 92))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 16))
+                        .setCreatedAt(LocalDateTime.of(2025, 7, 30, 9, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 6, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 6, 7, 30))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
         );
+
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
                         .setId(4))
-                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 4))
-                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 4))
-                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 16, 45))
-                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 26, 14, 00))
-                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 26, 15, 00))
-                        .setAppointmentType(ConsultationType.GENERAL)
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 18))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 8))
+                        .setCreatedAt(LocalDateTime.of(2025, 7, 31, 11, 20))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 7, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 7, 7, 30))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
         );
+
         Database.appointmentList.add(
                 ((Appointment) new Appointment()
                         .setId(5))
-                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 5))
-                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 5))
-                        .setCreatedAt(LocalDateTime.of(2025, 8, 16, 16, 45))
-                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 28, 11, 00))
-                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 28, 12, 00))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 45))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 10))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 1, 16, 5))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 8, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 8, 7, 30))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(6))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 60))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 6))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 2, 8, 50))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 9, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 9, 7, 30))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(7))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 3))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 13))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 3, 11, 30))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 10, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 10, 7, 30))
                         .setAppointmentType(ConsultationType.EMERGENCY)
         );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(8))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 77))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 9))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 4, 13, 10))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 11, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 11, 7, 30))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(9))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 22))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 2))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 5, 9, 40))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 12, 9, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 12, 9, 30))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(10))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 88))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 14))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 6, 15, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 13, 14, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 13, 14, 30))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(11))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 11))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 17))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 7, 10, 5))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 14, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 14, 7, 30))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(12))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 65))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 4))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 8, 12, 30))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 15, 10, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 15, 10, 30))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(13))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 30))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 5))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 9, 17, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 16, 10, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 16, 10, 30))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(14))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 99))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 12))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 10, 8, 10))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 17, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 17, 7, 30))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(15))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 42))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 15))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 11, 11, 55))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 18, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 18, 7, 30))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(16))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 71))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 18))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 12, 14, 20))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 19, 14, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 19, 14, 30))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(17))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 6))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 3))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 13, 9, 30))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 20, 10, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 20, 10, 30))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(18))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 80))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 7))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 14, 16, 10))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 21, 14, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 21, 14, 30))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(19))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 25))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 19))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 15, 10, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 22, 7, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 22, 7, 30))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(20))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 50))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 20))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 16, 13, 40))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 23, 14, 0))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 23, 14, 30))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(21))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 85))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 1))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 17, 8, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 24, 8, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 24, 9, 0))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(22))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 10))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 11))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 18, 15, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 25, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 25, 8, 0))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(23))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 70))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 16))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 19, 11, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 26, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 26, 8, 0))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(24))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 33))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 8))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 20, 14, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 27, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 27, 8, 0))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(25))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 95))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 10))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 21, 9, 15))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 28, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 28, 8, 0))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(26))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 48))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 6))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 22, 16, 30))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 29, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 29, 8, 0))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(27))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 13))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 13))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 23, 10, 40))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 30, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 30, 8, 0))
+                        .setAppointmentType(ConsultationType.EMERGENCY)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(28))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 75))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 9))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 24, 12, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 8, 31, 7, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 8, 31, 8, 0))
+                        .setAppointmentType(ConsultationType.FOLLOW_UP)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(29))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 28))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 2))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 25, 9, 0))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 9, 1, 9, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 9, 1, 10, 0))
+                        .setAppointmentType(ConsultationType.GENERAL)
+        );
+
+        Database.appointmentList.add(
+                ((Appointment) new Appointment()
+                        .setId(30))
+                        .setPatient(Database.patientsList.findFirst(p -> p.getId() == 82))
+                        .setDoctor(Database.doctorList.findFirst(d -> d.getId() == 14))
+                        .setCreatedAt(LocalDateTime.of(2025, 8, 26, 15, 30))
+                        .setExpectedStartAt(LocalDateTime.of(2025, 9, 2, 14, 30))
+                        .setExpectedEndAt(LocalDateTime.of(2025, 9, 2, 15, 0))
+                        .setAppointmentType(ConsultationType.SPECIALIST)
+        );
+
     }
 
     private static void initializeConsultations() {
