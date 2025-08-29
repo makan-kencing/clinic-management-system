@@ -110,51 +110,7 @@ public class MedicineUI extends UI {
         }
     }
 
-    public void manageProductMenu() throws IOException {
-        var prompt = this.getPrompt();
-        var builder = prompt.getPromptBuilder();
-        builder.createListPrompt()
-                .name("option")
-                .message("What do you want to do with it?")
-                .newItem("view").text("View details").add()
-                .newItem("delete").text("Delete record").add()
-                .newItem("edit").text("Edit record").add()
-                .newItem("add_stock").text("Add stock").add()
-                .newItem("manage_stock").text("Manage stocks").add()
-                .newItem("cancel").text("Back").add()
-                .addPrompt();
 
-        while (true) {
-            var product = this.selectProduct();
-            if (product == null)
-                return;
-
-            var result = prompt.prompt(builder.build());
-            switch (result.get("option")
-                    .getResult()) {
-                case "view":
-                    this.viewProductDetails(product);
-                    break;
-                case "delete":
-                    this.deleteProduct(product);
-                    break;
-                case "edit":
-                    this.editProduct(product);
-                    break;
-                case "add_stock":
-                    var stock = this.createStock(product);
-                    if (stock != null)
-                        MedicineController.addStockEntry(stock);
-
-                    break;
-                case "manage_stock":
-                    this.manageStockMenu(product);
-                    break;
-                case "cancel":
-                    break;
-            }
-        }
-    }
 
     public void manageMedicineMenu() throws IOException {
         var prompt = this.getPrompt();
@@ -202,6 +158,52 @@ public class MedicineUI extends UI {
         }
     }
 
+    public void manageProductMenu() throws IOException {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
+        builder.createListPrompt()
+                .name("option")
+                .message("What do you want to do with it?")
+                .newItem("view").text("View details").add()
+                .newItem("delete").text("Delete record").add()
+                .newItem("edit").text("Edit record").add()
+                .newItem("add_stock").text("Add stock").add()
+                .newItem("manage_stock").text("Manage stocks").add()
+                .newItem("cancel").text("Back").add()
+                .addPrompt();
+
+        while (true) {
+            var product = this.selectProduct();
+            if (product == null)
+                return;
+
+            var result = prompt.prompt(builder.build());
+            switch (result.get("option")
+                    .getResult()) {
+                case "view":
+                    this.viewProductDetails(product);
+                    break;
+                case "delete":
+                    this.deleteProduct(product);
+                    break;
+                case "edit":
+                    this.editProduct(product);
+                    break;
+                case "add_stock":
+                    var stock = this.createStock(product);
+                    if (stock != null)
+                        MedicineController.addStockEntry(stock);
+
+                    break;
+                case "manage_stock":
+                    this.manageStockMenu(product);
+                    break;
+                case "cancel":
+                    break;
+            }
+        }
+    }
+
     public void manageStockMenu() throws IOException {
         var prompt = this.getPrompt();
         var builder = prompt.getPromptBuilder();
@@ -232,38 +234,6 @@ public class MedicineUI extends UI {
             }
         }
     }
-
-    public void manageStockMenu(Product product) throws IOException {
-        var prompt = this.getPrompt();
-        var builder = prompt.getPromptBuilder();
-        builder.createListPrompt()
-                .name("option")
-                .message("What do you want to do with it?")
-                .newItem("view").text("View details").add()
-                .newItem("edit").text("Edit record").add()
-                .newItem("cancel").text("Back").add()
-                .addPrompt();
-
-        while (true) {
-            var stock = this.selectStock(product);
-            if (stock == null)
-                return;
-
-            var result = prompt.prompt(builder.build());
-            switch (result.get("option")
-                    .getResult()) {
-                case "view":
-                    this.viewStockDetails(stock);
-                    break;
-                case "edit":
-                    this.editStock(stock);
-                    break;
-                case "cancel":
-                    break;
-            }
-        }
-    }
-
 
     public void manageProductMenu(Medicine medicine) throws IOException {
         var prompt = this.getPrompt();
@@ -304,6 +274,37 @@ public class MedicineUI extends UI {
                     break;
                 case "manage_stock":
                     this.manageStockMenu(product);
+                    break;
+                case "cancel":
+                    break;
+            }
+        }
+    }
+
+    public void manageStockMenu(Product product) throws IOException {
+        var prompt = this.getPrompt();
+        var builder = prompt.getPromptBuilder();
+        builder.createListPrompt()
+                .name("option")
+                .message("What do you want to do with it?")
+                .newItem("view").text("View details").add()
+                .newItem("edit").text("Edit record").add()
+                .newItem("cancel").text("Back").add()
+                .addPrompt();
+
+        while (true) {
+            var stock = this.selectStock(product);
+            if (stock == null)
+                return;
+
+            var result = prompt.prompt(builder.build());
+            switch (result.get("option")
+                    .getResult()) {
+                case "view":
+                    this.viewStockDetails(stock);
+                    break;
+                case "edit":
+                    this.editStock(stock);
                     break;
                 case "cancel":
                     break;
@@ -487,7 +488,7 @@ public class MedicineUI extends UI {
         return this.selectStock("Selecting Stock", null, null);
     }
 
-    public @Nullable Stock selectProductStock(Product product) {
+    public @Nullable Stock selectStock(Product product) {
         var stockFilters = new DoubleLinkedList<InteractiveTable.NamedFilter<Stock>>();
         stockFilters.add(new InteractiveTable.NamedFilter<>("Product is " + product.getName(), StockFilter.byProduct(product)));
 
