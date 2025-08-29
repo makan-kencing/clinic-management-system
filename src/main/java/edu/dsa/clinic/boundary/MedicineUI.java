@@ -1278,6 +1278,11 @@ public class MedicineUI extends UI {
         }
 
         @Override
+        public String renderExtraControls() {
+            return "[n] New Medicine";
+        }
+
+        @Override
         protected KeyEvent handleKey(int ch) throws IOException {
             var resp = super.handleKey(ch);
             if (resp != KeyEvent.NOOP)
@@ -1583,6 +1588,11 @@ public class MedicineUI extends UI {
         }
 
         @Override
+        public String renderExtraControls() {
+            return "[n] New Product";
+        }
+
+        @Override
         protected KeyEvent handleKey(int ch) throws IOException {
             var resp = super.handleKey(ch);
             if (resp != KeyEvent.NOOP)
@@ -1803,6 +1813,11 @@ public class MedicineUI extends UI {
                     new Cell(o.getStockInDate().format(StockPromptBuilder.DATETIME_FORMAT)),
                     new Cell(MedicineController.getStockQuantityLeft(o))
             };
+        }
+
+        @Override
+        public String renderExtraControls() {
+            return "[n] New Stock";
         }
 
         @Override
