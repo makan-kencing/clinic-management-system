@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 abstract class ListTest {
     abstract <K> ListInterface<K> makeList();
@@ -71,7 +72,29 @@ abstract class ListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> list.insert(6, arg));
     }
 
+    @Test
     void pop() {
+        var list = this.<String>makeList();
+
+        list.add("banana");
+        list.add("watermelon");
+        list.add("apple");
+
+        assertEquals(3, list.size());
+        assertEquals("banana", list.getFirst());
+        assertEquals("watermelon", list.get(1));
+        assertEquals("apple", list.getLast());
+        assertEquals("banana", list.popFirst());
+        assertEquals(2, list.size());
+        assertEquals("apple", list.pop());
+        assertEquals(1, list.size());
+
+        list.pop();
+        assertEquals(0, list.size());
+
+
+        for (var s : list)
+            fail();
 
     }
 

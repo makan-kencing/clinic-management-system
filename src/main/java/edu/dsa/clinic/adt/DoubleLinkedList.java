@@ -299,7 +299,7 @@ public class DoubleLinkedList<T> implements ListInterface<T> {
 
         assert(this.reference != null);
 
-        if (this.length == 0)
+        if (this.reference.head == node && this.reference.tail == node)
             this.reference = null;
 
         else if (this.reference.head == node)
