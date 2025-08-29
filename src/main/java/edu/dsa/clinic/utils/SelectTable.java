@@ -63,7 +63,10 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
                     case EXIT:
                         return null;
                     case RETURN:
-                        return this.getSelected();
+                        try {
+                            return this.getSelected();
+                        } catch (IndexOutOfBoundsException _) {
+                        }
                 }
             }
         } finally {
@@ -71,7 +74,7 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
         }
     }
 
-    public T getSelected() {
+    public T getSelected() throws IndexOutOfBoundsException {
         return this.getData().get(this.getSelectedIndex());
     }
 
