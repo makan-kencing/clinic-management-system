@@ -37,7 +37,9 @@ import java.util.Objects;
 import java.util.Scanner;
 
 
-
+/**
+ * @author Tan Yi Jia
+ */
 public class MedicalUI extends UI {
     private final AppointmentController appointmentController = new AppointmentController();
     private final MedicalController medicalController = new MedicalController();
@@ -1529,38 +1531,55 @@ public class MedicalUI extends UI {
         };
     }
 
-    public static class ViewDiagnosisReport extends InteractiveTable<DiagnosisCounter> {
-
-        public ViewDiagnosisReport(ListInterface<DiagnosisCounter> diagnosisCounters) {
-            super(new Column[]{
-                    new Column("Diagnosis", Alignment.CENTER, 40),
-                    new Column("Occurrence", Alignment.CENTER, 15),
-                    new Column("Medicine Product Using", Alignment.CENTER, 170)
-            }, diagnosisCounters);
-        }
-
-        @Override
-        protected Cell[] getRow(DiagnosisCounter d) {
-            ListInterface<ProductCounter> productCounters = d.productCounters();
-
-           var productInfo= MedicalController.getProductUsageString(productCounters);
-
-            return new Cell[]{
-                    new Cell(d.key()),
-                    new Cell(d.count()),
-                    new Cell(productInfo)
-            };
-        }
-    }
-
-
     //diagnosis report
     public void diagnosisReport() {
         boolean viewingReport = true;
         var counts = MedicalController.countDiagnosesOccurrence();
-        var table = new ViewDiagnosisReport(counts);
         int total = MedicalController.getTotalProductUsage(counts);
         int width = 250;
+
+        int maxDiagnosisLength = "Medicine Product Using".length();
+        for (var dc : counts) {
+            String medicine = StringUtils.trimEarly(
+                    StringUtils.join(",", medicalController.getProductList(dc)),
+                    width - 75,
+                    "..."
+                    );
+            maxDiagnosisLength = Math.max(maxDiagnosisLength, medicine.length());
+        }
+        maxDiagnosisLength += 2;
+
+        InteractiveTable<DiagnosisCounter> table = new InteractiveTable<>(new Column[]{
+                new Column("Diagnosis", Alignment.CENTER, 40),
+                new Column("Occurrence", Alignment.CENTER, 15),
+                new Column("Medicine Product Using", Alignment.CENTER, maxDiagnosisLength)
+        }, counts) {
+            @Override
+            protected Cell[] getRow(DiagnosisCounter o) {
+                ListInterface<ProductCounter> productCounters = o.productCounters();
+                StringBuilder medicineBuilder = new StringBuilder();
+
+                for (int i = 0; i < productCounters.size(); i++) {
+                    ProductCounter pc = productCounters.get(i);
+                    medicineBuilder.append(pc.key().getName())
+                            .append(" (")
+                            .append(pc.count())
+                            .append(")");
+                    if (i < productCounters.size() - 1) {
+                        medicineBuilder.append(", ");
+                    }
+                }
+
+                String medicine = medicineBuilder.toString();
+
+                return new Cell[]{
+                        new Cell(o.key()),
+                        new Cell(o.count()),
+                        new Cell(StringUtils.trimEarly(medicine, width - 75, "..."))
+                };
+            }
+        };
+
         while(viewingReport) {
             System.out.println("=".repeat(width));
             System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
@@ -1574,15 +1593,16 @@ public class MedicalUI extends UI {
             System.out.println();
 
             table.display();
-            printDiagnosisTotalBarChart(counts);
 
+            printDiagnosisTotalBarChart(counts);
             System.out.println("Total Diagnosis Type: " + counts.size());
             System.out.println("Total Medicine Product Usage: " + total);
+            System.out.println();
 
             System.out.print("Use P/N to change pages, (0) to exit: ");
-
+            String opt =null;
             try {
-                String opt = this.scanner.nextLine().toLowerCase().trim();
+                opt = this.scanner.nextLine().toLowerCase().trim();
 
                 switch (opt) {
                     case "p":
@@ -1597,6 +1617,7 @@ public class MedicalUI extends UI {
                         break;
                     default:
                         System.out.println("Invalid option. Use P, N, or 0.");
+                        this.scanner.nextLine();
                         break;
                 }
 
@@ -1605,18 +1626,14 @@ public class MedicalUI extends UI {
                 this.scanner.nextLine();
             }
 
-
-            if (viewingReport) {
+            if (viewingReport && !opt.equals("0")) {
                 System.out.println("*".repeat(230));
-                System.out.printf("%120s\n", "END OF PAGE");
+                System.out.printf("%120s\n", "END OF CURRENT PAGE");
                 System.out.println("=".repeat(230));
-                System.out.println();
+                System.out.println("Press Enter to continue...");
+                this.scanner.nextLine();
             }
         }
-
-        System.out.println("*".repeat(230));
-        System.out.printf("%120s\n", "END OF THE REPORT");
-        System.out.println("=".repeat(230));
     }
 
     private void printDiagnosisTotalBarChart(ListInterface<DiagnosisCounter> counters) {
@@ -1640,7 +1657,7 @@ public class MedicalUI extends UI {
             // simple scaling (avoid divide by zero)
             int barLength = (max == 0) ? 0 : (count * 40 / max);
 
-            System.out.printf("%-20s | %s (%d)%n",
+            System.out.printf("%-30s | %s (%d)%n",
                    occurrenceCounter.key(),
                     "█".repeat(barLength),
                     count);
@@ -1774,18 +1791,5 @@ public class MedicalUI extends UI {
     }
 
 
-    public static void main(String[] args) throws IOException {
-        Initializer.initialize();
-
-        try (var terminal = TerminalBuilder.builder()
-                .system(true)
-                .build()
-        ) {
-            var scanner = new Scanner(System.in);
-
-            var medicalUI = new MedicalUI(terminal, scanner);
-            medicalUI.startMenu();
-        }
-    }
 
 }
