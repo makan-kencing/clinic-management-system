@@ -18,13 +18,23 @@ import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.lambda.Filter;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DoctorController {
+    public static ListInterface<DayOfWeek> days = new DoubleLinkedList<>();
 
+    public static ListInterface<DayOfWeek> getDays() {
+        if (days.size() == 0) { // Prevent duplicate entries
+            for (DayOfWeek day : DayOfWeek.values()) {
+                days.add(day);
+            }
+        }
+        return days;
+    }
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm"); //For Formatting Shift Time
 
@@ -90,6 +100,7 @@ public class DoctorController {
         return true;
     }
 
+    //For Addon Shift
     public static boolean additionalShift(ListInterface<Shift> currentShifts, Shift shift) {
         var iterator = currentShifts.iterator();
 
@@ -118,11 +129,12 @@ public class DoctorController {
         return true;
     }
 
+    //Perform Add Break Function
     public static void addBreak(ListInterface<Shift> currentShifts, Shift shift) {
         addBreak(currentShifts, shift.getTimeRange());
     }
 
-    //delete Shift
+    //Deleting Shift for Doctor
     public static void addBreak(ListInterface<Shift> currentShifts, Range<LocalTime> timeRange) {
         for (var currentShift : currentShifts) {
             if (currentShift.getTimeRange().overlapsExclusively(timeRange)) {
@@ -143,6 +155,7 @@ public class DoctorController {
         }
     }
 
+    //Get Doctor By Shift && Not Occupied with Appointment
     public static Schedule getAvailabilitySchedule(LocalDate date, Doctor doctor) {
         var schedule = doctor.getSchedule().clone();
 
@@ -157,6 +170,7 @@ public class DoctorController {
         return schedule;
     }
 
+    //Get Doctor with Most && The Least Consultations
     public static ListInterface<String> getExtremeDoctors(boolean most) {
         ListInterface<DoctorCounter> counters = getDoctorSummary();
         ListInterface<String> extremeDoctors = new DoubleLinkedList<>();
@@ -171,7 +185,7 @@ public class DoctorController {
         return extremeDoctors;
     }
 
-
+    //Get Doctors with Most Consultations
     public static ListInterface<DoctorCounter> getTopDoctorCountersByConsultations(int topN) {
         ListInterface<DoctorCounter> counters = getDoctorSummary();
         ListInterface<DoctorCounter> topCounters = new DoubleLinkedList<>();
@@ -180,7 +194,7 @@ public class DoctorController {
         }
         return topCounters;
     }
-
+    //Get Doctors with Most Patients Treated
     public static ListInterface<DoctorCounter> getTopDoctorCountersByPatients(int topN) {
         ListInterface<DoctorCounter> counters = getDoctorSummary();
         counters.sort((a, b) -> Integer.compare(b.getPatientCounters().size(), a.getPatientCounters().size()));
@@ -191,13 +205,13 @@ public class DoctorController {
         return topCounters;
     }
 
-
+    //Get Number of Consultations
     public static ListInterface<String> getTypeList(DoctorCounter dc) {
         ListInterface<String> list = new DoubleLinkedList<>();
         list.add(String.valueOf(dc.getCount())); // Number of consultations attended
         return list;
     }
-
+    //Get Number of Patients
     public static ListInterface<String> getPatientList(DoctorCounter dc) {
         ListInterface<String> list = new DoubleLinkedList<>();
         for (PatientCounter pc : dc.getPatientCounters()) {
@@ -222,7 +236,7 @@ public class DoctorController {
         stats.add(totalPatients);
         return stats;
     }
-
+    //Doctor Summary
     public static ListInterface<DoctorCounter> getDoctorSummary() {
 
         ListInterface<DoctorCounter> doctorCounters = new DoubleLinkedList<>();
@@ -231,7 +245,7 @@ public class DoctorController {
             var doctor = consult.getDoctor();
             var patient = consult.getPatient();
 
-            // Find or create DoctorCounter for this doctor
+
             var existingDoctor = doctorCounters.findFirst(dc -> dc.key().equals(doctor));
             if (existingDoctor == null) {
                 existingDoctor = new DoctorCounter(doctor);
@@ -240,7 +254,7 @@ public class DoctorController {
 
             existingDoctor.increment();
 
-            // Find or create PatientCounter for this patient (global, if needed elsewhere)
+
             var existingPatient = patientCounters.findFirst(pc -> pc.key().equals(patient));
             if (existingPatient == null) {
                 existingPatient = new PatientCounter(patient);
@@ -248,7 +262,7 @@ public class DoctorController {
             }
             existingPatient.increment();
 
-            // Add patient to this doctor's patientCounters if not already present
+
             if (existingDoctor.getPatientCounters().findFirst(pc -> pc.key().equals(patient)) == null) {
                 existingDoctor.getPatientCounters().add(new PatientCounter(patient));
             }
@@ -258,4 +272,6 @@ public class DoctorController {
 
         return doctorCounters;
     }
+
+
 }
