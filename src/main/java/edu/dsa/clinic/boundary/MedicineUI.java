@@ -353,40 +353,74 @@ public class MedicineUI extends UI {
     }
 
     public void viewSummaryReport() {
-        var width = this.terminal.getWidth();
-        var topN = 10;
+        var topN = 5;
         var reader = this.getLineReader();
+        var i = new AtomicInteger(0);
 
         while (true) {
+            this.terminal.puts(InfoCmp.Capability.clear_screen);
+            this.terminal.flush();
+
+            var width = this.terminal.getWidth();
+
             System.out.println("=".repeat(width));
             System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
-            System.out.println(StringUtils.pad("PATIENT MANAGEMENT MODULE", ' ', width));
-            System.out.println(StringUtils.pad("SUMMARY OF PATIENT REPORT", ' ', width));
+            System.out.println(StringUtils.pad("MEDICINE MANAGEMENT MODULE", ' ', width));
+            System.out.println(StringUtils.pad("SUMMARY OF MEDICINE PRESCRIPTIONS REPORT", ' ', width));
             System.out.println("=".repeat(width));
             System.out.println("*".repeat(width));
             System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY - HIGHLY CONFIDENTIAL DOCUMENT", ' ', width));
             System.out.println("*".repeat(width));
-            System.out.printf("Generated at: %s%n", PatientUI.DATE_FORMAT.format(java.time.LocalDateTime.now()));
+            System.out.printf("Generated at: %s%n", PatientUI.DATE_FORMAT.format(LocalDateTime.now()));
             System.out.println();
 
             var usages = MedicineController.getProductTreatedUsage();
-            var i = new AtomicInteger(0);
             int finalTopN = topN;
-            usages.filter(_ -> i.getAndIncrement() < finalTopN);
-            var table = new ProductReportTable(MedicineController.flatten(usages));
-            table.setTitle("Top Product Used for Treating Symptoms");
+
+            i.set(0);
+            var bottomUsages = usages.sorted(Comparator.comparing(MedicineController.ProductCounter::quantity));
+            bottomUsages.filter(_ -> i.getAndIncrement() < finalTopN);
+
+            i.set(0);
+            var topUsages = usages.filtered(_ -> i.getAndIncrement() < finalTopN);
+            var table = new ProductReportTable(MedicineController.flatten(topUsages));
             table.setPageSize(9999);
 
             table.display();
             System.out.println();
 
-            System.out.printf("Total Number of Product (Top %d): %d%n", topN, usages.size());
-            System.out.printf("Total Number of Doctors (Top %d): %d%n", topN, MedicineController.countDoctors(usages));
-            System.out.printf("Total Number of Symptoms (Top %d): %d%n", topN, MedicineController.countSymptoms(usages));
+            System.out.printf("Total Number of Product (Top %d): %d%n", topN, topUsages.size());
+            System.out.printf("Total Prescribed for Consultations (Top %d): %d%n", topN, MedicineController.countDoctors(topUsages));
             System.out.println();
 
             System.out.println("GRAPHICAL REPRESENTATION OF SUMMARY MODULE");
             System.out.println("------------------------------------------");
+            System.out.println();
+
+            final String BLUE = "\u001B[34m";
+            final String RESET = "\u001B[0m";
+            final int barWidth = terminal.getWidth() - 60;
+
+            System.out.println("+-------------------------------------+");
+            System.out.printf("| Top %d Products by Prescribed Amount |%n", topN);
+            System.out.println("+-------------------------------------+");
+            var max = topUsages.getFirst().quantity();
+            for (var usage : topUsages) {
+                int scaled = max == 0 ? 0 : (int) Math.round((usage.quantity() / (double) max) * barWidth);
+                System.out.printf("%-30s | %s%s%s (%d)%n",
+                        StringUtils.trimEarly(usage.key().getName(), 30, "..."),
+                        BLUE,
+                        "█".repeat(Math.max(1, scaled)),
+                        RESET,
+                        usage.quantity()
+                );
+            }
+
+            System.out.println();
+            System.out.println("Global Highlights:");
+            System.out.println("Products(s) with fewest usage: " + StringUtils.join(", ", bottomUsages.map(c -> c.key().getName() + " (" + c.quantity() + ")")));
+            System.out.println("Product(s) with most usage: " + StringUtils.join(", ", topUsages.map(c -> c.key().getName() + " (" + c.quantity() + ")")));
+            System.out.println();
 
             System.out.println("*".repeat(width));
             System.out.println(StringUtils.pad("END OF THE REPORT", ' ', width));
@@ -411,21 +445,25 @@ public class MedicineUI extends UI {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, keeping current TopN.");
             }
+
+            this.terminal.puts(InfoCmp.Capability.clear_screen);
+            this.terminal.flush();
         }
     }
 
     public static class ProductReportTable extends InteractiveTable<ProductTreatedUsage> {
         private int top = 0;
+        private String lastDoctorString = "";
         private Product lastProduct = null;
 
         public ProductReportTable(ListInterface<ProductTreatedUsage> data) {
             super(new Column[]{
                     new Column("No.", 4),
-                    new Column("Product Name", 25),
+                    new Column("Product Name", 30),
                     new Column("Medicine", 25),
                     new Column("Total Used", 10),
                     new Column("Consultation Count", 25),
-                    new Column("Doctors", 50),
+                    new Column("Most Used By Doctor (count) [usage]", 50),
                     new Column("Symptom", 20),
                     new Column("Prescribed Count", 20),
                     new Column("Prescribed Amount", 20)
@@ -446,27 +484,30 @@ public class MedicineUI extends UI {
                 if (lastProduct != null)
                     System.out.println(this.renderBorder());
                 this.top++;
+                this.lastDoctorString = StringUtils.join(", ", o.doctors().map(
+                        d -> String.format("%s (%d) [%d]",
+                                d.doctor().getName(),
+                                d.doctorCount(),
+                                d.doctorUsage())
+                ));
             }
 
             try {
                 return new Cell[]{
                         new Cell(sameProduct ? "" : this.top),
-                        new Cell(sameProduct ? "" : o.product().getName()),
-                        new Cell(sameProduct ? "" : o.product().getMedicine().getName()),
+                        new Cell(sameProduct ? "" : StringUtils.trimEarly(o.product().getName(), 30, "...")),
+                        new Cell(sameProduct ? "" : StringUtils.trimEarly(o.product().getMedicine().getName(), 25, "...")),
                         new Cell(sameProduct ? "" : o.totalUsage()),
                         new Cell(sameProduct ? "" : o.appearedCount()),
-                        new Cell(sameProduct ? "" : StringUtils.join(", ", o.doctors().map(
-                                d -> String.format("%s (%d) [%d]",
-                                        d.doctor().getName(),
-                                        d.doctorCount(),
-                                        d.doctorUsage())
-                        ))),
+                        new Cell(sameProduct ? "" : StringUtils.trimEarly(lastDoctorString, 50, "...")),
                         new Cell(o.treatedSymptom()),
                         new Cell(o.nUniqueTreatments()),
                         new Cell(o.treatmentUsage())
                 };
             } finally {
                 this.lastProduct = o.product();
+                if (this.lastDoctorString.length() > 40)
+                    this.lastDoctorString = this.lastDoctorString.substring(39);
             }
         }
 
@@ -1332,7 +1373,7 @@ public class MedicineUI extends UI {
         ) {
             terminal.puts(InfoCmp.Capability.clear_screen);
             var ui = new MedicineUI(terminal);
-            ui.startMenu();
+            ui.viewSummaryReport();
             // Entrypoint to the main UI.
         }
     }
