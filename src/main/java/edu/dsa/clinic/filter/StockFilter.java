@@ -1,6 +1,8 @@
 package edu.dsa.clinic.filter;
 
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicineController;
+import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.lambda.Filter;
@@ -10,6 +12,18 @@ import org.jetbrains.annotations.Range;
 public interface StockFilter {
     static Filter<Stock> byProduct(Product product) {
         return s -> s.getProduct().equals(product);
+    }
+
+    static Filter<Stock> byProductNameLike(String name) {
+        return s -> ProductFilter.byNameLike(name).filter(s.getProduct());
+    }
+
+    static Filter<Stock> byProductBrandLike(String brand) {
+        return s -> ProductFilter.byBrandLike(brand).filter(s.getProduct());
+    }
+
+    static Filter<Stock> byProductMedicineTypes(ListInterface<MedicineType> types) {
+        return s -> ProductFilter.hasMedicineTypes(types).filter(s.getProduct());
     }
 
     static Filter<Stock> byStockBetween(

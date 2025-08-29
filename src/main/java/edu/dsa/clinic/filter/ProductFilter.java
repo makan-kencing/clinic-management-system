@@ -1,8 +1,10 @@
 package edu.dsa.clinic.filter;
 
+import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.MedicineController;
 import edu.dsa.clinic.entity.Medicine;
 import edu.dsa.clinic.entity.MedicineAdministrationType;
+import edu.dsa.clinic.entity.MedicineType;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.lambda.Filter;
 import edu.dsa.clinic.utils.Ordered;
@@ -33,6 +35,10 @@ public interface ProductFilter {
 
     static Filter<Product> byMedicineId(int id) {
         return p -> MedicineFilter.byId(id).filter(p.getMedicine());
+    }
+
+    static Filter<Product> hasMedicineTypes(ListInterface<MedicineType> types) {
+        return p -> MedicineFilter.hasTypes(types).filter(p.getMedicine());
     }
 
     static Filter<Product> byAdministrationType(MedicineAdministrationType type) {
