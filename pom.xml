@@ -57,6 +57,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
+                    <mainClass>edu.dsa.clinic.ClinicManagementSystem</mainClass>
                     <executable>java</executable>
                     <includePluginDependencies>true</includePluginDependencies>
                 </configuration>
