@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 
 public class PatientUI extends UI {
     private final PatientController patientController = new PatientController();
-    private static final DateTimeFormatter DATE_FORMAT =
+    public static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
                     .withZone(ZoneId.systemDefault());
 
