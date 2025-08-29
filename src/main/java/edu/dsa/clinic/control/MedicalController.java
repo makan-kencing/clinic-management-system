@@ -3,18 +3,23 @@ package edu.dsa.clinic.control;
 import edu.dsa.clinic.Database;
 import edu.dsa.clinic.adt.DoubleLinkedList;
 import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.dto.AppointmentTypeCounter;
+import edu.dsa.clinic.dto.ConsultationTypeCounter;
 import edu.dsa.clinic.dto.DiagnosisCounter;
+import edu.dsa.clinic.dto.DoctorCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
+import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.ProductCounter;
+import edu.dsa.clinic.entity.Appointment;
 import edu.dsa.clinic.entity.Consultation;
 import edu.dsa.clinic.entity.ConsultationType;
 import edu.dsa.clinic.entity.Diagnosis;
+import edu.dsa.clinic.entity.Doctor;
 import edu.dsa.clinic.entity.Patient;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.lambda.Filter;
-import jdk.jfr.Category;
 import org.jetbrains.annotations.Nullable;
 
 public class MedicalController {
@@ -189,8 +194,6 @@ public class MedicalController {
         return counters;
     }
 
-
-
    public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
     int total = 0;
     for (int i = 0; i < diagnosisCounters.size(); i++) {
@@ -204,8 +207,61 @@ public class MedicalController {
     return total;
 }
 
+    public static String getProductUsageString(ListInterface<ProductCounter> productCounters) {
+        StringBuilder productInfo = new StringBuilder();
 
+        for (int i = 0; i < productCounters.size(); i++) {
+            ProductCounter pc = productCounters.get(i);
+            productInfo.append(pc.key().getName())
+                    .append(" (")
+                    .append(pc.count())
+                    .append("), ");
+        }
 
+        if (productInfo.length() > 0) {
+            productInfo.setLength(productInfo.length() - 2);
+        }
+
+        return productInfo.toString();
+    }
+
+    public ListInterface<ConsultationTypeCounter> getConsultationSummary() {
+        ListInterface<ConsultationTypeCounter> typeCounters = new DoubleLinkedList<>();
+        for (ConsultationType type : ConsultationType.values()) {
+            typeCounters.add(new ConsultationTypeCounter(type));
+        }
+
+        for (Consultation consult : Database.consultationsList) {
+            ConsultationType type = consult.getType();
+            Patient patient = consult.getPatient();
+            Doctor doctor = consult.getDoctor();
+
+            ConsultationTypeCounter ctc = typeCounters.findFirst(tc -> tc.getType() == type);
+
+            ctc.incrementConsultationCount();
+
+            DoctorCounter existingDoctor = ctc.getDoctorCounters().findFirst(dc -> dc.key().equals(doctor));
+            if (existingDoctor == null) {
+                existingDoctor = new DoctorCounter(doctor);
+                ctc.getDoctorCounters().add(existingDoctor);
+            }
+            existingDoctor.increment();
+
+            PatientCounter existingPatient = ctc.getPatientCounters().findFirst(pc -> pc.key().equals(patient));
+            if (existingPatient == null) {
+                existingPatient = new PatientCounter(patient);
+                ctc.getPatientCounters().add(existingPatient);
+            }
+            existingPatient.increment();
+        }
+
+        for (ConsultationTypeCounter atc : typeCounters) {
+            atc.getDoctorCounters().sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
+            atc.getPatientCounters().sort((a, b) -> Integer.compare(b.getCount(), a.getCount()));
+        }
+
+        return typeCounters;
+    }
 
 
 }

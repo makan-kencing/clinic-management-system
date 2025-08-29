@@ -168,22 +168,22 @@ public class AppointmentUI extends UI {
                 case "6" -> {
                     if (selectedPatient == null) {
                         System.out.println("Invalid: No patient selected.");
-                        return;
+                        break;
                     }
 
                     if (selectedDoctor == null) {
                         System.out.println("Invalid: No doctor selected.");
-                        return;
+                        break;
                     }
 
                     if (appointmentStartTime == null) {
                         System.out.println("Invalid: No appointment time selected.");
-                        return;
+                        break;
                     }
 
                     if(appointmentType == null){
                         System.out.println("Invalid: No appointment type selected.");
-                        return;
+                        break;
                     }
 
                     if (updateAppointmentConfirmation("add")) {
