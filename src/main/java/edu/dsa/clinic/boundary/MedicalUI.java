@@ -1271,9 +1271,12 @@ public class MedicalUI extends UI {
     public void medicalManagementMenu(){
         while (true) {
             System.out.println(""" 
+                    Medical Management System
+                    ==================================
                     1. Manage Medical Record
                     2. Generate Medical Summary Report
-                    3. Back""");
+                    3. Back
+                    ==================================""");
             System.out.print("Enter your choice :");
             Consultation consultation;
             int choice;
@@ -1291,7 +1294,7 @@ public class MedicalUI extends UI {
                         diagnosisReport();
                         break;
                     case 3:
-                        break;
+                        return;
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
@@ -1557,15 +1560,18 @@ public class MedicalUI extends UI {
         var counts = MedicalController.countDiagnosesOccurrence();
         var table = new ViewDiagnosisReport(counts);
         int total = MedicalController.getTotalProductUsage(counts);
-
+        int width = 250;
         while(viewingReport) {
-            System.out.println("=".repeat(230));
-            System.out.printf("%140s\n", "TUNKU ABDUL RAMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY");
-            System.out.printf("%120s\n", "MEDICAL CHECKING SUBSYSTEM");
-            System.out.println();
-            System.out.printf("%124s\n", "DOCTOR OCCURRENCE AND MEDICATION UTILIZATION REPORT");
+            System.out.println("=".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY", ' ', width));
+            System.out.println(StringUtils.pad("MEDICAL MANAGEMENT MODULE", ' ', width));
+            System.out.println(StringUtils.pad("DOCTOR OCCURRENCE AND MEDICATION UTILIZATION REPORT", ' ', width));
+            System.out.println("=".repeat(width));
+            System.out.println("*".repeat(width));
+            System.out.println(StringUtils.pad("TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY - HIGHLY CONFIDENTIAL DOCUMENT", ' ', width));
+            System.out.println("*".repeat(width));
             System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
-            System.out.printf("%125s\n", "-".repeat(35));
+            System.out.println();
 
             table.display();
             printDiagnosisTotalBarChart(counts);
