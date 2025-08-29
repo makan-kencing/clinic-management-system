@@ -25,13 +25,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DoctorController {
-    public static final ListInterface<DayOfWeek> days = new DoubleLinkedList<>();
-
-
+    public static ListInterface<DayOfWeek> days = new DoubleLinkedList<>();
 
     public static ListInterface<DayOfWeek> getDays() {
-        for (DayOfWeek day : DayOfWeek.values()) {
-            days.add(day);
+        if (days.size() == 0) { // Prevent duplicate entries
+            for (DayOfWeek day : DayOfWeek.values()) {
+                days.add(day);
+            }
         }
         return days;
     }
@@ -241,7 +241,7 @@ public class DoctorController {
             var doctor = consult.getDoctor();
             var patient = consult.getPatient();
 
-            // Find or create DoctorCounter for this doctor
+
             var existingDoctor = doctorCounters.findFirst(dc -> dc.key().equals(doctor));
             if (existingDoctor == null) {
                 existingDoctor = new DoctorCounter(doctor);
@@ -250,7 +250,7 @@ public class DoctorController {
 
             existingDoctor.increment();
 
-            // Find or create PatientCounter for this patient (global, if needed elsewhere)
+
             var existingPatient = patientCounters.findFirst(pc -> pc.key().equals(patient));
             if (existingPatient == null) {
                 existingPatient = new PatientCounter(patient);
@@ -258,7 +258,7 @@ public class DoctorController {
             }
             existingPatient.increment();
 
-            // Add patient to this doctor's patientCounters if not already present
+
             if (existingDoctor.getPatientCounters().findFirst(pc -> pc.key().equals(patient)) == null) {
                 existingDoctor.getPatientCounters().add(new PatientCounter(patient));
             }
