@@ -1811,7 +1811,8 @@ public class MedicineUI extends UI {
                     .name("order")
                     .message("Order direction by?")
                     .newItem("asc").text("Ascending").add()
-                    .newItem("desc").text("Descending").add();
+                    .newItem("desc").text("Descending").add()
+                    .addPrompt();
 
             var result = prompt.prompt(builder.build());
 
