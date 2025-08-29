@@ -20,6 +20,7 @@ import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Specialization;
 import edu.dsa.clinic.entity.Stock;
 import edu.dsa.clinic.entity.Treatment;
+import edu.dsa.clinic.filter.MedicineFilter;
 import edu.dsa.clinic.filter.ProductFilter;
 
 import java.math.BigDecimal;
@@ -580,6 +581,507 @@ public class Initializer {
                         .setName("Insulin")
                         .addType(MedicineType.ANTIDIABETICS)
         );
+
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(17))
+                        .setName("ABIRATERONE ACETATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(18))
+                        .setName("ABIRATERONE ACETATE; NIRAPARIB TOSYLATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(19))
+                        .setName("ADALIMUMAB-ADBM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(20))
+                        .setName("ADAPALENE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(21))
+                        .setName("ALBENDAZOLE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(22))
+                        .setName("ALEMTUZUMAB")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(23))
+                        .setName("AMMONIUM LACTATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(24))
+                        .setName("AMPHETAMINE SULFATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(25))
+                        .setName("ARFORMOTEROL TARTRATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(26))
+                        .setName("ARTEMETHER; LUMEFANTRINE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(27))
+                        .setName("ARTESUNATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(28))
+                        .setName("ATEZOLIZUMAB")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(29))
+                        .setName("BARIUM SULFATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(30))
+                        .setName("BENZOYL PEROXIDE; ERYTHROMYCIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(31))
+                        .setName("BORTEZOMIB")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(32))
+                        .setName("BRIGATINIB")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(33))
+                        .setName("BROMPHENIRAMINE MALEATE; DEXTROMETHORPHAN HYDROBROMIDE; PSEUDOEPHEDRINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(34))
+                        .setName("CALCIUM CHLORIDE; POTASSIUM CHLORIDE; SODIUM CHLORIDE; SODIUM LACTATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(35))
+                        .setName("CARBINOXAMINE MALEATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(36))
+                        .setName("CARISOPRODOL")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(37))
+                        .setName("CEFACLOR")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(38))
+                        .setName("CHLORPHENIRAMINE MALEATE; IBUPROFEN; PSEUDOEPHEDRINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(39))
+                        .setName("CLARITHROMYCIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(40))
+                        .setName("CLOMIPHENE CITRATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(41))
+                        .setName("CLOMIPRAMINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(42))
+                        .setName("COBICISTAT; DARUNAVIR ETHANOLATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(43))
+                        .setName("COBICISTAT; ELVITEGRAVIR; EMTRICITABINE; TENOFOVIR DISOPROXIL FUMARATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(44))
+                        .setName("CORTICORELIN OVINE TRIFLUTATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(45))
+                        .setName("CYCLOPENTOLATE HYDROCHLORIDE; PHENYLEPHRINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(46))
+                        .setName("DENILEUKIN DIFTITOX")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(47))
+                        .setName("DENOSUMAB-BBDZ")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(48))
+                        .setName("DIHYDROERGOTAMINE MESYLATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(49))
+                        .setName("DROPERIDOL")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(50))
+                        .setName("ELTROMBOPAG OLAMINE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(51))
+                        .setName("ENALAPRIL MALEATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(52))
+                        .setName("ENTACAPONE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(53))
+                        .setName("FILGRASTIM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(54))
+                        .setName("FILGRASTIM-AYOW")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(55))
+                        .setName("FINERENONE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(56))
+                        .setName("FITUSIRAN SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(57))
+                        .setName("FLUOXETINE HYDROCHLORIDE; OLANZAPINE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(58))
+                        .setName("FORMOTEROL FUMARATE; GLYCOPYRROLATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(59))
+                        .setName("GLUCAGON HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(60))
+                        .setName("GUANFACINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(61))
+                        .setName("HOMATROPINE METHYLBROMIDE; HYDROCODONE BITARTRATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(62))
+                        .setName("IBANDRONATE SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(63))
+                        .setName("ILOPROST")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(64))
+                        .setName("INSULIN ASPART-SZJJ")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(65))
+                        .setName("INSULIN DETEMIR")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(66))
+                        .setName("ISOTRETINOIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(67))
+                        .setName("LAMOTRIGINE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(68))
+                        .setName("LEDIPASVIR; SOFOSBUVIR")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(69))
+                        .setName("LINEZOLID")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(70))
+                        .setName("LONCASTUXIMAB TESIRINE-LPYL")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(71))
+                        .setName("LOTEPREDNOL ETABONATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(72))
+                        .setName("LOVASTATIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(73))
+                        .setName("LUMATEPERONE TOSYLATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(74))
+                        .setName("LURASIDONE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(75))
+                        .setName("MAGNESIUM SULFATE; POTASSIUM CHLORIDE; POTASSIUM PHOSPHATE, MONOBASIC; SODIUM CHLORIDE; SODIUM PHOSPHATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(76))
+                        .setName("MARSTACIMAB-HNCQ")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(77))
+                        .setName("MELOXICAM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(78))
+                        .setName("MESNA")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(79))
+                        .setName("METHAMPHETAMINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(80))
+                        .setName("METHOTREXATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(81))
+                        .setName("METRELEPTIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(82))
+                        .setName("MONTELUKAST SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(83))
+                        .setName("MOXETUMOMAB PASUDOTOX-TDFK")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(84))
+                        .setName("MYCOPHENOLATE SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(85))
+                        .setName("NALOXONE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(86))
+                        .setName("NALTREXONE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(87))
+                        .setName("NAPROXEN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(88))
+                        .setName("NIRAPARIB TOSYLATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(89))
+                        .setName("OCRIPLASMIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(90))
+                        .setName("OMEGA-3ACID ETHYL ESTERS")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(91))
+                        .setName("PEGINTERFERON ALFA-2A")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(92))
+                        .setName("PEGINTERFERON ALFA-2B")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(93))
+                        .setName("PEGINTERFERON BETA-1A")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(94))
+                        .setName("PEMETREXED DISODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(95))
+                        .setName("PIPERACILLIN SODIUM; TAZOBACTAM SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(96))
+                        .setName("PIVMECILLINAM HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(97))
+                        .setName("PRALATREXATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(98))
+                        .setName("PRAVASTATIN SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(99))
+                        .setName("RABEPRAZOLE SODIUM")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(100))
+                        .setName("RIPRETINIB")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(101))
+                        .setName("ROPEGINTERFERON ALFA-2B-NJFT")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(102))
+                        .setName("SACUBITRIL; VALSARTAN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(103))
+                        .setName("SILODOSIN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(104))
+                        .setName("SINECATECHINS")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(105))
+                        .setName("STREPTOMYCIN SULFATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(106))
+                        .setName("TESAMORELIN ACETATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(107))
+                        .setName("THIORIDAZINE HYDROCHLORIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(108))
+                        .setName("TIOTROPIUM BROMIDE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(109))
+                        .setName("TOREMIFENE CITRATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(110))
+                        .setName("TRANYLCYPROMINE SULFATE")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(111))
+                        .setName("TRASTUZUMAB-DKST")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(112))
+                        .setName("TREOSULFAN")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(113))
+                        .setName("VENETOCLAX")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(114))
+                        .setName("VENETOCLAX")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(115))
+                        .setName("VESTRONIDASE ALFA-VJBK")
+        );
+        Database.medicineList.add(
+                ((Medicine) new Medicine()
+                        .setId(116))
+                        .setName("ZILEUTON")
+        );
     }
 
     private static void initializeProducts() {
@@ -589,7 +1091,7 @@ public class Initializer {
                         .setId(1))
                         .setName("Aspirin")
                         .setBrand("Recadin")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(1)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0.01529"))
                         .setPrice(new BigDecimal("1"))
@@ -599,7 +1101,7 @@ public class Initializer {
                         .setId(2))
                         .setName("Aspirin")
                         .setBrand("Viquprin")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 1))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(1)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0.01529"))
                         .setPrice(new BigDecimal("1"))
@@ -609,7 +1111,7 @@ public class Initializer {
                         .setId(3))
                         .setName("Panadol PM")
                         .setBrand("Panadol")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(2)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
@@ -619,7 +1121,7 @@ public class Initializer {
                         .setId(4))
                         .setName("Panadol Extra")
                         .setBrand("Panadol")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(2)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
@@ -629,7 +1131,7 @@ public class Initializer {
                         .setId(5))
                         .setName("Panadol Extra Strength")
                         .setBrand("Panadol")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(2)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
@@ -639,7 +1141,7 @@ public class Initializer {
                         .setId(6))
                         .setName("Paracetamol")
                         .setBrand("Tylenol")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 2))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(2)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
@@ -649,7 +1151,7 @@ public class Initializer {
                         .setId(7))
                         .setName("Ibuprofen")
                         .setBrand("Advil")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 3))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(3)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
@@ -659,10 +1161,1110 @@ public class Initializer {
                         .setId(8))
                         .setName("Centrizine")
                         .setBrand("")
-                        .setMedicine(Database.medicineList.findFirst(m -> m.getId() == 6))
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(6)))
                         .setAdministrationType(MedicineAdministrationType.ORAL)
                         .setCost(new BigDecimal("0"))
                         .setPrice(new BigDecimal("0"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(9))
+                        .setName("ABACAVIR SULFATE")
+                        .setBrand("CHARTWELL RX")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(17)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("12.93"))
+                        .setPrice(new BigDecimal("16.75"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(10))
+                        .setName("ABIRATERONE ACETATE")
+                        .setBrand("AMNEAL PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(17)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("9.50"))
+                        .setPrice(new BigDecimal("10.93"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(11))
+                        .setName("ABACAVIR SULFATE AND LAMIVUDINE")
+                        .setBrand("LAURUS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(19)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.24"))
+                        .setPrice(new BigDecimal("4.33"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(12))
+                        .setName("ADAPALENE")
+                        .setBrand("ACTAVIS MID ATLANTIC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(20)))
+                        .setAdministrationType(MedicineAdministrationType.TOPICAL)
+                        .setCost(new BigDecimal("10.53"))
+                        .setPrice(new BigDecimal("11.86"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(13))
+                        .setName("VERZENIO")
+                        .setBrand("ELI LILLY AND CO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(24)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.59"))
+                        .setPrice(new BigDecimal("16.22"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(14))
+                        .setName("VERZENIO")
+                        .setBrand("ELI LILLY AND CO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(24)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.59"))
+                        .setPrice(new BigDecimal("16.22"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(15))
+                        .setName("VERZENIO")
+                        .setBrand("ELI LILLY AND CO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(24)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("7.23"))
+                        .setPrice(new BigDecimal("11.97"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(16))
+                        .setName("E-Z-CAT DRY")
+                        .setBrand("BRACCO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(29)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.90"))
+                        .setPrice(new BigDecimal("8.92"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(17))
+                        .setName("E-Z-PAQUE")
+                        .setBrand("BRACCO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(29)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.31"))
+                        .setPrice(new BigDecimal("6.20"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(18))
+                        .setName("ACARBOSE")
+                        .setBrand("STRIDES PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(31)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.96"))
+                        .setPrice(new BigDecimal("11.56"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(19))
+                        .setName("ACETAMINOPHEN")
+                        .setBrand("B BRAUN MEDICAL")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(34)))
+                        .setAdministrationType(MedicineAdministrationType.INTRAVENOUS)
+                        .setCost(new BigDecimal("2.91"))
+                        .setPrice(new BigDecimal("4.17"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(20))
+                        .setName("ACETAMINOPHEN, ASPIRIN AND CAFFEINE")
+                        .setBrand("PERRIGO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(35)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.68"))
+                        .setPrice(new BigDecimal("12.81"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(21))
+                        .setName("CARISOPRODOL")
+                        .setBrand("HERITAGE")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(36)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("4.71"))
+                        .setPrice(new BigDecimal("5.82"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(22))
+                        .setName("CARISOPRODOL")
+                        .setBrand("NATCO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(36)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.74"))
+                        .setPrice(new BigDecimal("8.23"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(23))
+                        .setName("BUTALBITAL, ACETAMINOPHEN, CAFFEINE AND CODEINE PHOSPHATE")
+                        .setBrand("HIKMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(38)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("14.45"))
+                        .setPrice(new BigDecimal("15.63"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(24))
+                        .setName("ACETAMINOPHEN AND CODEINE PHOSPHATE")
+                        .setBrand("STRIDES PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(39)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.97"))
+                        .setPrice(new BigDecimal("13.93"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(25))
+                        .setName("BIAXIN XL")
+                        .setBrand("ABBVIE INC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(39)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("11.90"))
+                        .setPrice(new BigDecimal("12.57"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(26))
+                        .setName("HYDROCODONE BITARTRATE AND ACETAMINOPHEN")
+                        .setBrand("ABHAI LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("2.12"))
+                        .setPrice(new BigDecimal("5.12"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(27))
+                        .setName("CLOMIPHENE CITRATE")
+                        .setBrand("APPCO")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.06"))
+                        .setPrice(new BigDecimal("15.28"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(28))
+                        .setName("ANEXSIA 5/325")
+                        .setBrand("SPECGX LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("9.93"))
+                        .setPrice(new BigDecimal("12.82"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(29))
+                        .setName("HYDROCODONE BITARTRATE AND ACETAMINOPHEN")
+                        .setBrand("ASCENT PHARMS INC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("2.18"))
+                        .setPrice(new BigDecimal("4.51"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(30))
+                        .setName("HYDROCODONE BITARTRATE AND ACETAMINOPHEN")
+                        .setBrand("SPECGX LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.13"))
+                        .setPrice(new BigDecimal("17.05"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(31))
+                        .setName("HYDROCODONE BITARTRATE AND ACETAMINOPHEN")
+                        .setBrand("ELITE LABS INC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("7.61"))
+                        .setPrice(new BigDecimal("11.24"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(32))
+                        .setName("HYDROCODONE BITARTRATE AND ACETAMINOPHEN")
+                        .setBrand("AUROLIFE PHARMA LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.30"))
+                        .setPrice(new BigDecimal("3.29"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(33))
+                        .setName("HYDROCODONE BITARTRATE AND ACETAMINOPHEN")
+                        .setBrand("SPECGX LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(40)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("2.19"))
+                        .setPrice(new BigDecimal("5.66"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(34))
+                        .setName("CLOMIPRAMINE HYDROCHLORIDE")
+                        .setBrand("JUBILANT CADISTA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(41)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.82"))
+                        .setPrice(new BigDecimal("18.25"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(35))
+                        .setName("CLOMIPRAMINE HYDROCHLORIDE")
+                        .setBrand("ZYDUS PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(41)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.87"))
+                        .setPrice(new BigDecimal("3.02"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(36))
+                        .setName("OXYCODONE AND ACETAMINOPHEN")
+                        .setBrand("ASCENT PHARMS INC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(43)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.94"))
+                        .setPrice(new BigDecimal("17.60"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(37))
+                        .setName("PERCOCET")
+                        .setBrand("ENDO OPERATIONS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(43)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("4.12"))
+                        .setPrice(new BigDecimal("8.62"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(38))
+                        .setName("OXYCODONE AND ACETAMINOPHEN")
+                        .setBrand("MIKART")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(43)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("9.14"))
+                        .setPrice(new BigDecimal("10.14"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(39))
+                        .setName("OXYCODONE AND ACETAMINOPHEN")
+                        .setBrand("ABHAI LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(43)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.09"))
+                        .setPrice(new BigDecimal("15.28"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(40))
+                        .setName("TRAMADOL HYDROCHLORIDE AND ACETAMINOPHEN")
+                        .setBrand("AUROBINDO PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(44)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("11.75"))
+                        .setPrice(new BigDecimal("15.57"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(41))
+                        .setName("ELTROMBOPAG OLAMINE")
+                        .setBrand("ANNORA PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(50)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.17"))
+                        .setPrice(new BigDecimal("4.93"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(42))
+                        .setName("PROMACTA")
+                        .setBrand("NOVARTIS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(50)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("7.81"))
+                        .setPrice(new BigDecimal("7.82"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(43))
+                        .setName("PROMACTA")
+                        .setBrand("NOVARTIS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(50)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("2.34"))
+                        .setPrice(new BigDecimal("3.27"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(44))
+                        .setName("ENALAPRIL MALEATE")
+                        .setBrand("AMNEAL")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(51)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.62"))
+                        .setPrice(new BigDecimal("4.71"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(45))
+                        .setName("ENTACAPONE")
+                        .setBrand("AJANTA PHARMA LTD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(52)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.21"))
+                        .setPrice(new BigDecimal("14.45"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(46))
+                        .setName("KERENDIA")
+                        .setBrand("BAYER HLTHCARE")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(55)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("4.27"))
+                        .setPrice(new BigDecimal("6.29"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(47))
+                        .setName("OLANZAPINE AND FLUOXETINE HYDROCHLORIDE")
+                        .setBrand("TEVA PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.32"))
+                        .setPrice(new BigDecimal("6.11"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(48))
+                        .setName("ACYCLOVIR")
+                        .setBrand("CHARTWELL RX")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.08"))
+                        .setPrice(new BigDecimal("16.67"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(49))
+                        .setName("ACYCLOVIR")
+                        .setBrand("GLENMARK SPECLT")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.TOPICAL)
+                        .setCost(new BigDecimal("10.98"))
+                        .setPrice(new BigDecimal("13.62"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(50))
+                        .setName("ACYCLOVIR")
+                        .setBrand("YILING")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.02"))
+                        .setPrice(new BigDecimal("12.85"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(51))
+                        .setName("OLANZAPINE AND FLUOXETINE HYDROCHLORIDE")
+                        .setBrand("EPIC PHARMA LLC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.37"))
+                        .setPrice(new BigDecimal("9.57"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(52))
+                        .setName("OLANZAPINE AND FLUOXETINE HYDROCHLORIDE")
+                        .setBrand("TEVA PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("14.78"))
+                        .setPrice(new BigDecimal("16.02"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(53))
+                        .setName("ACYCLOVIR")
+                        .setBrand("CARLSBAD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.88"))
+                        .setPrice(new BigDecimal("10.39"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(54))
+                        .setName("ACYCLOVIR")
+                        .setBrand("CHARTWELL RX")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(57)))
+                        .setAdministrationType(MedicineAdministrationType.TOPICAL)
+                        .setCost(new BigDecimal("10.17"))
+                        .setPrice(new BigDecimal("11.75"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(55))
+                        .setName("INTUNIV")
+                        .setBrand("TAKEDA PHARMS USA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(60)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.35"))
+                        .setPrice(new BigDecimal("10.39"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(56))
+                        .setName("GUANFACINE HYDROCHLORIDE")
+                        .setBrand("AUROBINDO PHARMA USA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(60)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("7.69"))
+                        .setPrice(new BigDecimal("11.17"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(57))
+                        .setName("GUANFACINE HYDROCHLORIDE")
+                        .setBrand("YICHANG HUMANWELL")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(60)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.17"))
+                        .setPrice(new BigDecimal("18.86"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(58))
+                        .setName("GUANFACINE HYDROCHLORIDE")
+                        .setBrand("FOSUN WANBANG")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(60)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.11"))
+                        .setPrice(new BigDecimal("6.08"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(59))
+                        .setName("GUANFACINE HYDROCHLORIDE")
+                        .setBrand("ALEMBIC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(60)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.22"))
+                        .setPrice(new BigDecimal("3.13"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(60))
+                        .setName("ABSORICA LD")
+                        .setBrand("SUN PHARM")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.43"))
+                        .setPrice(new BigDecimal("4.42"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(61))
+                        .setName("CLARAVIS")
+                        .setBrand("TEVA PHARMS USA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.86"))
+                        .setPrice(new BigDecimal("10.21"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(62))
+                        .setName("ISOTRETINOIN")
+                        .setBrand("AMNEAL PHARMS NY")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("5.23"))
+                        .setPrice(new BigDecimal("7.23"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(63))
+                        .setName("MYORISAN")
+                        .setBrand("UPSHER SMITH LABS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("7.05"))
+                        .setPrice(new BigDecimal("7.31"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(64))
+                        .setName("ABSORICA LD")
+                        .setBrand("SUN PHARM")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("4.12"))
+                        .setPrice(new BigDecimal("4.55"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(65))
+                        .setName("ISOTRETINOIN")
+                        .setBrand("AUROBINDO PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("9.05"))
+                        .setPrice(new BigDecimal("11.99"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(66))
+                        .setName("ABSORICA LD")
+                        .setBrand("SUN PHARM")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(66)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.43"))
+                        .setPrice(new BigDecimal("4.42"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(67))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("AUROBINDO PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.63"))
+                        .setPrice(new BigDecimal("2.34"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(68))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("IPCA LABS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("12.77"))
+                        .setPrice(new BigDecimal("15.19"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(69))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("ALKEM LABS LTD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.59"))
+                        .setPrice(new BigDecimal("13.42"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(70))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("GLENMARK PHARMS LTD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("5.95"))
+                        .setPrice(new BigDecimal("7.22"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(71))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("TARO PHARM INDS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.85"))
+                        .setPrice(new BigDecimal("7.37"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(72))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("AUROBINDO PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("15.51"))
+                        .setPrice(new BigDecimal("19.49"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(73))
+                        .setName("LAMICTAL XR")
+                        .setBrand("SMITHKLINE BEECHAM")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.64"))
+                        .setPrice(new BigDecimal("6.01"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(74))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("TORRENT PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.34"))
+                        .setPrice(new BigDecimal("5.05"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(75))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("AUROBINDO PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("1.63"))
+                        .setPrice(new BigDecimal("2.34"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(76))
+                        .setName("LAMOTRIGINE")
+                        .setBrand("YILING")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(67)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.62"))
+                        .setPrice(new BigDecimal("15.93"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(77))
+                        .setName("ZYVOX")
+                        .setBrand("PFIZER")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(69)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.38"))
+                        .setPrice(new BigDecimal("4.04"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(78))
+                        .setName("ADAPALENE AND BENZOYL PEROXIDE")
+                        .setBrand("ACTAVIS LABS UT INC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(73)))
+                        .setAdministrationType(MedicineAdministrationType.TOPICAL)
+                        .setCost(new BigDecimal("4.64"))
+                        .setPrice(new BigDecimal("5.59"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(79))
+                        .setName("LURASIDONE HYDROCHLORIDE")
+                        .setBrand("HERITAGE PHARMA AVET")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(74)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("5.48"))
+                        .setPrice(new BigDecimal("8.85"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(80))
+                        .setName("LURASIDONE HYDROCHLORIDE")
+                        .setBrand("AUROBINDO PHARMA LTD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(74)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.80"))
+                        .setPrice(new BigDecimal("15.77"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(81))
+                        .setName("LURASIDONE HYDROCHLORIDE")
+                        .setBrand("CHARTWELL RX")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(74)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.26"))
+                        .setPrice(new BigDecimal("10.45"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(82))
+                        .setName("LURASIDONE HYDROCHLORIDE")
+                        .setBrand("ZYDUS PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(74)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("14.15"))
+                        .setPrice(new BigDecimal("15.64"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(83))
+                        .setName("ADENOSINE")
+                        .setBrand("MYLAN ASI")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(76)))
+                        .setAdministrationType(MedicineAdministrationType.INTRAVENOUS)
+                        .setCost(new BigDecimal("6.64"))
+                        .setPrice(new BigDecimal("7.20"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(84))
+                        .setName("MELOXICAM")
+                        .setBrand("COREPHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(77)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.43"))
+                        .setPrice(new BigDecimal("17.33"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(85))
+                        .setName("MELOXICAM")
+                        .setBrand("ZYDUS PHARMS USA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(77)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("12.77"))
+                        .setPrice(new BigDecimal("13.21"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(86))
+                        .setName("DESOXYN")
+                        .setBrand("AJENAT PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(79)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.61"))
+                        .setPrice(new BigDecimal("7.87"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(87))
+                        .setName("MONTELUKAST SODIUM")
+                        .setBrand("LANNETT CO INC")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(82)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("5.97"))
+                        .setPrice(new BigDecimal("8.83"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(88))
+                        .setName("MONTELUKAST SODIUM")
+                        .setBrand("TEVA PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(82)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("2.09"))
+                        .setPrice(new BigDecimal("3.17"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(89))
+                        .setName("MONTELUKAST SODIUM")
+                        .setBrand("UNIMARK REMEDIES LTD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(82)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("9.39"))
+                        .setPrice(new BigDecimal("13.50"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(90))
+                        .setName("MONTELUKAST SODIUM")
+                        .setBrand("GLENMARK PHARMS LTD")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(82)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.90"))
+                        .setPrice(new BigDecimal("14.47"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(91))
+                        .setName("MONTELUKAST SODIUM")
+                        .setBrand("AMNEAL PHARMS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(82)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.23"))
+                        .setPrice(new BigDecimal("16.25"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(92))
+                        .setName("NALTREXONE HYDROCHLORIDE")
+                        .setBrand("BARR")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(86)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.80"))
+                        .setPrice(new BigDecimal("8.16"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(93))
+                        .setName("NAPROXEN")
+                        .setBrand("TRUPHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(87)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.32"))
+                        .setPrice(new BigDecimal("11.18"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(94))
+                        .setName("NAPROXEN")
+                        .setBrand("AMNEAL PHARMS NY")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(87)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("7.17"))
+                        .setPrice(new BigDecimal("7.76"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(95))
+                        .setName("ZEJULA")
+                        .setBrand("GLAXOSMITHKLINE")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(88)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.75"))
+                        .setPrice(new BigDecimal("11.48"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(96))
+                        .setName("PEMETREXED DISODIUM")
+                        .setBrand("JIANGSU HANSOH PHARM")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(94)))
+                        .setAdministrationType(MedicineAdministrationType.INTRAVENOUS)
+                        .setCost(new BigDecimal("3.26"))
+                        .setPrice(new BigDecimal("7.60"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(97))
+                        .setName("PEMETREXED DISODIUM")
+                        .setBrand("MEITHEAL")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(94)))
+                        .setAdministrationType(MedicineAdministrationType.INTRAVENOUS)
+                        .setCost(new BigDecimal("4.44"))
+                        .setPrice(new BigDecimal("6.25"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(98))
+                        .setName("PEMETREXED DISODIUM")
+                        .setBrand("ACCORD HLTHCARE")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(94)))
+                        .setAdministrationType(MedicineAdministrationType.INTRAVENOUS)
+                        .setCost(new BigDecimal("7.17"))
+                        .setPrice(new BigDecimal("10.40"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(99))
+                        .setName("PRAVASTATIN SODIUM")
+                        .setBrand("CIPLA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(98)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("6.09"))
+                        .setPrice(new BigDecimal("10.14"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(100))
+                        .setName("PRAVASTATIN SODIUM")
+                        .setBrand("APOTEX")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(98)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.88"))
+                        .setPrice(new BigDecimal("15.88"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(101))
+                        .setName("RABEPRAZOLE SODIUM")
+                        .setBrand("TORRENT")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(99)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("12.24"))
+                        .setPrice(new BigDecimal("14.31"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(102))
+                        .setName("SACUBITRIL AND VALSARTAN")
+                        .setBrand("BIOCON PHARMA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(102)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.01"))
+                        .setPrice(new BigDecimal("10.85"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(103))
+                        .setName("ENTRESTO")
+                        .setBrand("NOVARTIS PHARMS CORP")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(102)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("8.05"))
+                        .setPrice(new BigDecimal("8.89"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(104))
+                        .setName("ALENDRONATE SODIUM")
+                        .setBrand("CIPLA")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(103)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("13.09"))
+                        .setPrice(new BigDecimal("16.34"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(105))
+                        .setName("ALENDRONATE SODIUM")
+                        .setBrand("WATSON LABS")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(103)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("14.35"))
+                        .setPrice(new BigDecimal("18.12"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(106))
+                        .setName("ALLOPURINOL")
+                        .setBrand("HETERO LABS LTD V")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(111)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("10.78"))
+                        .setPrice(new BigDecimal("13.01"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(107))
+                        .setName("ALLOPURINOL")
+                        .setBrand("PH HEALTH")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(111)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.60"))
+                        .setPrice(new BigDecimal("5.69"))
+        );
+
+        Database.productList.add(
+                ((Product) new Product()
+                        .setId(108))
+                        .setName("ALLOPURINOL")
+                        .setBrand("PH HEALTH")
+                        .setMedicine(Database.medicineList.findFirst(MedicineFilter.byId(111)))
+                        .setAdministrationType(MedicineAdministrationType.ORAL)
+                        .setCost(new BigDecimal("3.60"))
+                        .setPrice(new BigDecimal("5.69"))
         );
     }
 
