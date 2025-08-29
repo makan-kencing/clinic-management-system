@@ -16,6 +16,7 @@ import edu.dsa.clinic.entity.Diagnosis;
 import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
+import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
@@ -1282,6 +1283,8 @@ public class MedicalUI extends UI {
                     case 2:
                         diagnosisReport();
                         break;
+                    case 3:
+                        break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
@@ -1516,48 +1519,37 @@ public class MedicalUI extends UI {
         };
     }
 
-    public static  class ViewDiagnosisReport extends InteractiveTable<DiagnosisCounter>{
+    public static class ViewDiagnosisReport extends InteractiveTable<DiagnosisCounter> {
+
         public ViewDiagnosisReport(ListInterface<DiagnosisCounter> diagnosisCounters) {
             super(new Column[]{
-                    new Column("Diagnosis",Alignment.CENTER,40),
-                    new Column("Occurrence",Alignment.CENTER,15),
-                    new Column("Medicine Product Using",Alignment.CENTER,110),
-                    new Column("Product Using Num",Alignment.CENTER,50)
-            },diagnosisCounters);
+                    new Column("Diagnosis", Alignment.CENTER, 40),
+                    new Column("Occurrence", Alignment.CENTER, 15),
+                    new Column("Medicine Product Using", Alignment.CENTER, 170)
+            }, diagnosisCounters);
         }
+
         @Override
         protected Cell[] getRow(DiagnosisCounter d) {
-            ListInterface<ProductCounter> p =d.productCounters();
+            ListInterface<ProductCounter> productCounters = d.productCounters();
 
-            StringBuilder productNames = new StringBuilder();
-            StringBuilder productCounts = new StringBuilder();
-
-            for (ProductCounter productCounter : p) {
-                productNames.append(productCounter.key().getName()).append(", ");
-                productCounts.append(productCounter.count()).append(", ");
-            }
-
-            if (!productNames.isEmpty()) productNames.setLength(productNames.length() - 2);
-            if (!productCounts.isEmpty()) productCounts.setLength(productCounts.length() - 2);
+           var productInfo= MedicalController.getProductUsageString(productCounters);
 
             return new Cell[]{
                     new Cell(d.key()),
                     new Cell(d.count()),
-                    new Cell(productNames.toString()),
-                    new Cell(productCounts.toString())
+                    new Cell(productInfo)
             };
         }
-
     }
-
 
 
     //diagnosis report
     public void diagnosisReport() {
         boolean viewingReport = true;
-        var counts = MedicalController.countDiagnosesOccurrence();  // 移到循环外面
+        var counts = MedicalController.countDiagnosesOccurrence();
         var table = new ViewDiagnosisReport(counts);
-        int total = MedicalController.getTotalProductUsage(counts);  // 移到循环外面
+        int total = MedicalController.getTotalProductUsage(counts);
 
         while(viewingReport) {
             System.out.println("=".repeat(230));
@@ -1597,7 +1589,7 @@ public class MedicalUI extends UI {
 
             } catch (InputMismatchException e) {
                 System.out.println("Input Mismatch. Please enter a valid option.");
-                this.scanner.nextLine();  // 清除错误输入
+                this.scanner.nextLine();
             }
 
 
@@ -1615,9 +1607,9 @@ public class MedicalUI extends UI {
     }
 
     private void printDiagnosisTotalBarChart(ListInterface<DiagnosisCounter> counters) {
-        System.out.println("============================================================");
+        System.out.println("=".repeat(70));
         System.out.println("   Total Occurrence (Bar Chart)   ");
-        System.out.println("============================================================");
+        System.out.println("=".repeat(70));
 
         int max = 0;
         for (int i = 0; i < counters.size(); i++) {
@@ -1641,7 +1633,7 @@ public class MedicalUI extends UI {
                     count);
         }
 
-        System.out.println("------------------------------------------------------------");
+        System.out.println("-".repeat(70));
     }
     public static void main(String[] args) throws IOException {
         Initializer.initialize();
