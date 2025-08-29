@@ -16,7 +16,6 @@ import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
-import org.jline.terminal.Terminal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,12 +28,17 @@ public class AppointmentUI extends UI {
     private final AppointmentController appointmentController = new AppointmentController();
     private final PatientUI patientUI = new PatientUI(this.scanner);
     private final DoctorUI doctorUI = new DoctorUI(this.scanner);
-    private final MedicalUI medicalUI = new MedicalUI(this.terminal, this.scanner);
+    private MedicalUI medicalUI;
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public AppointmentUI(Terminal terminal,  Scanner scanner) {
-        super(terminal, scanner);
+    public AppointmentUI(Scanner scanner) {
+        super(scanner);
+    }
+
+    public AppointmentUI setMedicalUI(MedicalUI medicalUI) {
+        this.medicalUI = medicalUI;
+        return this;
     }
 
     @Override
@@ -43,18 +47,23 @@ public class AppointmentUI extends UI {
         do{
             System.out.println("Select an Option");
             System.out.println("1. Manage Appointment");
-            System.out.println("2. Manage Consultation");
+            if (this.medicalUI != null) System.out.println("2. Manage Consultation");
             System.out.println("0. Exit");
             System.out.print("Enter Option: ");
             option = this.scanner.nextLine();
 
             switch(option) {
-                case "1" -> appointmentMenu();
-                case "2" -> medicalUI.startMenu();
-                case "0" -> System.out.println("Returning...");
+                case "1":
+                    appointmentMenu();
+                    break;
+                case "2":
+                    if (this.medicalUI != null) medicalUI.startMenu();
+                    break;
+                case "0":
+                    System.out.println("Returning...");
+                    return;
             }
-
-        }while(!option.equals("0"));
+        }while (true);
     }
 
     public void appointmentMenu() {

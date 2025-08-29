@@ -44,7 +44,8 @@ public class ClinicManagementSystem {
                 terminal.puts(InfoCmp.Capability.clear_screen);
                 terminal.flush();
 
-                switch (builder.promptOption(prompt)) {
+                var option = builder.promptOption(prompt);
+                switch (option) {
                     case PATIENT:
                         ui = new PatientUI(scanner);
                         break;
@@ -52,10 +53,18 @@ public class ClinicManagementSystem {
                         ui = new DoctorUI(scanner);
                         break;
                     case CONSULTATION:
-                        ui = new AppointmentUI(terminal, scanner);
-                        break;
                     case MEDICAL:
-                        ui = new MedicalUI(terminal, scanner);
+                        var appointmentUI = new AppointmentUI(scanner);
+                        var medicalUI = new MedicalUI(terminal, scanner);
+
+                        appointmentUI.setMedicalUI(medicalUI);
+                        medicalUI.setAppointmentUI(appointmentUI);
+
+                        ui = switch (option) {
+                            case CONSULTATION -> appointmentUI;
+                            case MEDICAL -> medicalUI;
+                            default -> throw new IllegalStateException();
+                        };
                         break;
                     case MEDICINE:
                         ui = new MedicineUI(terminal);
