@@ -189,6 +189,8 @@ public class MedicalController {
         return counters;
     }
 
+
+
    public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
     int total = 0;
     for (int i = 0; i < diagnosisCounters.size(); i++) {
