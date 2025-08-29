@@ -14,7 +14,6 @@ import edu.dsa.clinic.entity.Prescription;
 import edu.dsa.clinic.entity.Product;
 import edu.dsa.clinic.entity.Treatment;
 import edu.dsa.clinic.lambda.Filter;
-import jdk.jfr.Category;
 import org.jetbrains.annotations.Nullable;
 
 public class MedicalController {
@@ -189,8 +188,6 @@ public class MedicalController {
         return counters;
     }
 
-
-
    public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
     int total = 0;
     for (int i = 0; i < diagnosisCounters.size(); i++) {
@@ -204,7 +201,23 @@ public class MedicalController {
     return total;
 }
 
+    public static String getProductUsageString(ListInterface<ProductCounter> productCounters) {
+        StringBuilder productInfo = new StringBuilder();
 
+        for (int i = 0; i < productCounters.size(); i++) {
+            ProductCounter pc = productCounters.get(i);
+            productInfo.append(pc.key().getName())
+                    .append(" (")
+                    .append(pc.count())
+                    .append("), ");
+        }
+
+        if (productInfo.length() > 0) {
+            productInfo.setLength(productInfo.length() - 2);
+        }
+
+        return productInfo.toString();
+    }
 
 
 
