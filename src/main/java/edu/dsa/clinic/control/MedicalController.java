@@ -33,6 +33,18 @@ public class MedicalController {
         return c -> c.getPatient().getName().toLowerCase().contains(patientName.toLowerCase());
     }
 
+    public static Filter<Diagnosis> getDiagnosisFilter(String diagnosisName) {
+        return d->d.getDiagnosis().toLowerCase().contains(diagnosisName.trim().toLowerCase());
+    }
+
+    public static Filter<Treatment> getTreatmentFilter(String treatmentName) {
+        return t->t.getSymptom().toLowerCase().contains(treatmentName.trim().toLowerCase());
+    }
+
+    public static Filter<Prescription> getPrescriptionFilter(String prescriptionName) {
+        return p->p.getProduct().getName().toLowerCase().contains(prescriptionName.toLowerCase());
+    }
+
     public boolean saveConsultationRecord(Consultation consultation) {
         if (consultation == null) {
             return false;
@@ -52,8 +64,6 @@ public class MedicalController {
     public Consultation selectConsultationByObject(Patient patient) {
         return Database.consultationsList.findFirst(c -> c.getPatient().equals(patient));
     }
-
-
 
     public @Nullable Diagnosis selectDiagnosis(ListInterface<Diagnosis> diagnosis, int id) {
         return diagnosis.findFirst(d -> d.getId() == id);
@@ -151,7 +161,7 @@ public class MedicalController {
 
         for (var consultation : Database.consultationsList) {
             for (var diagnosis : consultation.getDiagnoses()) {
-                var diagnosedCondition = diagnosis.getDiagnosis();
+                var diagnosedCondition = diagnosis.getDiagnosis();  // String
 
                 var counter = counters.findFirst(dc -> dc.key().equals(diagnosedCondition));
                 if (counter == null) {
@@ -178,6 +188,22 @@ public class MedicalController {
         }
         return counters;
     }
+
+
+
+   public static int getTotalProductUsage(ListInterface<DiagnosisCounter> diagnosisCounters) {
+    int total = 0;
+    for (int i = 0; i < diagnosisCounters.size(); i++) {
+        DiagnosisCounter dc = diagnosisCounters.get(i);
+        ListInterface<ProductCounter> productCounters = dc.productCounters();
+
+        for (int j = 0; j < productCounters.size(); j++) {
+            total += productCounters.get(j).count();
+        }
+    }
+    return total;
+}
+
 
 
 

@@ -33,6 +33,7 @@ public class PatientUI extends UI {
         super(scanner);
     }
 
+    @Override
     public void startMenu() {
         String opt;
         do {
@@ -417,9 +418,42 @@ public class PatientUI extends UI {
         System.out.println("+" + "-".repeat(30) + "+");
         System.out.println("| Patient Detail Summary Table |");
         System.out.println("+" + "-".repeat(30) + "+");
-
+        table.setPageSize(100);
         table.display();
         System.out.println();
+
+        String opt;
+        do {
+            System.out.println("-".repeat(30));
+            System.out.println("Use P/N arrow keys to change pages");
+            System.out.println("(0) to exit");
+            System.out.println("-".repeat(30));
+            System.out.print("Selection : ");
+            opt = this.scanner.nextLine();
+
+            System.out.println();
+
+            if (!opt.equals("0")) {
+                switch (opt) {
+                    default: {
+                        if (opt.equalsIgnoreCase("N")) {
+                            table.nextPage();
+                            table.display();
+                        } else if (opt.equalsIgnoreCase("P")) {
+                            table.previousPage();
+                            table.display();
+                        } else {
+                            System.out.println("Invalid input. Try again.");
+                            System.out.println();
+                            table.display();
+                        }
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+        } while (true);
     }
 
     public void addPatient() {
@@ -1419,12 +1453,12 @@ public class PatientUI extends UI {
 
             int scaled = maxValue == 0 ? 0 : (int) Math.round((value / (double) maxValue) * barWidth);
 
-            final String GREEN = "\u001B[34m";
+            final String BLUE = "\u001B[34m";
             final String RESET = "\u001B[0m";
 
             System.out.printf("%-20s | %s%s%s (%d)%n",
                     pc.key().getName(),
-                    GREEN,
+                    BLUE,
                     "█".repeat(Math.max(1, scaled)),
                     RESET,
                     value
