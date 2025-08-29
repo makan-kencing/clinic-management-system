@@ -19,6 +19,7 @@ import edu.dsa.clinic.utils.table.Alignment;
 import edu.dsa.clinic.utils.table.Cell;
 import edu.dsa.clinic.utils.table.Column;
 import edu.dsa.clinic.utils.table.InteractiveTable;
+
 import java.util.Scanner;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -305,16 +306,44 @@ public class PatientUI extends UI {
         Patient selectedPatient = selectPatient();
         ListInterface<PatientDetail> rows = patientController.getPatientDetail(selectedPatient);
 
+        int diagnosisColumn = "Diagnosis".length();
+        int symptomColumn   = "Symptom".length();
+        int medicineColumn = "Medicine".length();
+
+        for (var pd : rows) {
+            Diagnosis d = pd.getDiagnosis();
+            String diagnosis = (d != null && d.getDiagnosis() != null)
+                    ? d.getDiagnosis()
+                    : "N/A";
+            diagnosisColumn = Math.max(diagnosisColumn, diagnosis.length());
+
+            Treatment t = pd.getTreatment();
+            String symptom = (t != null && t.getSymptom() != null)
+                    ? t.getSymptom()
+                    : "N/A";
+            symptomColumn = Math.max(symptomColumn, symptom.length());
+
+            Prescription p = pd.getPrescription();
+            String medicine = (p != null && p.getProduct() != null && p.getProduct().getName() != null)
+                    ? p.getProduct().getName()
+                    : "N/A";
+            medicineColumn = Math.max(medicineColumn, medicine.length());
+        }
+
+        medicineColumn += 2;
+        diagnosisColumn += 2;
+        symptomColumn   += 2;
+
         var table = new InteractiveTable<>(new Column[]{
                 new Column("Consultation Id", Alignment.CENTER, 15),
                 new Column("Doctor", Alignment.CENTER, 20),
                 new Column("Consulted At", Alignment.CENTER, 25),
                 new Column("Diagnosis Id", Alignment.CENTER, 15),
-                new Column("Diagnosis", Alignment.CENTER, 30),
+                new Column("Diagnosis", Alignment.CENTER, diagnosisColumn),
                 new Column("Treatment Id", Alignment.CENTER, 15),
-                new Column("Symptom", Alignment.CENTER, 30),
+                new Column("Symptom", Alignment.CENTER, symptomColumn),
                 new Column("Prescription Id", Alignment.CENTER, 15),
-                new Column("Medicine", Alignment.CENTER, 30),
+                new Column("Medicine", Alignment.CENTER, medicineColumn),
         }, rows) {
             private String lastConsultationId = null;
             private String lastDiagnosisId = null;
@@ -681,7 +710,7 @@ public class PatientUI extends UI {
                     new Column("Patient ID", Alignment.CENTER, 15),
                     new Column("Patient Name", Alignment.CENTER, 40),
                     new Column("Consultations Attended", Alignment.CENTER, maxConsultationLength),
-                    new Column("Total Medicines Prescribed", Alignment.CENTER, maxMedicineLength)
+                    new Column("Total Medicines Prescribed", Alignment.CENTER, 100)
             }, counters) {
                 @Override
                 protected Cell[] getRow(PatientCounter pc) {
@@ -697,7 +726,7 @@ public class PatientUI extends UI {
                             new Cell(patientId, Alignment.CENTER),
                             new Cell(patientName),
                             new Cell(consultationCount),
-                            new Cell(medicines)
+                            new Cell(StringUtils.trimEarly(medicines, 100, "..."))
                     };
                 }
             };
@@ -721,8 +750,10 @@ public class PatientUI extends UI {
             System.out.println();
 
             System.out.println("Global Highlights:");
-            System.out.println("Patient(s) with fewest consultations: " + StringUtils.join(", ", patientController.getExtremePatients(false)));
-            System.out.println("Patient(s) with most consultations: " + StringUtils.join(", ", patientController.getExtremePatients(true)));
+            System.out.println("Patient(s) with fewest consultations: " +
+                    StringUtils.trimEarly(StringUtils.join(", ", patientController.getExtremePatients(false)), 160, "..."));
+            System.out.println("Patient(s) with most consultations: " +
+                    StringUtils.trimEarly(StringUtils.join(", ", patientController.getExtremePatients(true)), 160, "..."));
             System.out.println();
 
             // footer
