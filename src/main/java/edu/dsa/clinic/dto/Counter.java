@@ -1,17 +1,19 @@
 package edu.dsa.clinic.dto;
 
+import edu.dsa.clinic.adt.ListInterface;
+import edu.dsa.clinic.lambda.Supplier;
 import org.jetbrains.annotations.Range;
 
-public class Counter<T> {
-    private final T key;
-    @org.jetbrains.annotations.Range(from = 0, to = Integer.MAX_VALUE)
+public class Counter<K> {
+    private final K key;
+    @Range(from = 0, to = Integer.MAX_VALUE)
     private int count = 0;
 
-    public Counter(T key) {
+    public Counter(K key) {
         this.key = key;
     }
 
-    public T key() {
+    public K key() {
         return key;
     }
 
@@ -25,5 +27,14 @@ public class Counter<T> {
 
     public void add(int n) {
         this.count += n;
+    }
+
+    public static <K, C extends Counter<K>> C getOrCreate(ListInterface<C> counters, K key, Supplier<C> createIfNotFound) {
+        var counter = counters.findFirst(c -> key.equals(c.key()));
+        if (counter == null) {
+            counter = createIfNotFound.get();
+            counters.add(counter);
+        }
+        return counter;
     }
 }
