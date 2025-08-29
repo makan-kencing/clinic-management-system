@@ -48,9 +48,11 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
 
                 this.display(false);
 
+                writer.println();
                 writer.println("[<] Previous page        [>] Next page");
                 writer.println("[\\/] Move selection down        [/\\] Move selection up");
                 writer.println("[s] Search        [f] Filter        [o] Order by");
+                writer.println(this.renderExtraControls());
                 writer.println("[Enter] Select");
 
                 writer.println("[q] Quit");
@@ -61,7 +63,10 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
                     case EXIT:
                         return null;
                     case RETURN:
-                        return this.getSelected();
+                        try {
+                            return this.getSelected();
+                        } catch (IndexOutOfBoundsException _) {
+                        }
                 }
             }
         } finally {
@@ -69,7 +74,7 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
         }
     }
 
-    public T getSelected() {
+    public T getSelected() throws IndexOutOfBoundsException {
         return this.getData().get(this.getSelectedIndex());
     }
 
@@ -156,6 +161,10 @@ public abstract class SelectTable<T> extends InteractiveTable<T> {
         if (index == this.getSelectedIndex())
             return "> " + super.renderBodyRow(o, index);
         return super.renderBodyRow(o, index);
+    }
+
+    public String renderExtraControls() {
+        return "";
     }
 
     abstract protected void promptSearch() throws IOException;

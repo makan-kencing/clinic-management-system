@@ -6,6 +6,7 @@ import edu.dsa.clinic.control.AppointmentController;
 import edu.dsa.clinic.control.DispensaryController;
 import edu.dsa.clinic.control.MedicalController;
 import edu.dsa.clinic.control.MedicineController;
+import edu.dsa.clinic.dto.AppointmentTypeCounter;
 import edu.dsa.clinic.dto.DiagnosisCounter;
 import edu.dsa.clinic.dto.MedicalDetail;
 import edu.dsa.clinic.dto.ProductCounter;
@@ -1549,9 +1550,16 @@ public class MedicalUI extends UI {
 
     }
 
+
+
     //diagnosis report
     public void diagnosisReport() {
-        while(true) {
+        boolean viewingReport = true;
+        var counts = MedicalController.countDiagnosesOccurrence();  // 移到循环外面
+        var table = new ViewDiagnosisReport(counts);
+        int total = MedicalController.getTotalProductUsage(counts);  // 移到循环外面
+
+        while(viewingReport) {
             System.out.println("=".repeat(230));
             System.out.printf("%140s\n", "TUNKU ABDUL RAMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY");
             System.out.printf("%120s\n", "MEDICAL CHECKING SUBSYSTEM");
@@ -1560,43 +1568,81 @@ public class MedicalUI extends UI {
             System.out.printf("Generated at: %s%n", DATE_FORMAT.format(java.time.LocalDateTime.now()));
             System.out.printf("%125s\n", "-".repeat(35));
 
-            var counts = MedicalController.countDiagnosesOccurrence();
-            var table = new ViewDiagnosisReport(counts);
             table.display();
-            int total= MedicalController.getTotalProductUsage(counts);
-            System.out.println("Total Diagnosis Type :" + counts.size());
-            System.out.println("Total Medicine Product Usage :" + total);
-            System.out.print("Use P/N arrow keys to change pages (0) to exit:");
-            String opt ;
+            printDiagnosisTotalBarChart(counts);
+
+            System.out.println("Total Diagnosis Type: " + counts.size());
+            System.out.println("Total Medicine Product Usage: " + total);
+
+            System.out.print("Use P/N to change pages, (0) to exit: ");
+
             try {
-                opt = this.scanner.nextLine().toLowerCase();
+                String opt = this.scanner.nextLine().toLowerCase().trim();
 
                 switch (opt) {
                     case "p":
                         table.previousPage();
-                        table.display();
                         break;
                     case "n":
                         table.nextPage();
-                        table.display();
                         break;
-                    case "0" :
-                          break;
+                    case "0":
+                        viewingReport = false;
+                        System.out.println("Exiting report...");
+                        break;
                     default:
-                        System.out.println("Invalid option");
+                        System.out.println("Invalid option. Use P, N, or 0.");
                         break;
                 }
-            }catch (InputMismatchException e){
-                    System.out.println("Input Mismatch");
-                    break;
+
+            } catch (InputMismatchException e) {
+                System.out.println("Input Mismatch. Please enter a valid option.");
+                this.scanner.nextLine();  // 清除错误输入
             }
-            System.out.println("*".repeat(230));
-            System.out.printf("%120s\n", "END OF THE REPORT");
-            System.out.println("=".repeat(230));
-            this.scanner.nextLine();
+
+
+            if (viewingReport) {
+                System.out.println("*".repeat(230));
+                System.out.printf("%120s\n", "END OF PAGE");
+                System.out.println("=".repeat(230));
+                System.out.println();
+            }
         }
+
+        System.out.println("*".repeat(230));
+        System.out.printf("%120s\n", "END OF THE REPORT");
+        System.out.println("=".repeat(230));
     }
 
+    private void printDiagnosisTotalBarChart(ListInterface<DiagnosisCounter> counters) {
+        System.out.println("============================================================");
+        System.out.println("   Total Occurrence (Bar Chart)   ");
+        System.out.println("============================================================");
+
+        int max = 0;
+        for (int i = 0; i < counters.size(); i++) {
+            DiagnosisCounter occurrenceCounter = counters.get(i);
+            if (occurrenceCounter.count() > max) {
+                max = occurrenceCounter.count();
+            }
+        }
+
+        // print rows
+        for (int i = 0; i < counters.size(); i++) {
+            DiagnosisCounter occurrenceCounter = counters.get(i);
+            int count = occurrenceCounter.count();
+
+            // simple scaling (avoid divide by zero)
+            int barLength = (max == 0) ? 0 : (count * 40 / max);
+
+            System.out.printf("%-20s | %s (%d)%n",
+                   occurrenceCounter.key(),
+                    "█".repeat(barLength),
+                    count);
+        }
+
+        System.out.println("------------------------------------------------------------");
+    }
     public static void main(String[] args) throws IOException {
         Initializer.initialize();
 
