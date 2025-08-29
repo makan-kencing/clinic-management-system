@@ -3,7 +3,6 @@ package edu.dsa.clinic.boundary;
 import edu.dsa.clinic.adt.ListInterface;
 import edu.dsa.clinic.control.DoctorController;
 import edu.dsa.clinic.dto.DoctorCounter;
-import edu.dsa.clinic.dto.PatientCounter;
 import edu.dsa.clinic.dto.Range;
 import edu.dsa.clinic.dto.Schedule;
 import edu.dsa.clinic.dto.Shift;
@@ -44,6 +43,7 @@ public class DoctorUI extends UI {
         super(scanner);
     }
 
+    //Doctor Main Menu
     @Override
     public void startMenu() {
         int choice;
@@ -93,7 +93,6 @@ public class DoctorUI extends UI {
                     deleteDoctor(doctor);
                     break;
                 case 4:
-                    // editDoctorInformation
                     doctor = selectDoctor();
                     if (doctor == null)
                         break;
@@ -101,7 +100,6 @@ public class DoctorUI extends UI {
                     modifyDoctor(doctor);
                     break;
                 case 5:
-                    // doctorShiftMenu
                     shiftsMenu();
                     break;
                 case 6:
@@ -117,6 +115,7 @@ public class DoctorUI extends UI {
         } while (true);
     }
 
+    //Select Gender Menu (Reusable)
     public Gender selectAGender() {
         Gender newGender;
         do {
@@ -146,6 +145,7 @@ public class DoctorUI extends UI {
         return newGender;
     }
 
+    //Create NEW Doctor
     public void createDoctor() {
         Doctor doctor = new Doctor();
         do{
@@ -364,7 +364,6 @@ public class DoctorUI extends UI {
                 break;
         }
     }
-
 
 
 
@@ -707,7 +706,7 @@ public class DoctorUI extends UI {
 
 
 
-    //Get User start & end time
+    //For Creating New Shift
     public @Nullable Shift createShiftFromInput() {
         while (true) {
             try {
@@ -737,7 +736,7 @@ public class DoctorUI extends UI {
     }
 
 
-
+    //For Addon Shift
     public @Nullable Shift createAdditionalShiftFromInput() {
         LocalTime start;
         LocalTime end;
@@ -763,6 +762,7 @@ public class DoctorUI extends UI {
 
         return null;
     }
+    //For Break ONLY
     public @Nullable Shift addBreakFromInput() {
         while (true) {
             try {
@@ -795,6 +795,7 @@ public class DoctorUI extends UI {
         this.viewSchedule(doctor.getSchedule());
         System.out.println("-".repeat(50));
     }
+
     //Get Doctor Availability
     public void viewDoctorAvailabilitySchedule(LocalDate date, Doctor doctor) {
         System.out.println("\nWeekly Availability Schedule for Dr." + doctor.getName());
@@ -802,7 +803,8 @@ public class DoctorUI extends UI {
         this.viewSchedule(DoctorController.getAvailabilitySchedule(date, doctor));
         System.out.println("-".repeat(50));
     }
-    //Doctor Shift
+
+    //Doctor Shift Schedule
     public void viewSchedule(Schedule schedule) {
         printDay("1. Monday", schedule.monday());
         printDay("2. Tuesday", schedule.tuesday());
@@ -931,10 +933,10 @@ public class DoctorUI extends UI {
                             double slotCoverage = (double) overlapMinutes / slotMinutes;
                             if (slotCoverage > coverage) coverage = slotCoverage;
 
-                            // Prioritize alignment: start > end > full > center
+
                             if (shiftStart.compareTo(slotStart) >= 0 && shiftStart.compareTo(slotEnd) < 0) {
                                 align = "right";
-                                break; // If shift starts in this slot, use left and stop
+                                break; // If shift starts in this slot, use right and stop
                             } else if (shiftEnd.compareTo(slotStart) > 0 && shiftEnd.compareTo(slotEnd) <= 0) {
                                 align = "left";
                                 // don't break, in case a later shift starts in this slot
@@ -1137,7 +1139,7 @@ public class DoctorUI extends UI {
     }
 
 
-
+    //Doctor Info Table
     public static class DoctorTable extends InteractiveTable<Doctor> {
         public DoctorTable(ListInterface<Doctor> doctors) {
             super(new Column[]{
