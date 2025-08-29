@@ -15,6 +15,7 @@ import edu.dsa.clinic.filter.StockFilter;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 /**
  * Logics for managing everything medicinal related. (e.g. {@link Medicine}, {@link Product},
@@ -135,12 +136,20 @@ public class MedicineController {
         public SymptomCounter(String key) {
             super(key);
         }
+
+        public int quantity() {
+            return this.quantity;
+        }
     }
     public static class DoctorCounter extends Counter<Doctor> {
         int quantity = 0;
 
         public DoctorCounter(Doctor key) {
             super(key);
+        }
+
+        public int quantity() {
+            return this.quantity;
         }
     }
 
@@ -151,6 +160,10 @@ public class MedicineController {
 
         public ProductCounter(Product key) {
             super(key);
+        }
+
+        public int quantity() {
+            return this.quantity;
         }
     }
 
@@ -180,6 +193,12 @@ public class MedicineController {
                     }
                 }
         }
+
+        for (var usage : usages) {
+            usage.doctors.sort(Comparator.comparing(DoctorCounter::quantity).reversed());
+            usage.symptoms.sort(Comparator.comparing(SymptomCounter::quantity).reversed());
+        }
+        usages.sort(Comparator.comparing(ProductCounter::quantity).reversed());
 
         return usages;
     }
