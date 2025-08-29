@@ -24,6 +24,7 @@ import edu.dsa.clinic.lambda.Mapper;
 import edu.dsa.clinic.lambda.Supplier;
 import edu.dsa.clinic.sorter.MedicineSorter;
 import edu.dsa.clinic.sorter.ProductSorter;
+import edu.dsa.clinic.sorter.StockSorter;
 import edu.dsa.clinic.utils.SelectTable;
 import edu.dsa.clinic.utils.StringUtils;
 import edu.dsa.clinic.utils.table.Cell;
@@ -404,16 +405,18 @@ public class MedicineUI extends UI {
             System.out.println("+-------------------------------------+");
             System.out.printf("| Top %d Products by Prescribed Amount |%n", topN);
             System.out.println("+-------------------------------------+");
-            var max = topUsages.getFirst().quantity();
-            for (var usage : topUsages) {
-                int scaled = max == 0 ? 0 : (int) Math.round((usage.quantity() / (double) max) * barWidth);
-                System.out.printf("%-30s | %s%s%s (%d)%n",
-                        StringUtils.trimEarly(usage.key().getName(), 30, "..."),
-                        BLUE,
-                        "█".repeat(Math.max(1, scaled)),
-                        RESET,
-                        usage.quantity()
-                );
+            if (usages.size() > 0) {
+                var max = topUsages.getFirst().quantity();
+                for (var usage : topUsages) {
+                    int scaled = max == 0 ? 0 : (int) Math.round((usage.quantity() / (double) max) * barWidth);
+                    System.out.printf("%-30s | %s%s%s (%d)%n",
+                            StringUtils.trimEarly(usage.key().getName(), 30, "..."),
+                            BLUE,
+                            "█".repeat(Math.max(1, scaled)),
+                            RESET,
+                            usage.quantity()
+                    );
+                }
             }
 
             System.out.println();
@@ -1452,7 +1455,7 @@ public class MedicineUI extends UI {
 
             var queryResult = (InputResult) result.get("query");
 
-            var query = queryResult.toString();
+            var query = queryResult.getResult();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
@@ -1523,6 +1526,7 @@ public class MedicineUI extends UI {
                     .message("Filter by?")
                     .newItem("type").text("Medicine Type").add()
                     .newItem("stock").text("Stock Count").add()
+                    .newItem("last_stocked").text("Last Stocked").add()
                     .newItem("cancel").text("Cancel").add()
                     .addPrompt();
 
@@ -1539,6 +1543,9 @@ public class MedicineUI extends UI {
                     if (this.setStockFilter())
                         this.updateData();
                     break;
+                case "last_stocked":
+                    if (this.setLastStockedFilter())
+                        this.updateData();
                 default:
                     break;
             }
@@ -1617,6 +1624,53 @@ public class MedicineUI extends UI {
 
             this.clearFilter(s -> s.startsWith("Stock "));
             this.addFilter(filterName, MedicineFilter.byStockCount(from, to));
+            return true;
+        }
+
+        protected boolean setLastStockedFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (YYYY-MM-DD hh:mm:ss)")
+                    .defaultValue("min")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (YYYY-MM-DD hh:mm:ss)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            LocalDateTime from, to;
+            try {
+                from = fromResult.getResult().equals("min")
+                        ? LocalDateTime.MIN
+                        : LocalDateTime.parse(fromResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+                to = toResult.getResult().equals("max")
+                        ? LocalDateTime.MAX
+                        : LocalDateTime.parse(toResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+            } catch (DateTimeParseException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid date format.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from == LocalDateTime.MIN)
+                filterName = "Stocked before " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+            else if (to == LocalDateTime.MAX)
+                filterName = "Stocked after " + from.format(StockPromptBuilder.DATETIME_FORMAT);
+            else
+                filterName = "Stocked between " + from.format(StockPromptBuilder.DATETIME_FORMAT) + " and " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+
+            this.clearFilter(s -> s.startsWith("Stocked "));
+            this.addFilter(filterName, MedicineFilter.byLatestStocked(from, to));
             return true;
         }
 
@@ -1762,7 +1816,7 @@ public class MedicineUI extends UI {
 
             var queryResult = (InputResult) result.get("query");
 
-            var query = queryResult.toString();
+            var query = queryResult.getResult();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
@@ -1827,7 +1881,170 @@ public class MedicineUI extends UI {
         }
 
         protected void promptAddFilter() throws IOException {
-            // TODO
+            var builder = this.prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("filter")
+                    .message("Filter by?")
+                    .newItem("medicine").text("Medicine Name").add()
+                    .newItem("brand").text("Brand").add()
+                    .newItem("stock").text("Stock Count").add()
+                    .newItem("last_stocked").text("Last Stocked").add()
+                    .newItem("cancel").text("Cancel").add()
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var filterResult = (ListResult) result.get("filter");
+
+            switch (filterResult.getResult()) {
+                case "medicine":
+                    if (this.setMedicineNameFilter())
+                        this.updateData();
+                    break;
+                case "brand":
+                    if (this.setBrandFilter())
+                        this.updateData();
+                    break;
+                case "stock":
+                    if (this.setStockFilter())
+                        this.updateData();
+                    break;
+                case "last_stocked":
+                    if (this.setLastStockedFilter())
+                        this.updateData();
+                default:
+                    break;
+            }
+        }
+
+        protected boolean setMedicineNameFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("query")
+                    .message("Medicine name")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var query = result.get("query").getResult();
+
+            this.clearFilter(s -> s.startsWith("By Medicine name "));
+            if (query == null || query.isEmpty())
+                return false;
+
+            this.addFilter("By Medicine name of \"" + query + "\"", ProductFilter.byMedicineNameLike(query));
+            return true;
+        }
+
+        protected boolean setBrandFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("query")
+                    .message("Brand name")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var query = result.get("query").getResult();
+
+            this.clearFilter(s -> s.startsWith("By Brand name of "));
+            if (query == null || query.isEmpty())
+                return false;
+
+            this.addFilter("By Brand name of \"" + query + "\"", ProductFilter.byBrandLike(query));
+            return true;
+        }
+
+        protected boolean setStockFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("0")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (default no limit)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            int from, to;
+            try {
+                from = Integer.parseInt(fromResult.getResult());
+                to = toResult.getResult().equals("max")
+                        ? Integer.MAX_VALUE
+                        : Integer.parseInt(toResult.getResult());
+            } catch (NumberFormatException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid quantity amount.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from <= 0)
+                filterName = "Stock <=" + to;
+            else if (to == Integer.MAX_VALUE)
+                filterName = "Stock >= " + from;
+            else
+                filterName = "Stock between " + from + " and " + to;
+
+            this.clearFilter(s -> s.startsWith("Stock "));
+            this.addFilter(filterName, ProductFilter.byStockCount(from, to));
+            return true;
+        }
+
+        protected boolean setLastStockedFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("min")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (YYYY-MM-DD HH:SS)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            LocalDateTime from, to;
+            try {
+                from = fromResult.getResult().equals("min")
+                        ? LocalDateTime.MIN
+                        : LocalDateTime.parse(fromResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+                to = toResult.getResult().equals("max")
+                        ? LocalDateTime.MAX
+                        : LocalDateTime.parse(toResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+            } catch (DateTimeParseException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid date format.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from == LocalDateTime.MIN)
+                filterName = "Stocked before " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+            else if (to == LocalDateTime.MAX)
+                filterName = "Stocked after " + from.format(StockPromptBuilder.DATETIME_FORMAT);
+            else
+                filterName = "Stocked between " + from.format(StockPromptBuilder.DATETIME_FORMAT) + " and " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+
+            this.clearFilter(s -> s.startsWith("Stocked "));
+            this.addFilter(filterName, ProductFilter.byLatestStocked(from, to));
+            return true;
         }
 
         protected void promptAddSorter() throws IOException {
@@ -1918,7 +2135,7 @@ public class MedicineUI extends UI {
             super(new Column[]{
                     new Column("Id", 4),
                     new Column("Product Brand", 30),
-                    new Column("Product Type", 40),
+                    new Column("Product Medicine", 40),
                     new Column("Product Name", 40),
                     new Column("In quantity", 15),
                     new Column("Stocked at", 20),
@@ -1993,7 +2210,7 @@ public class MedicineUI extends UI {
 
             var queryResult = (InputResult) result.get("query");
 
-            var query = queryResult.toString();
+            var query = queryResult.getResult();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
@@ -2062,11 +2279,280 @@ public class MedicineUI extends UI {
         }
 
         protected void promptAddFilter() throws IOException {
-            // TODO
+            var builder = this.prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("filter")
+                    .message("Filter by?")
+                    .newItem("medicine").text("Medicine").add()
+                    .newItem("product").text("Product").add()
+                    .newItem("in_quantity").text("In Quantity").add()
+                    .newItem("quantity_left").text("Quantity Left").add()
+                    .newItem("stocked_at").text("Stocked At").add()
+                    .newItem("cancel").text("Cancel").add()
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var filterResult = (ListResult) result.get("filter");
+
+            switch (filterResult.getResult()) {
+                case "medicine":
+                    if (this.setMedicineFilter())
+                        this.updateData();
+                    break;
+                case "product":
+                    if (this.setProductFilter())
+                        this.updateData();
+                    break;
+                case "in_quantity":
+                    if (this.setInQuantityFilter())
+                        this.updateData();
+                    break;
+                case "quantity_left":
+                    if (this.setQuantityLeftFilter())
+                        this.updateData();
+                    break;
+                case "stocked_at":
+                    if (this.setStockedAtFilter())
+                        this.updateData();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected boolean setMedicineFilter() {
+            var medicine = selectMedicine();
+
+            this.clearFilter(s -> s.startsWith("Product is "));
+            if (medicine == null)
+                return false;
+
+            this.addFilter("Product is \"" + medicine.getName() + "\"", StockFilter.byProductMedicine(medicine));
+            return true;
+        }
+
+        protected boolean setProductFilter() {
+            var product = selectProduct();
+
+            this.clearFilter(s -> s.startsWith("Product is "));
+            if (product == null)
+                return false;
+
+            this.addFilter("Product is \"" + product.getName() + "\"", StockFilter.byProduct(product));
+            return true;
+        }
+
+        protected boolean setInQuantityFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("0")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (default no limit)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            int from, to;
+            try {
+                from = Integer.parseInt(fromResult.getResult());
+                to = toResult.getResult().equals("max")
+                        ? Integer.MAX_VALUE
+                        : Integer.parseInt(toResult.getResult());
+            } catch (NumberFormatException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid quantity amount.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from <= 0)
+                filterName = "In quantity <=" + to;
+            else if (to == Integer.MAX_VALUE)
+                filterName = "In quantity >= " + from;
+            else
+                filterName = "In quantity between " + from + " and " + to;
+
+            this.clearFilter(s -> s.startsWith("In quantity "));
+            this.addFilter(filterName, StockFilter.byInQuantityBetween(from, to, true));
+            return true;
+        }
+
+        protected boolean setQuantityLeftFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (default 0)")
+                    .defaultValue("0")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (default no limit)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            int from, to;
+            try {
+                from = Integer.parseInt(fromResult.getResult());
+                to = toResult.getResult().equals("max")
+                        ? Integer.MAX_VALUE
+                        : Integer.parseInt(toResult.getResult());
+            } catch (NumberFormatException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid quantity amount.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from <= 0)
+                filterName = "Quantity left <=" + to;
+            else if (to == Integer.MAX_VALUE)
+                filterName = "Quantity left >= " + from;
+            else
+                filterName = "Quantity left between " + from + " and " + to;
+
+            this.clearFilter(s -> s.startsWith("Quantity left "));
+            this.addFilter(filterName, StockFilter.byStockLeftBetween(from, to, true));
+            return true;
+        }
+
+        protected boolean setStockedAtFilter() throws IOException {
+            var builder = this.prompt.getPromptBuilder();
+            builder.createInputPrompt()
+                    .name("from")
+                    .message("From (YYYY-MM-DD hh:mm:ss)")
+                    .defaultValue("min")
+                    .addPrompt()
+                    .createInputPrompt()
+                    .name("to")
+                    .message("To (YYYY-MM-DD hh:mm:ss)")
+                    .defaultValue("max")
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var fromResult = (InputResult) result.get("from");
+            var toResult = (InputResult) result.get("to");
+
+            LocalDateTime from, to;
+            try {
+                from = fromResult.getResult().equals("min")
+                        ? LocalDateTime.MIN
+                        : LocalDateTime.parse(fromResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+                to = toResult.getResult().equals("max")
+                        ? LocalDateTime.MAX
+                        : LocalDateTime.parse(toResult.getResult(), StockPromptBuilder.DATETIME_FORMAT);
+            } catch (DateTimeParseException _) {
+                var writer = terminal.writer();
+                writer.write("Invalid date format.");
+                writer.flush();
+
+                return false;
+            }
+
+            var filterName = "";
+            if (from == LocalDateTime.MIN)
+                filterName = "Stocked before " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+            else if (to == LocalDateTime.MAX)
+                filterName = "Stocked after " + from.format(StockPromptBuilder.DATETIME_FORMAT);
+            else
+                filterName = "Stocked between " + from.format(StockPromptBuilder.DATETIME_FORMAT) + " and " + to.format(StockPromptBuilder.DATETIME_FORMAT);
+
+            this.clearFilter(s -> s.startsWith("Stocked "));
+            this.addFilter(filterName, StockFilter.byStockedAtBetween(from, to));
+            return true;
         }
 
         protected void promptAddSorter() throws IOException {
-            // TODO
+            var builder = this.prompt.getPromptBuilder();
+            builder.createListPrompt()
+                    .name("type")
+                    .message("Order by?")
+                    .newItem("product").text("Product Name").add()
+                    .newItem("brand").text("Product Brand").add()
+                    .newItem("medicine").text("Product Medicine").add()
+                    .newItem("in_stock").text("Stock In").add()
+                    .newItem("stock_quantity").text("Stock Left").add()
+                    .newItem("last_stock").text("Last Stocked").add()
+                    .addPrompt()
+                    .createListPrompt()
+                    .name("order")
+                    .message("Order direction by?")
+                    .newItem("asc").text("Ascending").add()
+                    .newItem("desc").text("Descending").add()
+                    .addPrompt();
+
+            var result = this.prompt.prompt(builder.build());
+
+            var type = result.get("type").getResult();
+            var order = result.get("order").getResult();
+
+            String name = null;
+            Comparator<Stock> comparator = null;
+
+            switch (type) {
+                case "product":
+                    this.clearSorter(s -> s.startsWith("By product"));
+
+                    name = "By product (" + order + ")";
+                    comparator = StockSorter.byProductName(true);
+                    break;
+                case "brand":
+                    this.clearSorter(s -> s.startsWith("By brand"));
+
+                    name = "By brand (" + order + ")";
+                    comparator = StockSorter.byProductBrandName(true);
+                    break;
+                case "medicine":
+                    this.clearSorter(s -> s.startsWith("By medicine"));
+
+                    name = "By medicine (" + order + ")";
+                    comparator = StockSorter.byProductMedicineName(true);
+                    break;
+                case "in_stock":
+                    this.clearSorter(s -> s.startsWith("By in quantity"));
+
+                    name = "By in quantity (" + order + ")";
+                    comparator = StockSorter.byStockIn();
+                    break;
+                case "stock_quantity":
+                    this.clearSorter(s -> s.startsWith("By quantity left"));
+
+                    name = "By quantity left (" + order + ")";
+                    comparator = StockSorter.byStockLeft();
+                    break;
+                case "last_stock":
+                    this.clearSorter(s -> s.startsWith("By stocked at"));
+
+                    name = "By stocked at (" + order + ")";
+                    comparator = StockSorter.byStockedAt();
+                    break;
+            }
+            assert (comparator != null);
+
+            var descFlag = "desc".equals(order);
+            if (descFlag)
+                comparator = comparator.reversed();
+
+            this.addSorter(name, comparator);
+            this.updateData();
         }
     }
 
