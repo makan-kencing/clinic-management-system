@@ -1454,7 +1454,7 @@ public class MedicineUI extends UI {
 
             var queryResult = (InputResult) result.get("query");
 
-            var query = queryResult.toString();
+            var query = queryResult.getResult();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
@@ -1815,7 +1815,7 @@ public class MedicineUI extends UI {
 
             var queryResult = (InputResult) result.get("query");
 
-            var query = queryResult.toString();
+            var query = queryResult.getResult();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
@@ -2209,7 +2209,7 @@ public class MedicineUI extends UI {
 
             var queryResult = (InputResult) result.get("query");
 
-            var query = queryResult.toString();
+            var query = queryResult.getResult();
 
             this.clearFilter(s -> s.startsWith("Searching"));
             if (query.isEmpty() || query.equals("null"))
