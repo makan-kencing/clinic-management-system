@@ -17,8 +17,8 @@ abstract public class InteractiveTable<T> extends Table<T> {
 
     protected ListInterface<NamedFilter<T>> defaultFilters = new DoubleLinkedList<>();
     protected ListInterface<NamedSorter<T>> defaultSorters = new DoubleLinkedList<>();
-    protected ListInterface<NamedFilter<T>> filters;
-    protected ListInterface<NamedSorter<T>> sorters;
+    protected ListInterface<NamedFilter<T>> filters = this.defaultFilters;
+    protected ListInterface<NamedSorter<T>> sorters = this.defaultSorters;
     protected ListInterface<T> unfilteredData;
 
     public InteractiveTable(
@@ -28,16 +28,14 @@ abstract public class InteractiveTable<T> extends Table<T> {
             ListInterface<NamedSorter<T>> defaultSorters
     ) {
         this(columns, data);
-        this.defaultFilters.extend(defaultFilters);
-        this.defaultSorters.extend(defaultSorters);
+        this.defaultFilters = defaultFilters;
+        this.defaultSorters = defaultSorters;
         this.resetFilters();
         this.resetSorters();
     }
 
     public InteractiveTable(Column[] columns, ListInterface<T> data) {
         super(columns, data);
-        this.filters = this.defaultFilters.clone();
-        this.sorters = this.defaultSorters.clone();
         this.unfilteredData = data;
     }
 
