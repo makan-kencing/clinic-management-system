@@ -18,13 +18,23 @@ import edu.dsa.clinic.filter.DoctorFilter;
 import edu.dsa.clinic.lambda.Filter;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DoctorController {
+    public static final ListInterface<DayOfWeek> days = new DoubleLinkedList<>();
 
+
+
+    public static ListInterface<DayOfWeek> getDays() {
+        for (DayOfWeek day : DayOfWeek.values()) {
+            days.add(day);
+        }
+        return days;
+    }
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm"); //For Formatting Shift Time
 
@@ -258,4 +268,6 @@ public class DoctorController {
 
         return doctorCounters;
     }
+
+
 }

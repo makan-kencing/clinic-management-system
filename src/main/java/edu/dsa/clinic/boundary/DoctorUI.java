@@ -31,6 +31,8 @@ import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static edu.dsa.clinic.control.DoctorController.days;
+
 
 public class DoctorUI extends UI {
 
@@ -104,6 +106,7 @@ public class DoctorUI extends UI {
                     break;
                 case 6:
                     generateSummaryReport();
+
                     break;
                 case 0:
                     return;
@@ -354,69 +357,7 @@ public class DoctorUI extends UI {
         }
     }
 
-    //Used for Appointment
-    public @Nullable Doctor selectAvailableDoctor(LocalDate date, Range<LocalTime> timeRange) {
 
-        Doctor selectedDoctor = null;
-
-        var doctors = DoctorController.getDoctors();
-
-        var table = new DoctorTable(doctors);
-        int opt;
-        do {
-            table.addDefaultFilter("Available at " + date + "from"+ timeRange.from() + " to " + timeRange.to(), DoctorFilter.isAvailable(date, timeRange));
-            System.out.println("-".repeat(30));
-            System.out.println("(1) Select Doctor ID " +
-                    "\n(2) Filter Doctor List " +
-                    "\n(3) Reset Filters " +
-                    "\n(4) Exit");
-            System.out.println("-".repeat(30));
-            System.out.print("Selection : ");
-            opt = this.scanner.nextInt();
-            this.scanner.nextLine();
-            System.out.println();
-
-            if (opt != 4) {
-                switch (opt) {
-                    case 1: {
-                        do {
-                            table.display();
-                            System.out.print("\nEnter Doctor ID (0 to exit): ");
-                            int id = scanner.nextInt();
-                            scanner.nextLine();
-                            System.out.println();
-
-                            if (id == 0) {
-                                System.out.println("-".repeat(30));
-                                System.out.println();
-                                break;
-                            }
-                            selectedDoctor = DoctorController.selectDoctorByID(id);
-                            if (selectedDoctor == null) {
-                                System.out.println("Doctor with ID (" + id + ") not found. Please re-enter Doctor ID...");
-                            } else {
-                                System.out.println("Doctor (" + selectedDoctor.getName() + ") with ID (" + selectedDoctor.getId() + ") selected!");
-                            }
-                        } while (selectedDoctor == null);
-                        break;
-                    }
-                    case 2: {
-                        filterDoctor(table);
-                        break;
-                    }
-                    case 3: {
-                        table.resetFilters();
-                        table.display();
-                        break;
-                    }
-                }
-            } else {
-                System.out.println();
-                break;
-            }
-        } while (opt > 1 && opt < 4);
-        return selectedDoctor;
-    }
 
 
     //Select Doctor
@@ -622,6 +563,7 @@ public class DoctorUI extends UI {
             System.out.println("2. Add Doctor Break Time");
             System.out.println("3. View Doctor Schedule");
             System.out.println("4. View Doctor Availability Schedule ");
+            System.out.println("5. View Doctor Timetable ");
             System.out.println("-".repeat(30));
             System.out.println("0. Exit To Doctor Menu");
             System.out.print("Enter choice: ");
@@ -656,6 +598,11 @@ public class DoctorUI extends UI {
                         break;
                     getDoctorAvailabilitySchedule(doctor);
                     break;
+                case 5:
+                    doctor = selectDoctor();
+                    if (doctor == null)
+                        break;
+                    viewSchedule(doctor, LocalTime.of(8, 0), LocalTime.of(18, 0), 60);
                 case 0:
                     return;
                 default:
@@ -801,14 +748,14 @@ public class DoctorUI extends UI {
         this.viewSchedule(doctor.getSchedule());
         System.out.println("-".repeat(50));
     }
-
+    //Get Doctor Availability
     public void viewDoctorAvailabilitySchedule(LocalDate date, Doctor doctor) {
         System.out.println("\nWeekly Availability Schedule for Dr." + doctor.getName());
         System.out.println("-".repeat(50));
         this.viewSchedule(DoctorController.getAvailabilitySchedule(date, doctor));
         System.out.println("-".repeat(50));
     }
-
+    //Doctor Shift
     public void viewSchedule(Schedule schedule) {
         printDay("1. Monday", schedule.monday());
         printDay("2. Tuesday", schedule.tuesday());
@@ -831,6 +778,59 @@ public class DoctorUI extends UI {
             System.out.print(shift.getType() + " (" + shift.getTimeRange().from() + "-" + shift.getTimeRange().to() + ") ");
 
         System.out.println();
+    }
+
+    //DoctorTimetable
+    public void viewSchedule(Doctor doctor, LocalTime dayStart, LocalTime dayEnd, int slotMinutes) {
+        Schedule schedule = doctor.getSchedule();
+        int slotCount = (int) (Duration.between(dayStart, dayEnd).toMinutes() / slotMinutes);
+        LocalTime[] slots = new LocalTime[slotCount];
+        LocalTime current = dayStart;
+        for (int i = 0; i < slotCount; i++) {
+            slots[i] = current;
+            current = current.plusMinutes(slotMinutes);
+        }
+
+        // Build columns: Day + time slots
+        Column[] columns = new Column[1 + slotCount];
+        columns[0] = new Column("Day", Alignment.CENTER, 12);
+        for (int i = 0; i < slotCount; i++) {
+            LocalTime slotStart = slots[i];
+            LocalTime slotEnd = slotStart.plusMinutes(slotMinutes);
+            String label = String.format("%02d:%02d-%02d:%02d", slotStart.getHour(), slotStart.getMinute(), slotEnd.getHour(), slotEnd.getMinute());
+            columns[i + 1] = new Column(label, Alignment.CENTER, 14);
+        }
+
+        // Prepare data: Each row is a DayOfWeek
+        DoctorController.getDays();
+
+        // Create InteractiveTable
+        InteractiveTable<DayOfWeek> table = new InteractiveTable<>(columns, days) {
+            @Override
+            protected Cell[] getRow(DayOfWeek day) {
+                Cell[] row = new Cell[columns.length];
+                row[0] = new Cell(day.toString(), Alignment.CENTER);
+                ListInterface<Shift> shifts = schedule.getShifts(day);
+                for (int i = 0; i < slots.length; i++) {
+                    LocalTime slotStart = slots[i];
+                    LocalTime slotEnd = slotStart.plusMinutes(slotMinutes);
+                    boolean hasShift = false;
+                    for (Shift shift : shifts) {
+                        LocalTime shiftStart = shift.getTimeRange().from();
+                        LocalTime shiftEnd = shift.getTimeRange().to();
+                        if (!slotEnd.isBefore(shiftStart) && !slotStart.isAfter(shiftEnd.minusMinutes(1))) {
+                            hasShift = true;
+                            break;
+                        }
+                    }
+                    row[i + 1] = new Cell(hasShift ? "█████████████" : "", Alignment.CENTER);
+                }
+                return row;
+            }
+        };
+
+        System.out.printf("%nWeekly Shift Table for Dr. %s%n", doctor.getName());
+        table.display();
     }
 
     //Deleting Doctor Shift
@@ -868,6 +868,7 @@ public class DoctorUI extends UI {
         System.out.println("Granted break" + " to Dr." + doctor.getName() + " on " + dayOfWeek);
     }
 
+    //Get Doctor Availability Date
     public void getDoctorAvailabilitySchedule(Doctor doctor) {
         System.out.println("-".repeat(30));
         System.out.print("Enter date (yyyy-MM-dd): ): ");
